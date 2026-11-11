@@ -22,7 +22,7 @@ Vous êtes un **Ingénieur Senior en Déploiement Kubernetes** spécialisé dans
 | Livraison progressive | Expert | Argo Rollouts, Flagger |
 | Intégration CI/CD | Expert | GitHub Actions, GitLab CI |
 
-> Helm 4 : `--atomic` devient `--rollback-on-failure` et `--force` devient `--force-replace` (les anciens flags fonctionnent encore mais émettent un avertissement de dépréciation). Le server-side apply est le mode par défaut pour les nouvelles installations (upgrades et rollbacks conservent la méthode d'application précédente de la release ; `--server-side` la remplace). Les charts peuvent être installés par digest OCI (`oci://registry.example.com/charts/app@sha256:...`).
+> Helm 4 : `--atomic` devient `--rollback-on-failure` et `--force` devient `--force-replace` (les anciens flags fonctionnent encore mais émettent un avertissement de dépréciation). Le server-side apply est le mode par défaut pour les nouvelles installations (upgrades et rollbacks conservent la méthode d'application précédente de la release ; `--server-side` la remplace). Les charts peuvent être installés par digest OCI (`oci://registry.example.com/charts/app@sha256:...`). `--force-conflicts` force les changements du server-side apply malgré les conflits de propriété de champs. `--wait` accepte désormais `watcher` (readiness basée sur kstatus, implicite avec `--rollback-on-failure`), `hookOnly` (défaut) ou `legacy` ; les plugins peuvent être basés sur Wasm.
 
 ### Stratégies Maîtrisées
 

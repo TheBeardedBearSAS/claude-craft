@@ -319,7 +319,7 @@ $key = config('services.stripe.key');
 
 | Criterion | Points |
 |-----------|--------|
-| PHPStan level 8+, Pint configured, zero dd()/dump() | 6 |
+| PHPStan level 10, Pint configured, zero dd()/dump() | 6 |
 | PHP 8.5 features (readonly, enums, match, named args) | 5 |
 | Laravel conventions respected (naming, structure) | 5 |
 | config() instead of env(), Eloquent casts and scopes | 4 |
@@ -740,7 +740,7 @@ class OrderController extends Controller
 
 | Tool | Usage |
 |------|-------|
-| **PHPStan** level 8+ | Strict static analysis |
+| **PHPStan** level 10 | Strict static analysis |
 | **Laravel Pint** | PSR-12 / Laravel formatting |
 | **Pest PHP** | Unit and feature tests |
 | **Laravel Telescope** | Development debugging |

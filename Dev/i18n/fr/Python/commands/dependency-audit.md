@@ -52,7 +52,6 @@ pip audit
 import subprocess
 import json
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -62,7 +61,7 @@ class Vulnerability:
     vulnerability_id: str
     severity: str
     description: str
-    fixed_in: Optional[str]
+    fixed_in: str | None
 
 
 def run_pip_audit() -> list[Vulnerability]:

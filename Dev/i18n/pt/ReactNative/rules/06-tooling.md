@@ -410,7 +410,7 @@ npx expo install expo-camera@latest
 - Node.js: 22.13+ (linha 22), 24.3+ (linha 24) ou 26+; versões ímpares (23, 25) não são suportadas
 - Destaques do RN 0.88: despacho de eventos web por padrão; `fontVariationSettings` (fontes variáveis) em `Text` e `TextInput`; suporte ao ciclo de vida SceneDelegate no iOS; suporte a `ArrayBuffer` nos TurboModules Java; suporte experimental ao Swift Package Manager; React 19.3.0 e Metro 0.87. Sem breaking changes para o usuário
 - A API TypeScript estrita é o padrão do SDK 58: o opt-out no `tsconfig.json` será removido após o RN 0.89
-- Reanimated 4.7.x suporta RN 0.86-0.88
+- Reanimated 4.7.x suporta RN 0.86-0.88 (com `react-native-worklets` 0.13.x); o Expo SDK 58 inclui Reanimated 4.7.1 e `expo-router` ~58.0.30
 - O bundle mode do Worklets é experimental e não suportado: **não usar em produção**
 - Preferir **development builds** ao Expo Go ao mirar as lojas
 - `expo prebuild` limpa e regenera `android/` e `ios/` por padrão (`--no-clean` para mantê-los)

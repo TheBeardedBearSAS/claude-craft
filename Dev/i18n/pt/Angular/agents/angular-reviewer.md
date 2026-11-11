@@ -57,10 +57,10 @@ O estado e sincrono e usado para renderizacao?
 
 **OnPush por padrão (22.0.0, breaking change) :**
 - Componentes com `changeDetection` indefinido agora são `OnPush`; não é mais necessário declará-lo
-- Para manter o comportamento anterior, declarar `changeDetection: ChangeDetectionStrategy.Eager`; a migração `ng update` adiciona `Eager` aos componentes existentes quando aplicável
+- Para manter o comportamento anterior, declarar `changeDetection: ChangeDetectionStrategy.Eager`; a migração `ng update` `change-detection-eager` adiciona `Eager` a todos os componentes existentes
 
 **HttpClient Fetch por padrao :**
-- XHR depreciado — API Fetch e o transporte padrao
+- a API Fetch é o transporte padrão (XHR deixou de ser o padrão; apenas `ServerXhr` do `platform-server` está depreciado)
 - Melhor compatibilidade SSR e suporte a streaming
 
 **TypeScript 6 obrigatorio :**

@@ -40,7 +40,7 @@ Voir `rules/02-architecture.md` pour les patterns.
 |-------|-------------|
 | Analyse avant code | Consulter `rules/01-workflow-analysis.md` |
 | strict_types | Obligatoire dans tous les fichiers |
-| PHPStan level 8 | 0 erreurs |
+| PHPStan level 10 | 0 erreurs |
 | Controllers thin | Deleguer aux Actions |
 | Validation | Toujours via Form Requests |
 

@@ -8,7 +8,7 @@ React 19 introduit des changements majeurs : Server Components, Actions, nouveau
 
 **Sources :**
 - [react.dev/blog/2025/10/07/react-compiler-1](https://react.dev/blog/2025/10/07/react-compiler-1)
-- [dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb](https://dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb)
+- [react.dev — React 19](https://react.dev/blog/2024/12/05/react-19)
 
 ---
 

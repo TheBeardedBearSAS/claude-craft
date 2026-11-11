@@ -61,7 +61,7 @@ ng e2e                 # Tests E2E
 
 ### Generation de code
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ng generate service features/{{feature}}/services/{{name}}
 ```
 

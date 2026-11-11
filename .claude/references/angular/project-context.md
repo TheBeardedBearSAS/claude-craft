@@ -71,7 +71,7 @@ npm run test
 ng lint
 
 # Generate component
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ```
 
 ## Project-Specific Rules

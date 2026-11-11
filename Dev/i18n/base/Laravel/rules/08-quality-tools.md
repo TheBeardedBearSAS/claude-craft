@@ -15,7 +15,7 @@ parameters:
         - database
         - tests
 
-    level: 8
+    level: 10
 
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
@@ -580,7 +580,7 @@ arch('DTOs are readonly')
 
 ## Quality Checklist
 
-- [ ] PHPStan level 8 passing
+- [ ] PHPStan level 10 passing
 - [ ] Laravel Pint passing
 - [ ] Code coverage ≥ 80%
 - [ ] No debugging statements

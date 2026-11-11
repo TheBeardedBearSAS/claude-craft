@@ -215,6 +215,8 @@ hcloud server create --name app-hel-01 --type cpx32 --image ubuntu-24.04 \
 - El provider Terraform 1.69 abandona Terraform 1.14 (se añade 1.16); mantener el provider hcloud en `>= 1.70.0`, CLI hcloud 1.70.2
 - Los server types cx22/cx32/cx42/cx52 y cpx11-cpx51 ya no se pueden pedir desde 2026-01-01: usar cx23/cx33/cx43/cx53 y cpx12/cpx22/cpx32/cpx42/cpx52/cpx62
 - Ansible: usar la colección `hetzner.hcloud` (7.2.0, requiere un ansible-core reciente, p. ej. 2.22.0) y fijar su versión en `requirements.yml`
+- hcloud CLI >= 1.70.0: `hcloud load-balancer create --primary-ipv4 <primary-ip> --primary-ipv6 <primary-ip>` asigna Primary IPs existentes (si se omite, se asigna una nueva). Los endpoints de Volumes exponen una propiedad generalizada `assignee` junto a `server` (changelog 2026-10-27)
+- Imágenes: `ubuntu-26.04` está disponible (x86 y arm); `debian-11` está obsoleta y no permitirá crear nuevos servidores después del 2026-11-30: preferir `ubuntu-26.04`
 
 ## Lista de Verificación de Arquitectura
 

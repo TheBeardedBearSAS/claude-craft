@@ -57,10 +57,10 @@ Soy un especialista en revisión de código Angular 22 y TypeScript. Mi enfoque 
 
 **OnPush por defecto (22.0.0, breaking change) :**
 - Los componentes con `changeDetection` indefinido son ahora `OnPush`; ya no es necesario declararlo
-- Para conservar el comportamiento anterior, declarar `changeDetection: ChangeDetectionStrategy.Eager`; la migración `ng update` añade `Eager` a los componentes existentes cuando corresponde
+- Para conservar el comportamiento anterior, declarar `changeDetection: ChangeDetectionStrategy.Eager`; la migración `ng update` `change-detection-eager` añade `Eager` a todos los componentes existentes
 
 **HttpClient Fetch por defecto :**
-- XHR deprecado — la API Fetch es el transporte por defecto
+- la API Fetch es el transporte por defecto (XHR ya no es el predeterminado; solo `ServerXhr` de `platform-server` está deprecado)
 - Mejor compatibilidad SSR y soporte de streaming
 
 **TypeScript 6 requerido :**

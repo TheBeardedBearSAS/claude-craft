@@ -243,7 +243,7 @@ digest = hasher.create(password)
 Argon2::Password.verify_password(password, digest)
 ```
 
-NIST SP 800-63B-4 befolgen: mindestens 12 Zeichen, keine verpflichtenden Komplexitätsregeln, keine periodische Rotation, alle druckbaren Zeichen erlauben, gegen Listen kompromittierter Passwörter prüfen.
+NIST SP 800-63B-4 befolgen: mindestens 15 Zeichen (Einzelfaktor; 8 mit MFA), keine verpflichtenden Komplexitätsregeln, keine periodische Rotation, alle druckbaren Zeichen erlauben, gegen Listen kompromittierter Passwörter prüfen.
 
 `User.authenticate_by(email_address:, password:)` (timing-sicher) statt `find_by` gefolgt von `authenticate` verwenden.
 

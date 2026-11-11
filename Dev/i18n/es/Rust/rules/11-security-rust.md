@@ -169,7 +169,7 @@ pub async fn register(Json(body): Json<CreateUserRequest>) -> Result<StatusCode,
 - `#[serde(deny_unknown_fields)]` para DTO estrictos; DTO separados por caso de uso para prevenir la asignación masiva (mass assignment)
 - Limita los tamaños: `RequestBodyLimitLayer`, `DefaultBodyLimit`, longitudes `max` de las cadenas, topes de paginación (`limit <= 100`)
 - Envuelve `Json` en un extractor que mapee los rechazos por cuerpo mal formado al formato problem+json sin reflejar detalles internos
-- Contraseñas: mínimo 12 caracteres, permitir cualquier carácter imprimible, sin reglas de composición, sin rotación periódica (NIST SP 800-63B-4)
+- Contraseñas: mínimo 15 caracteres (factor único; 8 con MFA), permitir cualquier carácter imprimible, sin reglas de composición, sin rotación periódica (NIST SP 800-63B-4)
 
 ---
 

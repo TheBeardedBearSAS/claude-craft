@@ -461,7 +461,7 @@ const ItemList = ({ items, onClick }) => {
 };
 ```
 
-Source : [dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb](https://dev.to/jay_sarvaiya_reactjs/react-19-best-practices-write-clean-modern-and-efficient-react-code-1beb)
+Source : [react.dev — React 19](https://react.dev/blog/2024/12/05/react-19)
 
 ### Quand garder la memoization manuelle
 

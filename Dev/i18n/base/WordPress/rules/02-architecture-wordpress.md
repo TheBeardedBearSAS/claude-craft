@@ -98,6 +98,8 @@ Always use `$wpdb->prefix` for table names and `$wpdb->prepare()` for SQL.
 - Static blocks save markup in JS; any change to saved markup needs a `deprecated` entry so existing content keeps validating
 - Front-end interactivity uses the Interactivity API: `viewScriptModule` in `block.json`, `data-wp-interactive`, directives such as `data-wp-on--click` and `data-wp-bind--*`, a namespaced `store()` from `@wordpress/interactivity`, and server state via `wp_interactivity_state()`. Script modules need the `--experimental-modules` flag on `wp-scripts build`/`start` unless your scaffold already sets it
 - Block bindings and patterns are preferred over custom shortcodes for new content structures
+- SVG Icon API (7.1): `wp_register_icon_collection( $name, $args )`, `wp_register_icon( 'collection/icon-name', [ 'label' => ..., 'content' | 'file_path' => ... ] )`, `wp_get_icon( $name, [ 'size', 'class', 'label' ] )` (empty string when unregistered), REST `GET /wp/v2/icons`. Source: https://make.wordpress.org/core/2026/07/24/registering-and-rendering-svg-icons-in-wordpress-7-1/
+- The post editor is always iframed in 7.1, including on sites with legacy meta boxes: JS/CSS that reaches across the editor document boundary must be tested (jQuery UI is 1.14.2). Source: https://make.wordpress.org/core/2026/08/03/iframed-editor-changes-in-wordpress-7-1/
 
 ## Block Themes
 

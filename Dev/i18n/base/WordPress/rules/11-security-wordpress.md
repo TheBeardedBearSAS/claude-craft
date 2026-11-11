@@ -116,6 +116,7 @@ $wpdb->get_results( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}acme_reports 
 - Guard direct access: `defined( 'ABSPATH' ) || exit;` at the top of every PHP file that can be requested by URL
 - File paths from user input: allow-list names, resolve with `realpath()` and verify the result stays inside the intended directory; never `include` or `require` a variable path
 - Use `WP_Filesystem` for writes outside uploads when permissions require it; do not write exports to guessable public paths
+- 7.1 client-side media processing (wasm-vips in a Web Worker, on by default in Chromium 137+ with `Document-Isolation-Policy: isolate-and-credentialless`) uploads sub-sizes through `POST /wp/v2/media/{id}/sideload`: keep the `upload_files` capability and MIME allow-list on custom upload paths, make sure your CSP `worker-src` allows `blob:`, and opt out with `add_filter( 'wp_client_side_media_processing_enabled', '__return_false' )` if needed. Source: https://make.wordpress.org/core/2026/07/22/client-side-media-processing-in-wordpress-7-1/
 
 ## Data and Object Handling
 

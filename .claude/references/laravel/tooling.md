@@ -172,7 +172,7 @@ parameters:
         - app
         - database
 
-    level: 8
+    level: 10
 
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
@@ -255,8 +255,8 @@ return RectorConfig::configure()
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^5.0",
         "pestphp/pest-plugin-laravel": "^5.0",
-        "phpstan/phpstan": "^2.2",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "rector/rector": "^2.8",
         "spatie/laravel-ignition": "^2.4"
     }
 }

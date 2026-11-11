@@ -102,10 +102,10 @@ Le composant utilise-t-il inject() ?
 
 **OnPush par défaut (22.0.0, breaking change) :**
 - Les composants dont `changeDetection` est indéfini sont désormais `OnPush` ; il n'est plus nécessaire de le déclarer
-- Pour conserver l'ancien comportement, déclarer `changeDetection: ChangeDetectionStrategy.Eager` ; la migration `ng update` ajoute `Eager` aux composants existants le cas échéant
+- Pour conserver l'ancien comportement, déclarer `changeDetection: ChangeDetectionStrategy.Eager` ; la migration `ng update` `change-detection-eager` ajoute `Eager` à tous les composants existants
 
 **Angular 22 autres nouveautés :**
-- **HttpClient Fetch par défaut** (XHR déprécié)
+- **HttpClient Fetch par défaut** (XHR n'est plus le transport par défaut ; seul `ServerXhr` de `platform-server` est déprécié)
 - **TypeScript 6 requis** (TS 5.x non supporté)
 
 **Autres breaking changes 22.0.0** (https://github.com/angular/angular/blob/main/CHANGELOG.md) **:**

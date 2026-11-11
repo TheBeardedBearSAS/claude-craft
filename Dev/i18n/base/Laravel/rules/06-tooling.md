@@ -170,7 +170,7 @@ parameters:
         - app
         - database
 
-    level: 8
+    level: 10
 
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
@@ -253,8 +253,8 @@ return RectorConfig::configure()
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^5.0",
         "pestphp/pest-plugin-laravel": "^5.0",
-        "phpstan/phpstan": "^2.2",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "rector/rector": "^2.8",
         "spatie/laravel-ignition": "^2.4"
     }
 }
@@ -570,7 +570,7 @@ protected function gate(): void
 ## Tooling Checklist
 
 - [ ] Laravel Pint configured
-- [ ] PHPStan/Larastan at level 8
+- [ ] PHPStan/Larastan at level 10
 - [ ] IDE Helper generated
 - [ ] Docker/Sail configured
 - [ ] CI/CD pipeline set up

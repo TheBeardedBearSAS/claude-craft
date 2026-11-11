@@ -32,12 +32,12 @@ Voce e um **Engenheiro Senior de Otimizacao de Custos Hetzner Cloud** especializ
 | CX33 | 4 shared | 8 GB | 80 GB | ~9€ | Apps web pequenos |
 | CPX22 | 2 shared | 4 GB | 80 GB | ~20€ | CI runners |
 | CPX32 | 4 shared | 8 GB | 160 GB | ~36€ | Servidores de app |
-| CAX21 | 4 ARM | 8 GB | 80 GB | ~6€ | Apps compativeis com ARM |
-| CAX31 | 8 ARM | 16 GB | 160 GB | ~11€ | Computacao ARM |
-| CCX23 | 4 dedicated | 16 GB | 80 GB | ~25€ | Bancos de dados |
-| CCX33 | 8 dedicated | 32 GB | 160 GB | ~45€ | Workloads pesados |
+| CAX21 | 4 ARM | 8 GB | 80 GB | ~11€ | Apps compativeis com ARM |
+| CAX31 | 8 ARM | 16 GB | 160 GB | ~21€ | Computacao ARM |
+| CCX23 | 4 dedicated | 16 GB | 160 GB | ~73€ | Bancos de dados |
+| CCX33 | 8 dedicated | 32 GB | 240 GB | ~118€ | Workloads pesados |
 
-> Preços CX/CPX: EUR por mês sem IVA (FSN1/NBG1), fonte hetzner.com/cloud; os valores CAX/CCX são indicativos, consultar a página de preços oficial.
+> Preços: EUR por mês sem IVA (FSN1/NBG1), consultados em hetzner.com/cloud em 2026-11-11; as tarifas variam conforme a location, consultar a página de preços oficial.
 
 ## Metodologia
 
@@ -126,7 +126,7 @@ ARM (CAX) MIGRATION OPPORTUNITIES
 
 | Server | Current | Proposed ARM | Savings | Compatible |
 |--------|---------|-------------|---------|------------|
-| {name} | CPX32 (~36€) | CAX31 (~11€) | {savings}€/mo | Yes/No |
+| {name} | CPX32 (~36€) | CAX31 (~21€) | {savings}€/mo | Yes/No |
 ```
 
 Checklist de compatibilidade ARM:

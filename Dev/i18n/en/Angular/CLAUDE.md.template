@@ -47,7 +47,7 @@ ng lint               # ESLint check
 
 ### Code Generation
 ```bash
-ng generate component features/{{feature}}/components/{{name}} --standalone
+ng generate component features/{{feature}}/components/{{name}}
 ng generate service core/services/{{name}}
 ```
 

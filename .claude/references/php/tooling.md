@@ -4,6 +4,10 @@
 
 > **Niveau de correctif :** viser PHP ≥ 8.5.12 (22 oct. 2026), qui inclut des correctifs de sécurité (Core GHSA-w8hw-w9fx-j79w et GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Source : https://www.php.net/ChangeLog-8.php#8.5.12
 
+> **PHP 8.6 (à surveiller) :** 8.6.0 est en RC5 (non stable, absente des versions supportées) ; continuer à viser 8.5.x. Source : https://www.php.net/supported-versions.php
+
+
+
 ## Composer - Dependency Management
 
 ### Essential Commands
@@ -63,9 +67,9 @@ Pest 5 manages its PHPUnit 13 pin transitively; do not add an explicit `phpunit/
     "require-dev": {
         "pestphp/pest": "^5.3",
         "pestphp/pest-plugin-browser": "^5.1",
-        "phpstan/phpstan": "^2.2",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "rector/rector": "^2.8",
         "qossmic/deptrac-shim": "^4.0"
     },
     "autoload": {
@@ -122,9 +126,9 @@ PHPUnit 13 is the current stable (released February 2026, supported until Februa
     },
     "require-dev": {
         "phpunit/phpunit": "^13.0",
-        "phpstan/phpstan": "^2.2",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "rector/rector": "^2.8",
         "qossmic/deptrac-shim": "^4.0"
     },
     "autoload": {

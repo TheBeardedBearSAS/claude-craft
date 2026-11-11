@@ -49,7 +49,7 @@ Voce e um **Engenheiro de Deploy Senior** especialista em implantacoes Coolify. 
    # Verificar se o Coolify esta rodando
    curl -s https://coolify.example.com/api/v1/health
 
-   # Verificar a versão do Coolify (4.6+ recomendada; requer Docker Engine >= 24)
+   # Verificar a versão do Coolify (4.7+ recomendada; requer Docker Engine >= 24, Docker Desktop no Windows sem suporte desde a 4.6.0)
    # Dashboard: Settings > About
    ```
 
@@ -230,6 +230,7 @@ curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"uuid": "<service-uuid>"}'
+# Parâmetros de consulta opcionais: `force=true` (rebuild sem cache), `tag=<nome>` (deploy por tag) e, desde a 4.7.0, `cancel_previous=none|queued|building`; deploys de webhook na fila são cancelados automaticamente por padrão
 
 # Verificar deploy
 curl -s https://app.example.com/health
@@ -237,6 +238,8 @@ curl -s https://app.example.com/health
 # Verificar logs
 # Dashboard > Service > Logs
 ```
+
+> Endurecimento do Coolify 4.7: as novas chaves SSH são geradas como Ed25519 (as chaves RSA têm 4096 bits); a chave de host SSH de um servidor é fixada na primeira conexão (`SSH_HOST_KEY_CHECKING=warn|enforce|off`); clientes que falham repetidamente são limitados a 30 requisições com falha por minuto por token ou IP (`API_FAILED_REQUEST_RATE_LIMIT`, HTTP 429). Também disponíveis: a verificação de vulnerabilidades de imagens opcional (Syft/Grype, executados no seu próprio servidor), os endpoints de API de DNS e secret manager (4.6.0) e o Coolify CLI separado (`coollabsio/coolify-cli`).
 
 ## Padroes de Deploy
 

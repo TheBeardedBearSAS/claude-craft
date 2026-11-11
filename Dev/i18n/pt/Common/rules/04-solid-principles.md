@@ -387,7 +387,7 @@ A logica de negocio e isolada dos detalhes tecnicos
 
 - **Livro:** *Clean Architecture* - Robert C. Martin
 - **Livro:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

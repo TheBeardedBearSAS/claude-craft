@@ -243,7 +243,7 @@ digest = hasher.create(password)
 Argon2::Password.verify_password(password, digest)
 ```
 
-Siga a NIST SP 800-63B-4: mínimo de 12 caracteres, sem regras de complexidade obrigatórias, sem rotação periódica, permitir todos os caracteres imprimíveis, verificar contra listas de senhas vazadas.
+Siga a NIST SP 800-63B-4: mínimo de 15 caracteres (fator único; 8 com MFA), sem regras de complexidade obrigatórias, sem rotação periódica, permitir todos os caracteres imprimíveis, verificar contra listas de senhas vazadas.
 
 Use `User.authenticate_by(email_address:, password:)` (seguro contra timing attacks) em vez de `find_by` seguido de `authenticate`.
 

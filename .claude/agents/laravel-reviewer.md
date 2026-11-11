@@ -320,7 +320,7 @@ $key = config('services.stripe.key');
 
 | Critere | Points |
 |---------|--------|
-| PHPStan level 8+, Pint configure, zero dd()/dump() | 6 |
+| PHPStan level 10, Pint configure, zero dd()/dump() | 6 |
 | PHP 8.3+ features (readonly, enums, match, named args, native attributes) | 5 |
 | Conventions Laravel respectees (nommage, structure) | 5 |
 | config() au lieu de env(), Eloquent casts et scopes | 4 |

@@ -83,7 +83,7 @@ docker run --rm -v $(pwd):/app php:8.5-cli grep -r "RateLimiter" /app/config --i
 ```
 
 - [ ] Hash de mot de passe fort (argon2i ou bcrypt avec coût élevé)
-- [ ] Politique de mot de passe forte (min 12 caractères, complexité)
+- [ ] Politique de mot de passe forte (min 15 caractères en facteur unique, 8 avec MFA, sans règles de composition obligatoires — NIST SP 800-63B-4)
 - [ ] Rate limiting sur tentatives de login
 - [ ] Protection contre brute force
 - [ ] Gestion sécurisée des sessions (secure, httponly, samesite)

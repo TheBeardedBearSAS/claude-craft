@@ -49,7 +49,7 @@ Du bist ein **Senior Deployment-Ingenieur**, Experte fur Coolify-Deployments. Du
    # Coolify lauft verifizieren
    curl -s https://coolify.example.com/api/v1/health
 
-   # Coolify-Version prüfen (4.6+ empfohlen; erfordert Docker Engine >= 24)
+   # Coolify-Version prüfen (4.7+ empfohlen; erfordert Docker Engine >= 24, Docker Desktop unter Windows seit 4.6.0 nicht mehr unterstützt)
    # Dashboard: Settings > About
    ```
 
@@ -230,6 +230,7 @@ curl -X POST https://coolify.example.com/api/v1/deploy \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"uuid": "<service-uuid>"}'
+# Optionale Abfrageparameter: `force=true` (Rebuild ohne Cache), `tag=<Name>` (Deployment per Tag) und seit 4.7.0 `cancel_previous=none|queued|building`; wartende Webhook-Deployments werden standardmäßig automatisch abgebrochen
 
 # Deployment verifizieren
 curl -s https://app.example.com/health
@@ -237,6 +238,8 @@ curl -s https://app.example.com/health
 # Logs prufen
 # Dashboard > Service > Logs
 ```
+
+> Coolify-4.7-Härtung: Neue SSH-Schlüssel werden als Ed25519 erzeugt (RSA-Schlüssel haben 4096 Bit); der SSH-Hostschlüssel eines Servers wird bei der ersten Verbindung gepinnt (`SSH_HOST_KEY_CHECKING=warn|enforce|off`); Clients, die dauerhaft scheitern, werden auf 30 fehlgeschlagene Anfragen pro Minute je Token oder IP begrenzt (`API_FAILED_REQUEST_RATE_LIMIT`, HTTP 429). Ebenfalls verfügbar: optionaler Schwachstellenscan von Images (Syft/Grype, auf dem eigenen Server ausgeführt), API-Endpunkte für DNS und Secret-Manager (4.6.0) und das separate Coolify CLI (`coollabsio/coolify-cli`).
 
 ## Deployment-Patterns
 

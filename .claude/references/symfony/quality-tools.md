@@ -8,7 +8,7 @@ L'utilisation des outils de qualité est **OBLIGATOIRE** pour garantir un code m
 - PHP 8.4+ (Symfony 8.1 requiert PHP 8.4+, recommandé pour Property Hooks et Lazy Objects)
 - Symfony 8.1.x stable 8.1 (mai 2026, recommandée) ou 7.4 LTS — https://symfony.com/releases/8.1
 - PHPStan 2.2.x
-- Rector 2.4.x
+- Rector 2.8.x
 - Deptrac v4.x
 
 **Objectifs:**
@@ -391,7 +391,6 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -416,9 +415,8 @@ return RectorConfig::configure()
         earlyReturn: true,
         strictBooleans: true,
     )
+    ->withComposerBased(symfony: true) // version sets inferred from composer.json (SymfonyLevelSetList removed)
     ->withSets([
-        // ✅ Symfony 8.1
-        SymfonyLevelSetList::UP_TO_SYMFONY_81,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
 
@@ -1035,9 +1033,9 @@ make ci
 | Outil | Version Minimale | Commande Installation |
 |-------|-----------------|----------------------|
 | PHP | 8.5.x | - |
-| PHPStan | 2.2.x | `composer require --dev phpstan/phpstan:^2.2` |
-| Rector | 2.4.x | `composer require --dev rector/rector:^2.4` |
+| PHPStan | 2.3.x | `composer require --dev phpstan/phpstan:^2.3` |
+| Rector | 2.8.x | `composer require --dev rector/rector:^2.8` |
 | Deptrac | 4.x | `composer require --dev qossmic/deptrac-shim:^4.0` |
-| PHP-CS-Fixer | 3.x | `composer require --dev friendsofphp/php-cs-fixer:^3.0` |
+| PHP-CS-Fixer | 3.x | `composer require --dev friendsofphp/php-cs-fixer:^3.95` |
 | Infection | 0.35.x | `composer require --dev infection/infection:^0.35` |
 | PHPUnit | 12.x | `composer require --dev phpunit/phpunit:^12.0` |

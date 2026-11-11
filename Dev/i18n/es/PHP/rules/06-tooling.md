@@ -2,6 +2,8 @@
 
 > **Nivel de parche:** apuntar a PHP ≥ 8.5.12 (22 oct. 2026), que incluye correcciones de seguridad (Core GHSA-w8hw-w9fx-j79w y GHSA-6wmf-4rv5-p3rp, Lexbor, Opcache, SOAP, etc.). Fuente: https://www.php.net/ChangeLog-8.php#8.5.12
 
+> **PHP 8.6 (a vigilar):** 8.6.0 está en RC5 (no estable, aún fuera de las versiones soportadas); seguir apuntando a 8.5.x. Fuente: https://www.php.net/supported-versions.php
+
 ## Composer - Dependency Management
 
 ### Essential Commands
@@ -53,9 +55,9 @@ composer validate
         "psr/container": "^2.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "rector/rector": "^2.4",
+        "phpstan/phpstan": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "rector/rector": "^2.8",
         "pestphp/pest": "^5.3"
     },
     "autoload": {

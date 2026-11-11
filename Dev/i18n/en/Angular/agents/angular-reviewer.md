@@ -57,10 +57,10 @@ Is the state synchronous and used for rendering?
 
 **OnPush by default (22.0.0, breaking change) :**
 - Components with an undefined `changeDetection` are now `OnPush`; there is no need to declare it anymore
-- To keep the previous behavior, declare `changeDetection: ChangeDetectionStrategy.Eager`; the `ng update` migration adds `Eager` to existing components where applicable
+- To keep the previous behavior, declare `changeDetection: ChangeDetectionStrategy.Eager`; the `ng update` migration `change-detection-eager` adds `Eager` to all existing components where applicable
 
 **HttpClient Fetch by default :**
-- XHR deprecated — Fetch API is the default transport
+- Fetch API is the default transport (XHR is no longer the default; only `ServerXhr` in `platform-server` is deprecated)
 - Better SSR compatibility and streaming support
 
 **TypeScript 6 required :**

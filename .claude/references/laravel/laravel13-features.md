@@ -23,9 +23,12 @@ php artisan migrate   # crée agent_conversations et agent_conversation_messages
 
 | Fonctionnalité | Description |
 |----------------|-------------|
-| **Providers** | OpenAI, Anthropic, Gemini (enum `Laravel\Ai\Enums\Lab`) + driver `openai-compatible` pour endpoints auto-hébergés |
+| **Providers** | OpenAI, Anthropic, Gemini, Azure, Bedrock, Groq, xAI, DeepSeek, Mistral, Ollama, OpenRouter, Cohere… selon la fonctionnalité (enum `Laravel\Ai\Enums\Lab`) + driver `openai-compatible` pour endpoints auto-hébergés |
 | **Agents** | Classes `Agent` + trait `Promptable` (`php artisan make:agent`) |
 | **Outils (Tools)** | Contrat `Laravel\Ai\Contracts\Tool` (`php artisan make:tool`) |
+| **Outils provider** | Outils exécutés par le provider (`Laravel\Ai\Providers\Tools\WebSearch`, web fetch, file search, code execution), retournés par la méthode `tools()` |
+| **Conversations** | Interface `Conversational` (méthode `messages()`) ou trait `RemembersConversations` (persistance en base) ; `withMessages([...])` pour un historique ponctuel — ne pas combiner avec `Conversational` (`LogicException`) |
+| **Middleware** | Interface `HasMiddleware` + `php artisan make:agent-middleware` (`app/Ai/Middleware`) ; `handle(PendingStep $step, Closure $next)` appelé à chaque étape de génération |
 | **Sortie structurée** | `HasStructuredOutput` + `schema(JsonSchema $schema)` |
 | **Embeddings** | `Embeddings::for([...])->generate()` ou `Str::of(...)->toEmbeddings()` |
 | **Streaming** | `->stream()` |

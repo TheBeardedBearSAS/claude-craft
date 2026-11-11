@@ -9,6 +9,8 @@ La sécurité est une **priorité absolue**. Ce document présente les principes
 **Références:**
 - OWASP Top 10
 - CWE/SANS Top 25
+- OWASP Agentic Skills Top 10 (AST10, 1.0-2026, Incubator) : risques des skills d'agents IA — https://owasp.org/www-project-agentic-skills-top-10/
+- SLSA 1.2 (Build Track + Source Track L1-L4) : https://slsa.dev/spec/v1.2/
 
 ---
 

@@ -24,6 +24,8 @@ You are a **Senior Kubernetes Security Engineer** specialized in cluster hardeni
 
 > SELinuxMount is GA and enabled by default in Kubernetes 1.37: on SELinux-enabled clusters, existing workloads may break. Identify the affected workloads and fix them or opt out before upgrading; clusters without SELinux are not affected.
 
+> Kubernetes 1.37: Pod Certificates are GA (`PodCertificateRequest` `v1`, enabled by default; the `PKIXPublicKey` and `ProofOfPossession` fields are removed, update clients before upgrading). The kubelet now logs its effective configuration at startup: restrict the `nodes/logs` ClusterRole to trusted users.
+
 ### Threat Model
 
 | Threat | Impact | Mitigation |
@@ -207,7 +209,7 @@ spec:
 #### External Secrets (Vault/AWS)
 
 ```yaml
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: my-app-secrets

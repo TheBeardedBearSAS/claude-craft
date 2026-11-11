@@ -67,7 +67,7 @@ Verwenden Sie Google-Stil-Docstrings für alle öffentlichen Module, Klassen und
 def calculate_order_total(
     items: list[OrderItem],
     tax_rate: Decimal,
-    discount: Optional[Decimal] = None
+    discount: Decimal | None = None
 ) -> Money:
     """
     Berechnet den Gesamtbetrag einer Bestellung.
@@ -103,7 +103,7 @@ Typisieren Sie alle Funktionsparameter und Rückgabewerte.
 ### Grundlegende Typen
 
 ```python
-from typing import Optional, Union
+from typing import Union
 from decimal import Decimal
 from datetime import datetime
 
@@ -118,7 +118,7 @@ def process_user(
     pass
 
 # Optional (nullable)
-def find_user(user_id: str) -> Optional[User]:
+def find_user(user_id: str) -> User | None:
     """Gibt User zurück oder None, wenn nicht gefunden."""
     pass
 
@@ -192,7 +192,7 @@ T = TypeVar('T')
 class Repository(Generic[T]):
     """Generisches Repository."""
 
-    def find_by_id(self, entity_id: str) -> Optional[T]:
+    def find_by_id(self, entity_id: str) -> T | None:
         pass
 
     def save(self, entity: T) -> T:
@@ -394,7 +394,6 @@ src/myproject/
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 # 2. Drittanbieter
 from fastapi import FastAPI

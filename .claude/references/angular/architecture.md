@@ -409,7 +409,7 @@ export const routes: Routes = [
 
 ### 1. Change Detection Strategy (OnPush par défaut depuis Angular 22.0.0)
 
-Depuis Angular 22.0.0 (breaking change), **les composants dont `changeDetection` est indéfini sont `OnPush` par défaut**. Déclarer `changeDetection: ChangeDetectionStrategy.Eager` pour conserver l'ancien comportement ; la migration `ng update` ajoute `Eager` aux composants existants le cas échéant.
+Depuis Angular 22.0.0 (breaking change), **les composants dont `changeDetection` est indéfini sont `OnPush` par défaut**. Déclarer `changeDetection: ChangeDetectionStrategy.Eager` pour conserver l'ancien comportement ; la migration `ng update` `change-detection-eager` (22.0.0) ajoute `Eager` à tous les composants existants.
 
 ```typescript
 // Angular 22 — OnPush implicite (ne pas déclarer changeDetection)
@@ -429,7 +429,7 @@ export class MyComponent {}
 export class LegacyComponent {}
 ```
 
-**Impact migration :** les composants existants sans `changeDetection` passent à OnPush lors de la montée en 22.0.0 ; `ng update` insère `ChangeDetectionStrategy.Eager` pour préserver leur comportement, à retirer progressivement.
+**Impact migration :** les composants existants sans `changeDetection` passent à OnPush lors de la montée en 22.0.0 ; la migration `change-detection-eager` insère `ChangeDetectionStrategy.Eager` pour préserver leur comportement, à retirer progressivement.
 
 Source : https://github.com/angular/angular/blob/main/CHANGELOG.md (22.0.0, core)
 
@@ -666,42 +666,44 @@ export class UserService {
 
 ### injectAsync() (v22)
 
-`injectAsync()` permet d'injecter des dépendances asynchrones (lazy-loaded, promise-based) directement dans le constructeur :
+`injectAsync()` (`@angular/core`, API publique depuis 22.0) retourne une fonction qui résout le service à la demande : `injectAsync<T>(loader: () => Promise<ProviderToken<T>>, options?: { prefetch?: PrefetchTrigger }): () => Promise<T>`. Il doit être appelé dans un contexte d'injection, et le service chargé doit être auto-fourni (`@Injectable({providedIn: 'root'})` ou `@Service()`) :
 
 ```typescript
-import { Component, injectAsync } from '@angular/core';
+import { Component, injectAsync, onIdle } from '@angular/core';
 
 @Component({ ... })
 export class DashboardComponent {
-  // injectAsync : résolution lazy d'un service ou d'un token asynchrone
-  private analytics = injectAsync(() =>
-    import('./analytics.service').then(m => inject(m.AnalyticsService))
-  );
+  private analytics = injectAsync(() => import('./analytics.service'), { prefetch: onIdle });
+
+  async onClick() {
+    (await this.analytics()).track('click');
+  }
 }
 ```
 
-**Usage :** partage de singletons issus de micro-frontends ou de modules chargés dynamiquement sans circular dependency.
+**Usage :** charger paresseusement un service lourd (chunk séparé) sans le payer au démarrage. Source : https://angular.dev/guide/di/lazy-loading-services
 
 ### Angular Aria (v22)
 
-Le package `@angular/aria` (stable v22) fournit des primitives accessibles prêtes à l'emploi : `cdkAriaLive`, `cdkTrapFocus`, `cdkVisuallyHidden`, et les nouvelles directives `cdkCombobox`, `cdkListbox` :
+Le package `@angular/aria` existe sur npm (latest 22.2.6) ; le tag « developer preview » a été retiré dans 22.0.0 (CHANGELOG d'`angular/components`). Il fournit des directives headless accessibles par sous-entrée (`@angular/aria/listbox`, `/combobox`, `/menu`, `/tabs`, `/tree`, `/toolbar`, `/accordion`, `/grid`) ; sélecteurs `ngListbox`, `ngOption`, etc. (source : https://angular.dev/guide/aria/listbox). `cdkTrapFocus`, `cdkAriaLive` et `cdkVisuallyHidden` restent dans `@angular/cdk/a11y`.
 
 ```typescript
-import { CdkListbox, CdkOption } from '@angular/cdk/listbox';
+import { Listbox, Option } from '@angular/aria/listbox';
 
 @Component({
-  imports: [CdkListbox, CdkOption],
+  imports: [Listbox, Option],
   template: `
-    <ul cdkListbox>
-      <li cdkOption="option1">Option 1</li>
-      <li cdkOption="option2">Option 2</li>
-    </ul>
+    <div ngListbox aria-label="Options">
+      @for (o of options; track o) { <div ngOption [value]="o">{{ o }}</div> }
+    </div>
   `
 })
-export class AccessibleListComponent {}
+export class AccessibleListComponent {
+  options = ['Option 1', 'Option 2'];
+}
 ```
 
-**SSRF/SSR (v22) :** Angular 22 corrige plusieurs vecteurs SSRF liés au SSR (Server-Side Rendering) : les requêtes HTTP faites côté serveur n'incluent plus les cookies client par défaut (`withClientHydration()` ne forwarde plus les credentials).
+**SSRF (v22) :** le CHANGELOG 22.0.0 liste des correctifs SSRF dans `platform-server` (« prevent SSRF bypasses via backslash URLs in HttpClient », « secure location and document initialization against SSRF and path hijack ») ; la mention précédente d'un non-forward des cookies par `withClientHydration()` n'est confirmée par aucune source officielle et a été retirée. `ServerXhr` (`@angular/platform-server`) est déprécié ; JSONP est déprécié depuis 22.1.
 
 **Source :** https://blog.ninja-squad.com/2026/06/03/what-is-new-angular-22.0
 

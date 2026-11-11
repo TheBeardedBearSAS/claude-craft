@@ -47,7 +47,7 @@ Ver `rules/02-architecture.md` para padroes.
 ### Comandos de desenvolvimento
 ```bash
 ng serve                           # Servidor de desenvolvimento
-ng generate component features/... --standalone # Gerar componente
+ng generate component features/... # Gerar componente
 ng build --configuration=production # Build producao
 ```
 

@@ -27,7 +27,7 @@ parameters:
     paths:
         - app
         - database
-    level: 8
+    level: 10
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 ```

@@ -401,7 +401,6 @@ src/myproject/
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 # 2. Third-party
 from fastapi import FastAPI

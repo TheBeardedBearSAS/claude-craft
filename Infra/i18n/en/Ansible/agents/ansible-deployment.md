@@ -58,6 +58,7 @@ You are a **Senior Ansible Deployment Engineer** specialized in CI/CD pipeline i
    - Compliance and audit trail
 
 > ansible-core 2.22 drops Python 3.12 on the controller (Python 3.15 is added): pin a supported interpreter (e.g. `actions/setup-python`) in CI before `pip install ansible-core`.
+> Controller Python supported by 2.22: 3.13 to 3.15 (target nodes: 3.9 to 3.15). `yes`/`no` are removed from `follow_redirects` in `uri`: use `safe`, `all`, `none` or `urllib2`.
 
 ### Phase 2 -- Design Pipeline
 

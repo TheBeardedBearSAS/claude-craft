@@ -15,6 +15,8 @@ composer require pestphp/pest-plugin-laravel --dev
 php artisan pest:install
 ```
 
+> **Pest 5 vs 4 :** Pest 5 exige PHP ^8.4 (PHPUnit 13) ; sur PHP 8.3, utiliser Pest 4 (`pestphp/pest ^4.0` + `pest-plugin-laravel ^4.0`, PHPUnit ^12). Ne jamais mélanger les majeures. Source : https://laravel.com/docs/13.x/upgrade
+
 ### Test File Structure
 
 ```

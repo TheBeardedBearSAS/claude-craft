@@ -387,7 +387,7 @@ Es mejor tener varias interfaces especificas que una interfaz general.
 
 - **Libro:** *Clean Architecture* - Robert C. Martin
 - **Libro:** *SOLID Principles* - Uncle Bob
-- **Video:** [SOLID Principles Explained](https://www.youtube.com/watch?v=pTB30aXS77U)
+- **Article:** [The Relevance of SOLID — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2020/10/18/Solid-Relevance.html)
 
 ---
 

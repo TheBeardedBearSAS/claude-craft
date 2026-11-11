@@ -43,7 +43,6 @@ app/
 ```python
 # app/models/{resource}.py
 from datetime import datetime
-from typing import Optional
 from sqlalchemy import Column, String, DateTime, Boolean, Text
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -70,7 +69,6 @@ class {Resource}(Base):
 ```python
 # app/schemas/{resource}.py
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -78,7 +76,7 @@ from pydantic import BaseModel, Field, ConfigDict
 class {Resource}Base(BaseModel):
     """Schéma de base pour {Resource}."""
     name: str = Field(..., min_length=1, max_length=255, description="Nom de la ressource")
-    description: Optional[str] = Field(None, description="Description optionnelle")
+    description: str | None = Field(None, description="Description optionnelle")
     is_active: bool = Field(True, description="Statut actif/inactif")
 
 
@@ -89,9 +87,9 @@ class {Resource}Create({Resource}Base):
 
 class {Resource}Update(BaseModel):
     """Schéma pour la mise à jour (tous les champs optionnels)."""
-    name: Optional[str] = Field(None, min_length=1, max_length=255)
-    description: Optional[str] = None
-    is_active: Optional[bool] = None
+    name: str | None = Field(None, min_length=1, max_length=255)
+    description: str | None = None
+    is_active: bool | None = None
 
 
 class {Resource}InDB({Resource}Base):
@@ -121,7 +119,6 @@ class {Resource}List(BaseModel):
 
 ```python
 # app/crud/{resource}.py
-from typing import Optional
 from uuid import UUID
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -136,7 +133,7 @@ class CRUD{Resource}(CRUDBase[{Resource}, {Resource}Create, {Resource}Update]):
 
     async def get_by_name(
         self, db: AsyncSession, *, name: str
-    ) -> Optional[{Resource}]:
+    ) -> {Resource} | None:
         """Récupère par nom."""
         result = await db.execute(
             select({Resource}).where({Resource}.name == name)
@@ -161,7 +158,7 @@ class CRUD{Resource}(CRUDBase[{Resource}, {Resource}Create, {Resource}Update]):
         *,
         page: int = 1,
         size: int = 20,
-        is_active: Optional[bool] = None,
+        is_active: bool | None = None,
     ) -> tuple[list[{Resource}], int]:
         """Récupère avec pagination."""
         query = select({Resource})
@@ -191,7 +188,6 @@ class CRUD{Resource}(CRUDBase[{Resource}, {Resource}Create, {Resource}Update]):
 
 ```python
 # app/api/v1/endpoints/{resource}.py
-from typing import Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -214,7 +210,7 @@ async def list_{resource}s(
     db: AsyncSession = Depends(get_db),
     page: int = Query(1, ge=1, description="Numéro de page"),
     size: int = Query(20, ge=1, le=100, description="Taille de page"),
-    is_active: Optional[bool] = Query(None, description="Filtrer par statut"),
+    is_active: bool | None = Query(None, description="Filtrer par statut"),
     current_user: User = Depends(get_current_user),
 ) -> {Resource}List:
     """

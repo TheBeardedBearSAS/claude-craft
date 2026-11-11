@@ -849,6 +849,7 @@ describe('api/cron/daily', () => {
 
 - **vercel.json est un contrat de build-time** : le valider contre le schéma, ne jamais le laisser diverger silencieusement de la forme déployée
 - **Les Functions passent par défaut en Node.js/Fluid Compute** : l'Edge Runtime est un enjeu de reconnaissance de migration, pas une cible pour du nouveau code
+- **Les Cron Jobs sont legacy → Schedules** : `crons[]` fonctionne encore mais Vercel le migre vers Schedules (`schedules` dans vercel.json, indexé par nom, fuseau IANA, `requestMethod` vaut `POST` par défaut) ; signaler tout nouvel usage de `crons[]` comme note de migration, jamais comme défaut
 - **Les endpoints Cron sont des URL publiques jusqu'à preuve du contraire** : toujours vérifier un secret partagé avant d'exécuter tout effet de bord
 - **Cache-Control a exactement un propriétaire par route** : les headers de vercel.json ou la propre primitive ISR du framework, jamais les deux
 - **Storage** : les `@vercel/kv`/`@vercel/postgres` natifs sont des impasses — le Marketplace (Neon/Upstash) est la seule voie supportée à l'avenir

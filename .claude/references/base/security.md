@@ -33,7 +33,7 @@ La securite est une **priorite absolue**. Ce document presente les principes gen
 > **Source:** [OWASP Top 10:2025](https://owasp.org/Top10/2025/) — publie novembre 2025.
 > Changements majeurs vs 2021 : SSRF consolidé dans A01, Security Misconfiguration remonte en A02, Software Supply Chain Failures nouveau en A03 (absorbe l'ancien « Vulnerable and Outdated Components »), Software or Data Integrity Failures en A08, Mishandling of Exceptional Conditions nouveau en A10.
 
-> **Listes connexes :** OWASP Top 10 for Agentic Applications 2026 (publié le 2025-12-09) et OWASP Top 10 for LLM Applications 2026 ([genai.owasp.org](https://genai.owasp.org/home/resources/owasp-genai-llm-top-10-2026/), v1.0, 2026-08-03) pour le code d'agents IA/LLM ; OWASP ASVS 5.0.0 pour les exigences de vérification.
+> **Listes connexes :** OWASP Top 10 for Agentic Applications 2026 (publié le 2025-12-09) et OWASP Top 10 for LLM Applications 2026 ([genai.owasp.org](https://genai.owasp.org/home/resources/owasp-genai-llm-top-10-2026/), v1.0, 2026-08-03) pour le code d'agents IA/LLM ; OWASP ASVS 5.0.0 pour les exigences de vérification. **OWASP Agentic Skills Top 10 (AST10)** : projet OWASP Incubator (version 1.0-2026, https://owasp.org/www-project-agentic-skills-top-10/) qui recense les 10 risques majeurs des *skills* d'agents IA (couche d'exécution derrière MCP), mappés sur le modèle MAESTRO de la CSA — à consulter avant d'installer un skill tiers.
 
 ### A01. Broken Access Control (inclut SSRF consolide)
 
@@ -143,7 +143,7 @@ RISQUE
 - Credential stuffing possible
 
 PROTECTION
-- Politique de mots de passe forts (min 12 caracteres)
+- Politique de mots de passe forts (min 15 caracteres en facteur unique, 8 avec MFA, sans regles de composition — NIST SP 800-63B-4)
 - MFA pour acces sensibles
 - Expiration des sessions
 - Rate limiting sur login
@@ -499,6 +499,8 @@ Content-Security-Policy:
 | **Niveau 1** | Provenance documentee du build | Tracabilite basique |
 | **Niveau 2** | Build sur plateforme verifiable, signe | Resistance aux compromissions internes |
 | **Niveau 3** | Build reproductible, infrastructure durcie | Resistance aux compromissions de la plateforme |
+
+**Source Track (SLSA 1.2, statut Approved) :** la 1.2 ajoute au Build Track un Source Track (https://slsa.dev/spec/v1.2/source-requirements) avec 4 niveaux : L1 versionné, L2 historique et provenance, L3 contrôles techniques continus, L4 revue à deux personnes ; il s'accompagne de Source Verification Summary Attestations.
 
 ### SBOM (Software Bill of Materials)
 

@@ -65,7 +65,7 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 
 ## Limitations historiques (beta) — à revérifier sur votre version de RC (3.6.0-rc.14)
 
-> Le CHANGELOG des RC 12-14 montre que `<Transition>`, `<TransitionGroup>`, `<KeepAlive>`, l'hydratation SSR Vapor et des hooks devtools reçoivent des correctifs et ajouts (source : github.com/vuejs/core, branche `minor`, CHANGELOG.md). Les limitations ci-dessous, issues de la beta, ne sont donc plus garanties : les tester avant d'écarter ou d'adopter Vapor.
+> Source officielle : la note de version 3.6.0-beta.1 (github.com/vuejs/core/releases/tag/v3.6.0-beta.1) déclare Vapor « feature-complete » avec parité avec toutes les fonctionnalités stables du mode Virtual DOM, mais « toujours considéré comme instable » ; seule exception documentée : `Suspense` n'est pas supporté en mode Vapor seul (utilisable via un `Suspense` VDOM). Aucune annonce officielle de stabilité n'existe pour Transition, KeepAlive ou SSR : seuls les correctifs du CHANGELOG de la branche `minor` l'attestent. Le CHANGELOG des RC 12-14 montre que `<Transition>`, `<TransitionGroup>`, `<KeepAlive>`, l'hydratation SSR Vapor et des hooks devtools reçoivent des correctifs et ajouts (source : github.com/vuejs/core, branche `minor`, CHANGELOG.md). Les limitations ci-dessous, issues de la beta, ne sont donc plus garanties : les tester avant d'écarter ou d'adopter Vapor.
 
 - **Transitions** (`<Transition>`, `<TransitionGroup>`) : support Vapor en cours de stabilisation (correctifs jusqu'à rc.14) ; si le comportement diverge, utiliser CSS pur ou GSAP.
 - **`<KeepAlive>`** : support Vapor en cours de stabilisation (correctifs jusqu'à rc.14) ; tester la désactivation/réactivation avant usage.
@@ -88,7 +88,7 @@ const total = computed(() => items.value.reduce((n, i) => n + i.qty, 0));
 1. **Upgrade Vue 3.5 → 3.6** : pas de breaking change si vous n'activez pas Vapor.
 2. **Identifier les composants "hot"** via Vue DevTools > Performance. Cibler ceux avec re-renders fréquents.
 3. **Activer `<script setup vapor>`** un composant à la fois.
-4. **Tests de non-régression** : Vitest 5 + Vue Test Utils 2.x (2.5.1) : vérifier le support Vapor sur votre version avant adoption.
+4. **Tests de non-régression** : Vitest 5 + Vue Test Utils 2.x (2.5.1) : aucune source officielle (releases `vuejs/test-utils` jusqu'à 2.5.1, documentation) ne mentionne le support de Vapor : tester sur votre version avant adoption. Vitest 5.1.0 déclare `vite` `^6.4.0 || ^7.0.0 || ^8.0.0` en `peerDependencies` (registry.npmjs.org/vitest/latest), donc compatible Vite 8.
 5. **Mesurer** : Lighthouse + Memory profiler avant/après. Sans gain mesurable, repasser en VDOM.
 
 ## Checklist Vapor production-ready

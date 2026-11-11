@@ -31,8 +31,8 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 |-------------|-------------|---------------|
 | Docker | Multi-stage builds, BuildKit cache/secrets, distroless, SBOM | Engine 29.9.3 (SSOT `config/versions.yaml` ; inclut les correctifs CVE de la branche 29.x) |
 | Docker Compose | Orchestration locale, profiles, extensions | Compose 5.7.0 (Compose Specification ; champ `version:` obsolète — le supprimer) |
-| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.37.2 stable (1.36.5 sur la branche 1.36 ; 1.34 hors support après le 2026-10-27) — Ingress-NGINX retiré (mars 2026) → Gateway API |
-| Helm | Charts, values, templating | Helm 4.3.1 (Helm 4 = MAJOR — `--atomic` → `--rollback-on-failure`, `--force` → `--force-replace`, server-side apply par défaut, WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
+| Kubernetes | Gateway API, sidecar-less (Ambient/Cilium), DRA, User Namespaces, Mutating Admission Policies | 1.37.2 stable (1.36.5 sur la branche 1.36 ; 1.34 hors support après le 2026-10-27) — Ingress-NGINX retiré (mars 2026) → Gateway API ; 1.37 : Pod Certificates, DRA Device Taints et `metrics.k8s.io/v1` GA, supprimer les objets `scheduling.k8s.io/v1alpha2` avant la montée depuis 1.36, restreindre le ClusterRole `nodes/logs` ; External Secrets : `external-secrets.io/v1` (v1beta1 n'est plus servi) |
+| Helm | Charts, values, templating | Helm 4.3.1 (Helm 4 = MAJOR — `--atomic` → `--rollback-on-failure`, `--force` → `--force-replace`, server-side apply par défaut (`--force-conflicts`), `--wait=watcher` (kstatus), WASM plugins, API v4 ; Helm 3 EOL sécurité nov. 2026) |
 | FrankenPHP | Worker mode (Laravel Octane/Symfony), HTTP/3, max_requests | 1.13.5 (PHP 8.5 ; ≤ 1.13.1 vulnérable à PHP2Shell, CVE-2026-109618/109619 → minimum 1.13.5) |
 | PgBouncer | Transaction pooling, prepared statements natifs | 1.26.1 (1.21+ requis pour prepared stmts ; 1.17.0 à 1.26.0 vulnérables, CVE-2026-107350 corrigée en 1.26.1 ; option `-R` supprimée) |
 
@@ -42,7 +42,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 - Compose Specification : https://www.compose-spec.io/  
 - Kubernetes releases (1.37.2 / 1.36.5) : https://kubernetes.io/releases/  
 - Retrait Ingress-NGINX : https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/  
-- K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
+- K8s Gateway API : https://gateway-api.sigs.k8s.io/  
 - K8s Support Policy : https://endoflife.date/kubernetes
 
 ### Cloud Providers & IaC
@@ -52,9 +52,9 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 | GCP | Cloud Run, GKE, Cloud SQL |
 | DigitalOcean | App Platform, Kubernetes, Managed DB |
 | Azure | AKS, App Service, Azure DevOps |
-| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.70.0 / CLI 1.70.2 — `datacenter` supprimé (410 depuis le 2026-10-01) → `location` ; cx22/cpx21… retirés → cx23/cpx22… |
+| Hetzner Cloud | VPS, Kubernetes, Load Balancers (location vs datacenter 2026) | hcloud provider 1.70.0 / CLI 1.70.2 — `datacenter` supprimé (410 depuis le 2026-10-01) → `location` ; cx22/cpx21… retirés → cx23/cpx22… ; `ubuntu-26.04` disponible, `debian-11` ne crée plus de serveurs après le 2026-11-30 ; plugin Packer >= 1.8.2 |
 | Coolify | Self-hosted PaaS, MCP server natif (read-only), audit logging structuré | v4.7.5 (novembre 2026) |
-| OpenTofu | State encryption, OCI registry backends | 1.13.9 (1.13.2 : DoS HTTP/2 sur `tofu init` ; 1.13.8 : panic sur chiffrement d'état invalide) |
+| OpenTofu | State encryption, OCI registry backends | 1.13.9 (1.13.2 : DoS HTTP/2 sur `tofu init` ; 1.13.8 : panic sur chiffrement d'état invalide ; provider AWS `~> 6.0`) |
 | Ansible | Automation, playbooks, roles | ansible-core 2.22.0 (collection `hetzner.hcloud` 7.2.0) |
 
 ### Monitoring & Observability
@@ -220,7 +220,7 @@ server_idle_timeout = 600
 - **Audit logging structuré** : mutations API, événements webhook, authentification et autorisations loggués (queryable depuis le panel admin) — compliance-ready.
 - **Permissions des tokens API** : `POST /api/v1/deploy` exige un token portant la permission `deploy` (ou `root`) — un token `write` seul est refusé ; toute suppression via l'API exige `delete` ou `root` (4.6.0). Créer un token dédié au CI limité à `deploy`.
 - **Prérequis 4.6+** : Docker Engine >= 24.0 sur les serveurs gérés.
-- **Durcissements 4.7** : `SSH_HOST_KEY_CHECKING` (`warn`, `enforce` ou `off`), `API_FAILED_REQUEST_RATE_LIMIT` (30 requêtes échouées par minute par défaut), paramètre de déploiement `cancel_previous` (`none`, `queued` ou `building`).
+- **Durcissements 4.7** : `SSH_HOST_KEY_CHECKING` (`warn`, `enforce` ou `off`), `API_FAILED_REQUEST_RATE_LIMIT` (30 requêtes échouées par minute par défaut), paramètres de déploiement `force`, `tag` et `cancel_previous` (`none`, `queued` ou `building`) ; nouvelles clés SSH générées en Ed25519 (RSA sur demande, 4096 bits) ; scan d'images Syft/Grype optionnel.
 
 **Sources** : https://coolify.io/docs/integrations/mcp — https://github.com/coollabsio/coolify/releases
 
@@ -269,7 +269,7 @@ tofu plan -refresh-only -out=drift.plan
 ```
 
 **Patterns clés ansible-core 2.22.x (2.22.0)** :
-- **2.22 (2026-11-02)** : Python 3.12 abandonné côté contrôleur (3.15 ajouté) ; secrets connus masqués en `$REDACTED---
+- **2.22 (2026-11-02)** : Python contrôleur 3.13 à 3.15 (3.12 abandonné), cibles 3.9 à 3.15 ; `yes`/`no` retirés de `uri.follow_redirects` ; secrets connus masqués en `$REDACTED---
 name: devops-engineer
 description: CI-CD, Docker, and deployment specialist
 model: sonnet
@@ -313,7 +313,7 @@ Tu es un **DevOps Engineer Senior** avec 10+ ans d'expérience en CI/CD, contene
 - Compose Specification : https://www.compose-spec.io/  
 - Kubernetes releases (1.37.2 / 1.36.5) : https://kubernetes.io/releases/  
 - Retrait Ingress-NGINX : https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/  
-- K8s Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
+- K8s Gateway API : https://gateway-api.sigs.k8s.io/  
 - K8s Support Policy : https://endoflife.date/kubernetes
 
 ### Cloud Providers & IaC
@@ -583,7 +583,7 @@ kubectl get pods -o jsonpath='{.spec.initContainers[?(@.restartPolicy=="Always")
 - ❌ Non supportées : 1.31, 1.32, 1.33
 
 **Sources** :  
-- Gateway API : https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl  
+- Gateway API : https://gateway-api.sigs.k8s.io/  
 - Sidecar-less : https://istio.io/latest/blog/2024/ambient-reaches-beta/  
 - Support Policy : https://endoflife.date/kubernetes  
 - K8s 1.36 : https://kubernetes.io/blog/2026/04/22/kubernetes-v1-36-release/

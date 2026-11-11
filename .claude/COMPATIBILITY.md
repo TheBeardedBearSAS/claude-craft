@@ -73,8 +73,8 @@
 | **Node.js 18.x** | Not supported | EOL depuis avril 2025 |
 | **Node.js 20.x** | Not supported | EOL depuis le 30 avril 2026 |
 | **Node.js 22.x** (Maintenance LTS) | Supported | Version minimale (`engines.node: >=22.0.0`) — EOL le 2027-04-30 |
-| **Node.js 24.x** (Maintenance LTS depuis le 2026-10-20) | Supported | Version testée en CI et utilisée pour la publication npm |
-| **Node.js 26.x** (Active LTS depuis le 2026-10-28) | Recommended | Non encore testée en CI — ruptures connues : `http.Server.writeHeader`, modules `_stream_*` et `--experimental-transform-types` supprimés, `NODE_MODULE_VERSION` 147, `module.register()` déprécié |
+| **Node.js 24.x** (Maintenance LTS depuis le 2026-10-20) | Supported | Testée en CI et utilisée pour la publication npm |
+| **Node.js 26.x** (Active LTS depuis le 2026-10-28) | Recommended | Testée en CI depuis le 2026-11-11 (matrice 22 / 24 / 26) — ruptures connues côté projets : `http.Server.writeHeader`, modules `_stream_*` et `--experimental-transform-types` supprimés, `NODE_MODULE_VERSION` 147, `module.register()` déprécié |
 
 ---
 

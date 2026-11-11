@@ -48,7 +48,7 @@ Ver `rules/02-architecture.md` para patrones detallados.
 ```bash
 ng serve                     # Servidor desarrollo
 ng build                     # Build produccion
-ng generate component [name] --standalone  # Generar componente
+ng generate component [name]  # Generar componente
 ```
 
 ### Pipeline de calidad

@@ -548,7 +548,7 @@ public class OrdersApiTests : IClassFixture<CustomWebApplicationFactory>
 
 ### Testcontainers for Real Database Testing
 
-> **Version note:** Use Testcontainers **4.x** (4.12.0 latest stable). Starting with 4.0, default image versions
+> **Version note:** Use Testcontainers **4.x** (4.16.0 latest stable). Starting with 4.0, default image versions
 > are no longer provided — always call `.WithImage(...)` explicitly to avoid a runtime exception.
 
 ```csharp
