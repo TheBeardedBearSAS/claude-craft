@@ -21,6 +21,20 @@ describe('StoryFrontmatterSchema', () => {
     expect(parsed.dependencies).toEqual([]);
   });
 
+  it('leaves invest_score undefined when absent (no fake 0)', () => {
+    expect(StoryFrontmatterSchema.parse(minimal).invest_score).toBeUndefined();
+  });
+
+  it('accepts epic-style and TT ids', () => {
+    expect(StoryFrontmatterSchema.parse({ id: 'US-E4-02', title: 'x' }).id).toBe('US-E4-02');
+    expect(StoryFrontmatterSchema.parse({ id: 'TT-012', title: 'x' }).id).toBe('TT-012');
+  });
+
+  it('rejects ids that could escape a file name', () => {
+    expect(() => StoryFrontmatterSchema.parse({ id: 'US-001/../x', title: 'x' })).toThrow();
+    expect(() => StoryFrontmatterSchema.parse({ id: 'US-001.md', title: 'x' })).toThrow();
+  });
+
   it('accepts full story', () => {
     const full = {
       id: 'US-042',
@@ -44,7 +58,7 @@ describe('StoryFrontmatterSchema', () => {
 
   it('rejects invalid id format', () => {
     expect(() => StoryFrontmatterSchema.parse({ id: 'STORY-1', title: 'x' })).toThrow();
-    expect(() => StoryFrontmatterSchema.parse({ id: 'US-1', title: 'x' })).toThrow();
+    expect(() => StoryFrontmatterSchema.parse({ id: 'US-', title: 'x' })).toThrow();
   });
 
   it('rejects invalid status', () => {
@@ -65,10 +79,12 @@ describe('StoryFrontmatterSchema', () => {
   });
 
   it('rejects invalid task id in list', () => {
-    expect(() => StoryFrontmatterSchema.parse({
-      ...minimal,
-      tasks: { total: 1, completed: 0, list: ['T-001'] },
-    })).toThrow();
+    expect(() =>
+      StoryFrontmatterSchema.parse({
+        ...minimal,
+        tasks: { total: 1, completed: 0, list: ['T-001'] },
+      })
+    ).toThrow();
   });
 
   it('rejects invalid dependency id', () => {
@@ -106,15 +122,25 @@ describe('TaskFrontmatterSchema', () => {
   });
 
   it('rejects invalid type', () => {
-    expect(() => TaskFrontmatterSchema.parse({
-      id: 'TASK-001', us_id: 'US-001', type: 'UNKNOWN', estimation_hours: 1,
-    })).toThrow();
+    expect(() =>
+      TaskFrontmatterSchema.parse({
+        id: 'TASK-001',
+        us_id: 'US-001',
+        type: 'UNKNOWN',
+        estimation_hours: 1,
+      })
+    ).toThrow();
   });
 
   it('rejects mismatched us_id format', () => {
-    expect(() => TaskFrontmatterSchema.parse({
-      id: 'TASK-001', us_id: 'STORY-001', type: 'BE', estimation_hours: 1,
-    })).toThrow();
+    expect(() =>
+      TaskFrontmatterSchema.parse({
+        id: 'TASK-001',
+        us_id: 'STORY-001',
+        type: 'BE',
+        estimation_hours: 1,
+      })
+    ).toThrow();
   });
 });
 
@@ -131,10 +157,12 @@ describe('TransitionRequestSchema', () => {
   });
 
   it('rejects blocked_reason over 500 chars', () => {
-    expect(() => TransitionRequestSchema.parse({
-      status: 'blocked',
-      blocked_reason: 'x'.repeat(501),
-    })).toThrow();
+    expect(() =>
+      TransitionRequestSchema.parse({
+        status: 'blocked',
+        blocked_reason: 'x'.repeat(501),
+      })
+    ).toThrow();
   });
 
   it('rejects unknown status', () => {
@@ -174,9 +202,7 @@ describe('SprintStatusSchema', () => {
           title: 'Login',
           status: 'in-progress',
           story_points: 5,
-          history: [
-            { timestamp: '2026-01-30T10:00:00Z', from: 'backlog', to: 'ready-for-dev', by: 'pm', reason: '' },
-          ],
+          history: [{ timestamp: '2026-01-30T10:00:00Z', from: 'backlog', to: 'ready-for-dev', by: 'pm', reason: '' }],
         },
       },
     };
@@ -194,12 +220,19 @@ describe('SprintStatusSchema', () => {
 
   it('keeps per-task statuses (sprint-status.yaml is the source of truth for task status)', () => {
     const parsed = SprintStatusSchema.parse(
-      withTasks({ total: 2, completed: 1, list: ['TASK-001', 'TASK-002'], status: { 'TASK-001': 'done', 'TASK-002': 'in-progress' } })
+      withTasks({
+        total: 2,
+        completed: 1,
+        list: ['TASK-001', 'TASK-002'],
+        status: { 'TASK-001': 'done', 'TASK-002': 'in-progress' },
+      })
     );
     expect(parsed.stories['US-001'].tasks.status).toEqual({ 'TASK-001': 'done', 'TASK-002': 'in-progress' });
   });
 
   it('rejects an unknown task status', () => {
-    expect(SprintStatusSchema.safeParse(withTasks({ list: ['TASK-001'], status: { 'TASK-001': 'wip' } })).success).toBe(false);
+    expect(SprintStatusSchema.safeParse(withTasks({ list: ['TASK-001'], status: { 'TASK-001': 'wip' } })).success).toBe(
+      false
+    );
   });
 });

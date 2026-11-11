@@ -1,7 +1,8 @@
-import { open, rename, unlink, stat } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
+import { rename, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseFile, stringify } from './frontmatter.js';
+import { acquireLock, LockedError } from './lock.js';
 
 /**
  * Atomic update of a Markdown file's frontmatter.
@@ -9,43 +10,16 @@ import { parseFile, stringify } from './frontmatter.js';
  * Safety :
  *   1. Exclusive lock file (<path>.lock, O_CREAT|O_EXCL) — refuses concurrent writes.
  *   2. Optional mtime check (ETag-like) — rejects writes if file changed on disk.
- *   3. Write to a temp file then rename — atomic on POSIX: the original stays intact if the write fails.
- *      The temp file has a random name and is created exclusively, and no predictable side file (the former
- *      <path>.bak) is written: a symlink planted under such a name would redirect the write outside the project.
+ *   3. Write to a fresh temp file (O_EXCL: never through a planted symlink) then rename — atomic on POSIX,
+ *      so a failure leaves the original untouched. No `.bak` copy: a `<file>.bak` symlink committed in a
+ *      hostile branch would have redirected that copy anywhere (e.g. .git/hooks/pre-commit).
  *   4. Body of the markdown file is preserved byte-for-byte.
  */
-
-class LockedError extends Error {
-  constructor(filepath) {
-    super(`File is locked: ${filepath}`);
-    this.code = 'LOCKED';
-  }
-}
 
 class MtimeMismatchError extends Error {
   constructor(filepath, expected, actual) {
     super(`mtime mismatch for ${filepath}: expected ${expected}, got ${actual}`);
     this.code = 'MTIME_MISMATCH';
-  }
-}
-
-async function acquireLock(filepath) {
-  const lockPath = `${filepath}.lock`;
-  try {
-    const fd = await open(lockPath, 'wx');
-    await fd.close();
-    return lockPath;
-  } catch (err) {
-    if (err.code === 'EEXIST') throw new LockedError(filepath);
-    throw err;
-  }
-}
-
-async function releaseLock(lockPath) {
-  try {
-    await unlink(lockPath);
-  } catch {
-    /* ignore */
   }
 }
 
@@ -58,7 +32,7 @@ async function releaseLock(lockPath) {
  */
 export async function updateFrontmatter(filepath, patch, opts = {}) {
   const abs = path.resolve(filepath);
-  const lockPath = await acquireLock(abs);
+  const release = await acquireLock(`${abs}.lock`);
   try {
     if (typeof opts.expectedMtime === 'number') {
       const st = await stat(abs);
@@ -69,25 +43,18 @@ export async function updateFrontmatter(filepath, patch, opts = {}) {
 
     const { data, body } = await parseFile(abs);
     const merged = { ...data, ...patch };
-    await replaceFile(abs, stringify(merged, body));
+    const tmp = `${abs}.tmp-${process.pid}-${randomUUID()}`;
+    try {
+      await writeFile(tmp, stringify(merged, body), { encoding: 'utf8', flag: 'wx' });
+      await rename(tmp, abs);
+    } catch (err) {
+      await rm(tmp, { force: true });
+      throw err;
+    }
     const st = await stat(abs);
     return { data: merged, body, mtime: st.mtimeMs };
   } finally {
-    await releaseLock(lockPath);
-  }
-}
-
-async function replaceFile(abs, content) {
-  const tmp = `${abs}.tmp-${process.pid}-${randomUUID()}`;
-  const fd = await open(tmp, 'wx'); // exclusive: never follows or reuses an existing name
-  try {
-    await fd.writeFile(content, 'utf8');
-    await fd.close();
-    await rename(tmp, abs);
-  } catch (err) {
-    await fd.close().catch(() => {}); // already closed when rename failed
-    await unlink(tmp).catch(() => {}); // best effort: the original file is untouched
-    throw err;
+    await release();
   }
 }
 

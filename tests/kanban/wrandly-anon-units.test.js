@@ -109,6 +109,10 @@ describe('classifyKanbanEvent (SSE refresh routing, bug #7)', () => {
     expect(r.reloadStories).toBe(true);
     expect(r.reloadSprint).toBe(true);
   });
+  it('reloads both on an external sprint-status.yaml change (K-01)', () => {
+    const r = classifyKanbanEvent({ event: 'file:changed', payload: { category: 'sprint-status' } });
+    expect(r).toEqual({ reloadStories: true, reloadSprint: true });
+  });
   it('ignores irrelevant file changes', () => {
     const r = classifyKanbanEvent({ event: 'file:changed', payload: { category: 'other' } });
     expect(r.reloadStories).toBe(false);

@@ -8,7 +8,8 @@
     "postbuild": "node scripts/generate-sitemap.mjs",
     "preview": "vitepress preview",
     "sync": "bash scripts/sync-docs.sh",
-    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts"
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
+    "test:kanban": "playwright test --config tests/kanban/playwright.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

@@ -78,6 +78,24 @@ describe('validateTransition — gates', () => {
       expect(r.missing[0]).toMatch(/invest_score/);
     });
 
+    it('without invest_score, passes when story_points > 0', () => {
+      const story = { ...storyOk({ status: 'backlog', story_points: 3 }), invest_score: undefined };
+      expect(validateTransition(story, 'ready-for-dev').allowed).toBe(true);
+    });
+
+    it('without invest_score, fails when story_points is 0 or absent', () => {
+      const story = { ...storyOk({ status: 'backlog', story_points: 0 }), invest_score: undefined };
+      const r = validateTransition(story, 'ready-for-dev');
+      expect(r.allowed).toBe(false);
+      expect(r.gate).toBe('invest_gate');
+      expect(r.missing[0]).toMatch(/story_points/);
+    });
+
+    it('an explicit invest_score < 6 still blocks even with story_points', () => {
+      const r = validateTransition(storyOk({ status: 'backlog', invest_score: 3, story_points: 5 }), 'ready-for-dev');
+      expect(r.allowed).toBe(false);
+    });
+
     it('fails when invest_score missing', () => {
       const r = validateTransition({ ...storyOk(), status: 'backlog', invest_score: undefined }, 'ready-for-dev');
       expect(r.allowed).toBe(false);
@@ -93,7 +111,7 @@ describe('validateTransition — gates', () => {
     it('fails when tasks remaining', () => {
       const r = validateTransition(
         storyOk({ status: 'in-progress', tasks: { total: 3, completed: 1, list: [] } }),
-        'review',
+        'review'
       );
       expect(r.allowed).toBe(false);
       expect(r.gate).toBe('tasks_complete_gate');
@@ -103,7 +121,7 @@ describe('validateTransition — gates', () => {
     it('fails when no tasks defined', () => {
       const r = validateTransition(
         storyOk({ status: 'in-progress', tasks: { total: 0, completed: 0, list: [] } }),
-        'review',
+        'review'
       );
       expect(r.allowed).toBe(false);
       expect(r.missing.join(' ')).toMatch(/no tasks/);
@@ -112,10 +130,7 @@ describe('validateTransition — gates', () => {
 
   describe('review -> done : dod_gate', () => {
     it('passes with all tasks done + tdd green', () => {
-      const r = validateTransition(
-        storyOk({ status: 'review', tdd_phase: 'green' }),
-        'done',
-      );
+      const r = validateTransition(storyOk({ status: 'review', tdd_phase: 'green' }), 'done');
       expect(r.allowed).toBe(true);
     });
 
@@ -191,11 +206,10 @@ describe('validateUnblock', () => {
 
 describe('computeTransitionPatch', () => {
   it('builds blocked patch with reason and timestamp', () => {
-    const p = computeTransitionPatch(
-      { status: 'in-progress' },
-      'blocked',
-      { blocked_reason: 'waiting', now: '2026-04-15T00:00:00Z' },
-    );
+    const p = computeTransitionPatch({ status: 'in-progress' }, 'blocked', {
+      blocked_reason: 'waiting',
+      now: '2026-04-15T00:00:00Z',
+    });
     expect(p).toEqual({
       status: 'blocked',
       previous_status: 'in-progress',
@@ -207,7 +221,7 @@ describe('computeTransitionPatch', () => {
   it('clears blocked fields when unblocking', () => {
     const p = computeTransitionPatch(
       { status: 'blocked', previous_status: 'in-progress', blocked_reason: 'x' },
-      'in-progress',
+      'in-progress'
     );
     expect(p.status).toBe('in-progress');
     expect(p.previous_status).toBe('');

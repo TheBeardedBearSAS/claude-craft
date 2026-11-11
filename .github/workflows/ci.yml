@@ -18,6 +18,7 @@ on:
       - 'Infra/i18n/**'
       - 'Project/i18n/**'
       - 'Tools/**'
+      - 'website/tests/kanban/**'
       - 'docs/**'
       - 'README.md'
       - '.github/workflows/ci.yml'
@@ -199,6 +200,47 @@ jobs:
       # SEC-011: rule 11-security.md mandates --audit-level=moderate (block moderate+high).
       - name: Security audit
         run: npm audit --omit=dev --audit-level=moderate
+
+  # Audit K-12: builds the Kanban client on every PR and runs the browser harness
+  # (smoke, axe, reflow, keyboard) against a copy of tests/fixtures/wrandly-anon.
+  kanban-e2e:
+    name: Kanban client build + browser tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # pinned: v7.1.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Kanban client
+        run: npm run kanban:build
+
+      - name: Install website (Playwright) dependencies
+        run: cd website && npm ci
+
+      - name: Install Playwright Chromium
+        run: cd website && npx playwright install --with-deps chromium
+
+      - name: Run Kanban browser tests
+        run: cd website && npm run test:kanban
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pinned: v7.0.2
+        with:
+          name: kanban-e2e-report
+          path: |
+            website/tests/kanban/report/
+            website/tests/kanban/results/
+          if-no-files-found: ignore
+          retention-days: 7
 
   trivy:
     name: Trivy CVE Scan

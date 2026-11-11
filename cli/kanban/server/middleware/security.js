@@ -5,7 +5,6 @@ import path from 'node:path';
  * Only http://127.0.0.1:<port> and http://localhost:<port> are accepted.
  */
 export function csrfGuard(port) {
-  const allowed = new Set([`http://127.0.0.1:${port}`, `http://localhost:${port}`]);
   return async (c, next) => {
     if (!['POST', 'PATCH', 'PUT', 'DELETE'].includes(c.req.method)) {
       return next();
@@ -21,8 +20,35 @@ export function csrfGuard(port) {
         source = null;
       }
     }
-    if (!source || !allowed.has(source)) {
+    const p = servedPort(c, port);
+    if (source !== `http://127.0.0.1:${p}` && source !== `http://localhost:${p}`) {
       return c.json({ error: 'forbidden', reason: 'invalid origin' }, 403);
+    }
+    return next();
+  };
+}
+
+const LOOPBACK_HOSTS = ['127.0.0.1', 'localhost', '[::1]'];
+
+// Port of the socket that received the request; the configured one in-process (app.request(), no socket).
+function servedPort(c, port) {
+  return c.env?.incoming?.socket?.localPort ?? port;
+}
+
+/**
+ * Middleware factory : rejects requests whose Host header is not a loopback
+ * name on the served port (DNS rebinding protection, GET included).
+ */
+export function hostGuard(port) {
+  return async (c, next) => {
+    const socket = c.env?.incoming?.socket;
+    const host = c.req.header('host');
+    // Rule: Host must be exactly <loopback>:<port of the listening socket> (configured port when in-process); a
+    // missing Host is only tolerated in-process (app.request(), no socket) since Node rejects Host-less HTTP/1.1.
+    if (!socket && host === undefined) return next();
+    const p = servedPort(c, port);
+    if (!LOOPBACK_HOSTS.some((h) => host === `${h}:${p}`)) {
+      return c.json({ error: 'forbidden' }, 403);
     }
     return next();
   };

@@ -390,6 +390,37 @@ sprint_id: sprint-zzz
     });
   });
 
+  describe('computeBurndown — degenerate dates', () => {
+    const status = (start_date, end_date) => ({
+      version: '1.0',
+      metadata: { sprint_id: 's', name: 's', start_date, end_date, goal: '' },
+      stories: {},
+    });
+    const stories = [{ id: 'US-001', story_points: 5, status: 'done' }];
+
+    it('start_date == end_date yields finite points (no NaN)', () => {
+      const r = computeBurndown(status('2026-01-05', '2026-01-05'), stories, new Date('2026-01-05T10:00:00Z'));
+      expect(r.ideal.length).toBeGreaterThan(0);
+      for (const p of [...r.ideal, ...r.actual]) expect(Number.isFinite(p.points)).toBe(true);
+    });
+
+    it('invalid dates give a clean empty result', () => {
+      const r = computeBurndown(status('not-a-date', '2026-01-05'), stories);
+      expect(r).toEqual({ ideal: [], actual: [], total_points: 5, on_track: null });
+    });
+
+    it('end before start gives a clean empty result', () => {
+      const r = computeBurndown(status('2026-01-10', '2026-01-05'), stories);
+      expect(r).toEqual({ ideal: [], actual: [], total_points: 5, on_track: null });
+    });
+
+    it('ignores history entries with a non-string timestamp', () => {
+      const s = status('2026-01-01', '2026-01-10');
+      s.stories['US-001'] = { history: [{ to: 'done', timestamp: 42 }] };
+      expect(() => computeBurndown(s, stories, new Date('2026-01-03T00:00:00Z'))).not.toThrow();
+    });
+  });
+
   describe('computeBurndown', () => {
     it('returns empty arrays if no dates in metadata', () => {
       const sprintStatus = {

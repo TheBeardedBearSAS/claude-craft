@@ -18,3 +18,7 @@ pt/*
 
 # Lighthouse harness reports (generated)
 tests/lighthouse/reports/
+
+# Kanban browser harness reports (generated)
+tests/kanban/report/
+tests/kanban/results/

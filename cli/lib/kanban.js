@@ -2,7 +2,7 @@
  * claude-craft kanban : launches a local HTTP server that serves an interactive
  * Kanban view of a BMAD v6 project-management/ directory.
  *
- * Usage : claude-craft kanban [--port=3737] [--open] [--readonly] [--no-watch]
+ * Usage : claude-craft kanban [--port=3737] [--open] [--readonly] [--no-watch] [--user=<name>]
  *
  * @module cli/lib/kanban
  */
@@ -28,7 +28,7 @@ function openBrowser(url) {
   try {
     spawn(opener, [url], { detached: true, stdio: 'ignore' }).unref();
   } catch {
-    /* best-effort ; user can click the printed URL */
+    // best-effort ; user can click the printed URL
   }
 }
 
@@ -48,11 +48,15 @@ export async function runKanban({ targetPath, options }) {
   }
   const { projectRoot, pmDir } = resolved;
 
-  const port = Number(options.port ?? 3737);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    console.error(`${c.red}Error: invalid --port value "${options.port}"${c.reset}`);
+  const { parsePort, resolveUser, readGitUserName } = await import('../kanban/server/cli-options.js');
+  let port;
+  try {
+    port = parsePort(options.port);
+  } catch (err) {
+    console.error(`${c.red}Error: ${err.message}${c.reset}`);
     process.exit(1);
   }
+  const user = resolveUser(options, process.env, { gitUserName: await readGitUserName() });
   const readonly = !!options.readonly;
   const watch = options.watch !== false && !options['no-watch'];
   const shouldOpen = !!options.open;
@@ -66,12 +70,12 @@ export async function runKanban({ targetPath, options }) {
   const repository = new Repository(pmDir);
   await repository.refresh();
   const eventBus = new EventBus();
-  const app = createApp({ repository, port, readonly, eventBus, projectRoot });
+  const app = createApp({ repository, port, readonly, eventBus, projectRoot, user });
 
   let stopWatcher = null;
   if (watch) {
     const { startWatcher } = await import('../kanban/server/services/file-watcher.js');
-    const handle = startWatcher({ rootDir: pmDir, repository, eventBus });
+    const handle = startWatcher({ rootDir: pmDir, projectRoot, repository, eventBus });
     stopWatcher = handle.stop;
   }
 

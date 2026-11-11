@@ -11,27 +11,24 @@
  *   blocked       -> previous_status (via unblock)
  *
  * Gates (must pass before transition is allowed) :
- *   backlog       -> ready-for-dev : invest_score === 6
+ *   backlog       -> ready-for-dev : invest_score >= 6 when set, else story_points > 0
  *   in-progress   -> review        : tasks.completed === tasks.total && tasks.total > 0
  *   review        -> done          : tasks.completed === tasks.total && tdd_phase in green|refactor|done
  */
 
-export const STATUSES = Object.freeze(['backlog', 'ready-for-dev', 'in-progress', 'review', 'done', 'blocked']);
+import { STATUSES, TRANSITIONS } from '../../shared/transitions.js';
 
-const TRANSITIONS = Object.freeze({
-  backlog: ['ready-for-dev', 'blocked'],
-  'ready-for-dev': ['in-progress', 'blocked', 'backlog'],
-  'in-progress': ['review', 'blocked'],
-  review: ['done', 'in-progress', 'blocked'],
-  done: [],
-  blocked: [],
-});
+export { STATUSES };
 
 const GATES = Object.freeze({
   'backlog->ready-for-dev': {
     name: 'invest_gate',
     check: (story) => {
-      const score = Number(story.invest_score ?? 0);
+      if (story.invest_score === undefined || story.invest_score === null) {
+        const ok = Number(story.story_points ?? 0) > 0;
+        return { passed: ok, missing: ok ? [] : ['story_points must be > 0 (no invest_score set)'] };
+      }
+      const score = Number(story.invest_score);
       return {
         passed: score >= 6,
         missing: score >= 6 ? [] : [`invest_score must be 6/6 (got ${score})`],

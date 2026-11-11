@@ -61,6 +61,17 @@ describe('updateFrontmatter', () => {
     } finally { await rm(dir, { recursive: true, force: true }); }
   });
 
+  it('steals a stale lock left by a dead process (K-02)', async () => {
+    const dir = await tmp();
+    try {
+      const fp = await makeStory(dir);
+      await writeFile(`${fp}.lock`, JSON.stringify({ pid: 2 ** 22 + 12345, ts: Date.now() }));
+      await updateFrontmatter(fp, { status: 'done' });
+      expect(parseString(await readFile(fp, 'utf8')).data.status).toBe('done');
+      await expect(access(`${fp}.lock`)).rejects.toThrow();
+    } finally { await rm(dir, { recursive: true, force: true }); }
+  });
+
   it('rejects on mtime mismatch', async () => {
     const dir = await tmp();
     try {

@@ -1,8 +1,8 @@
 import path from 'node:path';
-import { readFile, writeFile, mkdir, open, rename, unlink } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import * as yaml from 'js-yaml';
 import { SprintStatusSchema } from '../../shared/schemas.js';
-import { LockedError } from './file-writer.js';
+import { acquireLock } from './lock.js';
 
 /**
  * Load sprint status from .bmad/sprint-status.yaml
@@ -40,12 +40,7 @@ export async function loadSprintStatus(projectRoot) {
  */
 export async function updateSprintStatusStory(projectRoot, id, patch, opts = {}) {
   const yamlPath = path.join(projectRoot, '.bmad', 'sprint-status.yaml');
-  const lockPath = `${yamlPath}.lock`;
-  const fd = await open(lockPath, 'wx').catch((err) => {
-    if (err.code === 'EEXIST') throw new LockedError(yamlPath);
-    throw err;
-  });
-  await fd.close();
+  const release = await acquireLock(`${yamlPath}.lock`);
   try {
     const doc = yaml.load(await readFile(yamlPath, 'utf8'));
     const story = doc?.stories?.[id];
@@ -67,7 +62,7 @@ export async function updateSprintStatusStory(projectRoot, id, patch, opts = {})
     await rename(tmp, yamlPath);
     return story;
   } finally {
-    await unlink(lockPath).catch(() => {});
+    await release();
   }
 }
 
@@ -142,13 +137,16 @@ export function computeBurndown(sprintStatus, storiesBySprint, now = new Date())
 
   const startDate = new Date(sprintStatus.metadata.start_date);
   const endDate = new Date(sprintStatus.metadata.end_date);
+  if (!(startDate <= endDate)) return { ideal: [], actual: [], total_points: totalPoints, on_track: null };
   const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+  // start == end: a single ideal point, the rate is irrelevant (avoid 0/0).
+  const pointsPerDay = totalDays > 0 ? totalPoints / totalDays : 0;
 
   const ideal = [];
   for (let day = 0; day <= totalDays; day++) {
     const date = new Date(startDate);
     date.setDate(date.getDate() + day);
-    const remaining = totalPoints - (totalPoints / totalDays) * day;
+    const remaining = totalPoints - pointsPerDay * day;
     ideal.push({
       date: date.toISOString().split('T')[0],
       points: Math.max(0, Math.round(remaining * 10) / 10),
@@ -221,7 +219,7 @@ function buildActualBurndown(sprintStatus, storiesBySprint, startDate, endDate, 
     if (!storyData?.history) continue;
 
     for (const entry of storyData.history) {
-      if (entry.to === 'done') {
+      if (entry.to === 'done' && typeof entry.timestamp === 'string') {
         const eventDate = new Date(entry.timestamp);
         if (eventDate >= startDate && eventDate <= endDate) {
           doneEvents.push({

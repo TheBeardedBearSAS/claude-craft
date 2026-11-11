@@ -1,5 +1,6 @@
 import { readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { storyIdFromFilename } from '../../shared/ids.js';
 
 /**
  * Recursive scanner for a project-management/ directory (BMAD v6 layout).
@@ -44,7 +45,7 @@ function classify(rootDir, absPath) {
   const rel = path.relative(rootDir, absPath).split(path.sep).join('/');
   if (!rel.endsWith('.md') && !rel.endsWith('.yaml') && !rel.endsWith('.yml')) return null;
 
-  if (rel.startsWith('backlog/user-stories/') && /US-\d+/.test(rel)) return 'story';
+  if (rel.startsWith('backlog/user-stories/') && rel.split('/').some(storyIdFromFilename)) return 'story';
   if (rel.startsWith('backlog/epics/') && /EPIC-\d+/.test(rel)) return 'epic';
 
   const sprintMatch = rel.match(/^sprints\/([^/]+)\/(.+)$/);
