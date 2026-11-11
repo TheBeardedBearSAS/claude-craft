@@ -183,12 +183,12 @@ export function focusLost(active, body, dialog) {
 }
 
 /**
- * The focus is on no control: nothing, the page body, or a container (a dialog, a region focusable by script such as
- * <main>). Safari on macOS puts it there when a button is clicked: it gives the focus to the nearest focusable
- * ancestor of the button, not to the button.
+ * The focus is on no control: nothing, the page body, a dialog or <main> (focusable by script). Safari on macOS puts
+ * it there when a button is clicked: it gives the focus to the nearest focusable ancestor of the button, not to the
+ * button. Not every `tabindex="-1"`: a menu item out of the Tab order is a control.
  */
 export function restsOnContainer(active, body) {
-  return !active || active === body || active.matches?.('dialog, [tabindex="-1"]') === true;
+  return !active || active === body || active.matches?.('dialog, main') === true;
 }
 
 /**

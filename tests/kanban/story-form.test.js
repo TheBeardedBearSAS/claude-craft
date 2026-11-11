@@ -249,7 +249,14 @@ describe('focusLost', () => {
     const dialog = { contains: () => false };
     const container = (selector) => el({ matches: (s) => s.split(', ').includes(selector) });
     expect(focusLost(container('dialog'), body, dialog)).toBe(true);
-    expect(focusLost(container('[tabindex="-1"]'), body, dialog)).toBe(true);
+    expect(focusLost(container('main'), body, dialog)).toBe(true);
+  });
+
+  // Seen in the journey: closing the settings stole the focus from the Move menu opened meanwhile.
+  it('is false on a control taken out of the Tab order (a menu item, tabindex -1)', () => {
+    const dialog = { contains: () => false };
+    const item = el({ matches: (s) => s.split(', ').includes('[tabindex="-1"]') });
+    expect(focusLost(item, body, dialog)).toBe(false);
   });
 
   it('is false when the user already reached another control', () => {
@@ -277,7 +284,7 @@ describe('openerOf', () => {
 
   it('is the control just clicked when the focus went to a container (<main>, a dialog)', () => {
     const clicked = button();
-    const main = button({ matches: (s) => s.split(', ').includes('[tabindex="-1"]') });
+    const main = button({ matches: (s) => s.split(', ').includes('main') });
     expect(openerOf(main, body, clicked)).toBe(clicked);
   });
 
