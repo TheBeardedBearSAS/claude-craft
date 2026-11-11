@@ -19,3 +19,18 @@ export function alignBurndownByDate(ideal = [], actual = []) {
     actual: actualByDate.has(date) ? actualByDate.get(date) : null,
   }));
 }
+
+/** uPlot columns (unix seconds, ideal, actual) from the two series, one column per distinct date. */
+export function buildSeries(ideal = [], actual = []) {
+  const rows = alignBurndownByDate(ideal, actual);
+  return {
+    timestamps: rows.map((r) => Math.floor(Date.parse(r.date) / 1000)),
+    ideal: rows.map((r) => r.ideal),
+    actual: rows.map((r) => r.actual),
+  };
+}
+
+const ON_TRACK = ['on-track', 'at-risk', 'behind'];
+
+/** Known on-track status or 'unknown' (the i18n key is `burndown.status.<value>`). */
+export const normalizeOnTrack = (value) => (ON_TRACK.includes(value) ? value : 'unknown');

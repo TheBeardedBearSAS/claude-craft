@@ -4,28 +4,32 @@
    *
    * Usage:
    *   <PromptDialog bind:this={promptDialog} />
-   *   const value = await promptDialog.prompt('Enter a reason:');
-   *   // Returns the string entered, or null if cancelled.
+   *   const value = await promptDialog.prompt('Enter a reason:', { required: 'A reason is needed.' });
+   *   // Returns the trimmed string, or null if cancelled. An empty answer is refused with an
+   *   // inline error (and the dialog stays open) when `required` is given.
    */
+  import { t } from '../lib/i18n/index.svelte.js';
 
   let dialog = $state(null);
   let inputEl = $state(null);
   let message = $state('');
+  let requiredMessage = $state('');
   let inputValue = $state('');
+  let showError = $state(false);
   let resolvePromise = null;
 
   /**
-   * Open the dialog and return a promise that resolves with the entered value
-   * (string) or null when the user cancels.
-   *
-   * @param {string} promptMessage - Label text shown above the input.
+   * @param {string} promptMessage - Visible label of the input.
+   * @param {{ required?: string }} [opts] - `required`: error text shown when the answer is empty.
    * @returns {Promise<string|null>}
    */
-  export function prompt(promptMessage) {
+  export function prompt(promptMessage, { required = '' } = {}) {
     message = promptMessage;
+    requiredMessage = required;
     inputValue = '';
+    showError = false;
+    dialog.returnValue = '';
     dialog.showModal();
-    // Focus the input after the dialog is open (next microtask)
     Promise.resolve().then(() => inputEl?.focus());
     return new Promise((resolve) => {
       resolvePromise = resolve;
@@ -33,59 +37,59 @@
   }
 
   function handleClose() {
-    const confirmed = dialog.returnValue === 'confirm';
-    const value = confirmed && inputValue.trim() ? inputValue : null;
-    resolvePromise?.(value);
+    const value = dialog.returnValue === 'confirm' ? inputValue.trim() : '';
+    resolvePromise?.(value || null);
     resolvePromise = null;
   }
 
-  function handleKeydown(e) {
-    // Allow submitting with Enter from within the input
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      dialog.returnValue = 'confirm';
-      dialog.close();
+  function confirm() {
+    if (requiredMessage && !inputValue.trim()) {
+      showError = true;
+      inputEl?.focus();
+      return;
     }
+    dialog.returnValue = 'confirm';
+    dialog.close();
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    confirm();
   }
 </script>
 
-<dialog
-  bind:this={dialog}
-  aria-labelledby="prompt-dialog-title"
-  aria-modal="true"
-  onclose={handleClose}
->
-  <form method="dialog">
-    <h2 id="prompt-dialog-title" class="dialog-title">{message}</h2>
+<dialog bind:this={dialog} aria-labelledby="prompt-dialog-label" onclose={handleClose}>
+  <form onsubmit={handleSubmit}>
+    <label id="prompt-dialog-label" for="prompt-dialog-input" class="dialog-title">{message}</label>
     <input
+      id="prompt-dialog-input"
       bind:this={inputEl}
       bind:value={inputValue}
       type="text"
       class="dialog-input"
-      aria-label={message}
-      onkeydown={handleKeydown}
+      aria-invalid={showError ? 'true' : undefined}
+      aria-describedby={showError ? 'prompt-dialog-error' : undefined}
+      oninput={() => (showError = false)}
     />
+    <!-- Toujours présente (vide) : un message inséré dans une région déjà là est annoncé de façon fiable. -->
+    <p id="prompt-dialog-error" class="dialog-error" role="alert">{showError ? requiredMessage : ''}</p>
     <div class="dialog-actions">
-      <button type="submit" value="cancel" class="btn-cancel">Cancel</button>
-      <button
-        type="button"
-        class="btn-confirm"
-        onclick={() => {
-          dialog.returnValue = 'confirm';
-          dialog.close();
-        }}
-      >OK</button>
+      <button type="button" class="btn-cancel" onclick={() => dialog.close()}>{t('common.cancel')}</button>
+      <button type="submit" class="btn-confirm">{t('common.ok')}</button>
     </div>
   </form>
 </dialog>
 
 <style>
   dialog {
+    margin: auto;
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px;
-    min-width: 320px;
+    width: min(380px, 100vw - 32px);
+    min-width: min(320px, 100vw - 32px);
+    box-sizing: border-box;
     color: var(--fg);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
@@ -95,8 +99,9 @@
   }
 
   .dialog-title {
+    display: block;
     margin: 0 0 14px;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
   }
 
@@ -105,17 +110,28 @@
     width: 100%;
     box-sizing: border-box;
     background: var(--bg-sidebar);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius);
     color: var(--fg);
     padding: 8px 10px;
-    font-size: 14px;
+    font-size: 0.875rem;
     margin-bottom: 16px;
   }
 
-  .dialog-input:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
+  .dialog-input[aria-invalid='true'] {
+    border-color: var(--danger);
+    margin-bottom: 8px;
+  }
+
+  /* Vide mais rendue (pas de display: none) : la région doit rester dans l'arbre d'accessibilité. */
+  .dialog-error:empty {
+    margin: 0;
+  }
+
+  .dialog-error {
+    margin: 0 0 16px;
+    font-size: 0.8125rem;
+    color: var(--danger);
   }
 
   .dialog-actions {
@@ -126,11 +142,12 @@
 
   .btn-cancel,
   .btn-confirm {
-    padding: 8px 16px;
+    min-height: 32px;
+    padding: 6px 16px;
     border-radius: var(--radius);
-    font-size: 14px;
+    font-size: 0.875rem;
     cursor: pointer;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
   }
 
   .btn-cancel {
@@ -138,11 +155,8 @@
     color: var(--fg-dim);
   }
 
-  .btn-cancel:hover,
-  .btn-cancel:focus {
+  .btn-cancel:hover {
     background: var(--border);
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
   }
 
   .btn-confirm {
@@ -151,10 +165,15 @@
     border-color: var(--accent);
   }
 
-  .btn-confirm:hover,
-  .btn-confirm:focus {
+  .btn-confirm:hover {
     opacity: 0.9;
+  }
+
+  /* Anneau de focus visible sur chaque contrôle (le défaut global est écrasé par les bordures locales). */
+  .dialog-input:focus-visible,
+  .btn-cancel:focus-visible,
+  .btn-confirm:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 1px;
+    outline-offset: 2px;
   }
 </style>

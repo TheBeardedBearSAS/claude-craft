@@ -1,149 +1,118 @@
 <script>
   import { store } from '../lib/store.svelte.js';
-  import { alignBurndownByDate } from '../lib/burndown.js';
+  import { tweaks } from '../lib/tweaks.svelte.js';
+  import { t, fmtDate } from '../lib/i18n/index.svelte.js';
+  import { alignBurndownByDate, buildSeries, normalizeOnTrack } from '../lib/burndown.js';
+  import { focusable } from '../lib/actions.js';
+  import Icon from '../components/Icon.svelte';
   import uPlot from 'uplot';
   import 'uplot/dist/uPlot.min.css';
 
-  // sr-only table rows joined by DATE (bug #8 : was joined by array index, which
-  // mismatched because ideal has one row/day and actual is event-driven).
+  const HEIGHT = 320;
+  const TRACK_ICON = { 'on-track': 'check', 'at-risk': 'warn', behind: 'warn' };
+
+  // Rows joined by DATE (bug #8: they were paired by array index, but `actual` is event-driven).
   const tableRows = $derived(alignBurndownByDate(store.burndown?.ideal ?? [], store.burndown?.actual ?? []));
+  const series = $derived(buildSeries(store.burndown?.ideal ?? [], store.burndown?.actual ?? []));
+  const hasData = $derived(store.burndown?.ideal?.length > 0);
+  const onTrack = $derived(normalizeOnTrack(store.burndown?.on_track));
+  const sprintName = $derived(store.sprint?.name || t('burndown.currentSprint'));
+  const day = (iso) => fmtDate(iso, { dateStyle: 'medium' });
 
   let chartContainer = $state(null);
-  // Plain `let` (NOT $state) : the chart instance is read AND written inside the
-  // $effect below. As $state it made the effect depend on its own write → a
-  // reactive loop that spawned duplicate uPlot canvases and starved the event
-  // loop (hashchange could no longer flush, freezing route changes on this view).
-  let chart = null;
 
-  const hasData = $derived(store.burndown?.ideal?.length > 0);
-
-  const onTrackColor = $derived.by(() => {
-    if (store.burndown?.on_track === 'on-track') return 'var(--success)';
-    if (store.burndown?.on_track === 'at-risk') return 'var(--warning)';
-    if (store.burndown?.on_track === 'behind') return 'var(--danger)';
-    return 'var(--fg-dim)';
-  });
-
+  // The chart is rebuilt when the data, the accent (Tweaks) or the language change (t() reads the catalog): uPlot draws on a
+  // canvas, so the tokens are read as computed values at build time. The instance is a local of the
+  // effect (never $state: reading and writing it here made the effect depend on its own write).
   $effect(() => {
-    if (!chartContainer || !hasData) {
-      if (chart) {
-        chart.destroy();
-        chart = null;
-      }
-      return;
-    }
+    tweaks.accent;
+    if (!chartContainer || !hasData) return;
 
-    // Canvas ne résout pas var(--x) : on lit les valeurs calculées des tokens.
     const cs = getComputedStyle(chartContainer);
-    const tok = (name, fb) => cs.getPropertyValue(name).trim() || fb;
-    const cFaint = tok('--fg-faint', '#888');
+    const tok = (name, fallback) => cs.getPropertyValue(name).trim() || fallback;
+    const cFaint = tok('--fg-dim', '#aaa');
     const cAccent = tok('--accent', '#bdf03d');
     const cGrid = tok('--border-faint', '#333');
-
-    const idealData = store.burndown.ideal.map((p) => ({ ts: Math.floor(Date.parse(p.date) / 1000), pts: p.points }));
-    const actualData = store.burndown.actual.map((p) => ({ ts: Math.floor(Date.parse(p.date) / 1000), pts: p.points }));
-
-    const allTimestamps = new Set([...idealData.map((p) => p.ts), ...actualData.map((p) => p.ts)]);
-    const timestamps = Array.from(allTimestamps).sort((a, b) => a - b);
-    const idealValues = timestamps.map((ts) => idealData.find((p) => p.ts === ts)?.pts ?? null);
-    const actualValues = timestamps.map((ts) => actualData.find((p) => p.ts === ts)?.pts ?? null);
-
-    const data = [timestamps, idealValues, actualValues];
+    const axis = { stroke: cFaint, grid: { stroke: cGrid }, ticks: { stroke: cGrid } };
+    const dateLabel = (v) => fmtDate(new Date(v * 1000).toISOString().slice(0, 10), { day: '2-digit', month: '2-digit' });
 
     const opts = {
       width: chartContainer.clientWidth || 800,
-      height: 320,
+      height: HEIGHT,
       scales: { x: { time: true } },
-      axes: [
-        {
-          stroke: cFaint,
-          grid: { stroke: cGrid },
-          ticks: { stroke: cGrid },
-          values: (u, vals) => vals.map((v) => {
-            const d = new Date(v * 1000);
-            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
-          }),
-        },
-        { stroke: cFaint, grid: { stroke: cGrid }, ticks: { stroke: cGrid } },
-      ],
+      axes: [{ ...axis, values: (u, vals) => vals.map(dateLabel) }, axis],
       series: [
-        { label: 'Date' },
-        { label: 'Ideal', stroke: cFaint, width: 1.5, dash: [5, 5], points: { show: false } },
-        // spanGaps : l'axe X couvre chaque jour idéal, donc la série réelle
-        // (événementielle) a des trous (null) entre deux mesures. Sans spanGaps,
-        // uPlot rompt le trait et on ne voit que des points isolés (bug #5).
-        { label: 'Actual', stroke: cAccent, width: 3, spanGaps: true, points: { show: true, size: 6, fill: cAccent, stroke: cAccent } },
+        { label: t('burndown.series.date') },
+        // Ideal: dashed, thin, no markers. Actual: solid, thick, with markers (not told apart by colour only).
+        { label: t('burndown.legend.ideal'), stroke: cFaint, width: 1.5, dash: [6, 6], points: { show: false } },
+        // spanGaps: the actual series is event-driven, so it has holes between measures (bug #5).
+        { label: t('burndown.legend.actual'), stroke: cAccent, width: 3, spanGaps: true, points: { show: true, size: 7, fill: cAccent, stroke: cAccent } },
       ],
-      legend: { show: true },
+      legend: { show: false },
     };
-
-    if (chart) chart.destroy();
-    chart = new uPlot(opts, data, chartContainer);
-
-    const resizeObserver = new ResizeObserver(() => {
-      if (chart && chartContainer) chart.setSize({ width: chartContainer.clientWidth, height: 320 });
-    });
-    resizeObserver.observe(chartContainer);
+    const chart = new uPlot(opts, [series.timestamps, series.ideal, series.actual], chartContainer);
+    const resize = new ResizeObserver(() => chart.setSize({ width: chartContainer.clientWidth, height: HEIGHT }));
+    resize.observe(chartContainer);
 
     return () => {
-      resizeObserver.disconnect();
-      if (chart) {
-        chart.destroy();
-        chart = null;
-      }
+      resize.disconnect();
+      chart.destroy();
     };
   });
 </script>
 
-<div class="view-pad">
+<div class="view-pad" aria-busy={store.loading}>
+  <h2 class="sr-only">{t('nav.burndown')}</h2>
   <div class="burn-wrap">
-    {#if !store.burndown || !hasData}
-      <div class="empty">No burndown data (sprint not started or no start/end date)</div>
+    {#if store.loading}
+      <div class="empty" role="status">{t('common.loading')}</div>
+    {:else if !hasData}
+      <div class="empty">{t('burndown.empty')}</div>
     {:else}
       <div class="burn-card">
         <header class="burn-header">
-          <h2>{store.sprint?.name || 'Current Sprint'}</h2>
+          <h3>{sprintName}</h3>
           <div class="meta">
-            <span class="on-track-badge" style="background: color-mix(in oklch, {onTrackColor} 16%, transparent); color: {onTrackColor}">
-              {store.burndown.on_track || 'unknown'}
+            <span class="on-track-badge is-{onTrack}">
+              {#if TRACK_ICON[onTrack]}<Icon name={TRACK_ICON[onTrack]} size={13} />{/if}{t(`burndown.status.${onTrack}`)}
             </span>
-            <span>{store.burndown.total_points}p total</span>
+            <span>{t('burndown.total', { n: store.burndown.total_points })}</span>
           </div>
         </header>
 
-        <div class="burn-legend">
-          <span class="k"><i style="background: var(--fg-faint)"></i> Idéal</span>
-          <span class="k"><i style="background: var(--accent)"></i> Réel</span>
-        </div>
+        <ul class="burn-legend">
+          <li class="k"><span class="swatch swatch-ideal" aria-hidden="true"></span>{t('burndown.legend.ideal')}</li>
+          <li class="k"><span class="swatch swatch-actual" aria-hidden="true"></span>{t('burndown.legend.actual')}</li>
+        </ul>
 
-        <!--
-          role=img + aria-label : alternative accessible pour le canvas uPlot (WCAG SC 1.1.1, 1.4.5).
-          Le tableau sr-only fournit les données brutes aux lecteurs d'écran.
-        -->
-        <div
-          class="chart-wrapper"
-          bind:this={chartContainer}
-          role="img"
-          aria-label="Graphique de burndown du sprint {store.sprint?.name || 'courant'} : idéal vs réel"
-          aria-describedby="burndown-data-table"
-        ></div>
+        <!-- role=img : alternative accessible au canvas (WCAG 1.1.1). Les mêmes données sont dans le tableau ci-dessous. -->
+        <div class="chart-wrapper" bind:this={chartContainer} role="img" aria-label={t('burndown.chart.label', { sprint: sprintName })}></div>
 
-        <table class="sr-only" id="burndown-data-table" aria-label="Données du burndown">
-          <caption>Burndown — idéal vs réel</caption>
-          <thead>
-            <tr><th scope="col">Date</th><th scope="col">Points idéal</th><th scope="col">Points réel</th></tr>
-          </thead>
-          <tbody>
-            {#each tableRows as row}
-              <tr><td>{row.date}</td><td>{row.ideal ?? '—'}</td><td>{row.actual ?? '—'}</td></tr>
-            {/each}
-          </tbody>
-        </table>
+        <details class="burn-data">
+          <summary>{t('burndown.data.show')}</summary>
+          <div class="table-scroll" role="region" use:focusable aria-label={t('burndown.table.label')}>
+            <table>
+              <caption class="sr-only">{t('burndown.table.caption')}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">{t('burndown.table.date')}</th>
+                  <th scope="col" class="num">{t('burndown.table.ideal')}</th>
+                  <th scope="col" class="num">{t('burndown.table.actual')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each tableRows as row (row.date)}
+                  <tr>
+                    <th scope="row">{day(row.date)}</th>
+                    <td class="num mono">{row.ideal ?? '—'}</td>
+                    <td class="num mono">{row.actual ?? '—'}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
     {/if}
   </div>
 </div>
-
-<style>
-  .chart-wrapper { min-height: 320px; }
-</style>

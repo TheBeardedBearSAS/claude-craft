@@ -22,7 +22,6 @@ export const ICONS = {
   down: '<path d="M6 9l6 6 6-6"/>',
   settings:
     '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
-  bell: '<path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
   filter: '<path d="M3 5h18l-7 8v6l-4-2v-4z"/>',
   warn: '<path d="M12 3 2 20h20z"/><path d="M12 9v5M12 17h.01"/>',
   arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>',

@@ -14,7 +14,8 @@ const IGNORED = [/\.bak$/, /\.lock$/, /\.tmp-/, /(^|[/\\])\../, /node_modules/];
  * @param {EventBus} opts.eventBus - bus to publish events
  * @param {Repository} opts.repository - cache to refresh on changes
  * @param {number} [opts.debounceMs=200] - debounce delay per path
- * @returns {object} - { stop: async () => void }
+ * @returns {{ ready: Promise<void>, stop: () => Promise<void> }} `ready` resolves once the initial scan is done
+ *   and changes are actually being observed
  */
 export function startWatcher({ rootDir, projectRoot, eventBus, repository, debounceMs = 200 }) {
   const statusPath = projectRoot ? path.join(projectRoot, '.bmad', 'sprint-status.yaml') : null;
@@ -26,6 +27,7 @@ export function startWatcher({ rootDir, projectRoot, eventBus, repository, debou
       .join('/');
   const debounceTimers = new Map();
   let watcher = null;
+  let ready = Promise.resolve();
 
   const onEvent = async (event, filePath) => {
     const category = classify(filePath);
@@ -58,6 +60,7 @@ export function startWatcher({ rootDir, projectRoot, eventBus, repository, debou
       persistent: true,
     });
 
+    ready = new Promise((resolve) => watcher.once('ready', resolve));
     watcher
       .on('add', (p) => onEvent('add', p))
       .on('change', (p) => onEvent('change', p))
@@ -67,6 +70,7 @@ export function startWatcher({ rootDir, projectRoot, eventBus, repository, debou
   }
 
   return {
+    ready,
     async stop() {
       for (const timer of debounceTimers.values()) {
         clearTimeout(timer);

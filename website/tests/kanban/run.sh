@@ -3,10 +3,12 @@
 #
 # From the repo root:
 #   bash website/tests/kanban/run.sh            # build image + run specs
-#   UPDATE_KNOWN=1 bash website/tests/kanban/run.sh   # regenerate known-violations.json
+#   bash website/tests/kanban/run.sh a11y.spec.ts   # extra args go to `playwright test`
 #
 # The repo is mounted read-only at /src and copied to /work, so node_modules/dist/reports
-# never touch the host tree (host root node_modules is root-owned). Report -> website/tests/kanban/report/.
+# never touch the host tree (host root node_modules is root-owned). Report -> website/tests/kanban/report/,
+# test outputs (traces, screenshots) -> website/tests/kanban/results/ (both git-ignored).
+# KANBAN_SCREENSHOTS=1 also captures every view for a visual check (screenshots.spec.ts).
 set -euo pipefail
 
 if [ ! -d /src/website ]; then
@@ -15,12 +17,13 @@ if [ ! -d /src/website ]; then
   HARNESS="$ROOT/website/tests/kanban"
   IMAGE=cc-kanban-e2e
   docker build -q -t "$IMAGE" "$HARNESS" >/dev/null
-  mkdir -p "$HARNESS/report"
+  rm -rf "$HARNESS/results"
+  mkdir -p "$HARNESS/report" "$HARNESS/results"
   exec docker run --rm --user "$(id -u):$(id -g)" \
-    -e UPDATE_KNOWN="${UPDATE_KNOWN:-0}" \
+    -e KANBAN_SCREENSHOTS="${KANBAN_SCREENSHOTS:-0}" \
     -v "$ROOT":/src:ro \
     -v "$HARNESS/report":/out \
-    -v "$HARNESS/known-violations.json":/out-known/known-violations.json \
+    -v "$HARNESS/results":/out-results \
     -v cc-kanban-npm-cache:/npm-cache \
     "$IMAGE" "$@"
 fi
@@ -28,9 +31,9 @@ fi
 # ---- container side ----
 # Generated/unreadable website content (root-owned locale dirs) is not needed by the harness.
 mkdir -p /work/repo
-tar -C /src --exclude=.git --exclude=node_modules --exclude=dist --exclude=audit --exclude=docs \
+tar -C /src --ignore-failed-read --exclude=.git --exclude=node_modules --exclude=.test-tmp --exclude=.stryker-tmp --exclude=coverage --exclude=dist --exclude=audit --exclude=docs \
     --exclude='website/[a-z][a-z]' --exclude=website/.vitepress --exclude=website/test-results \
-    --exclude=website/public --exclude=website/tests/kanban/report -cf - . \
+    --exclude=website/public --exclude=website/tests/kanban/report --exclude=website/tests/kanban/results -cf - . \
   | tar -C /work/repo -xf -
 cd /work/repo
 mkdir -p "$HOME"
@@ -42,14 +45,9 @@ npm run kanban:build
 # Largest JS chunk (informational budget)
 find cli/kanban/client/dist/assets -name '*.js' -printf '%s %p\n' | sort -rn | head -1
 
-# Use the host baseline (writable mount) so UPDATE_KNOWN rewrites the tracked file.
-cp /out-known/known-violations.json website/tests/kanban/known-violations.json 2>/dev/null || true
-
 rc=0
-( cd website && npx playwright test --config tests/kanban/playwright.config.ts ) || rc=$?
+( cd website && npx playwright test --config tests/kanban/playwright.config.ts "$@" ) || rc=$?
 
 cp -r website/tests/kanban/report/. /out/ 2>/dev/null || true
-if [ "${UPDATE_KNOWN:-0}" = "1" ]; then
-  cat website/tests/kanban/known-violations.json > /out-known/known-violations.json
-fi
+cp -r website/tests/kanban/results/. /out-results/ 2>/dev/null || true
 exit "$rc"

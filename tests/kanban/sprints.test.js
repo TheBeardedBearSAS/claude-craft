@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { summarizeSprint, sortSprints } from '../../cli/kanban/client/src/lib/sprints.js';
+import {
+  summarizeSprint,
+  sortSprints,
+  sprintState,
+  sprintTotals,
+  groupTasksByStory,
+} from '../../cli/kanban/client/src/lib/sprints.js';
 
 const mkFile = (category, name) => ({
   category,
@@ -74,5 +80,67 @@ describe('sortSprints', () => {
     const input = [{ id: 'a' }, { id: 'b' }];
     sortSprints(input);
     expect(input.map((s) => s.id)).toEqual(['a', 'b']);
+  });
+});
+
+describe('sprintState', () => {
+  const sp = (id, done = 0, total = 0, extra = {}) => ({ id, done_points: done, total_points: total, ...extra });
+
+  it('trusts an explicit state from the API', () => {
+    expect(sprintState(sp('sprint-2', 0, 5, { state: 'closed' }), 'sprint-2')).toBe('closed');
+    expect(sprintState(sp('sprint-2', 5, 5, { state: 'planned' }), null)).toBe('planned');
+  });
+
+  it('ignores an unknown explicit state', () => {
+    expect(sprintState(sp('sprint-2', 0, 5, { state: 'weird' }), 'sprint-2')).toBe('active');
+  });
+
+  it('is active when it is the store sprint, even with no points done', () => {
+    expect(sprintState(sp('sprint-3', 0, 8), 'sprint-3')).toBe('active');
+  });
+
+  it('is not active just because some points are done (K-20)', () => {
+    expect(sprintState(sp('sprint-4', 3, 8), 'sprint-3')).toBe('planned');
+  });
+
+  it('is closed when every point is delivered', () => {
+    expect(sprintState(sp('sprint-1', 8, 8), 'sprint-3')).toBe('closed');
+  });
+
+  it('is closed when older than the active sprint (numeric-aware)', () => {
+    expect(sprintState(sp('sprint-9', 2, 8), 'sprint-10')).toBe('closed');
+    expect(sprintState(sp('sprint-11', 0, 8), 'sprint-10')).toBe('planned');
+  });
+
+  it('is planned without any active sprint and nothing delivered', () => {
+    expect(sprintState(sp('sprint-1', 0, 8), null)).toBe('planned');
+    expect(sprintState(sp('sprint-1', 0, 0), undefined)).toBe('planned');
+  });
+});
+
+describe('sprintTotals', () => {
+  it('sums points, done points and percent', () => {
+    const t = sprintTotals([
+      { status: 'done', story_points: 3 },
+      { status: 'review', story_points: 5 },
+    ]);
+    expect(t).toEqual({ total: 8, done: 3, count: 2, pct: 38 });
+  });
+
+  it('handles an empty sprint', () => {
+    expect(sprintTotals([])).toEqual({ total: 0, done: 0, count: 0, pct: 0 });
+    expect(sprintTotals(undefined)).toEqual({ total: 0, done: 0, count: 0, pct: 0 });
+  });
+});
+
+describe('groupTasksByStory', () => {
+  it('groups tasks under their us_id', () => {
+    const g = groupTasksByStory([
+      { id: 'T1', us_id: 'US-1' },
+      { id: 'T2', us_id: 'US-2' },
+      { id: 'T3', us_id: 'US-1' },
+    ]);
+    expect(g['US-1'].map((t) => t.id)).toEqual(['T1', 'T3']);
+    expect(g['US-2']).toHaveLength(1);
   });
 });

@@ -1,163 +1,221 @@
 <script>
-  import { marked } from 'marked';
-  import DOMPurify from 'dompurify';
+  import { untrack } from 'svelte';
+  import { store } from '../lib/store.svelte.js';
+  import { route } from '../lib/router.svelte.js';
+  import { formatHash } from '../lib/query.js';
+  import { t } from '../lib/i18n/index.svelte.js';
+  import { request, ApiError, latestOnly, isAbort, errorKey } from '../lib/api.js';
+  import { renderMarkdown } from '../lib/markdown.js';
+  import { buildDocsTree, groupOpenFor } from '../lib/docs-tree.js';
+  import { scrollable } from '../lib/actions.js';
   import Icon from '../components/Icon.svelte';
 
-  let docs = $state([]);
-  let selectedDoc = $state(null);
-  let docContent = $state('');
-  let loading = $state(true);
-  let loadingContent = $state(false);
-  let error = $state(null);
-  let contentContainer = $state(null);
+  const WIDE = '(min-width: 981px)';
+  const runList = latestOnly();
+  const runDoc = latestOnly();
+  const mq = window.matchMedia(WIDE);
 
-  const tree = $derived.by(() => {
-    const root = [];
-    const groups = {};
-    for (const doc of docs) {
-      const parts = doc.rel.split('/');
-      if (parts.length === 1) {
-        root.push(doc);
-      } else {
-        const topLevel = parts[0];
-        if (!groups[topLevel]) groups[topLevel] = { name: topLevel, children: [] };
-        groups[topLevel].children.push(doc);
-      }
+  let docs = $state([]);
+  let listLoaded = $state(false);
+  let listError = $state(null);
+
+  let content = $state('');
+  let loadedRel = $state(null);
+  let docLoading = $state(false);
+  let docError = $state(null);
+  let html = $state('');
+
+  let navOpen = $state(mq.matches);
+  let openGroups = $state(new Set());
+  let copyStatus = $state('');
+  let copyTimer;
+
+  const selectedRel = $derived(route.params.rel ?? null);
+  const tree = $derived(buildDocsTree(docs));
+  const href = (rel) => formatHash('docs', { rel }, {});
+
+  /** The document endpoint answers text/markdown, which `request` (JSON only) cannot read. */
+  async function fetchText(url, signal) {
+    let res;
+    try {
+      res = await fetch(url, { signal });
+    } catch (err) {
+      if (isAbort(err)) throw err;
+      throw new ApiError({ status: 0, code: 'network', body: null, message: err?.message });
     }
-    return { root, groups: Object.values(groups) };
-  });
+    if (res.ok) return res.text();
+    const body = await res.json().catch(() => null);
+    const code = typeof body?.error === 'string' && body.error ? body.error : `http_${res.status}`;
+    throw new ApiError({ status: res.status, code, body });
+  }
 
   async function loadDocs() {
-    loading = true;
-    error = null;
+    const ticket = runList();
     try {
-      const res = await fetch('/api/docs');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      const data = await request('/api/docs', { signal: ticket.signal });
+      if (!ticket.current) return;
       docs = data.docs || [];
+      listError = null;
     } catch (err) {
-      error = err.message;
-    } finally {
-      loading = false;
+      if (isAbort(err) || !ticket.current) return;
+      listError = errorKey(err);
     }
+    if (ticket.current) listLoaded = true;
   }
 
-  async function selectDoc(doc) {
-    selectedDoc = doc;
-    loadingContent = true;
-    try {
-      const res = await fetch(`/api/docs/${encodeURIComponent(doc.rel)}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      docContent = await res.text();
-    } catch (err) {
-      docContent = `Error loading document: ${err.message}`;
-    } finally {
-      loadingContent = false;
+  async function loadDoc(rel) {
+    const ticket = runDoc();
+    if (!rel) {
+      content = '';
+      loadedRel = null;
+      docError = null;
+      docLoading = false;
+      return;
     }
+    docLoading = loadedRel !== rel; // a live reload of the open document keeps it on screen
+    docError = null;
+    try {
+      const text = await fetchText(`/api/docs/${rel.split('/').map(encodeURIComponent).join('/')}`, ticket.signal);
+      if (!ticket.current) return;
+      content = text;
+      loadedRel = rel;
+    } catch (err) {
+      if (isAbort(err) || !ticket.current) return;
+      docError = errorKey(err);
+      content = '';
+      loadedRel = null;
+    }
+    if (ticket.current) docLoading = false;
   }
 
-  const renderedContent = $derived.by(() => {
-    if (!docContent) return '';
+  async function copy() {
+    clearTimeout(copyTimer);
     try {
-      return DOMPurify.sanitize(marked.parse(docContent));
+      await navigator.clipboard.writeText(content);
+      copyStatus = t('docs.copied');
     } catch {
-      return '<p>Error rendering markdown</p>';
+      copyStatus = t('docs.copyFailed');
     }
-  });
-
-  let copied = $state(false);
-  function copyContent() {
-    if (docContent && navigator.clipboard) {
-      navigator.clipboard.writeText(docContent).then(() => {
-        copied = true;
-        setTimeout(() => (copied = false), 1500);
-      });
-    }
+    copyTimer = setTimeout(() => (copyStatus = ''), 2500);
   }
 
-  $effect(() => { loadDocs(); });
+  function toggleGroup(name) {
+    const next = new Set(openGroups);
+    if (next.has(name)) next.delete(name);
+    else next.add(name);
+    openGroups = next;
+  }
 
-  // Réécrit les liens US-xxx vers le board (navigation interne).
+  // Narrow screens: the tree sits above the document, so fold it once a document is chosen.
+  const onPick = () => {
+    if (!mq.matches) navOpen = false;
+  };
+
   $effect(() => {
-    if (!contentContainer || !renderedContent) return;
-    const links = contentContainer.querySelectorAll('a');
-    for (const link of links) {
-      const text = link.textContent?.trim() || '';
-      if (/^US-\d+$/.test(text)) {
-        link.href = '#/kanban';
-        link.dataset.storyId = text;
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.location.hash = '#/kanban';
-        });
-      }
-    }
+    store.revision;
+    untrack(loadDocs);
+  });
+  $effect(() => {
+    const rel = selectedRel;
+    store.revision;
+    untrack(() => loadDoc(rel));
   });
 
-  let expandedGroups = $state(new Set());
-  function toggleGroup(groupName) {
-    if (expandedGroups.has(groupName)) expandedGroups.delete(groupName);
-    else expandedGroups.add(groupName);
-    expandedGroups = new Set(expandedGroups);
-  }
+  // Open the folder holding the selected document (deep link, or a link followed from elsewhere).
+  $effect(() => {
+    const group = groupOpenFor(selectedRel);
+    if (group) untrack(() => (openGroups = new Set(openGroups).add(group)));
+  });
+
+  $effect(() => {
+    const on = () => (navOpen = mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  });
+  $effect(() => () => clearTimeout(copyTimer));
+
+  // h1 of the document becomes h2 (the page keeps a single h1); story ids become ?story= links.
+  $effect(() => {
+    const src = content;
+    const linkRoute = { name: 'docs', params: { rel: loadedRel }, query: {} };
+    let stale = false;
+    renderMarkdown(src, { linkRoute, demote: 1 }).then((out) => {
+      if (!stale) html = out;
+    });
+    return () => (stale = true);
+  });
 </script>
 
-<div class="docs-pad">
-  <div class="docs-layout">
-    <aside class="docs-tree" aria-label="Navigation des documents">
-      {#if loading}
-        <div class="empty" style="padding:20px 8px">Chargement…</div>
-      {:else if error}
-        <div class="empty" style="padding:20px 8px; color: var(--danger)">Erreur : {error}</div>
-      {:else}
-        {#each tree.root as doc}
-          <button class="tree-item" class:active={selectedDoc?.rel === doc.rel} onclick={() => selectDoc(doc)}>
-            <Icon name="file" cls="ico" size={15} />{doc.rel}
-          </button>
-        {/each}
-        {#each tree.groups as group}
-          <div class="tree-group">
-            <button class="tree-item group-header" onclick={() => toggleGroup(group.name)} aria-expanded={expandedGroups.has(group.name)}>
-              <span class="group-icon">{expandedGroups.has(group.name) ? '▼' : '▶'}</span>{group.name}/
-            </button>
-            {#if expandedGroups.has(group.name)}
-              <div class="group-children">
-                {#each group.children as doc}
-                  <button class="tree-item nested" class:active={selectedDoc?.rel === doc.rel} onclick={() => selectDoc(doc)}>
-                    {doc.rel.split('/').slice(1).join('/')}
-                  </button>
-                {/each}
-              </div>
-            {/if}
-          </div>
-        {/each}
-      {/if}
-    </aside>
+{#snippet docLink(doc, label, nested)}
+  <a class="tree-item" class:nested href={href(doc.rel)} aria-current={selectedRel === doc.rel ? 'page' : undefined} onclick={onPick}>
+    {#if !nested}<Icon name="file" cls="ico" size={15} />{/if}{label}
+  </a>
+{/snippet}
 
-    <div class="doc-view" role="region" aria-label="Contenu du document">
-      {#if !selectedDoc}
-        <div class="empty">Sélectionnez un document</div>
+<div class="view-pad">
+  <h2 class="sr-only">{t('docs.title')}</h2>
+  <div class="docs-layout">
+    <details class="docs-nav" bind:open={navOpen}>
+      <summary>{t('docs.title')}</summary>
+      <nav aria-label={t('docs.tree.label')} aria-busy={!listLoaded}>
+        {#if !listLoaded}
+          <div class="empty" role="status">{t('common.loading')}</div>
+        {:else if listError}
+          <div class="empty" role="alert">
+            <p>{t(listError)}</p>
+            <button class="btn" onclick={loadDocs}>{t('common.retry')}</button>
+          </div>
+        {:else if docs.length === 0}
+          <div class="empty">{t('docs.empty')}</div>
+        {:else}
+          <ul class="tree-list">
+            {#each tree.root as doc (doc.rel)}
+              <li>{@render docLink(doc, doc.rel, false)}</li>
+            {/each}
+            {#each tree.groups as group (group.name)}
+              {@const open = openGroups.has(group.name)}
+              <li class="tree-group">
+                <button class="tree-item group-header" aria-expanded={open} aria-label={t('docs.group.toggle', { name: group.name })} onclick={() => toggleGroup(group.name)}>
+                  <Icon name="chevron" cls="group-icon" size={12} />{group.name}/
+                </button>
+                {#if open}
+                  <ul class="group-children">
+                    {#each group.children as child (child.doc.rel)}
+                      <li>{@render docLink(child.doc, child.label, true)}</li>
+                    {/each}
+                  </ul>
+                {/if}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </nav>
+    </details>
+
+    <div class="doc-view" role="region" aria-label={t('docs.view.label')} aria-busy={docLoading}>
+      {#if !selectedRel}
+        <div class="empty">{t('docs.select')}</div>
       {:else}
         <div class="doc-toolbar">
-          <span class="doc-path mono">{selectedDoc.rel}</span>
-          <button class="btn btn-ghost" onclick={copyContent} aria-label="Copier le contenu">
-            <Icon name="copy" size={15} />{copied ? 'Copié !' : 'Copier'}
-          </button>
+          <span class="doc-path mono">{selectedRel}</span>
+          <span class="copy-wrap">
+            <span class="copy-status" role="status">{copyStatus}</span>
+            <button class="btn btn-ghost" onclick={copy} aria-label={t('docs.copy.label')} disabled={!content}>
+              <Icon name="copy" size={15} />{t('docs.copy')}
+            </button>
+          </span>
         </div>
-        {#if loadingContent}
-          <div class="empty">Chargement du document…</div>
+        {#if docLoading}
+          <div class="empty">{t('docs.loadingDoc')}</div>
+        {:else if docError}
+          <div class="empty" role="alert">
+            <p>{t(docError)}</p>
+            <button class="btn" onclick={() => loadDoc(selectedRel)}>{t('common.retry')}</button>
+          </div>
         {:else}
-          <div class="doc-paper" bind:this={contentContainer}>{@html renderedContent}</div>
+          <div class="doc-paper" use:scrollable={html}>{@html html}</div>
         {/if}
       {/if}
     </div>
   </div>
 </div>
-
-<style>
-  .docs-pad { padding: 22px; height: 100%; min-height: 0; display: flex; flex-direction: column; }
-  .docs-pad .docs-layout { flex: 1; min-height: 0; }
-  .group-icon { font-size: 9px; width: 12px; display: inline-block; }
-  .doc-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .doc-toolbar .doc-path { font-size: 12px; color: var(--fg-faint); }
-</style>

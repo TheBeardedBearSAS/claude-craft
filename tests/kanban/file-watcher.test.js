@@ -46,7 +46,8 @@ describe('file-watcher', () => {
       debounceMs: DEBOUNCE,
     });
 
-    await sleep(100);
+    // Writing before chokidar finished its initial scan loses the event (flaky under load).
+    await watcher.ready;
   });
 
   afterEach(async () => {
@@ -166,7 +167,7 @@ describe('file-watcher', () => {
       await repo.refresh();
       const refresh = vi.spyOn(repo, 'refresh');
       w = startWatcher({ rootDir: pm, projectRoot: root, eventBus, repository: repo, debounceMs: DEBOUNCE });
-      await sleep(300);
+      await w.ready;
       return { yamlPath, refresh };
     }
 

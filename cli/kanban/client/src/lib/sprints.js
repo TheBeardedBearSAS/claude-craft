@@ -1,5 +1,7 @@
 // Pure sprint-summary logic (no DOM, no Svelte) — unit-tested in tests/kanban/sprints.test.js.
 
+import { sumPoints } from './points.js';
+
 /**
  * Roll up a sprint aggregation entry against the full story list.
  * @param {{ id:string, files?:object[], goalPath?:string|null }} sprintEntry
@@ -30,5 +32,40 @@ export function summarizeSprint(sprintEntry, stories) {
  * @returns {Array<{ id:string }>}
  */
 export function sortSprints(summaries) {
-  return [...summaries].sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true, sensitivity: 'base' }));
+  return [...summaries].sort((a, b) => compareSprintIds(b.id, a.id));
+}
+
+const compareSprintIds = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+const STATES = ['planned', 'active', 'closed'];
+
+/**
+ * State of a sprint. Uses the explicit `state` of the API when present; otherwise derives it from the
+ * active sprint id (never from "some points are done", K-20): active if it is the active sprint,
+ * closed if everything is delivered or if it comes before the active one, planned otherwise.
+ * @param {{ id:string, state?:string, total_points?:number, done_points?:number }} sprint
+ * @param {string|null|undefined} activeId id of the active sprint (store.sprint.sprint_id)
+ * @returns {'planned'|'active'|'closed'}
+ */
+export function sprintState(sprint, activeId) {
+  if (STATES.includes(sprint?.state)) return sprint.state;
+  if (activeId && sprint.id === activeId) return 'active';
+  if (sprint.total_points > 0 && sprint.done_points >= sprint.total_points) return 'closed';
+  if (activeId && compareSprintIds(sprint.id, activeId) < 0) return 'closed';
+  return 'planned';
+}
+
+/** Points, done points, story count and percent of a sprint's stories. */
+export function sprintTotals(stories) {
+  const list = stories ?? [];
+  const total = sumPoints(list);
+  const done = sumPoints(list, (s) => s.status === 'done');
+  return { total, done, count: list.length, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+/** { 'US-1': [task, …] } from a flat task list. */
+export function groupTasksByStory(tasks) {
+  const map = {};
+  for (const task of tasks ?? []) (map[task.us_id] ??= []).push(task);
+  return map;
 }

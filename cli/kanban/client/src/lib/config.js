@@ -99,3 +99,11 @@ export function avatarColor(name) {
   const hue = hashString(name) % 360;
   return `oklch(0.78 0.12 ${hue})`;
 }
+
+/** Palettes d'accent proposées (a = accent, d = dim, f = foreground). */
+export const ACCENTS = {
+  lime: { a: 'oklch(0.88 0.21 126)', d: 'oklch(0.72 0.16 126)', f: 'oklch(0.22 0.05 126)' },
+  cyan: { a: 'oklch(0.83 0.13 200)', d: 'oklch(0.68 0.11 200)', f: 'oklch(0.18 0.04 215)' },
+  violet: { a: 'oklch(0.74 0.17 295)', d: 'oklch(0.62 0.16 295)', f: 'oklch(0.2 0.04 295)' },
+  amber: { a: 'oklch(0.84 0.15 75)', d: 'oklch(0.73 0.13 70)', f: 'oklch(0.24 0.05 70)' },
+};
