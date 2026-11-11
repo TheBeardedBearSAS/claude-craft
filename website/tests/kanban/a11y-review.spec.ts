@@ -591,7 +591,7 @@ const LOT4: Array<[string, (p: Page) => Promise<void>]> = [
   ['close-dialog', async (p) => {
     await p.goto('/#/sprints/sprint-9-auth-premium');
     await p.locator('.sd-title').waitFor();
-    await p.getByRole('button', { name: /^(Close sprint|Sprint schließen)$/ }).first().click();
+    await p.getByRole('button', { name: /^(Close sprint|Sprint abschließen)$/ }).first().click();
     await expect(p.locator('dialog.close-sprint[open]')).toBeVisible();
   }],
   ['backlog-planning', async (p) => {
