@@ -35,7 +35,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Restore incremental cache (PR only)
         if: github.event_name == 'pull_request'
@@ -49,14 +49,14 @@ jobs:
       - name: Run Stryker (weekly full)
         if: github.event_name != 'pull_request'
         # Weekly: tolerant — informational signal only.
-        run: npx stryker run || true
+        run: ./node_modules/.bin/stryker run || true
 
       - name: Run Stryker (PR incremental — mutate only changed files)
         if: github.event_name == 'pull_request'
         # PR: blocking. Threshold (mutationScore.break / .high / .low) is
         # configured in stryker.config.mjs. CI fails if the score falls
         # below the `break` threshold.
-        run: npx stryker run --incremental
+        run: ./node_modules/.bin/stryker run --incremental
 
       - name: Upload mutation report
         if: always()

@@ -23,5 +23,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
 # /work: throw-away copy of the repo (host mount stays read-only, no root-owned files).
 # /npm-cache: world-writable so a named volume works with `--user <uid>`.
 RUN mkdir -p /work /npm-cache /out && chmod 777 /work /npm-cache /out
+# run.sh always passes --user <host uid>; `node` is only the default when it is run without one.
+USER node
 WORKDIR /work
 ENTRYPOINT ["bash", "/src/website/tests/kanban/run.sh"]

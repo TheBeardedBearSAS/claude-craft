@@ -46,9 +46,9 @@ tar -C /src --ignore-failed-read --exclude=.git --exclude=node_modules --exclude
 cd /work/repo
 mkdir -p "$HOME"
 
-npm ci --no-audit --no-fund
+npm ci --ignore-scripts --no-audit --no-fund
 npm run kanban:build
-( cd website && npm ci --no-audit --no-fund )
+( cd website && npm ci --ignore-scripts --no-audit --no-fund )
 
 # Logged for the report; a mismatch with the image fails at launch ("Executable doesn't exist").
 ( cd website && npx playwright --version )

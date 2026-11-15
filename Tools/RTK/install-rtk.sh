@@ -156,7 +156,7 @@ install_rtk_binary() {
 
     # Download installer
     print_info "Downloading RTK installer..."
-    if ! curl -fsSL "https://raw.githubusercontent.com/rtk-ai/rtk/${RTK_INSTALL_COMMIT}/install.sh" -o "$tmp_install"; then
+    if ! curl --proto '=https' --tlsv1.2 -fsSL "https://raw.githubusercontent.com/rtk-ai/rtk/${RTK_INSTALL_COMMIT}/install.sh" -o "$tmp_install"; then
         print_error "Failed to download RTK installer"
         exit 1
     fi

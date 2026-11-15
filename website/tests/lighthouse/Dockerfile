@@ -8,7 +8,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV CHROME_PATH=/usr/bin/chromium
 # Lighthouse pinned for deterministic scoring
-RUN npm install -g lighthouse@12.2.1 http-server@14.1.1
+RUN npm install -g --ignore-scripts lighthouse@12.2.1 http-server@14.1.1
+
+# Headless Chromium and the preview server need no root.
+USER node
 
 WORKDIR /site
 ENTRYPOINT ["bash", "/site/tests/lighthouse/run.sh"]
