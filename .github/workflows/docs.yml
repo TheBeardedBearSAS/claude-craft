@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -33,13 +31,13 @@ jobs:
           cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
-        run: cd website && npm ci
+        run: cd website && npm ci --ignore-scripts
 
       - name: Sync docs
         run: cd website && bash scripts/sync-docs.sh
 
       - name: Build VitePress
-        run: cd website && npx vitepress build
+        run: cd website && ./node_modules/.bin/vitepress build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # pinned: v5.0.0
@@ -64,16 +62,16 @@ jobs:
           cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
-        run: cd website && npm ci
+        run: cd website && npm ci --ignore-scripts
 
       - name: Install Playwright Chromium
-        run: cd website && npx playwright install --with-deps chromium
+        run: cd website && ./node_modules/.bin/playwright install --with-deps chromium
 
       - name: Sync and build
-        run: cd website && bash scripts/sync-docs.sh && npx vitepress build
+        run: cd website && bash scripts/sync-docs.sh && ./node_modules/.bin/vitepress build
 
       - name: Run E2E tests
-        run: cd website && npx playwright test --config tests/e2e/playwright.config.ts
+        run: cd website && ./node_modules/.bin/playwright test --config tests/e2e/playwright.config.ts
 
       - name: Upload test report
         if: failure()
@@ -87,6 +85,10 @@ jobs:
     name: Deploy to GitHub Pages
     needs: [build, test]
     runs-on: ubuntu-latest
+    # Only the deploy job publishes to Pages: write scopes stay out of the build and test jobs.
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

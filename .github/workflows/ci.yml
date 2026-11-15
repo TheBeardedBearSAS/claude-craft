@@ -60,7 +60,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Run linter
         run: npm run lint
@@ -94,7 +94,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Validate content (agents, commands, skills, doc counts)
         run: npm run test:content
@@ -113,7 +113,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Run i18n parity check
         run: npm run lint:i18n
@@ -151,7 +151,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Verify generated docs are up-to-date
         run: npm run docs:check
@@ -196,7 +196,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       # SEC-011: rule 11-security.md mandates --audit-level=moderate (block moderate+high).
       - name: Security audit
@@ -240,13 +240,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build Kanban client
         run: npm run kanban:build
 
       - name: Install website (Playwright) dependencies
-        run: cd website && npm ci
+        run: cd website && npm ci --ignore-scripts
 
       - name: Check the image matches the installed Playwright
         run: test "$(node -p "require('./website/node_modules/@playwright/test/package.json').version")" = "1.65.0"
@@ -282,16 +282,16 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build Kanban client
         run: npm run kanban:build
 
       - name: Install website (Playwright) dependencies
-        run: cd website && npm ci
+        run: cd website && npm ci --ignore-scripts
 
       - name: Install WebKit
-        run: cd website && npx playwright install webkit
+        run: cd website && ./node_modules/.bin/playwright install webkit
 
       # KANBAN_SCREENSHOTS=1: screenshots.spec.ts captures every view, form and native control as macOS draws them.
       - name: Run Kanban browser tests

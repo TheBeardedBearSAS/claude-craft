@@ -431,7 +431,8 @@ run_deps_install() {
     print_info "Attempting dependency installation..."
 
     if [[ -f "package.json" ]]; then
-        npm install 2>/dev/null || yarn install 2>/dev/null || true
+        # --ignore-scripts: an unattended loop must not run the lifecycle scripts of third-party packages.
+        npm install --ignore-scripts 2>/dev/null || yarn install --ignore-scripts 2>/dev/null || true
     elif [[ -f "composer.json" ]]; then
         composer install 2>/dev/null || true
     elif [[ -f "pyproject.toml" ]]; then

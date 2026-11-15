@@ -162,7 +162,7 @@ jobs:
           echo "Unpacked size: ${SIZE_KB} kB (threshold: 25600 kB)"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Security audit
         run: npm audit --omit=dev --audit-level=moderate
@@ -189,7 +189,7 @@ jobs:
           VALE_ARCHIVE="vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
           VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/${VALE_ARCHIVE}"
           VALE_SHA256="774c034771f990e25fdbb4f940213423f2563b8df99ec31a296643e0872324cb"
-          wget -qO "/tmp/${VALE_ARCHIVE}" "${VALE_URL}"
+          wget --https-only -qO "/tmp/${VALE_ARCHIVE}" "${VALE_URL}"
           echo "${VALE_SHA256}  /tmp/${VALE_ARCHIVE}" | sha256sum -c -
           tar xz -C /usr/local/bin vale -f "/tmp/${VALE_ARCHIVE}"
           rm -f "/tmp/${VALE_ARCHIVE}"
@@ -249,7 +249,7 @@ jobs:
 
       - name: Install dependencies
         # Needed for the Kanban build below: vite/svelte are devDependencies, absent from a fresh checkout.
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build Kanban UI
         # cli/kanban/client/dist is gitignored, so it must be (re)built here or the published
