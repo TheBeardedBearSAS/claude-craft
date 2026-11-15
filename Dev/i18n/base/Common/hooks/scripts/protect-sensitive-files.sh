@@ -8,9 +8,9 @@ set -u
 hook_require_parser
 hook_input
 FILE=$(hook_get tool_input.file_path)
-[ -n "$FILE" ] || FILE=$(hook_get tool_input.notebook_path)
+[[ -n "$FILE" ]] || FILE=$(hook_get tool_input.notebook_path)
 
-if [ -n "$FILE" ] && is_sensitive_path "$FILE"; then
+if [[ -n "$FILE" ]] && is_sensitive_path "$FILE"; then
   hook_block "Cannot modify sensitive file: $FILE"
 fi
 exit 0

@@ -12,7 +12,7 @@ hook_input
 TOOL=$(hook_get tool_name)
 ERROR=$(hook_get error)
 CWD=$(hook_get cwd)
-[ -z "$CWD" ] || cd "$CWD" 2>/dev/null || true
+[[ -z "$CWD" ]] || cd "$CWD" 2>/dev/null || true
 
 has() { printf '%s' "$ERROR" | grep -qiE -e "$1"; }
 
@@ -46,5 +46,5 @@ printf '[%s] [%s] [%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$severity" "$TOOL
   "$(printf '%s' "$ERROR" | tr '\n' ' ' | cut -c1-300)" >>.claude/logs/tool-failures.log 2>/dev/null
 
 HINT=$(recovery_hint)
-[ -z "$HINT" ] || hook_context PostToolUseFailure "$HINT"
+[[ -z "$HINT" ]] || hook_context PostToolUseFailure "$HINT"
 exit 0

@@ -60,7 +60,7 @@ SRC_DIR=$(get_source_dir)
 
 # Scaffold content (project CLAUDE.md/README/index) sourced per-language with English fallback
 SCAFFOLD_DIR="$SRC_DIR/scaffold"
-if [ ! -d "$SCAFFOLD_DIR" ]; then SCAFFOLD_DIR="$I18N_DIR/en/scaffold"; fi
+if [[ ! -d "$SCAFFOLD_DIR" ]]; then SCAFFOLD_DIR="$I18N_DIR/en/scaffold"; fi
 
 ui_box "🚀 Project Commands - v${VERSION}"
 echo ""
@@ -93,10 +93,10 @@ fi
 
 # Copy project commands from i18n source
 CMD_SRC="$SRC_DIR/commands"
-if [ ! -d "$CMD_SRC" ]; then
+if [[ ! -d "$CMD_SRC" ]]; then
     CMD_SRC="$SCRIPT_DIR/claude-commands"
 fi
-if [ -d "$CMD_SRC" ]; then
+if [[ -d "$CMD_SRC" ]]; then
     cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
     COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$COMMANDS_COUNT project commands copied"
@@ -105,7 +105,7 @@ fi
 
 # Copy gate commands from i18n source
 GATE_CMD_SRC="$SRC_DIR/Gate/commands"
-if [ -d "$GATE_CMD_SRC" ]; then
+if [[ -d "$GATE_CMD_SRC" ]]; then
     cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/gate/" 2>/dev/null || true
     GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$GATE_COUNT gate commands copied"
@@ -116,10 +116,10 @@ bash "$SCRIPT_DIR/../Dev/scripts/prune-removed-commands.sh" "$PROJECT_DIR"
 
 # Copy agents from i18n source
 AGT_SRC="$SRC_DIR/agents"
-if [ ! -d "$AGT_SRC" ]; then
+if [[ ! -d "$AGT_SRC" ]]; then
     AGT_SRC="$SCRIPT_DIR/claude-agents"
 fi
-if [ -d "$AGT_SRC" ]; then
+if [[ -d "$AGT_SRC" ]]; then
     cp "$AGT_SRC/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
     AGENTS_COUNT=$(ls -1 "$AGT_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$AGENTS_COUNT agents copied"
@@ -127,10 +127,10 @@ fi
 
 # Copy templates from i18n source
 TPL_SRC="$SRC_DIR/templates"
-if [ ! -d "$TPL_SRC" ]; then
+if [[ ! -d "$TPL_SRC" ]]; then
     TPL_SRC="$SCRIPT_DIR/templates"
 fi
-if [ -d "$TPL_SRC" ]; then
+if [[ -d "$TPL_SRC" ]]; then
     cp "$TPL_SRC/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
     TEMPLATES_COUNT=$(ls -1 "$TPL_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$TEMPLATES_COUNT templates copied"
@@ -179,7 +179,7 @@ write_scaffold "$PROJECT_DIR/project-management/README.md" "project-management R
 
 echo ""
 echo "=================================================="
-if [ "$lang" = "fr" ]; then
+if [[ "$lang" = "fr" ]]; then
 echo "✅ Installation terminée !"
 echo ""
 echo "📋 Commandes disponibles :"

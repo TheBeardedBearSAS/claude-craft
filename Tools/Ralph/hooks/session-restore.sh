@@ -34,19 +34,19 @@ dod_listing() {
         return 0
     fi
     while IFS= read -r line; do
-        [ -n "$line" ] || continue
+        [[ -n "$line" ]] || continue
         ralph_item_optional "$line" && continue
         name=$(ralph_json_get "$line" name)
-        [ -n "$name" ] || name=$(ralph_json_get "$line" id)
+        [[ -n "$name" ]] || name=$(ralph_json_get "$line" id)
         out="$out
 - ${name:-unnamed}"
     done < <(ralph_dod_items "$config")
-    [ -z "$out" ] || printf 'Definition of Done (checked when you stop):%s' "$out"
+    [[ -z "$out" ]] || printf 'Definition of Done (checked when you stop):%s' "$out"
 }
 
 build_session_context() {
     local context="" phase task ralph_session ctx_json
-    if [ -n "$HOOK_CONTEXT_FILE" ] && [ -f "$HOOK_CONTEXT_FILE" ]; then
+    if [[ -n "$HOOK_CONTEXT_FILE" ]] && [[ -f "$HOOK_CONTEXT_FILE" ]]; then
         ctx_json=$(cat "$HOOK_CONTEXT_FILE")
         phase=$(ralph_json_get "$ctx_json" phase)
         task=$(ralph_json_get "$ctx_json" current_task)
@@ -58,7 +58,7 @@ build_session_context() {
     fi
 
     local progress_file="$RALPH_SESSION_BASE/sprint-progress.md"
-    if [ -f "$progress_file" ]; then
+    if [[ -f "$progress_file" ]]; then
         local done_n todo_n current_phase
         done_n=$(count_matches '^[[:space:]]*- \[x\]' "$progress_file")
         todo_n=$(count_matches '^[[:space:]]*- \[ \]' "$progress_file")
@@ -67,11 +67,11 @@ build_session_context() {
 }Sprint Progress:
 - Completed Tasks: $done_n
 - Pending Tasks: $todo_n"
-        [ -z "$current_phase" ] || context="$context
+        [[ -z "$current_phase" ]] || context="$context
 - Sprint Phase: $current_phase"
     fi
 
-    if [ -n "$context" ] && command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
+    if [[ -n "$context" ]] && command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
         local branch changes
         branch=$(git branch --show-current 2>/dev/null || true)
         changes=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ' || true)
@@ -84,7 +84,7 @@ Git Status:
 
     local dod
     dod=$(dod_listing)
-    [ -z "$dod" ] || context="${context:+$context
+    [[ -z "$dod" ]] || context="${context:+$context
 
 }$dod"
 

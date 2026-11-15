@@ -364,7 +364,7 @@ spawn_session() {
 
         # Update per-session info (isolated file, no conflict)
         if command -v yq &>/dev/null; then
-            yq -i ".status = \"$([ $status -eq 0 ] && echo completed || echo failed)\"" "$session_dir/info.yaml"
+            yq -i ".status = \"$([[ $status -eq 0 ]] && echo completed || echo failed)\"" "$session_dir/info.yaml"
             yq -i ".exit_code = $status" "$session_dir/info.yaml"
             yq -i ".completed_at = \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"" "$session_dir/info.yaml"
         fi

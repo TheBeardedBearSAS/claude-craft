@@ -9,7 +9,7 @@ set -u
 hook_has_parser || exit 0
 hook_input
 CWD=$(hook_get cwd)
-[ -z "$CWD" ] || cd "$CWD" 2>/dev/null || true
+[[ -z "$CWD" ]] || cd "$CWD" 2>/dev/null || true
 SESSION_ID=$(hook_get session_id)
 REASON=$(hook_get reason)
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -24,13 +24,13 @@ FILES=$(git status --porcelain -- . ':!.claude' 2>/dev/null | wc -l | tr -d ' ')
 
 # Échecs d'outils du jour ; `|| true` : grep -c affiche déjà 0 et sort en 1 sans correspondance.
 FAILURES=0
-if [ -f .claude/logs/tool-failures.log ]; then
+if [[ -f .claude/logs/tool-failures.log ]]; then
   FAILURES=$(grep -c "^\[$(date -u +%Y-%m-%d)" .claude/logs/tool-failures.log) || true
 fi
 
 STORY=none
 STATUS=unknown
-if [ -f .bmad/current-story.yaml ]; then
+if [[ -f .bmad/current-story.yaml ]]; then
   STORY=$(grep '^id:' .bmad/current-story.yaml | head -n 1 | cut -d' ' -f2) || true
   STATUS=$(grep '^status:' .bmad/current-story.yaml | head -n 1 | cut -d' ' -f2) || true
 fi

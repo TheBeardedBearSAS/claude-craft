@@ -44,8 +44,8 @@ FAIL=0
 printf "\n%-42s %-13s %-9s %-9s %-9s   (%s runs)\n" "PATH" "PERF med/best" "A11Y" "BP" "SEO" "$RUNS"
 printf '%.0s-' {1..86}; echo
 
-while IFS= read -r path || [ -n "$path" ]; do
-  [ -z "$path" ] && continue
+while IFS= read -r path || [[ -n "$path" ]]; do
+  [[ -z "$path" ]] && continue
   case "$path" in \#*) continue;; esac
   url="${BASE}${path}"
   slug=$(echo "$path" | tr '/' '_' | sed 's/^_//;s/^$/root/')
@@ -68,15 +68,15 @@ while IFS= read -r path || [ -n "$path" ]; do
   perfMed=$(median "${perfs[@]}"); perfBest=$(best "${perfs[@]}")
   a11y=$(median "${a11ys[@]}"); bp=$(median "${bps[@]}"); seo=$(median "${seos[@]}")
   budget=$(perf_budget "$path")
-  flag=""; [ "$perfMed" -lt "$budget" ] && { FAIL=1; flag=" ✖perf"; }
+  flag=""; [[ "$perfMed" -lt "$budget" ]] && { FAIL=1; flag=" ✖perf"; }
   printf "%-42s %5s/%-7s %-9s %-9s %-9s%s\n" "$path" "$perfMed" "$perfBest" "$a11y" "$bp" "$seo" "$flag"
   for s in "$a11y" "$bp" "$seo"; do
-    if [ "$s" -lt 100 ]; then FAIL=1; fi
+    if [[ "$s" -lt 100 ]]; then FAIL=1; fi
   done
 done < "$URLS_FILE"
 
 echo
-if [ "$FAIL" -ne 0 ]; then
+if [[ "$FAIL" -ne 0 ]]; then
   echo "✖ Lighthouse gate FAILED — some category < 100. Reports in tests/lighthouse/reports/"
   exit 1
 fi

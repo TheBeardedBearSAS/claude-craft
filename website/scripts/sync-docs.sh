@@ -25,7 +25,7 @@ add_frontmatter() {
   {
     echo "---"
     echo "title: \"$title\""
-    [ -n "$desc" ] && echo "description: \"$desc\""
+    [[ -n "$desc" ]] && echo "description: \"$desc\""
     echo "---"
     echo ""
     cat "$file"
@@ -44,7 +44,7 @@ copy_doc() {
   cp "$src" "$dest"
 
   # Derive title from first H1 if not provided
-  if [ -z "$title" ]; then
+  if [[ -z "$title" ]]; then
     title=$(grep -m1 '^# ' "$src" | sed 's/^# //' || basename "$src" .md)
   fi
 
@@ -240,12 +240,12 @@ rewrite_links_in_dir "en" "$WEBSITE_DIR/en"
 
 # --- French ---
 echo "  Syncing French docs..."
-[ -f "$DOCS_DIR/i18n/fr/QUICKSTART.md" ]      && copy_doc "$DOCS_DIR/i18n/fr/QUICKSTART.md"      "$WEBSITE_DIR/fr/getting-started/quickstart.md" "Démarrage Rapide" "Installez Claude Craft et lancez votre premier workflow avec Claude Code en 5 minutes : commandes, agents et bonnes pratiques prêts à l'emploi."
-[ -f "$DOCS_DIR/i18n/fr/PREREQUISITES.md" ]    && copy_doc "$DOCS_DIR/i18n/fr/PREREQUISITES.md"    "$WEBSITE_DIR/fr/getting-started/prerequisites.md" "Prérequis" "Découvrez les prérequis et dépendances nécessaires pour installer Claude Craft dans votre projet avant de démarrer."
-[ -f "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md" ]    && copy_doc "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md"    "$WEBSITE_DIR/fr/reference/cli.md" "Référence CLI" "Documentation complète de la CLI Claude Craft : commandes, options et exemples d'utilisation pour votre terminal."
-[ -f "$DOCS_DIR/i18n/fr/FAQ.md" ]              && copy_doc "$DOCS_DIR/i18n/fr/FAQ.md"              "$WEBSITE_DIR/fr/faq.md" "FAQ" "Réponses aux questions fréquentes sur Claude Craft : installation, configuration, agents, commandes et bonnes pratiques."
-[ -f "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md" ]  && copy_doc "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md"  "$WEBSITE_DIR/fr/troubleshooting.md" "Dépannage" "Solutions aux problèmes courants rencontrés avec Claude Craft : installation, configuration et utilisation au quotidien."
-[ -f "$DOCS_DIR/i18n/fr/ABOUT.md" ]            && copy_doc "$DOCS_DIR/i18n/fr/ABOUT.md"            "$WEBSITE_DIR/fr/about.md" "À propos" "Claude Craft est maintenu par The Bearded CTO et publié sous licence MIT par The Bearded Bear SAS. Découvrez qui est derrière le projet et comment nous contacter."
+[[ -f "$DOCS_DIR/i18n/fr/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/fr/QUICKSTART.md"      "$WEBSITE_DIR/fr/getting-started/quickstart.md" "Démarrage Rapide" "Installez Claude Craft et lancez votre premier workflow avec Claude Code en 5 minutes : commandes, agents et bonnes pratiques prêts à l'emploi."
+[[ -f "$DOCS_DIR/i18n/fr/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/PREREQUISITES.md"    "$WEBSITE_DIR/fr/getting-started/prerequisites.md" "Prérequis" "Découvrez les prérequis et dépendances nécessaires pour installer Claude Craft dans votre projet avant de démarrer."
+[[ -f "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md"    "$WEBSITE_DIR/fr/reference/cli.md" "Référence CLI" "Documentation complète de la CLI Claude Craft : commandes, options et exemples d'utilisation pour votre terminal."
+[[ -f "$DOCS_DIR/i18n/fr/FAQ.md" ]]              && copy_doc "$DOCS_DIR/i18n/fr/FAQ.md"              "$WEBSITE_DIR/fr/faq.md" "FAQ" "Réponses aux questions fréquentes sur Claude Craft : installation, configuration, agents, commandes et bonnes pratiques."
+[[ -f "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md" ]]  && copy_doc "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md"  "$WEBSITE_DIR/fr/troubleshooting.md" "Dépannage" "Solutions aux problèmes courants rencontrés avec Claude Craft : installation, configuration et utilisation au quotidien."
+[[ -f "$DOCS_DIR/i18n/fr/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/fr/ABOUT.md"            "$WEBSITE_DIR/fr/about.md" "À propos" "Claude Craft est maintenu par The Bearded CTO et publié sous licence MIT par The Bearded Bear SAS. Découvrez qui est derrière le projet et comment nous contacter."
 
 for guide in "$DOCS_DIR/guides/fr/"*.md; do
   fname=$(basename "$guide")
@@ -257,9 +257,9 @@ rewrite_links_in_dir "fr" "$WEBSITE_DIR/fr"
 
 # --- Spanish ---
 echo "  Syncing Spanish docs..."
-[ -f "$DOCS_DIR/i18n/es/QUICKSTART.md" ]      && copy_doc "$DOCS_DIR/i18n/es/QUICKSTART.md"      "$WEBSITE_DIR/es/getting-started/quickstart.md" "Inicio Rápido" "Instala Claude Craft y pon en marcha tu primer flujo de trabajo con Claude Code en 5 minutos: comandos, agentes y buenas prácticas listos para usar."
-[ -f "$DOCS_DIR/i18n/es/PREREQUISITES.md" ]    && copy_doc "$DOCS_DIR/i18n/es/PREREQUISITES.md"    "$WEBSITE_DIR/es/getting-started/prerequisites.md" "Requisitos" "Descubre los requisitos y las dependencias necesarias para instalar Claude Craft en tu proyecto antes de empezar."
-[ -f "$DOCS_DIR/i18n/es/ABOUT.md" ]            && copy_doc "$DOCS_DIR/i18n/es/ABOUT.md"            "$WEBSITE_DIR/es/about.md" "Acerca de" "Claude Craft está mantenido por The Bearded CTO y publicado bajo licencia MIT por The Bearded Bear SAS. Descubre quién está detrás del proyecto y cómo contactarnos."
+[[ -f "$DOCS_DIR/i18n/es/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/es/QUICKSTART.md"      "$WEBSITE_DIR/es/getting-started/quickstart.md" "Inicio Rápido" "Instala Claude Craft y pon en marcha tu primer flujo de trabajo con Claude Code en 5 minutos: comandos, agentes y buenas prácticas listos para usar."
+[[ -f "$DOCS_DIR/i18n/es/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/es/PREREQUISITES.md"    "$WEBSITE_DIR/es/getting-started/prerequisites.md" "Requisitos" "Descubre los requisitos y las dependencias necesarias para instalar Claude Craft en tu proyecto antes de empezar."
+[[ -f "$DOCS_DIR/i18n/es/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/es/ABOUT.md"            "$WEBSITE_DIR/es/about.md" "Acerca de" "Claude Craft está mantenido por The Bearded CTO y publicado bajo licencia MIT por The Bearded Bear SAS. Descubre quién está detrás del proyecto y cómo contactarnos."
 
 for guide in "$DOCS_DIR/guides/es/"*.md; do
   fname=$(basename "$guide")
@@ -271,9 +271,9 @@ rewrite_links_in_dir "es" "$WEBSITE_DIR/es"
 
 # --- German ---
 echo "  Syncing German docs..."
-[ -f "$DOCS_DIR/i18n/de/QUICKSTART.md" ]      && copy_doc "$DOCS_DIR/i18n/de/QUICKSTART.md"      "$WEBSITE_DIR/de/getting-started/quickstart.md" "Schnellstart" "Installieren Sie Claude Craft und starten Sie Ihren ersten Workflow mit Claude Code in 5 Minuten: einsatzbereite Befehle, Agenten und Best Practices."
-[ -f "$DOCS_DIR/i18n/de/PREREQUISITES.md" ]    && copy_doc "$DOCS_DIR/i18n/de/PREREQUISITES.md"    "$WEBSITE_DIR/de/getting-started/prerequisites.md" "Voraussetzungen" "Erfahren Sie, welche Voraussetzungen und Abhängigkeiten für die Installation von Claude Craft in Ihrem Projekt erforderlich sind."
-[ -f "$DOCS_DIR/i18n/de/ABOUT.md" ]            && copy_doc "$DOCS_DIR/i18n/de/ABOUT.md"            "$WEBSITE_DIR/de/about.md" "Über uns" "Claude Craft wird von The Bearded CTO gepflegt und unter der MIT-Lizenz von The Bearded Bear SAS veröffentlicht. Erfahren Sie, wer dahintersteckt und wie Sie Kontakt aufnehmen."
+[[ -f "$DOCS_DIR/i18n/de/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/de/QUICKSTART.md"      "$WEBSITE_DIR/de/getting-started/quickstart.md" "Schnellstart" "Installieren Sie Claude Craft und starten Sie Ihren ersten Workflow mit Claude Code in 5 Minuten: einsatzbereite Befehle, Agenten und Best Practices."
+[[ -f "$DOCS_DIR/i18n/de/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/de/PREREQUISITES.md"    "$WEBSITE_DIR/de/getting-started/prerequisites.md" "Voraussetzungen" "Erfahren Sie, welche Voraussetzungen und Abhängigkeiten für die Installation von Claude Craft in Ihrem Projekt erforderlich sind."
+[[ -f "$DOCS_DIR/i18n/de/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/de/ABOUT.md"            "$WEBSITE_DIR/de/about.md" "Über uns" "Claude Craft wird von The Bearded CTO gepflegt und unter der MIT-Lizenz von The Bearded Bear SAS veröffentlicht. Erfahren Sie, wer dahintersteckt und wie Sie Kontakt aufnehmen."
 
 for guide in "$DOCS_DIR/guides/de/"*.md; do
   fname=$(basename "$guide")
@@ -285,9 +285,9 @@ rewrite_links_in_dir "de" "$WEBSITE_DIR/de"
 
 # --- Portuguese ---
 echo "  Syncing Portuguese docs..."
-[ -f "$DOCS_DIR/i18n/pt/QUICKSTART.md" ]      && copy_doc "$DOCS_DIR/i18n/pt/QUICKSTART.md"      "$WEBSITE_DIR/pt/getting-started/quickstart.md" "Início Rápido" "Instale o Claude Craft e comece seu primeiro workflow com o Claude Code em 5 minutos: comandos, agentes e boas práticas prontos para usar."
-[ -f "$DOCS_DIR/i18n/pt/PREREQUISITES.md" ]    && copy_doc "$DOCS_DIR/i18n/pt/PREREQUISITES.md"    "$WEBSITE_DIR/pt/getting-started/prerequisites.md" "Pré-requisitos" "Conheça os pré-requisitos e as dependências necessárias para instalar o Claude Craft no seu projeto antes de começar."
-[ -f "$DOCS_DIR/i18n/pt/ABOUT.md" ]            && copy_doc "$DOCS_DIR/i18n/pt/ABOUT.md"            "$WEBSITE_DIR/pt/about.md" "Sobre" "O Claude Craft é mantido por The Bearded CTO e publicado sob a licença MIT pela The Bearded Bear SAS. Descubra quem está por trás do projeto e como entrar em contato."
+[[ -f "$DOCS_DIR/i18n/pt/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/pt/QUICKSTART.md"      "$WEBSITE_DIR/pt/getting-started/quickstart.md" "Início Rápido" "Instale o Claude Craft e comece seu primeiro workflow com o Claude Code em 5 minutos: comandos, agentes e boas práticas prontos para usar."
+[[ -f "$DOCS_DIR/i18n/pt/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/pt/PREREQUISITES.md"    "$WEBSITE_DIR/pt/getting-started/prerequisites.md" "Pré-requisitos" "Conheça os pré-requisitos e as dependências necessárias para instalar o Claude Craft no seu projeto antes de começar."
+[[ -f "$DOCS_DIR/i18n/pt/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/pt/ABOUT.md"            "$WEBSITE_DIR/pt/about.md" "Sobre" "O Claude Craft é mantido por The Bearded CTO e publicado sob a licença MIT pela The Bearded Bear SAS. Descubra quem está por trás do projeto e como entrar em contato."
 
 for guide in "$DOCS_DIR/guides/pt/"*.md; do
   fname=$(basename "$guide")

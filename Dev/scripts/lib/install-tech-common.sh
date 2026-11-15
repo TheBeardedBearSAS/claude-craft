@@ -161,18 +161,18 @@ verify_source_files() {
     for rule in "${TECH_RULES[@]}"; do
         local rule_file="${src_dir}/rules/${rule}"
         local base_rule_file="$I18N_DIR/base/$TECH_NAME/rules/${rule}"
-        if [ ! -f "$rule_file" ] && [ ! -f "$base_rule_file" ]; then
+        if [[ ! -f "$rule_file" ]] && [[ ! -f "$base_rule_file" ]]; then
             log_error "Missing source file: rules/${rule}"
             missing=1
         fi
     done
     local verify_file="${src_dir}/${TECH_VERIFY_FILE}"
     local base_verify_file="$I18N_DIR/base/$TECH_NAME/${TECH_VERIFY_FILE}"
-    if [ ! -f "$verify_file" ] && [ ! -f "$base_verify_file" ]; then
+    if [[ ! -f "$verify_file" ]] && [[ ! -f "$base_verify_file" ]]; then
         log_error "Missing source file: ${TECH_VERIFY_FILE}"
         missing=1
     fi
-    if [ $missing -eq 1 ]; then exit 1; fi
+    if [[ $missing -eq 1 ]]; then exit 1; fi
 }
 
 # ============================================================================
@@ -180,10 +180,10 @@ verify_source_files() {
 # ============================================================================
 detect_installation() {
     local target_dir="$1"
-    if [ -d "${target_dir}/.claude" ]; then
-        if [ -d "${target_dir}/.claude/references/${TECH_NAMESPACE}" ]; then
+    if [[ -d "${target_dir}/.claude" ]]; then
+        if [[ -d "${target_dir}/.claude/references/${TECH_NAMESPACE}" ]]; then
             echo "tcl"
-        elif [ -f "${target_dir}/.claude/rules/00-project-context.md" ]; then
+        elif [[ -f "${target_dir}/.claude/rules/00-project-context.md" ]]; then
             echo "legacy"
         else
             echo "partial"
@@ -197,8 +197,8 @@ create_backup() {
     local target_dir="$1"
     local dry_run="$2"
     local backup_dir="${target_dir}/.claude-backup-$(date +%Y%m%d-%H%M%S)"
-    if [ -d "${target_dir}/.claude" ]; then
-        if [ "$dry_run" = "true" ]; then
+    if [[ -d "${target_dir}/.claude" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Backup: ${backup_dir}"
         else
             cp -r "${target_dir}/.claude" "${backup_dir}"
@@ -239,7 +239,7 @@ copy_generic_skills() {
     for skill_name in "${!skill_names[@]}"; do
         local dest_dir="${target_dir}/.claude/skills/${skill_name}"
 
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy skill: skills/${skill_name}/"
         else
             mkdir -p "$dest_dir"
@@ -250,7 +250,7 @@ copy_generic_skills() {
         ((count++)) || true
     done
 
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+    if [[ "$dry_run" = "false" ]] && [[ $count -gt 0 ]]; then
         log_success "$count generic skills copied from Common/"
     fi
 }
@@ -283,7 +283,7 @@ copy_tech_skills() {
     for skill_name in "${!skill_names[@]}"; do
         local dest_dir="${target_dir}/.claude/skills/${skill_name}"
 
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy skill: skills/${skill_name}/"
         else
             mkdir -p "$dest_dir"
@@ -293,7 +293,7 @@ copy_tech_skills() {
         ((count++)) || true
     done
 
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+    if [[ "$dry_run" = "false" ]] && [[ $count -gt 0 ]]; then
         log_success "$count ${TECH_DISPLAY_NAME}-specific skills copied"
     fi
 }
@@ -304,14 +304,14 @@ copy_templates() {
     local dest="${target_dir}/.claude/templates"
 
     if i18n_dir_exists "$TECH_NAME/templates"; then
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: templates/*.md"
         else
             copy_i18n_files "$TECH_NAME/templates" "$dest" "*.md"
             log_success "Templates copied"
         fi
-    elif [ -d "${SCRIPT_DIR}/templates" ]; then
-        if [ "$dry_run" = "true" ]; then
+    elif [[ -d "${SCRIPT_DIR}/templates" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: templates/*.md"
         else
             cp "${SCRIPT_DIR}/templates/"*.md "$dest/" 2>/dev/null || true
@@ -326,14 +326,14 @@ copy_checklists() {
     local dest="${target_dir}/.claude/checklists"
 
     if i18n_dir_exists "$TECH_NAME/checklists"; then
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: checklists/*.md"
         else
             copy_i18n_files "$TECH_NAME/checklists" "$dest" "*.md"
             log_success "Checklists copied"
         fi
-    elif [ -d "${SCRIPT_DIR}/checklists" ]; then
-        if [ "$dry_run" = "true" ]; then
+    elif [[ -d "${SCRIPT_DIR}/checklists" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: checklists/*.md"
         else
             cp "${SCRIPT_DIR}/checklists/"*.md "$dest/" 2>/dev/null || true
@@ -348,7 +348,7 @@ copy_commands() {
     local dest="${target_dir}/.claude/commands/${TECH_NAMESPACE}"
 
     if i18n_dir_exists "$TECH_NAME/commands"; then
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
         else
             copy_i18n_files "$TECH_NAME/commands" "$dest" "*.md"
@@ -356,8 +356,8 @@ copy_commands() {
             count=$(find "$dest" -name "*.md" -type f 2>/dev/null | wc -l)
             log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
         fi
-    elif [ -d "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}" ]; then
-        if [ "$dry_run" = "true" ]; then
+    elif [[ -d "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
         else
             cp "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}/"*.md "$dest/" 2>/dev/null || true
@@ -375,7 +375,7 @@ copy_checks() {
     local dest="${target_dir}/.claude/references/${TECH_NAMESPACE}/checks"
 
     if i18n_dir_exists "$TECH_NAME/checks"; then
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: references/${TECH_NAMESPACE}/checks/*.md"
         else
             mkdir -p "$dest"
@@ -391,14 +391,14 @@ copy_agents() {
     local dest="${target_dir}/.claude/agents"
 
     if i18n_dir_exists "$TECH_NAME/agents"; then
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: agents/*.md"
         else
             copy_i18n_files "$TECH_NAME/agents" "$dest" "*.md"
             log_success "Agents copied"
         fi
-    elif [ -d "${SCRIPT_DIR}/claude-agents" ]; then
-        if [ "$dry_run" = "true" ]; then
+    elif [[ -d "${SCRIPT_DIR}/claude-agents" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: agents/*.md"
         else
             cp "${SCRIPT_DIR}/claude-agents/"*.md "$dest/" 2>/dev/null || true
@@ -443,7 +443,7 @@ install_tcl() {
     create_tcl_directory_structure "$target_dir" "$TECH_NAMESPACE" "$dry_run"
 
     # 2. Copy base references (universal principles)
-    if [ "$skip_common" = "false" ]; then
+    if [[ "$skip_common" = "false" ]]; then
         copy_base_references "$target_dir" "$I18N_DIR" "$lang" "$dry_run"
     fi
 
@@ -451,7 +451,7 @@ install_tcl() {
     copy_tech_references "$target_dir" "$src_dir" "$TECH_NAMESPACE" "$dry_run" "${TECH_RULE_MAPPINGS[@]}"
 
     # 3b. Copy 2026 feature references (if any)
-    if [[ ${#TECH_2026_REFS[@]} -gt 0 ]] && [ "$dry_run" = "false" ]; then
+    if [[ ${#TECH_2026_REFS[@]} -gt 0 ]] && [[ "$dry_run" = "false" ]]; then
         local refs_2026_src="${TECH_2026_REFS_SRC_DIR:-${SCRIPT_DIR}/../../.claude/references/${TECH_NAMESPACE}}"
         local refs_2026_dst="${target_dir}/.claude/references/${TECH_NAMESPACE}"
         # Skip if source and destination resolve to the same directory
@@ -459,29 +459,29 @@ install_tcl() {
         resolved_src="$(cd "$refs_2026_src" 2>/dev/null && pwd)" || resolved_src=""
         resolved_dst="$(cd "$refs_2026_dst" 2>/dev/null && pwd)" || resolved_dst=""
         local count_2026=0
-        if [ -n "$resolved_src" ] && [ "$resolved_src" = "$resolved_dst" ]; then
+        if [[ -n "$resolved_src" ]] && [[ "$resolved_src" = "$resolved_dst" ]]; then
             log_success "2026 feature references already in place (same directory)"
         else
             for ref_file in "${TECH_2026_REFS[@]}"; do
-                if [ -f "${refs_2026_src}/${ref_file}" ]; then
+                if [[ -f "${refs_2026_src}/${ref_file}" ]]; then
                     cp "${refs_2026_src}/${ref_file}" "${refs_2026_dst}/"
                     ((count_2026++)) || true
                 fi
             done
         fi
-        if [ $count_2026 -gt 0 ]; then
+        if [[ $count_2026 -gt 0 ]]; then
             log_success "${count_2026} 2026 feature references copied"
         fi
     fi
 
     # 4. Copy project context template (base + lang fallback)
-    if [ "$dry_run" = "false" ]; then
+    if [[ "$dry_run" = "false" ]]; then
         local ctx_template
         ctx_template=$(resolve_i18n_file "$TECH_NAME/rules/00-project-context.md.template")
         if [[ -z "$ctx_template" ]]; then
             ctx_template="${src_dir}/rules/00-project-context.md.template"
         fi
-        if [ -f "$ctx_template" ]; then
+        if [[ -f "$ctx_template" ]]; then
             local sed_args=(-e "s#{{PROJECT_NAME}}#${project_name}#g" -e "s#{{TECH_STACK}}#${tech_stack}#g")
             if [[ ${#TECH_EXTRA_SED_ARGS[@]} -gt 0 ]]; then
                 sed_args+=("${TECH_EXTRA_SED_ARGS[@]}")
@@ -492,7 +492,7 @@ install_tcl() {
     fi
 
     # 5. Copy skills
-    if [ "$skip_common" = "false" ]; then
+    if [[ "$skip_common" = "false" ]]; then
         copy_generic_skills "$target_dir" "$dry_run"
     fi
     copy_tech_skills "$target_dir" "$dry_run"
@@ -558,7 +558,7 @@ main() {
 
     verify_source_files
 
-    if [ -z "$mode" ]; then
+    if [[ -z "$mode" ]]; then
         case $(detect_installation "$target_dir") in
             tcl) log_info "Existing TCL installation -> update mode"; mode="update" ;;
             legacy) log_info "Legacy installation detected -> TCL migration"; mode="install" ;;
@@ -566,17 +566,17 @@ main() {
         esac
     fi
 
-    [ "$backup" = "true" ] || [ "$force" = "true" ] && create_backup "$target_dir" "$dry_run"
+    [[ "$backup" = "true" ]] || [[ "$force" = "true" ]] && create_backup "$target_dir" "$dry_run"
 
     case $mode in
         install)
-            [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+            [[ "$interactive" = "true" ]] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
             install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             ;;
         update)
-            if [ "$force" = "true" ]; then
+            if [[ "$force" = "true" ]]; then
                 log_warning "Force mode: ALL files will be overwritten"
-                [ "$interactive" = "true" ] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
+                [[ "$interactive" = "true" ]] && prompt_project_info || { PROJECT_NAME="${PROJECT_NAME:-MyProject}"; TECH_STACK="${TECH_STACK:-${DEFAULT_STACK}}"; }
                 install_tcl "$target_dir" "$PROJECT_NAME" "$TECH_STACK" "$dry_run" "$preserve_config" "$skip_common"
             else
                 log_info "Updating references..."
@@ -587,7 +587,7 @@ main() {
             ;;
     esac
 
-    if [ "$dry_run" = "false" ]; then
+    if [[ "$dry_run" = "false" ]]; then
         show_tcl_summary "$target_dir" "$TECH_DISPLAY_NAME" "$TECH_NAMESPACE"
     else
         log_dry_run "End of simulation"

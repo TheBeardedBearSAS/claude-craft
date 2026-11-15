@@ -204,7 +204,7 @@ list_projects() {
         echo -e "  ${C_CYAN}$((i+1)))${C_RESET} ${C_BOLD}$name${C_RESET}"
         [[ -n "$desc" && "$desc" != "null" ]] && echo -e "     ${C_DIM}$desc${C_RESET}"
         echo -e "     📂 $root"
-        echo -e "     📦 $modules_count ${MSG_PROJECTS_MODULES} | ${MSG_PROJECTS_COMMON} $([ "$common" == "true" ] && echo "✓" || echo "✗")"
+        echo -e "     📦 $modules_count ${MSG_PROJECTS_MODULES} | ${MSG_PROJECTS_COMMON} $([[ "$common" == "true" ]] && echo "✓" || echo "✗")"
 
         # List modules
         for ((j=0; j<modules_count; j++)); do
@@ -383,7 +383,7 @@ edit_project() {
     [[ -n "$new_root" ]] && new_root="$new_root" idx="$proj_index" yq -i '.projects[env(idx) | tonumber].root = env(new_root)' "$CONFIG_FILE"
 
     # Common
-    local common_display=$([ "$proj_common" == "true" ] && echo "Y/n" || echo "y/N")
+    local common_display=$([[ "$proj_common" == "true" ]] && echo "Y/n" || echo "y/N")
     read -p "${MSG_EDIT_PROJECT_COMMON} [$common_display]: " new_common
     if [[ "$new_common" =~ ^[OoYySs]$ ]]; then
         yq -i ".projects[$proj_index].common = true" "$CONFIG_FILE"

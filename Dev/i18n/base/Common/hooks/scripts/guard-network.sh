@@ -13,7 +13,7 @@ set -u
 hook_require_parser
 hook_input
 CMD=$(hook_get tool_input.command)
-[ -n "$CMD" ] || exit 0
+[[ -n "$CMD" ]] || exit 0
 
 # Corps de heredoc retirés, puis un segment par ligne (hook_shell_segments) : le texte
 # cité est une donnée, sauf après sh -c / eval et dans $(…) / `…`. Un segment "|"
