@@ -169,7 +169,10 @@ export function describeFailure(err) {
 /** One opaque token per opening of a creation form: the server answers a repeated POST with the first answer. */
 export function idempotencyKey(source = globalThis.crypto) {
   if (typeof source?.randomUUID === 'function') return source.randomUUID();
-  return Array.from({ length: 4 }, () => Math.random().toString(36).slice(2, 10).padEnd(8, '0')).join('-');
+  // randomUUID needs a secure context; getRandomValues does not.
+  const random = typeof source?.getRandomValues === 'function' ? source : globalThis.crypto;
+  const hex = Array.from(random.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, '0')).join('');
+  return hex.match(/.{8}/g).join('-');
 }
 
 /**

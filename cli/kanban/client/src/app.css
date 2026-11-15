@@ -144,7 +144,7 @@ select:disabled {
 /* Contrastes forcés : les dégradés sont supprimés, la flèche avec eux ; le contrôle natif du système la redessine. */
 @media (forced-colors: active) {
   select {
-    -webkit-appearance: auto;
+    /* Unprefixed only: Safari 15.4+ aliases -webkit-appearance to it, and `auto` is not a -webkit-appearance value. */
     appearance: auto;
   }
 }

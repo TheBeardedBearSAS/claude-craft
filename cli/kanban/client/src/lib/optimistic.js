@@ -34,7 +34,8 @@ export function createWriteTracker() {
     track(id, write) {
       const all = Promise.allSettled([pending.get(id), write]);
       pending.set(id, all);
-      all.then(() => pending.get(id) === all && pending.delete(id));
+      // allSettled never rejects: nothing to catch.
+      void all.then(() => pending.get(id) === all && pending.delete(id));
       return write;
     },
     settled: (id) => pending.get(id) ?? Promise.resolve(),

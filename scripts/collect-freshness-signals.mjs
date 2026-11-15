@@ -45,7 +45,7 @@ export function extractVersion(tag) {
   return (
     String(tag ?? '')
       .replace(/_/g, '.')
-      .match(/\d+(?:\.\d+)+/)?.[0] ?? null
+      .match(/(?<!\d)\d+(?:\.\d+)+/)?.[0] ?? null
   );
 }
 

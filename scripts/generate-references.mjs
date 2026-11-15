@@ -277,7 +277,8 @@ function renderCommandsBody(commands) {
   lines.push('## Commands by Namespace', '');
   lines.push('| Namespace | Count |');
   lines.push('|-----------|-------|');
-  const sortedNs = Object.keys(byNs).sort();
+  // Code-unit order, as a bare .sort(): the generated file must not depend on the locale.
+  const sortedNs = Object.keys(byNs).sort((a, b) => Number(a > b) - Number(a < b));
   for (const ns of sortedNs) {
     lines.push(`| \`/${ns}:*\` | ${byNs[ns].length} |`);
   }

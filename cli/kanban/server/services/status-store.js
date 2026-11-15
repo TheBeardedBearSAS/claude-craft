@@ -52,7 +52,8 @@ const sha12 = (text) => createHash('sha1').update(text).digest('hex').slice(0, 1
 function sortedJson(value) {
   if (Array.isArray(value)) return `[${value.map(sortedJson).join(',')}]`;
   if (value && typeof value === 'object') {
-    const keys = Object.keys(value).sort();
+    // Code-unit order, as a bare .sort(): stable and locale-independent.
+    const keys = Object.keys(value).sort((a, b) => Number(a > b) - Number(a < b));
     return `{${keys.map((k) => `${JSON.stringify(k)}:${sortedJson(value[k])}`).join(',')}}`;
   }
   return JSON.stringify(value ?? null);
@@ -293,7 +294,7 @@ function pidAlive(pid) {
 async function sweepOrphans(yamlPath) {
   const prefix = `${path.basename(yamlPath)}.tmp-`;
   for (const name of await readdir(path.dirname(yamlPath))) {
-    const pid = name.startsWith(prefix) ? Number.parseInt(name.slice(prefix.length), 10) : NaN;
+    const pid = name.startsWith(prefix) ? Number.parseInt(name.slice(prefix.length), 10) : Number.NaN;
     if (Number.isInteger(pid) && (pid === process.pid || !pidAlive(pid))) {
       await rm(path.join(path.dirname(yamlPath), name), { force: true });
     }

@@ -1,9 +1,23 @@
 import { readFile } from 'node:fs/promises';
 import * as yaml from 'js-yaml';
 
-// Frontmatter delimited by `---` lines. Strips exactly one newline after the
-// closing delimiter (matches the prior gray-matter behavior the tests assert).
-const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n)?([\s\S]*)$/;
+/**
+ * Splits `---`-delimited frontmatter from the body: `[yaml, body]`, or `null` without frontmatter.
+ * Strips exactly one newline after the closing delimiter (the prior gray-matter behavior the tests
+ * assert). Same result as /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n)?([\s\S]*)$/, in linear time.
+ */
+export function splitFrontmatter(raw) {
+  const start = raw.startsWith('---\n') ? 4 : raw.startsWith('---\r\n') ? 5 : -1;
+  if (start < 0) return null;
+  const close = raw.indexOf('\n---', start);
+  if (close < 0) return null;
+  const end = close > start && raw[close - 1] === '\r' ? close - 1 : close;
+  let i = close + 4;
+  while (raw[i] === ' ' || raw[i] === '\t') i++;
+  if (raw.startsWith('\r\n', i)) i += 2;
+  else if (raw[i] === '\n') i += 1;
+  return [raw.slice(start, end), raw.slice(i)];
+}
 
 // A real sprint-status.yaml is a few thousand nodes; an alias bomb ("billion laughs") is billions.
 const MAX_YAML_NODES = 1_000_000;
@@ -47,12 +61,13 @@ export async function parseFile(filepath) {
  * Parse a Markdown string with YAML frontmatter.
  */
 export function parseString(raw) {
-  const match = FRONTMATTER_RE.exec(raw);
+  const match = splitFrontmatter(raw);
   if (!match) return { data: {}, body: raw, raw };
+  const [front, body] = match;
   // js-yaml 5 throws on empty input; an empty frontmatter block (---\n---) parses to {}.
-  const parsed = match[1].trim() === '' ? {} : loadYaml(match[1]);
+  const parsed = front.trim() === '' ? {} : loadYaml(front);
   const data = parsed && typeof parsed === 'object' ? parsed : {};
-  return { data, body: match[2] ?? '', raw };
+  return { data, body, raw };
 }
 
 /**

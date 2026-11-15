@@ -40,7 +40,7 @@ function toggleMenu(state, ctx) {
 function reduceMenuKey(state, key, ctx) {
   if (key === 'Escape') return { state: { ...state, showMoveMenu: false }, action: { type: 'close-menu' } };
   if (!/^[1-6]$/.test(key)) return noop(state);
-  const target = ctx.columns[parseInt(key, 10) - 1];
+  const target = ctx.columns[Number.parseInt(key, 10) - 1];
   const card = currentCard(state, ctx);
   if (!target || !card) return noop(state);
   if (card._writable === false) return { state, action: { type: 'readonly', cardId: card.id } };

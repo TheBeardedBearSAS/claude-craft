@@ -56,7 +56,7 @@ const MODEL_ID_RE = /claude-(?:opus|sonnet|haiku|fable|mythos)-\d+(?:[-.]\d+)*/g
 const MODEL_NAME_RE = /\b(Opus|Sonnet|Haiku|Fable|Mythos) (\d+(?:\.\d+)?)\b/g;
 const CLI_RE = /(?<![\d.])2\.1\.\d{2,3}(?!\d)/g;
 // `$4/$20` (en) ou `4 $/20 $` (fr) : groupes 1-2 ou 3-4.
-const PRICE_RE = /\$(\d+(?:\.\d+)?)\s*\/\s*\$(\d+(?:\.\d+)?)|(\d+(?:[.,]\d+)?)\s?\$\s*\/\s*(\d+(?:[.,]\d+)?)\s?\$/g;
+export const PRICE_RE = /\$(\d+(?:\.\d+)?)\s*\/\s*\$(\d+(?:\.\d+)?)|(?<!\d)(\d+(?:[.,]\d+)?)\s?\$\s*\/\s*(\d+(?:[.,]\d+)?)\s?\$/g;
 const ENV_RE = /\bCLAUDE_CODE_[A-Z0-9_]+/g;
 const DEPRECATED_RE = /[Ee]xtended thinking|\bbudget_tokens\b/g;
 

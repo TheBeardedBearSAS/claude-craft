@@ -75,7 +75,9 @@ describe('lock', () => {
     const old = new Date(Date.now() - 60_000);
     await utimes(lockPath, old, old);
     const release = await acquireLock(lockPath, { ...FAST, ttlMs: 10_000 });
+    expect(JSON.parse(await readFile(lockPath, 'utf8')).pid).toBe(process.pid);
     await release();
+    expect(await exists(lockPath)).toBe(false);
   });
 
   it('keeps an unreadable fresh lock', async () => {
@@ -87,7 +89,9 @@ describe('lock', () => {
     const release = await acquireLock(lockPath);
     setTimeout(release, 30);
     const next = await acquireLock(lockPath, { retries: 20, retryDelayMs: 20 });
+    expect(JSON.parse(await readFile(lockPath, 'utf8')).pid).toBe(process.pid);
     await next();
+    expect(await exists(lockPath)).toBe(false);
   });
 
   it('release leaves a lock that another process took over after expiry', async () => {

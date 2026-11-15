@@ -46,8 +46,8 @@ const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.322');
  * @returns {-1|0|1}
  */
 function semverCmp(a, b) {
-  const pa = a.split('.').map((n) => parseInt(n, 10));
-  const pb = b.split('.').map((n) => parseInt(n, 10));
+  const pa = a.split('.').map((n) => Number.parseInt(n, 10));
+  const pb = b.split('.').map((n) => Number.parseInt(n, 10));
   for (let i = 0; i < 3; i++) {
     const da = pa[i] || 0;
     const db = pb[i] || 0;
@@ -62,7 +62,7 @@ function semverCmp(a, b) {
  * @returns {string|null}
  */
 function extractSemver(output) {
-  const m = output.match(/(\d+)\.(\d+)\.(\d+)/);
+  const m = output.match(/(?<!\d)(\d+)\.(\d+)\.(\d+)/);
   return m ? m[0] : null;
 }
 
@@ -122,7 +122,7 @@ function runDoctor(targetPath, deps = {}) {
 
   // 1. Node.js version >= 20
   const nodeVer = process.version;
-  const major = parseInt(nodeVer.slice(1), 10);
+  const major = Number.parseInt(nodeVer.slice(1), 10);
   if (major >= 20) {
     console.log(`  ${c.green}[OK]${c.reset} Node.js ${nodeVer}`);
     passed++;

@@ -73,7 +73,7 @@ async function sendSprint(id, sprintId) {
 function failed(key, params, err) {
   toast({ kind: 'error', message: err?.message ?? '', key, params: { ...params, reasonKey: errorKey(err) } });
   // A conflict means our copy is stale: fetch the current one.
-  if (err.code === 'conflict') loadStories();
+  if (err.code === 'conflict') void loadStories();
 }
 
 export function planStory(id, sprint) {

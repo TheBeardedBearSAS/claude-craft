@@ -55,7 +55,9 @@ function format(Ctor, locale, options, value) {
 }
 
 /** Date ISO (jour seul ou horodatage) → texte localisé ; invalide → ''. */
-export function formatDate(locale, iso, opts = { dateStyle: 'medium' }) {
+const DEFAULT_DATE_OPTIONS = Object.freeze({ dateStyle: 'medium' });
+
+export function formatDate(locale, iso, opts = DEFAULT_DATE_OPTIONS) {
   if (!iso) return '';
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return '';

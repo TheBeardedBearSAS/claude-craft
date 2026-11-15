@@ -116,7 +116,12 @@ export function applyOps(tx, ops) {
 
 function storyPoints(archive, pred) {
   const stories = Object.values(archive.stories ?? {});
-  return stories.length ? sum(stories.filter(pred), (s) => s.points) : null;
+  return stories.length
+    ? sum(
+        stories.filter((s) => pred(s)),
+        (s) => s.points
+      )
+    : null;
 }
 
 function velocityRow(id, archive) {
@@ -158,7 +163,8 @@ export function sprintSlug(name) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .slice(0, SLUG_MAX)
-    .replace(/^-+|-+$/g, '');
+    // Dash runs are already collapsed above: at most one dash at each end.
+    .replace(/^-|-$/g, '');
   return slug || 'sprint';
 }
 
@@ -176,11 +182,27 @@ export function renderSprintGoal({ number, name, start_date, end_date, goal, cap
 
 const field = (text, labels, valueRe) => new RegExp(`^\\|\\s*(?:${labels})\\s*\\|\\s*${valueRe}`, 'mi').exec(text)?.[1];
 
+const GOAL_HEADING_RE = /^##[ \t]+Sprint Goal\s*$/;
+// A `##` line ends the section; a bare `##` only when a newline follows it (the former regular expression).
+const isH2 = (line, i, lines) => /^##\s/.test(line) || (line === '##' && i < lines.length - 1);
+
+/** The `## Sprint Goal` section up to the next `##` heading, quote markers and quotes removed, on one line. */
 function goalOf(text) {
-  const section = /^##\s+Sprint Goal\s*\n([\s\S]*?)(?=^##\s|(?![\s\S]))/m.exec(text)?.[1] ?? '';
-  const quoted = section.replace(/^\s*>\s?/gm, '').replace(/^\s*["“”]|["“”]\s*$/g, '');
-  return oneLine(quoted);
+  const lines = text.split('\n');
+  const start = lines.findIndex((l) => GOAL_HEADING_RE.test(l));
+  if (start < 0 || start === lines.length - 1) return '';
+  const rest = lines.slice(start + 1);
+  const end = rest.findIndex(isH2);
+  const section = oneLine((end < 0 ? rest : rest.slice(0, end)).map((l) => l.replace(/^[ \t]*>/, '')).join('\n'));
+  return oneLine(section.replace(/^["“”]|["“”]$/g, ''));
 }
+
+/** Text of the first `# ` heading, or ''. */
+const titleOf = (text) =>
+  text
+    .split('\n')
+    .map((l) => /^#[ \t]+(\S[^\n]*)$/.exec(l)?.[1])
+    .find(Boolean) ?? '';
 
 /**
  * Name, dates, goal and capacity of a sprint from its `sprint-goal.md`. Tolerant: a free-form file
@@ -188,7 +210,7 @@ function goalOf(text) {
  */
 export function parseSprintGoal(text, id) {
   const src = typeof text === 'string' ? text : '';
-  const title = /^#\s+(.+)$/m.exec(src)?.[1] ?? '';
+  const title = titleOf(src);
   const parsed = {
     name: title.replace(/^Sprint\s*\d+\s*[:—–-]?\s*/i, '').trim() || id,
     start_date: field(src, 'Début|Debut|Start', DATE_RE) ?? '',
