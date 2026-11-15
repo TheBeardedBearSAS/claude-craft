@@ -21,8 +21,8 @@ CWD=$(hook_get cwd)
 cd "${CWD:-.}" 2>/dev/null || true
 
 progress_file="${RALPH_SESSION_BASE:-.ralph}/sprint-progress.md"
-[ -f "$progress_file" ] || exit 0
+[[ -f "$progress_file" ]] || exit 0
 current_task=$(awk '/^## Current Task: /{sub(/^## Current Task: /, ""); print; exit}' "$progress_file")
-[ -n "$current_task" ] || exit 0
+[[ -n "$current_task" ]] || exit 0
 
 hook_context PreToolUse "Current sprint task: $current_task"

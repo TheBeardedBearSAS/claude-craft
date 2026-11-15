@@ -8,18 +8,18 @@ set -u
 hook_has_parser || exit 0
 hook_input
 FILE_PATH=$(hook_get tool_input.file_path)
-[ -n "$FILE_PATH" ] || exit 0
+[[ -n "$FILE_PATH" ]] || exit 0
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
 case "${FILE_PATH##*.}" in
   js | jsx | ts | tsx)
-    if have npx && [ -f package.json ]; then npx --no-install eslint --fix "$FILE_PATH" >/dev/null 2>&1 || true; fi
+    if have npx && [[ -f package.json ]]; then npx --no-install eslint --fix "$FILE_PATH" >/dev/null 2>&1 || true; fi
     ;;
   php)
     if have php-cs-fixer; then
       php-cs-fixer fix "$FILE_PATH" --quiet >/dev/null 2>&1 || true
-    elif [ -x vendor/bin/php-cs-fixer ]; then
+    elif [[ -x vendor/bin/php-cs-fixer ]]; then
       vendor/bin/php-cs-fixer fix "$FILE_PATH" --quiet >/dev/null 2>&1 || true
     fi
     ;;

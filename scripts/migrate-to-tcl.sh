@@ -52,14 +52,14 @@ echo "╚═══════════════════════�
 echo ""
 
 # Check if .claude directory exists
-if [ ! -d "$CLAUDE_DIR" ]; then
+if [[ ! -d "$CLAUDE_DIR" ]]; then
     log_error "No .claude directory found in $PROJECT_DIR"
     log_info "This script is for migrating existing claude-craft projects."
     exit 1
 fi
 
 # Check if already migrated
-if [ -d "$CLAUDE_DIR/references" ]; then
+if [[ -d "$CLAUDE_DIR/references" ]]; then
     log_warning "Project appears to already be migrated (references/ exists)"
     read -p "Continue anyway? (y/N) " -n 1 -r
     echo
@@ -78,34 +78,34 @@ log_success "Directory structure created"
 
 # Step 2: Backup existing files
 log_info "Backing up existing files..."
-if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
+if [[ -f "$CLAUDE_DIR/CLAUDE.md" ]]; then
     cp "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md$BACKUP_SUFFIX"
     log_success "CLAUDE.md backed up"
 fi
 
 # Step 3: Move rules to references (if rules directory exists)
-if [ -d "$CLAUDE_DIR/rules" ]; then
+if [[ -d "$CLAUDE_DIR/rules" ]]; then
     log_info "Moving rules to references..."
 
     # Map of old files to new locations
     # Base principles (language-agnostic)
-    [ -f "$CLAUDE_DIR/rules/01-workflow-analysis.md" ] && cp "$CLAUDE_DIR/rules/01-workflow-analysis.md" "$CLAUDE_DIR/references/base/workflow-analysis.md"
-    [ -f "$CLAUDE_DIR/rules/04-solid-principles.md" ] && cp "$CLAUDE_DIR/rules/04-solid-principles.md" "$CLAUDE_DIR/references/base/solid-principles.md"
-    [ -f "$CLAUDE_DIR/rules/05-kiss-dry-yagni.md" ] && cp "$CLAUDE_DIR/rules/05-kiss-dry-yagni.md" "$CLAUDE_DIR/references/base/kiss-dry-yagni.md"
-    [ -f "$CLAUDE_DIR/rules/07-testing.md" ] && cp "$CLAUDE_DIR/rules/07-testing.md" "$CLAUDE_DIR/references/base/testing-principles.md"
-    [ -f "$CLAUDE_DIR/rules/09-git-workflow.md" ] && cp "$CLAUDE_DIR/rules/09-git-workflow.md" "$CLAUDE_DIR/references/base/git-workflow.md"
-    [ -f "$CLAUDE_DIR/rules/10-documentation.md" ] && cp "$CLAUDE_DIR/rules/10-documentation.md" "$CLAUDE_DIR/references/base/documentation.md"
-    [ -f "$CLAUDE_DIR/rules/11-security.md" ] && cp "$CLAUDE_DIR/rules/11-security.md" "$CLAUDE_DIR/references/base/security-principles.md"
+    [[ -f "$CLAUDE_DIR/rules/01-workflow-analysis.md" ]] && cp "$CLAUDE_DIR/rules/01-workflow-analysis.md" "$CLAUDE_DIR/references/base/workflow-analysis.md"
+    [[ -f "$CLAUDE_DIR/rules/04-solid-principles.md" ]] && cp "$CLAUDE_DIR/rules/04-solid-principles.md" "$CLAUDE_DIR/references/base/solid-principles.md"
+    [[ -f "$CLAUDE_DIR/rules/05-kiss-dry-yagni.md" ]] && cp "$CLAUDE_DIR/rules/05-kiss-dry-yagni.md" "$CLAUDE_DIR/references/base/kiss-dry-yagni.md"
+    [[ -f "$CLAUDE_DIR/rules/07-testing.md" ]] && cp "$CLAUDE_DIR/rules/07-testing.md" "$CLAUDE_DIR/references/base/testing-principles.md"
+    [[ -f "$CLAUDE_DIR/rules/09-git-workflow.md" ]] && cp "$CLAUDE_DIR/rules/09-git-workflow.md" "$CLAUDE_DIR/references/base/git-workflow.md"
+    [[ -f "$CLAUDE_DIR/rules/10-documentation.md" ]] && cp "$CLAUDE_DIR/rules/10-documentation.md" "$CLAUDE_DIR/references/base/documentation.md"
+    [[ -f "$CLAUDE_DIR/rules/11-security.md" ]] && cp "$CLAUDE_DIR/rules/11-security.md" "$CLAUDE_DIR/references/base/security-principles.md"
 
     # C#-specific rules
-    [ -f "$CLAUDE_DIR/rules/00-project-context.md" ] && cp "$CLAUDE_DIR/rules/00-project-context.md" "$CLAUDE_DIR/references/csharp/project-context.md"
-    [ -f "$CLAUDE_DIR/rules/02-architecture-csharp.md" ] && cp "$CLAUDE_DIR/rules/02-architecture-csharp.md" "$CLAUDE_DIR/references/csharp/architecture.md"
-    [ -f "$CLAUDE_DIR/rules/03-coding-standards.md" ] && cp "$CLAUDE_DIR/rules/03-coding-standards.md" "$CLAUDE_DIR/references/csharp/coding-standards.md"
-    [ -f "$CLAUDE_DIR/rules/06-tooling.md" ] && cp "$CLAUDE_DIR/rules/06-tooling.md" "$CLAUDE_DIR/references/csharp/tooling.md"
-    [ -f "$CLAUDE_DIR/rules/07-testing-csharp.md" ] && cp "$CLAUDE_DIR/rules/07-testing-csharp.md" "$CLAUDE_DIR/references/csharp/testing-csharp.md"
-    [ -f "$CLAUDE_DIR/rules/08-quality-tools.md" ] && cp "$CLAUDE_DIR/rules/08-quality-tools.md" "$CLAUDE_DIR/references/csharp/quality-tools.md"
-    [ -f "$CLAUDE_DIR/rules/11-security-csharp.md" ] && cp "$CLAUDE_DIR/rules/11-security-csharp.md" "$CLAUDE_DIR/references/csharp/security-csharp.md"
-    [ -f "$CLAUDE_DIR/rules/12-aspire-cloud-native.md" ] && cp "$CLAUDE_DIR/rules/12-aspire-cloud-native.md" "$CLAUDE_DIR/references/csharp/aspire.md"
+    [[ -f "$CLAUDE_DIR/rules/00-project-context.md" ]] && cp "$CLAUDE_DIR/rules/00-project-context.md" "$CLAUDE_DIR/references/csharp/project-context.md"
+    [[ -f "$CLAUDE_DIR/rules/02-architecture-csharp.md" ]] && cp "$CLAUDE_DIR/rules/02-architecture-csharp.md" "$CLAUDE_DIR/references/csharp/architecture.md"
+    [[ -f "$CLAUDE_DIR/rules/03-coding-standards.md" ]] && cp "$CLAUDE_DIR/rules/03-coding-standards.md" "$CLAUDE_DIR/references/csharp/coding-standards.md"
+    [[ -f "$CLAUDE_DIR/rules/06-tooling.md" ]] && cp "$CLAUDE_DIR/rules/06-tooling.md" "$CLAUDE_DIR/references/csharp/tooling.md"
+    [[ -f "$CLAUDE_DIR/rules/07-testing-csharp.md" ]] && cp "$CLAUDE_DIR/rules/07-testing-csharp.md" "$CLAUDE_DIR/references/csharp/testing-csharp.md"
+    [[ -f "$CLAUDE_DIR/rules/08-quality-tools.md" ]] && cp "$CLAUDE_DIR/rules/08-quality-tools.md" "$CLAUDE_DIR/references/csharp/quality-tools.md"
+    [[ -f "$CLAUDE_DIR/rules/11-security-csharp.md" ]] && cp "$CLAUDE_DIR/rules/11-security-csharp.md" "$CLAUDE_DIR/references/csharp/security-csharp.md"
+    [[ -f "$CLAUDE_DIR/rules/12-aspire-cloud-native.md" ]] && cp "$CLAUDE_DIR/rules/12-aspire-cloud-native.md" "$CLAUDE_DIR/references/csharp/aspire.md"
 
     # Backup and remove old rules directory
     mv "$CLAUDE_DIR/rules" "$CLAUDE_DIR/rules$BACKUP_SUFFIX"
@@ -262,7 +262,7 @@ EOF
 log_success "INDEX.md created"
 
 # Step 6: Create context.yaml if it doesn't exist
-if [ ! -f "$CLAUDE_DIR/context.yaml" ]; then
+if [[ ! -f "$CLAUDE_DIR/context.yaml" ]]; then
     log_info "Creating context.yaml..."
     cat > "$CLAUDE_DIR/context.yaml" << 'EOF'
 # Claude-Craft Context Configuration
@@ -306,7 +306,7 @@ echo "  ✅ Created context.yaml for smart suggestions"
 echo ""
 echo "Backups created:"
 echo "  📁 $CLAUDE_DIR/CLAUDE.md$BACKUP_SUFFIX"
-if [ -d "$CLAUDE_DIR/rules$BACKUP_SUFFIX" ]; then
+if [[ -d "$CLAUDE_DIR/rules$BACKUP_SUFFIX" ]]; then
     echo "  📁 $CLAUDE_DIR/rules$BACKUP_SUFFIX/"
 fi
 echo ""

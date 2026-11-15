@@ -16,14 +16,14 @@
 # "system browser" mode any more: a distribution Chromium older than CI's once hid a real defect.
 set -euo pipefail
 
-if [ ! -d /src/website ]; then
+if [[ ! -d /src/website ]]; then
   # ---- host side: build the image and re-run this script in the container ----
   ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
   HARNESS="$ROOT/website/tests/kanban"
   IMAGE=cc-kanban-e2e
   # Playwright version of the lockfile (no node on the host): image browsers == installed @playwright/test.
   PW_VERSION="$(sed -n '/"node_modules\/@playwright\/test": {/,/"version"/s/.*"version": "\([^"]*\)".*/\1/p' "$ROOT/website/package-lock.json")"
-  [ -n "$PW_VERSION" ] || { echo "cannot read the @playwright/test version from website/package-lock.json" >&2; exit 1; }
+  [[ -n "$PW_VERSION" ]] || { echo "cannot read the @playwright/test version from website/package-lock.json" >&2; exit 1; }
   docker build -q --build-arg PLAYWRIGHT_VERSION="$PW_VERSION" -t "$IMAGE:$PW_VERSION" "$HARNESS" >/dev/null
   rm -rf "$HARNESS/results"
   mkdir -p "$HARNESS/report" "$HARNESS/results"

@@ -11,10 +11,10 @@ hook_has_parser || exit 0
 hook_input
 OUT=$(hook_get tool_response.stdout)
 LEN=${#OUT}
-[ "$LEN" -gt 50000 ] || exit 0
+[[ "$LEN" -gt 50000 ]] || exit 0
 
 INTERRUPTED=false
-[ "$(hook_get tool_response.interrupted)" != true ] || INTERRUPTED=true
+[[ "$(hook_get tool_response.interrupted)" != true ]] || INTERRUPTED=true
 HEAD=$(printf '%s' "$OUT" | head -c 8000)
 hook_replace_bash_output \
   "[output truncated by the output-filter hook: ${LEN} chars total, first 8000 shown. Re-run with a narrower command (grep/head/tail) to see more.]

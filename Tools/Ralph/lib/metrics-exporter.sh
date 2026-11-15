@@ -195,7 +195,7 @@ export_metrics_json() {
         "peak_usage_percent": $peak_context
     },
     "dod": {
-        "passed": $([ "$METRICS_DOD_PASSED" -gt 0 ] && echo "true" || echo "false"),
+        "passed": $([[ "$METRICS_DOD_PASSED" -gt 0 ]] && echo "true" || echo "false"),
         "checks_performed": $METRICS_DOD_CHECKS
     },
     "performance": {
@@ -247,7 +247,7 @@ ralph_iteration_duration_ms_p95{session_id="$session_id"} $p95_response
 
 # HELP ralph_circuit_breaker_triggered Whether the circuit breaker was triggered
 # TYPE ralph_circuit_breaker_triggered gauge
-ralph_circuit_breaker_triggered{session_id="$session_id"} $([ "${METRICS_DATA["cb_triggered"]}" == "true" ] && echo "1" || echo "0")
+ralph_circuit_breaker_triggered{session_id="$session_id"} $([[ "${METRICS_DATA["cb_triggered"]}" == "true" ]] && echo "1" || echo "0")
 
 # HELP ralph_no_progress_streak Current no-progress streak
 # TYPE ralph_no_progress_streak gauge
@@ -267,7 +267,7 @@ ralph_dod_checks_total{session_id="$session_id"} $METRICS_DOD_CHECKS
 
 # HELP ralph_dod_passed Whether DoD passed
 # TYPE ralph_dod_passed gauge
-ralph_dod_passed{session_id="$session_id"} $([ "$METRICS_DOD_PASSED" -gt 0 ] && echo "1" || echo "0")
+ralph_dod_passed{session_id="$session_id"} $([[ "$METRICS_DOD_PASSED" -gt 0 ]] && echo "1" || echo "0")
 EOF
 }
 

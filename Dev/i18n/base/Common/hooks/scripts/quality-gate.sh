@@ -11,29 +11,29 @@ set -u
 
 hook_has_parser || exit 0
 hook_input
-[ "$(hook_get stop_hook_active)" = "true" ] && exit 0
+[[ "$(hook_get stop_hook_active)" = "true" ]] && exit 0
 cwd=$(hook_get cwd)
-[ -z "$cwd" ] || cd "$cwd" 2>/dev/null || exit 0
+[[ -z "$cwd" ]] || cd "$cwd" 2>/dev/null || exit 0
 
 # Commande de test du projet (vide si aucun framework détecté).
 detect_cmd() {
-  if [ -n "${QUALITY_GATE_CMD:-}" ]; then printf '%s' "$QUALITY_GATE_CMD"; return; fi
-  if [ -f package.json ]; then
+  if [[ -n "${QUALITY_GATE_CMD:-}" ]]; then printf '%s' "$QUALITY_GATE_CMD"; return; fi
+  if [[ -f package.json ]]; then
     local saved=$HOOK_INPUT script
     HOOK_INPUT=$(cat package.json)
     script=$(hook_get scripts.test)
     HOOK_INPUT=$saved
     case "$script" in "" | *"no test specified"*) ;; *) printf 'npm test'; return ;; esac
   fi
-  if [ -f composer.json ] && [ -x vendor/bin/phpunit ]; then printf 'vendor/bin/phpunit'
-  elif { [ -f pyproject.toml ] || [ -f setup.py ]; } && command -v pytest >/dev/null 2>&1; then printf 'pytest -q'
-  elif [ -f pubspec.yaml ] && command -v flutter >/dev/null 2>&1; then printf 'flutter test'
-  elif [ -f go.mod ] && command -v go >/dev/null 2>&1; then printf 'go test ./...'
+  if [[ -f composer.json ]] && [[ -x vendor/bin/phpunit ]]; then printf 'vendor/bin/phpunit'
+  elif { [[ -f pyproject.toml ]] || [[ -f setup.py ]]; } && command -v pytest >/dev/null 2>&1; then printf 'pytest -q'
+  elif [[ -f pubspec.yaml ]] && command -v flutter >/dev/null 2>&1; then printf 'flutter test'
+  elif [[ -f go.mod ]] && command -v go >/dev/null 2>&1; then printf 'go test ./...'
   fi
 }
 
 cmd=$(detect_cmd)
-[ -n "$cmd" ] || exit 0
+[[ -n "$cmd" ]] || exit 0
 
 # Empreinte de l'arbre de travail (hors journaux) : vide hors dépôt git => pas de cache.
 fingerprint=""
@@ -41,7 +41,7 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
   fingerprint=$({ git status --porcelain -- . ':!.claude/logs'; git diff HEAD -- . ':!.claude/logs'; } 2>/dev/null | cksum)
 fi
 ok_file=.claude/logs/quality-gate.ok
-if [ -n "$fingerprint" ] && [ -f "$ok_file" ] && [ "$(cat "$ok_file")" = "$fingerprint" ]; then
+if [[ -n "$fingerprint" ]] && [[ -f "$ok_file" ]] && [[ "$(cat "$ok_file")" = "$fingerprint" ]]; then
   exit 0
 fi
 

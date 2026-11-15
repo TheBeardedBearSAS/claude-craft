@@ -14,7 +14,7 @@ RALPH_HOOKS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 ralph_shared() {
     local base="$RALPH_HOOKS_DIR" c
     for c in "$base/$1" "$base/../../../Dev/i18n/base/Common/hooks/scripts/$1"; do
-        if [ -f "$c" ]; then
+        if [[ -f "$c" ]]; then
             printf '%s' "$c"
             return 0
         fi
@@ -54,7 +54,7 @@ ralph_guard_verdict() {
         path=$(ralph_shared "$guard") || { printf 'guard %s not found' "$guard"; return 1; }
         rc=0
         out=$(printf '%s' "$payload" | BLOCK_RM_RF=dangerous bash "$path" 2>&1 1>/dev/null) || rc=$?
-        if [ "$rc" -ne 0 ]; then
+        if [[ "$rc" -ne 0 ]]; then
             printf '%s' "${out:-blocked by $guard}"
             return 1
         fi
@@ -66,7 +66,7 @@ ralph_guard_verdict() {
 ralph_find_config() {
     local p
     for p in ralph.yml .claude/ralph.yml; do
-        if [ -f "$p" ]; then
+        if [[ -f "$p" ]]; then
             printf '%s' "$p"
             return 0
         fi

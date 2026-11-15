@@ -12,9 +12,9 @@ set -u
 hook_require_parser
 hook_input
 CMD=$(hook_get tool_input.command)
-[ -n "$CMD" ] || exit 0
+[[ -n "$CMD" ]] || exit 0
 cwd=$(hook_get cwd)
-[ -z "$cwd" ] || cd "$cwd" 2>/dev/null || exit 0
+[[ -z "$cwd" ]] || cd "$cwd" 2>/dev/null || exit 0
 
 # Lignes émises : `commit`, `all` (commit -a), `add` (git add), `dir <chemin>` (git -C).
 facts=$(printf '%s\n' "$CMD" | hook_strip_heredocs | tr "'\"" '  ' | awk '
@@ -41,7 +41,7 @@ facts=$(printf '%s\n' "$CMD" | hook_strip_heredocs | tr "'\"" '  ' | awk '
 case "$facts" in *commit*) ;; *) exit 0 ;; esac
 
 dir=$(printf '%s\n' "$facts" | sed -n 's/^dir //p' | head -n 1)
-[ -z "$dir" ] || cd "$dir" 2>/dev/null || exit 0
+[[ -z "$dir" ]] || cd "$dir" 2>/dev/null || exit 0
 top=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
 cd "$top" || exit 0
 
@@ -50,19 +50,19 @@ if printf '%s\n' "$facts" | grep -qxE 'add|all'; then
   files=$(printf '%s\n%s\n%s\n' "$files" "$(git diff --name-only HEAD 2>/dev/null)" "$(git ls-files -o --exclude-standard 2>/dev/null)")
 fi
 files=$(printf '%s\n' "$files" | sed '/^$/d' | sort -u)
-[ -n "$files" ] || exit 0
+[[ -n "$files" ]] || exit 0
 
 existing=()
 while IFS= read -r f; do
   if is_sensitive_path "$f"; then hook_block "Attempting to commit a sensitive file: $f"; fi
-  [ -f "$f" ] && existing+=("$f")
+  [[ -f "$f" ]] && existing+=("$f")
 done <<EOF
 $files
 EOF
-[ ${#existing[@]} -gt 0 ] || exit 0
+[[ ${#existing[@]} -gt 0 ]] || exit 0
 
 for p in '-----BEGIN [A-Z ]*PRIVATE KEY-----' 'AKIA[0-9A-Z]{16}' 'ghp_[A-Za-z0-9]{36}' 'xox[baprs]-[A-Za-z0-9-]{10,}'; do
   hit=$(grep -lIE -e "$p" -- "${existing[@]}" 2>/dev/null | head -n 1)
-  [ -z "$hit" ] || hook_block "Potential secret detected in $hit"
+  [[ -z "$hit" ]] || hook_block "Potential secret detected in $hit"
 done
 exit 0

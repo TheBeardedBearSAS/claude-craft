@@ -7,7 +7,7 @@ set -u
 # shellcheck source=lib/hook-io.sh
 . "$(dirname "${BASH_SOURCE[0]}")/lib/hook-io.sh"
 
-[ -n "${SLACK_WEBHOOK_URL:-}" ] || exit 0
+[[ -n "${SLACK_WEBHOOK_URL:-}" ]] || exit 0
 hook_has_parser || exit 0
 hook_input
 MESSAGE=$(hook_get message)

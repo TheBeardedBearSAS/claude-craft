@@ -9,12 +9,12 @@ set -u
 hook_has_parser || exit 0
 hook_input
 CWD=$(hook_get cwd)
-[ -z "$CWD" ] || cd "$CWD" 2>/dev/null || true
+[[ -z "$CWD" ]] || cd "$CWD" 2>/dev/null || true
 
 # Variables sûres de .env.local, au format `export NAME=valeur`. Valeurs limitées à
 # [A-Za-z0-9_.:/-] : CLAUDE_ENV_FILE est sourcé par le shell, pas de métacaractères.
 # DATABASE_URL est exclue (identifiants possibles) ; commentaires et lignes vides ignorés.
-if [ -n "${CLAUDE_ENV_FILE:-}" ] && [ -f .env.local ]; then
+if [[ -n "${CLAUDE_ENV_FILE:-}" ]] && [[ -f .env.local ]]; then
   sed -n -E 's#^(NODE_ENV|APP_ENV|APP_DEBUG|DATABASE_HOST|DATABASE_PORT|LOG_LEVEL|PORT|HOST)=([A-Za-z0-9_.:/-]*)$#export \1=\2#p' \
     .env.local >>"$CLAUDE_ENV_FILE" 2>/dev/null
 fi
@@ -29,18 +29,18 @@ json_field() {
 }
 
 CONTEXT=""
-add() { [ -z "$2" ] || CONTEXT="$CONTEXT$1 $2, "; }
+add() { [[ -z "$2" ]] || CONTEXT="$CONTEXT$1 $2, "; }
 
-if [ -f composer.json ]; then
+if [[ -f composer.json ]]; then
   add Symfony "$(json_field composer.json 'require.symfony/framework-bundle')"
   add PHP "$(json_field composer.json require.php)"
 fi
-if [ -f package.json ]; then
+if [[ -f package.json ]]; then
   add React "$(json_field package.json dependencies.react)"
   add Next.js "$(json_field package.json dependencies.next)"
 fi
-[ ! -f pubspec.yaml ] || CONTEXT="${CONTEXT}Flutter/Dart, "
-[ ! -f pyproject.toml ] || CONTEXT="${CONTEXT}Python, "
+[[ ! -f pubspec.yaml ]] || CONTEXT="${CONTEXT}Flutter/Dart, "
+[[ ! -f pyproject.toml ]] || CONTEXT="${CONTEXT}Python, "
 
 # Services déclarés dans les fichiers Compose (noms canoniques et historiques).
 COMPOSE=$(cat compose.yaml compose.yml docker-compose.yaml docker-compose.yml 2>/dev/null)
@@ -49,5 +49,5 @@ for svc in postgres:PostgreSQL mysql:MySQL redis:Redis; do
 done
 
 CONTEXT=${CONTEXT%, }
-[ -z "$CONTEXT" ] || hook_context SessionStart "Project stack: $CONTEXT"
+[[ -z "$CONTEXT" ]] || hook_context SessionStart "Project stack: $CONTEXT"
 exit 0

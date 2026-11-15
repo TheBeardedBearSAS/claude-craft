@@ -50,14 +50,14 @@ create_tcl_directory_structure() {
     )
 
     for dir in "${dirs[@]}"; do
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Creer: ${dir}/"
         else
             mkdir -p "${target_dir}/${dir}"
         fi
     done
 
-    if [ "$dry_run" = "false" ]; then
+    if [[ "$dry_run" = "false" ]]; then
         log_success "TCL directory structure created"
     fi
 }
@@ -75,7 +75,7 @@ copy_base_references() {
     local common_rules_lang="${i18n_dir}/${lang}/Common/rules"
     local common_rules_base="${i18n_dir}/base/Common/rules"
 
-    if [ ! -d "$common_rules_lang" ] && [ ! -d "$common_rules_base" ]; then
+    if [[ ! -d "$common_rules_lang" ]] && [[ ! -d "$common_rules_base" ]]; then
         log_warning "Common rules directory not found in lang or base"
         return 0
     fi
@@ -97,14 +97,14 @@ copy_base_references() {
 
         # Resolve: lang takes precedence over base
         local src_file=""
-        if [ -f "${common_rules_lang}/${old_name}" ]; then
+        if [[ -f "${common_rules_lang}/${old_name}" ]]; then
             src_file="${common_rules_lang}/${old_name}"
-        elif [ -f "${common_rules_base}/${old_name}" ]; then
+        elif [[ -f "${common_rules_base}/${old_name}" ]]; then
             src_file="${common_rules_base}/${old_name}"
         fi
 
-        if [ -n "$src_file" ]; then
-            if [ "$dry_run" = "true" ]; then
+        if [[ -n "$src_file" ]]; then
+            if [[ "$dry_run" = "true" ]]; then
                 log_dry_run "Copy: references/base/${new_name}"
             else
                 cp "$src_file" "$dest_file"
@@ -113,7 +113,7 @@ copy_base_references() {
         fi
     done
 
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+    if [[ "$dry_run" = "false" ]] && [[ $count -gt 0 ]]; then
         log_success "${count} base references copied"
     fi
 }
@@ -134,7 +134,7 @@ copy_tech_references() {
     fi
     local dest_dir="${target_dir}/.claude/references/${tech_namespace}"
 
-    if [ ! -d "$rules_dir" ] && [ ! -d "${base_rules_dir:-}" ]; then
+    if [[ ! -d "$rules_dir" ]] && [[ ! -d "${base_rules_dir:-}" ]]; then
         log_warning "Rules directory not found: $rules_dir"
         return 0
     fi
@@ -147,14 +147,14 @@ copy_tech_references() {
 
         # Resolve: lang dir takes precedence over base
         local src_file=""
-        if [ -f "${rules_dir}/${old_name}" ]; then
+        if [[ -f "${rules_dir}/${old_name}" ]]; then
             src_file="${rules_dir}/${old_name}"
-        elif [ -n "${base_rules_dir:-}" ] && [ -f "${base_rules_dir}/${old_name}" ]; then
+        elif [[ -n "${base_rules_dir:-}" ]] && [[ -f "${base_rules_dir}/${old_name}" ]]; then
             src_file="${base_rules_dir}/${old_name}"
         fi
 
-        if [ -n "$src_file" ]; then
-            if [ "$dry_run" = "true" ]; then
+        if [[ -n "$src_file" ]]; then
+            if [[ "$dry_run" = "true" ]]; then
                 log_dry_run "Copy: references/${tech_namespace}/${new_name}"
             else
                 cp "$src_file" "$dest_file"
@@ -163,7 +163,7 @@ copy_tech_references() {
         fi
     done
 
-    if [ "$dry_run" = "false" ] && [ $count -gt 0 ]; then
+    if [[ "$dry_run" = "false" ]] && [[ $count -gt 0 ]]; then
         log_success "${count} tech-specific references copied to ${tech_namespace}/"
     fi
 }
@@ -185,14 +185,14 @@ generate_minimal_claude_md() {
     local dest_file="${target_dir}/.claude/CLAUDE.md"
 
     # Skip if preserve_config and file exists
-    if [ "$preserve_config" = "true" ] && [ -f "$dest_file" ]; then
-        if [ "$dry_run" = "false" ]; then
+    if [[ "$preserve_config" = "true" ]] && [[ -f "$dest_file" ]]; then
+        if [[ "$dry_run" = "false" ]]; then
             log_info "CLAUDE.md preserved (--preserve-config)"
         fi
         return 0
     fi
 
-    if [ "$dry_run" = "true" ]; then
+    if [[ "$dry_run" = "true" ]]; then
         log_dry_run "Generate: CLAUDE.md"
         return 0
     fi
@@ -237,14 +237,14 @@ generate_index_md() {
     local dest_file="${target_dir}/.claude/INDEX.md"
 
     # Skip if preserve_config and file exists
-    if [ "$preserve_config" = "true" ] && [ -f "$dest_file" ]; then
-        if [ "$dry_run" = "false" ]; then
+    if [[ "$preserve_config" = "true" ]] && [[ -f "$dest_file" ]]; then
+        if [[ "$dry_run" = "false" ]]; then
             log_info "INDEX.md preserved (--preserve-config)"
         fi
         return 0
     fi
 
-    if [ "$dry_run" = "true" ]; then
+    if [[ "$dry_run" = "true" ]]; then
         log_dry_run "Generate: INDEX.md"
         return 0
     fi
@@ -311,14 +311,14 @@ generate_context_yaml() {
     local dest_file="${target_dir}/.claude/context.yaml"
 
     # Skip if preserve_config and file exists
-    if [ "$preserve_config" = "true" ] && [ -f "$dest_file" ]; then
-        if [ "$dry_run" = "false" ]; then
+    if [[ "$preserve_config" = "true" ]] && [[ -f "$dest_file" ]]; then
+        if [[ "$dry_run" = "false" ]]; then
             log_info "context.yaml preserved (--preserve-config)"
         fi
         return 0
     fi
 
-    if [ "$dry_run" = "true" ]; then
+    if [[ "$dry_run" = "true" ]]; then
         log_dry_run "Generate: context.yaml"
         return 0
     fi

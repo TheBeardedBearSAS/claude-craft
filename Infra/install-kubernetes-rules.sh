@@ -98,12 +98,12 @@ verify_source_files() {
     local src_dir
     src_dir=$(get_source_dir)
 
-    if [ ! -d "$src_dir/agents" ]; then
+    if [[ ! -d "$src_dir/agents" ]]; then
         log_error "Source directory missing: $src_dir/agents"
         exit 1
     fi
 
-    if [ ! -d "$src_dir/commands" ]; then
+    if [[ ! -d "$src_dir/commands" ]]; then
         log_error "Source directory missing: $src_dir/commands"
         exit 1
     fi
@@ -115,9 +115,9 @@ verify_source_files() {
 detect_installation() {
     local target_dir="$1"
 
-    if [ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]; then
+    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]]; then
         echo "existing"
-    elif [ -d "${target_dir}/.claude" ]; then
+    elif [[ -d "${target_dir}/.claude" ]]; then
         echo "partial"
     else
         echo "none"
@@ -130,8 +130,8 @@ create_backup() {
     local dry_run="$2"
     local backup_dir="${target_dir}/.claude-backup-kubernetes-$(date +%Y%m%d-%H%M%S)"
 
-    if [ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ] || [ -d "${target_dir}/.claude/agents" ]; then
-        if [ "$dry_run" = "true" ]; then
+    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]] || [[ -d "${target_dir}/.claude/agents" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Backup Kubernetes files to ${backup_dir}"
         else
             mkdir -p "${backup_dir}/commands"
@@ -139,7 +139,7 @@ create_backup() {
             cp -r "${target_dir}/.claude/commands/${TECH_NAMESPACE}" "${backup_dir}/commands/" 2>/dev/null || true
             # Only backup kubernetes-related agents
             for agent in kubernetes-architect kubernetes-deployment kubernetes-debug kubernetes-security kubernetes-monitoring; do
-                if [ -f "${target_dir}/.claude/agents/${agent}.md" ]; then
+                if [[ -f "${target_dir}/.claude/agents/${agent}.md" ]]; then
                     cp "${target_dir}/.claude/agents/${agent}.md" "${backup_dir}/agents/"
                 fi
             done
@@ -161,7 +161,7 @@ create_directory_structure() {
     )
 
     for dir in "${dirs[@]}"; do
-        if [ "$dry_run" = "true" ]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Create directory: ${target_dir}/${dir}"
         else
             mkdir -p "${target_dir}/${dir}"
@@ -177,13 +177,13 @@ copy_agents() {
     src_dir=$(get_source_dir)
     local agt_dir="${src_dir}/agents"
 
-    if [ -d "$agt_dir" ]; then
-        if [ "$dry_run" = "true" ]; then
+    if [[ -d "$agt_dir" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: agents/*.md"
         else
             local count=0
             for agent_file in "${agt_dir}/"*.md; do
-                if [ -f "$agent_file" ]; then
+                if [[ -f "$agent_file" ]]; then
                     cp "$agent_file" "${target_dir}/.claude/agents/"
                     ((++count))
                 fi
@@ -201,13 +201,13 @@ copy_commands() {
     src_dir=$(get_source_dir)
     local cmd_dir="${src_dir}/commands"
 
-    if [ -d "$cmd_dir" ]; then
-        if [ "$dry_run" = "true" ]; then
+    if [[ -d "$cmd_dir" ]]; then
+        if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Copy: commands/*.md"
         else
             local count=0
             for cmd_file in "${cmd_dir}/"*.md; do
-                if [ -f "$cmd_file" ]; then
+                if [[ -f "$cmd_file" ]]; then
                     cp "$cmd_file" "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"
                     ((++count))
                 fi
@@ -225,12 +225,12 @@ show_summary() {
     # Count installed files
     local commands_count=0
     local agents_count=0
-    if [ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]; then
+    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]]; then
         commands_count=$(ls -1 "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"*.md 2>/dev/null | wc -l)
     fi
     # Count only Kubernetes agents
     for agent in kubernetes-architect kubernetes-deployment kubernetes-debug kubernetes-security kubernetes-monitoring; do
-        if [ -f "${target_dir}/.claude/agents/${agent}.md" ]; then
+        if [[ -f "${target_dir}/.claude/agents/${agent}.md" ]]; then
             ((++agents_count))
         fi
     done
@@ -249,10 +249,10 @@ show_summary() {
     echo ""
 
     # List available commands
-    if [ $commands_count -gt 0 ]; then
+    if [[ $commands_count -gt 0 ]]; then
         echo "Available Kubernetes commands:"
         for cmd_file in "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"*.md; do
-            if [ -f "$cmd_file" ]; then
+            if [[ -f "$cmd_file" ]]; then
                 local cmd_name
                 cmd_name=$(basename "$cmd_file" .md)
                 echo "  - /${TECH_NAMESPACE}:${cmd_name}"
@@ -262,10 +262,10 @@ show_summary() {
     fi
 
     # List available agents
-    if [ $agents_count -gt 0 ]; then
+    if [[ $agents_count -gt 0 ]]; then
         echo "Available Kubernetes agents:"
         for agent in kubernetes-architect kubernetes-deployment kubernetes-debug kubernetes-security kubernetes-monitoring; do
-            if [ -f "${target_dir}/.claude/agents/${agent}.md" ]; then
+            if [[ -f "${target_dir}/.claude/agents/${agent}.md" ]]; then
                 echo "  - @${agent}"
             fi
         done
@@ -341,8 +341,8 @@ main() {
     done
 
     # Resolve absolute path
-    if [ "$target_dir" != "." ]; then
-        if [ ! -d "$target_dir" ]; then
+    if [[ "$target_dir" != "." ]]; then
+        if [[ ! -d "$target_dir" ]]; then
             log_error "Directory does not exist: $target_dir"
             exit 1
         fi
@@ -364,7 +364,7 @@ main() {
     verify_source_files
 
     # Auto-detect mode if not specified
-    if [ -z "$mode" ]; then
+    if [[ -z "$mode" ]]; then
         local installation_status
         installation_status=$(detect_installation "$target_dir")
         case $installation_status in
@@ -380,13 +380,13 @@ main() {
     fi
 
     echo "Mode: ${mode}"
-    if [ "$dry_run" = "true" ]; then
+    if [[ "$dry_run" = "true" ]]; then
         echo "Dry-run mode: no modifications will be made"
     fi
     echo ""
 
     # Create backup if requested or in force mode
-    if [ "$backup" = "true" ] || [ "$force" = "true" ]; then
+    if [[ "$backup" = "true" ]] || [[ "$force" = "true" ]]; then
         create_backup "$target_dir" "$dry_run"
     fi
 
@@ -401,7 +401,7 @@ main() {
     esac
 
     # Show summary
-    if [ "$dry_run" = "false" ]; then
+    if [[ "$dry_run" = "false" ]]; then
         show_summary "$target_dir" "$mode"
     else
         echo ""

@@ -18,7 +18,7 @@ HOOK_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 hook_has_parser || exit 0
 hook_input
-[ "$(hook_get stop_hook_active)" = "true" ] && exit 0
+[[ "$(hook_get stop_hook_active)" = "true" ]] && exit 0
 
 CWD=$(hook_get cwd)
 cd "${CWD:-.}" 2>/dev/null || true
@@ -35,13 +35,13 @@ run_dod_command() {
 
 failures=""
 while IFS= read -r line; do
-    [ -n "$line" ] || continue
+    [[ -n "$line" ]] || continue
     ralph_item_optional "$line" && continue
-    [ "$(ralph_json_get "$line" type)" = "command" ] || continue
+    [[ "$(ralph_json_get "$line" type)" = "command" ]] || continue
     name=$(ralph_json_get "$line" name)
-    [ -n "$name" ] || name=$(ralph_json_get "$line" id)
+    [[ -n "$name" ]] || name=$(ralph_json_get "$line" id)
     cmd=$(ralph_json_get "$line" command)
-    if [ -z "$cmd" ]; then
+    if [[ -z "$cmd" ]]; then
         failures="$failures- ${name:-unnamed}: no command defined
 "
     elif ! verdict=$(ralph_guard_verdict "$cmd"); then
@@ -53,7 +53,7 @@ while IFS= read -r line; do
     fi
 done < <(ralph_dod_items "$CONFIG_FILE")
 
-if [ -n "$failures" ]; then
+if [[ -n "$failures" ]]; then
     hook_stop_block "Definition of Done not satisfied. Fix the following before stopping:
 $failures"
 fi

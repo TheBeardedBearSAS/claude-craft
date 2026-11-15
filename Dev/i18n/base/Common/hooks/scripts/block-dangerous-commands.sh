@@ -16,7 +16,7 @@ set -u
 hook_require_parser
 hook_input
 CMD=$(hook_get tool_input.command)
-[ -n "$CMD" ] || exit 0
+[[ -n "$CMD" ]] || exit 0
 
 MODE=${BLOCK_RM_RF:-dangerous}
 TEXT=$(printf '%s\n' "$CMD" | hook_strip_heredocs | hook_shell_segments)
