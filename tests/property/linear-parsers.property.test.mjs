@@ -10,6 +10,10 @@ import { slugify, splitItem } from '../../cli/kanban/server/services/story-files
 import { extractVersion } from '../../scripts/collect-freshness-signals.mjs';
 import { PRICE_RE, loadTruth, scanText } from '../../scripts/scan-claude-claims.mjs';
 
+// Under Stryker every surviving-candidate mutant re-runs the tests that cover it: thousands of generated cases per
+// property made the weekly full run exceed its timeout. 100 cases still kill mutants; plain runs keep the full count.
+const runs = (n) => (process.env.STRYKER_MUTATOR_WORKER ? 100 : n);
+
 const textOf = (alphabet, maxLength = 40) =>
   fc.array(fc.constantFrom(...alphabet), { maxLength }).map((chars) => chars.join(''));
 
@@ -33,7 +37,7 @@ describe('splitFrontmatter', () => {
       fc.property(textOf(['-', '-', '-', '\n', '\r', ' ', '\t', 'a', ':']), (body) => {
         for (const raw of [body, `---\n${body}`, `---\r\n${body}`]) expect(splitFrontmatter(raw)).toEqual(oracle(raw));
       }),
-      { numRuns: 2000 }
+      { numRuns: runs(2000) }
     );
   });
 
@@ -48,7 +52,7 @@ describe('splitTags', () => {
       fc.property(textOf(['<', '>', 'a', ' ', '/']), (html) => {
         expect(splitTags(html)).toEqual(html.split(/(<[^>]*>)/));
       }),
-      { numRuns: 2000 }
+      { numRuns: runs(2000) }
     );
   });
 
@@ -82,7 +86,7 @@ describe('slugs', () => {
         expect(sprintSlug(name)).toBe(oldSprint(name));
         expect(slugify(name)).toBe(oldStory(name));
       }),
-      { numRuns: 2000 }
+      { numRuns: runs(2000) }
     );
   });
 });
@@ -122,7 +126,7 @@ describe('parseSprintGoal', () => {
         expect(parsed.goal).toBe(oldGoal(text));
         expect(parsed.name).toBe(oldName(text, 'sprint-x'));
       }),
-      { numRuns: 3000 }
+      { numRuns: runs(3000) }
     );
   });
 
@@ -147,7 +151,7 @@ describe('splitItem', () => {
           expect(splitItem(line)).toEqual(m ? m.slice(1, 6) : null);
         }
       }),
-      { numRuns: 2000 }
+      { numRuns: runs(2000) }
     );
   });
 
@@ -166,7 +170,7 @@ describe('version and price extraction', () => {
       fc.property(textOf(['1', '2', '.', '_', 'v', '-']), (tag) => {
         expect(extractVersion(tag)).toBe(old(tag));
       }),
-      { numRuns: 2000 }
+      { numRuns: runs(2000) }
     );
   });
 
@@ -181,7 +185,7 @@ describe('version and price extraction', () => {
       fc.property(textOf(['1', '2', '.', ',', '$', '/', ' ', 'a']), (line) => {
         expect(all(PRICE_RE, line)).toEqual(all(OLD, line));
       }),
-      { numRuns: 3000 }
+      { numRuns: runs(3000) }
     );
   });
 
