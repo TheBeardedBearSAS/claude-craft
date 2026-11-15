@@ -25,6 +25,10 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=coverage)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 

@@ -48,8 +48,11 @@ jobs:
 
       - name: Run Stryker (weekly full)
         if: github.event_name != 'pull_request'
-        # Weekly: tolerant — informational signal only.
-        run: ./node_modules/.bin/stryker run || true
+        # Weekly: tolerant — informational signal only. The full report goes to the Stryker dashboard
+        # (README mutation badge); Stryker derives the project and the version (branch) from GitHub Actions.
+        run: ./node_modules/.bin/stryker run --reporters progress,clear-text,html,json,dashboard || true
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
       - name: Run Stryker (PR incremental — mutate only changed files)
         if: github.event_name == 'pull_request'
