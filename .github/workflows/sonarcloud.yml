@@ -1,0 +1,54 @@
+name: SonarCloud
+
+# Static analysis + coverage on SonarCloud (project TheBeardedBearSAS_claude-craft).
+# Configuration lives in sonar-project.properties. Automatic Analysis is disabled on SonarCloud:
+# this workflow is the only source of analyses. Main is analysed on push so PRs compare against it.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  group: sonarcloud-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sonarcloud:
+    name: SonarCloud analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Fork PRs do not receive SONAR_TOKEN: skip them rather than fail.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
+        with:
+          # Full history: blame data for new-code detection.
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # pinned: v7.1.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run Vitest with coverage (lcov)
+        run: npm run test:coverage
+
+      # Analyse even when a coverage threshold fails: the gate for thresholds is ci.yml.
+      - name: SonarCloud scan
+        if: ${{ !cancelled() }}
+        uses: SonarSource/sonarqube-scan-action@59202af334b4ba7b5db01b701b8e79f8b3bef0f4 # pinned: v8.5.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

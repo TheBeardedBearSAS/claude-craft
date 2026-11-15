@@ -16,7 +16,7 @@ export default defineConfig({
         // Orchestrator with server/watcher side-effects ; covered end-to-end by tests/kanban/e2e-server.test.js.
         'cli/lib/kanban.js',
       ],
-      reporter: ['text', 'json-summary'],
+      reporter: ['text', 'json-summary', 'lcov'],
       thresholds: {
         // Branch coverage temporarily lowered from 85 to 84 in v8.3.2 release.
         // Sprint 2 (CVE-2025-59536 hardening in doctor.js) and Sprint 4 (deep
