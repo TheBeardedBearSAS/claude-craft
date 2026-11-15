@@ -35,12 +35,25 @@ function tagInfo(token) {
  * @param {string} html sanitized HTML
  * @param {{ name?: string, params?: object, query?: object }} [route]
  */
+/** Same tokens as `html.split(/(<[^>]*>)/)` (text, tag, text, …), in linear time. */
+export function splitTags(html) {
+  const tokens = [];
+  let last = 0;
+  for (let lt = html.indexOf('<'); lt !== -1; lt = html.indexOf('<', last)) {
+    const gt = html.indexOf('>', lt);
+    if (gt === -1) break;
+    tokens.push(html.slice(last, lt), html.slice(lt, gt + 1));
+    last = gt + 1;
+  }
+  tokens.push(html.slice(last));
+  return tokens;
+}
+
 export function linkifyStoryIds(html, route = {}) {
   const { name = 'kanban', params = {}, query = {} } = route;
   const href = (id) => formatHash(name, params, { ...query, story: id });
   let depth = 0;
-  return String(html ?? '')
-    .split(/(<[^>]*>)/)
+  return splitTags(String(html ?? ''))
     .map((token) => {
       if (token.startsWith('<')) {
         const tag = tagInfo(token);

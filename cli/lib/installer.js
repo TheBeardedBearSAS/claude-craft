@@ -113,7 +113,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
       console.log(`  ${c.dim}Auto-detected locale: ${detectedLang}${c.reset}`);
     }
     const langInput = await cli.prompt(`  Select (1-5, default: ${detectedIndex}): `);
-    const langIndex = parseInt(langInput) - 1;
+    const langIndex = Number.parseInt(langInput, 10) - 1;
     cli.config.language = langKeys[langIndex] !== undefined ? langKeys[langIndex] : detectedLang;
     console.log(`  ${c.green}Selected: ${LANGUAGES[cli.config.language]}${c.reset}`);
 
@@ -132,7 +132,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
     const defaultTechs = preSelected.length > 0 ? preSelected.join(' ') : '1';
 
     const techInput = await cli.prompt(`  Select (default: ${defaultTechs}): `);
-    const techIndices = (techInput || defaultTechs).split(/\s+/).map((n) => parseInt(n) - 1);
+    const techIndices = (techInput || defaultTechs).split(/\s+/).map((n) => Number.parseInt(n, 10) - 1);
     cli.config.technologies = techIndices.filter((i) => i >= 0 && i < techKeys.length).map((i) => techKeys[i]);
     console.log(`  ${c.green}Selected: ${cli.config.technologies.join(', ') || 'common only'}${c.reset}`);
 

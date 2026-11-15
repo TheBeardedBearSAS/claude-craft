@@ -29,7 +29,7 @@ export function compareVersions(a, b) {
   const parse = (v) =>
     String(v)
       .split('.')
-      .map((seg) => parseInt(seg, 10) || 0);
+      .map((seg) => Number.parseInt(seg, 10) || 0);
   const left = parse(a);
   const right = parse(b);
   const len = Math.max(left.length, right.length);

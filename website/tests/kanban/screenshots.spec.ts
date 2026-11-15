@@ -87,7 +87,8 @@ for (const size of SIZES) {
       await page.setViewportSize(size);
       await open(page);
       await page.waitForTimeout(400); // fonts, lazy chart/graph
-      await shot(page, `${name}-${size.width}`);
+      const png = await shot(page, `${name}-${size.width}`);
+      expect(png.byteLength).toBeGreaterThan(0);
     });
   }
 }

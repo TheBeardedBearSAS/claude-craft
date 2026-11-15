@@ -72,7 +72,9 @@ export async function collectMetrics(opts = {}) {
 
   const npmSummary = result.npm ? `npm=${result.npm.downloads_last_week}` : 'npm=error';
   const starsSummary = result.github ? `stars=${result.github.stars}` : 'stars=error';
-  console.log(`Adoption metrics saved: ${outPath} (${npmSummary}, ${starsSummary})`);
+  // The counts come from the npm and GitHub APIs: no line breaks may reach the log.
+  const oneLine = (text) => text.replace(/[\r\n]+/g, ' ');
+  console.log(oneLine(`Adoption metrics saved: ${outPath} (${npmSummary}, ${starsSummary})`));
 
   return result;
 }

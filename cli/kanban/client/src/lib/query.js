@@ -16,11 +16,14 @@ const enc = (v) => encodeURIComponent(v).replace(/%2C/gi, ',');
 
 /** Stable serialization: sorted keys, empty values dropped, arrays joined by ','. */
 export function buildQuery(obj) {
-  return Object.keys(obj ?? {})
-    .filter((k) => !EMPTY(obj[k]))
-    .sort()
-    .map((k) => `${encodeURIComponent(k)}=${enc(Array.isArray(obj[k]) ? obj[k].join(',') : String(obj[k]))}`)
-    .join('&');
+  return (
+    Object.keys(obj ?? {})
+      .filter((k) => !EMPTY(obj[k]))
+      // Code-unit order, as a bare .sort(): stable and locale-independent.
+      .sort((a, b) => Number(a > b) - Number(a < b))
+      .map((k) => `${encodeURIComponent(k)}=${enc(Array.isArray(obj[k]) ? obj[k].join(',') : String(obj[k]))}`)
+      .join('&')
+  );
 }
 
 /** Apply a patch to a query object (or string). Empty patch values remove the key. */

@@ -222,6 +222,11 @@ describe('idempotencyKey', () => {
     expect(idempotencyKey({})).not.toBe(key);
   });
 
+  it('draws the fallback from crypto.getRandomValues, never Math.random', () => {
+    const getRandomValues = (bytes) => bytes.fill(171);
+    expect(idempotencyKey({ getRandomValues })).toBe('abababab-abababab-abababab-abababab');
+  });
+
   it('uses crypto.randomUUID when present', () => {
     expect(idempotencyKey({ randomUUID: () => 'fixed-uuid-1234' })).toBe('fixed-uuid-1234');
   });

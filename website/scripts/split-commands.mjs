@@ -33,9 +33,9 @@ const preamble = [];
 const sections = []; // { heading, text, lines: [] }
 let cur = null;
 for (const line of lines) {
-  const m = line.match(/^## (.+?)\s*$/);
-  if (m) {
-    cur = { heading: line, text: m[1], lines: [line] };
+  const text = line.startsWith('## ') ? line.slice(3).trimEnd() : '';
+  if (text) {
+    cur = { heading: line, text, lines: [line] };
     sections.push(cur);
   } else if (cur) {
     cur.lines.push(line);
@@ -60,7 +60,7 @@ const slug = (text) =>
     .replace(/\(`[^`]*`\)/g, '') // drop the (`/xxx:`) marker
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-|-$/g, '');
 
 const outDir = join(dirname(file), 'commands');
 rmSync(outDir, { recursive: true, force: true });
@@ -69,7 +69,7 @@ mkdirSync(outDir, { recursive: true });
 const indexEntries = [];
 for (const s of nsSections) {
   const id = slug(s.text);
-  const title = s.text.replace(/\s*-\s*NEW\s*$/i, '').trim();
+  const title = s.text.replace(/-\s*NEW\s*$/i, '').trim();
   // Section body = everything after its `## heading` line. The section's `###` subheadings
   // must shift up one level (### -> ##) so the sub-page reads h1 -> h2 with no skipped
   // level (WCAG heading-order). Skip fenced code blocks so `#` comments aren't touched.

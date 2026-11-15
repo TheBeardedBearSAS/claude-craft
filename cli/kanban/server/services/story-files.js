@@ -27,9 +27,10 @@ const normalize = (s) =>
 export function slugify(title) {
   const slug = normalize(String(title ?? ''))
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+/, '')
+    // Dash runs are already collapsed above: at most one dash at each end.
+    .replace(/^-/, '')
     .slice(0, MAX_SLUG)
-    .replace(/-+$/, '');
+    .replace(/-$/, '');
   return slug || 'story';
 }
 
@@ -100,7 +101,21 @@ export function renderStoryMarkdown({
 
 const SECTION_RE = /^##\s+(?:metadata|metadonnees|metadatos|metadaten|metadados)\s*$/;
 const NEXT_HEADING_RE = /^#{1,2}\s/;
-const ITEM_RE = /^(\s*[-*]\s+\*\*)([^*]+?)(\*\*\s*:\s*)(.*?)(\s*)$/;
+const ITEM_HEAD_RE = /^(\s*[-*]\s+\*\*)([^*]+)(\*\*\s*:)/;
+
+/**
+ * `- **Label**: value` → [prefix, label, separator, value, trailing whitespace], or null.
+ * Same groups as /^(\s*[-*]\s+\*\*)([^*]+?)(\*\*\s*:\s*)(.*?)(\s*)$/, in linear time.
+ */
+export function splitItem(line) {
+  const m = ITEM_HEAD_RE.exec(line);
+  if (!m) return null;
+  const rest = line.slice(m[0].length);
+  if (/[\n\r\u2028\u2029]/.test(rest.trim())) return null;
+  const value = rest.trim();
+  const lead = rest.length - rest.trimStart().length;
+  return [m[1], m[2], m[3] + rest.slice(0, lead), value, rest.slice(lead + value.length)];
+}
 const STATUS_LABELS = new Set(['status', 'statut', 'estado']);
 
 const LABEL_KEYS = new Map([
@@ -135,12 +150,12 @@ export function patchMetadataList(text, fields) {
   const pending = new Map(Object.keys(ADDED).flatMap((k) => (fields[k] === undefined ? [] : [[k, fields[k]]])));
   let last = range.start;
   for (let i = range.start + 1; i < range.end; i++) {
-    const m = ITEM_RE.exec(lines[i]);
+    const m = splitItem(lines[i]);
     if (!m) continue;
     last = i;
-    const key = LABEL_KEYS.get(normalize(m[2]));
+    const key = LABEL_KEYS.get(normalize(m[1]));
     if (!key || !pending.has(key)) continue;
-    lines[i] = `${m[1]}${m[2]}${m[3]}${valueOf(pending.get(key))}${m[5]}`;
+    lines[i] = `${m[0]}${m[1]}${m[2]}${valueOf(pending.get(key))}${m[4]}`;
     pending.delete(key);
   }
   const cr = text.includes('\r\n') ? '\r' : '';
@@ -160,8 +175,8 @@ export function hasStatusLine(markdown) {
   return stripComments(String(markdown ?? ''))
     .split('\n')
     .some((line) => {
-      const m = ITEM_RE.exec(line);
-      return !!m && STATUS_LABELS.has(normalize(m[2])) && !/sprint-status/i.test(m[4]);
+      const m = splitItem(line);
+      return !!m && STATUS_LABELS.has(normalize(m[1])) && !/sprint-status/i.test(m[3]);
     });
 }
 
