@@ -189,7 +189,7 @@ jobs:
           VALE_ARCHIVE="vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
           VALE_URL="https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/${VALE_ARCHIVE}"
           VALE_SHA256="774c034771f990e25fdbb4f940213423f2563b8df99ec31a296643e0872324cb"
-          wget --https-only -qO "/tmp/${VALE_ARCHIVE}" "${VALE_URL}"
+          curl --proto '=https' --tlsv1.2 -fsSL -o "/tmp/${VALE_ARCHIVE}" "${VALE_URL}"
           echo "${VALE_SHA256}  /tmp/${VALE_ARCHIVE}" | sha256sum -c -
           tar xz -C /usr/local/bin vale -f "/tmp/${VALE_ARCHIVE}"
           rm -f "/tmp/${VALE_ARCHIVE}"
