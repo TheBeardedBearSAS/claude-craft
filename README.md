@@ -32,6 +32,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v9.3.0
+
+**Kanban en écriture et qualité mesurée (2026-11-16, v9.3.0) :**
+
+- **Kanban** (`claude-craft kanban`) : création, édition et suppression de stories, planification du backlog, création/démarrage/clôture de sprint avec report, limites WIP, vélocité ; écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé, détection de conflit) ; interface en 5 langues, accessibilité vérifiée par axe.
+- **Qualité** : analyse SonarCloud en CI à chaque PR (0 issue, quality gate vert, couverture 95 %), score de mutation Stryker publié sur le dashboard ; badges dans ce README.
+- **Sécurité** : `npm ci --ignore-scripts` dans toute la CI, téléchargements HTTPS uniquement, permissions des workflows au plus juste, expressions régulières sans retour arrière super-linéaire, `hono` mis à jour (GHSA-4m76-xfj5-7975). Détails : [CHANGELOG](CHANGELOG.md#930---2026-11-16).
+
 ## What's New in v9.2.1
 
 **Audit de fraîcheur du 2026-11-11 (v9.2.1) :**

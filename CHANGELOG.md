@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.0] - 2026-11-16
+
 ### Added
+
+- **Analyse SonarCloud en CI** (`.github/workflows/sonarcloud.yml`, `sonar-project.properties`) : sur chaque PR, push sur `main` et lancement manuel, avec la couverture Vitest (reporter `lcov`). Les 541 remontées initiales sont corrigées ; les exceptions par conception sont déclarées une à une (règle + fichier + justification) dans `sonar-project.properties`.
+- **Badges** SonarCloud (quality gate, couverture, sécurité, maintenabilité) dans le README ; le run Stryker complet publie son rapport sur le dashboard Stryker (secret `STRYKER_DASHBOARD_API_KEY`), ce qui alimente le badge de score de mutation.
 
 - **Kanban : outil de gestion de projet** (`claude-craft kanban`, rapport `docs/audits/KANBAN-AUDIT-2026-11.md`). Écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé avec les scripts `.bmad/lib/`, détection de conflit par story, commentaires YAML préservés) ; création, édition et suppression (corbeille) de stories, statut des tâches, planification du backlog dans un sprint, création, démarrage et clôture de sprint avec report, limites WIP indicatives (`.bmad/kanban.yaml`), vélocité, recherche, filtres et tri dans l'URL, liens profonds `?story=`, option `--user=<nom>`, `GET /api/diagnostics` et bandeau de diagnostics.
 - **Kanban : interface en anglais, français, espagnol, allemand et portugais**, menu « Déplacer » (alternative au glisser-déposer), tableau équivalent du graphe de dépendances, navigation conservée à 320 px, contrastes AA verrouillés par test, harnais navigateur + axe (`bash website/tests/kanban/run.sh`).
@@ -15,12 +20,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Scripts shell** : tests conditionnels `[[ ]]` au lieu de `[ ]` dans 35 scripts bash (hooks, installeurs, Ralph, outils).
+- **Tests property-based** : 100 cas par propriété sous Stryker (nombre complet hors Stryker) ; le run de mutation complet repasse de plus de 90 min à 37 min.
 - **Kanban** : port par défaut documenté à 3737 (et non 3141) ; `--port=<n>` exige la forme avec « = » ; identifiants `US-E4-02` acceptés ; le serveur contrôle `Host` et `Origin` et limite la taille des corps.
 - **`/workflow:start`** (5 langues) : l'archivage sous `archived_sprints` ne concerne que les stories terminées du sprint précédent, pas les stories de backlog.
 - **Documentation Kanban** : `CLI-REFERENCE.md` (5 langues), `FAQ.md`, `CHEAT-SHEET.md`, `TROUBLESHOOTING.md`, `ACCESSIBILITY.md` (état de conformité vérifié et limites), guides 07 et 10 (5 langues).
 
+### Fixed
+
+- **Expressions régulières à retour arrière super-linéaire** (frontmatter, découpage des balises HTML, objectif et titre de sprint, métadonnées de story, slugs, extraction de versions et de prix) : réécrites en temps linéaire, avec des tests property-based qui vérifient des résultats identiques aux anciennes expressions.
+- **Clé d'idempotence du formulaire de story** : le repli sans `crypto.randomUUID` (contexte non sécurisé) tire ses octets de `crypto.getRandomValues` au lieu de `Math.random`.
+
 ### Security
 
+- **Dépendance `hono`** mise à jour (GHSA-4m76-xfj5-7975, GHSA-h7mg-cq63-vhpq, GHSA-3gg2-335m-rxc6, GHSA-46wx-v44x-9hh2, GHSA-4h7h-rv7c-7m2v ; sévérité modérée).
+- **CI durcie** : `npm ci --ignore-scripts` partout, binaires locaux au lieu de `npx`, `@cyclonedx/cyclonedx-npm` épinglé en version exacte, permissions d'écriture Pages limitées au job de déploiement, téléchargements HTTPS uniquement (Vale, installeur RTK), images Docker de test sans root ; la reprise de Ralph installe les dépendances npm/yarn sans scripts de cycle de vie.
 - **Kanban — écriture à travers un lien symbolique `.bak`** (`cli/kanban/server/services/file-writer.js`) : avant d'écrire le frontmatter d'une story, le serveur la copiait vers `<story>.md.bak` sans vérifier ce nom. Un dépôt contenant un lien symbolique `US-xxx.md.bak` (branche d'un tiers) faisait écrire le contenu de la story dans la cible du lien, par exemple `.git/hooks/pre-commit`, lors d'un déplacement de cette story sur le board. La copie de sauvegarde est supprimée (l'écriture par fichier temporaire puis renommage laissait déjà l'original intact en cas d'échec) et le fichier temporaire est créé en exclusif sous un nom aléatoire. Versions concernées : celles qui embarquent le Kanban, jusqu'à 9.2.1 incluse.
 
 ## [9.2.1] - 2026-11-11
