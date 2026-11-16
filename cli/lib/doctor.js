@@ -36,7 +36,7 @@ function loadClaudeCodeVersion(key, fallback) {
 // TOCTOU write (CVE-2026-103435, 2.1.129), managed settings bypass (CVE-2026-103012, 2.1.260),
 // Bash permission and MCP OAuth fixes (2.1.321, no GHSA published).
 const MIN_CLAUDE_CODE = loadClaudeCodeVersion('minimum', '2.1.321');
-const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.322');
+const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.325');
 
 /**
  * Compare two semver-ish version strings (`major.minor.patch`).

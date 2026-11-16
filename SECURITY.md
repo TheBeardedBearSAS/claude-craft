@@ -47,7 +47,7 @@ If you discover a security vulnerability in Claude Craft, please report it respo
 
 When using Claude Craft:
 
-- Keep Claude Code at or above the security minimum (2.1.321+; 2.1.322 recommended).
+- Keep Claude Code at or above the security minimum (2.1.321+; 2.1.325 recommended).
 - Review agent permissions in `.claude/settings.json` before granting access.
 - Never commit sensitive data (API keys, tokens) in BMAD configuration files.
 - Use the sandbox mode to restrict skill directory writes.
