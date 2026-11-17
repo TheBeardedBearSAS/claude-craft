@@ -338,13 +338,13 @@ npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
 
 ### Claude Code plugin
 
-One plugin per command namespace and per stack, so every command keeps its name (`/react:check`, `/workflow:init`):
+One plugin per command namespace and per stack, each prefixed with `bear-` so commands never clash with project commands or other plugins (`/bear-react:check`, `/bear-workflow:init`):
 
 ```
 /plugin marketplace add TheBeardedBearSAS/bear-craft
-/plugin install common@bear-craft      # shared agents, skills, rules and the optional safety hooks
-/plugin install workflow@bear-craft    # BMAD sprint workflow (also: team, qa, uiux, gate, project)
-/plugin install react@bear-craft       # a stack: react, symfony, flutter, python, rust, …
+/plugin install bear-common@bear-craft      # shared agents, skills, rules and the optional safety hooks
+/plugin install bear-workflow@bear-craft    # BMAD sprint workflow (also: bear-team, bear-qa, bear-uiux, bear-gate, bear-project)
+/plugin install bear-react@bear-craft       # a stack: bear-react, bear-symfony, bear-flutter, bear-python, …
 ```
 
 Plugins live in [`plugins/`](plugins/) and are generated from the installers (`npm run plugins:generate`).

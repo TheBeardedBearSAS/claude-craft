@@ -13,7 +13,7 @@
 |------------------|----------------|-----------------------|
 | npm package `@the-bearded-bear/claude-craft` | `@the-bearded-bear/bear-craft` | The old package is deprecated on npm and stays at 9.4.0 |
 | Command `claude-craft` | `bear-craft` | `claude-craft` still works and prints a deprecation notice; removed in 11.0 |
-| Claude Code plugin `claude-craft@claude-craft` | `common@bear-craft`, `react@bear-craft`, … (one plugin per namespace or stack) | Reinstall the plugins you need (see below) |
+| Claude Code plugin `claude-craft@claude-craft` | `bear-common@bear-craft`, `bear-react@bear-craft`, … (one plugin per namespace or stack) | Reinstall the plugins you need (see below) |
 | `CLAUDE_CRAFT_USER` (Kanban author) | `BEAR_CRAFT_USER` | `CLAUDE_CRAFT_USER` is still read when `BEAR_CRAFT_USER` is unset; removed in 11.0 |
 | Community skills `claude-craft-skill-*` | `bear-craft-skill-*` | `bear-craft skill add` still accepts `claude-craft-skill-*` packages; removed in 11.0 |
 | Shared shell lib `~/.local/lib/claude-craft/` | `~/.local/lib/bear-craft/` | `install-rtk.sh` still finds the old path |
@@ -42,7 +42,7 @@ working. Generated files only carry the new name the next time you run `bear-cra
 
 3. **Reinstall the Claude Code plugin** if you use it. In Claude Code, run `/plugin`, remove `claude-craft`, then
    add the `bear-craft` marketplace (`TheBeardedBearSAS/bear-craft`), then install the plugins you need — one per
-   namespace or stack, named like the namespace: `/plugin install common@bear-craft`, `/plugin install react@bear-craft`
+   namespace or stack, named `bear-<namespace>`; commands become `/bear-<namespace>:<command>` (e.g. `/bear-react:check`): `/plugin install bear-common@bear-craft`, `/plugin install bear-react@bear-craft`
    (commands keep their names, e.g. `/react:check`). Use either the `common` plugin or the CLI installation for hooks, not both.
 
 4. **Rename environment variables**: `export BEAR_CRAFT_USER="…"` instead of `CLAUDE_CRAFT_USER`.

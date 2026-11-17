@@ -146,7 +146,7 @@ Pas de cible Makefile dédiée : la cible générique `install-%` couvre tout st
 | `Makefile` | Ajouter `<ns>` à `TECHS` |
 | `Dev/scripts/check-config.sh` | Ajouter `<ns>` à `DEV_TECHS` |
 | `Dev/scripts/install-from-config.sh` | Nouveau `case` pointant vers `install-<ns>-rules.sh` |
-| `plugins/<ns>/` + `.claude-plugin/marketplace.json` | Générés : `npm run plugins:generate` (puis `plugins:check`) — le plugin du stack porte le nom du namespace |
+| `plugins/bear-<ns>/` + `.claude-plugin/marketplace.json` | Générés : `npm run plugins:generate` (puis `plugins:check`) — le plugin du stack porte le nom `bear-<ns>` |
 | `Dev/stack-profiles/<ns>/stack.txt` | **Obligatoire** (testé par `tests/content/stack-profiles.test.mjs`) : ligne 1 libellé, ligne 2 stack |
 | `Dev/stack-profiles/<ns>/permissions.txt` | Règles `Bash(...)` uniquement |
 | `Dev/stack-profiles/<ns>/quality.md` | Outils qualité en liste |

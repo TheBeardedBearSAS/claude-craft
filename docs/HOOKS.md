@@ -254,7 +254,7 @@ Hook examples (`auto-format`, `output-filter`, ...) are copied to `.claude/templ
 
 ### Shipping the hooks through the `common` plugin
 
-The `common` Claude Code plugin (`/plugin install common@bear-craft`) ships the `default` profile as `hooks/hooks.json`
+The `common` Claude Code plugin (`/plugin install bear-common@bear-craft`) ships the `default` profile as `hooks/hooks.json`
 (commands point to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`, `onFailure` is kept). No other plugin carries hooks.
 
 > **Pick a single channel: the `common` plugin *or* the CLI installation with hooks (`--hooks=default|full`).** Enabling both

@@ -189,7 +189,7 @@ make migrate-check
 
 | Target | Description |
 |--------|-------------|
-| `plugin-export-all` | Generate `plugins/<namespace>/` (one Claude Code plugin per namespace and stack) |
+| `plugin-export-all` | Generate `plugins/bear-<namespace>/` (one Claude Code plugin per namespace and stack) |
 | `plugin-check` | Fail when `plugins/` drifts from the installers |
 
 **Usage:**
