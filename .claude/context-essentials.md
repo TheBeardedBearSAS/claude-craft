@@ -1,7 +1,7 @@
 # Bear Craft - Contexte Essentiel
 
 ## Projet
-- **Version:** 9.4.0
+- **Version:** 10.0.0
 - **Type:** Framework multi-technologie pour Claude Code
 - **Stacks:** 24 (Symfony, React, Flutter, Python, Angular, Vue.js, Vite, Vercel, Tauri, Laravel, React Native, C#/.NET, PHP, Ruby / Rails, Rust / Axum, Paperclip, Docker, Coolify, Kubernetes, OpenTofu, Ansible, Hcloud, PgBouncer, FrankenPHP)
 - **Agents:** 74 | **Commandes:** 224 | **Namespaces:** 28

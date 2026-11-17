@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.0] - 2026-11-17
+
+> **Claude Craft is now Bear Craft.** New npm package `@the-bearded-bear/bear-craft` (the `claude-craft` command stays as an alias in 10.x), commands prefixed `/bear-<ns>:` on every channel, installation through Claude Code plugins in 5 languages. Upgrade guide: [MIGRATION-v10](docs/MIGRATION-v10.md).
+
 ### Added
 
 - **`bear-craft sync`**: re-registers the project marketplace and re-installs the recorded plugins on this machine (after a clone or a move); idempotent, rules untouched. Added to the help and the shell completions.

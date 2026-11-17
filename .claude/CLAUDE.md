@@ -1,6 +1,6 @@
 # Bear-Craft - Multi-Technology Framework
 
-**Version:** 9.4.0 | **Languages:** en, fr, es, de, pt
+**Version:** 10.0.0 | **Languages:** en, fr, es, de, pt
 
 A comprehensive AI-assisted development framework for Claude Code with 17 technology stacks, 33 specialized agents (+39 infra agents on-demand), 82 commands across 18 namespaces, and BMAD v6 project management.
 
