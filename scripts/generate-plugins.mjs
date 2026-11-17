@@ -27,6 +27,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as yaml from 'js-yaml';
 import { TECH_REGISTRY } from '../cli/lib/tech-registry.js';
+import { byCodeUnit, descriptionFromFrontmatter, trimTrailingPathPunctuation } from './lib/plugin-text.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MARKETPLACE = path.join(ROOT, '.claude-plugin', 'marketplace.json');
@@ -47,11 +48,20 @@ const INFRA_PLUGINS = {
   docker: ['Docker', 'Docker: Dockerfile, Compose, CI/CD image pipelines and debugging, with specialist agents.'],
   coolify: ['Coolify', 'Coolify: self-hosted PaaS setup, deployment, backups and debugging.'],
   kubernetes: ['Kubernetes', 'Kubernetes: architecture, deployment setup, security audit and troubleshooting.'],
-  opentofu: ['OpenTofu', 'OpenTofu: infrastructure-as-code architecture, deployment setup, security audit and debugging.'],
+  opentofu: [
+    'OpenTofu',
+    'OpenTofu: infrastructure-as-code architecture, deployment setup, security audit and debugging.',
+  ],
   ansible: ['Ansible', 'Ansible: automation architecture, deployment setup, security audit and debugging.'],
   hcloud: ['Hetzner Cloud', 'Hetzner Cloud (hcloud): architecture, deployment setup, security audit and debugging.'],
-  pgbouncer: ['PgBouncer', 'PgBouncer: connection pooling architecture, deployment setup, security audit and debugging.'],
-  frankenphp: ['FrankenPHP', 'FrankenPHP: PHP application server architecture, deployment setup, security audit and debugging.'],
+  pgbouncer: [
+    'PgBouncer',
+    'PgBouncer: connection pooling architecture, deployment setup, security audit and debugging.',
+  ],
+  frankenphp: [
+    'FrankenPHP',
+    'FrankenPHP: PHP application server architecture, deployment setup, security audit and debugging.',
+  ],
 };
 
 /** Plugins de hooks (aucune commande) : fragment source, dépendances. */
@@ -73,7 +83,8 @@ const HOOK_PLUGINS = {
   'hooks-memory': {
     display: 'Hooks (memory)',
     fragment: 'hooks.memory.json',
-    description: 'Cross-session memory hooks backed by SQLite (session start, prompt submit, post-tool, pre-compact, session end).',
+    description:
+      'Cross-session memory hooks backed by SQLite (session start, prompt submit, post-tool, pre-compact, session end).',
     needs: ['`sqlite3` (system package)', '`jq` (system package)', '`bash`'],
   },
 };
@@ -108,7 +119,7 @@ const walk = (dir, base = dir) =>
   fs.existsSync(dir)
     ? fs
         .readdirSync(dir, { withFileTypes: true })
-        .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+        .sort((a, b) => byCodeUnit(a.name, b.name))
         .flatMap((d) => {
           const p = path.join(dir, d.name);
           return d.isDirectory() ? walk(p, base) : [path.relative(base, p).split(path.sep).join('/')];
@@ -117,7 +128,7 @@ const walk = (dir, base = dir) =>
 
 const isText = (buf) => !buf.includes(0);
 const exec = (file) => (fs.statSync(file).mode & 0o111) !== 0;
-const sortedKeys = (m) => [...m.keys()].sort();
+const sortedKeys = (m) => [...m.keys()].sort(byCodeUnit);
 
 // --- Contexte ----------------------------------------------------------------------
 
@@ -272,7 +283,7 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
   const rewrite = (text, from) =>
     text.replace(REF_RE, (match, at, dir, rest, offset, whole) => {
       const next = whole[offset + match.length];
-      const trimmed = rest.replace(/[./-]+$/, '');
+      const trimmed = trimTrailingPathPunctuation(rest);
       const tail = rest.slice(trimmed.length);
       const report = (cause) => unresolved.push({ plugin: name, from, ref: `.claude/${dir}/${rest}`, cause });
       if (next && /[{*<$[]/.test(next)) return (report('placeholder'), match);
@@ -281,7 +292,8 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
 
       if (dir === 'commands') {
         const [ns, file] = trimmed.split('/');
-        if (ns === pluginName(name) && file && ownCommands.has(file)) return `\${CLAUDE_PLUGIN_ROOT}/commands/${file}${tail}`;
+        if (ns === pluginName(name) && file && ownCommands.has(file))
+          return `\${CLAUDE_PLUGIN_ROOT}/commands/${file}${tail}`;
         return (report('command-outside-plugin'), match);
       }
       // project-context.md est généré dans le projet de l'utilisateur (nom du projet, stack) : ce n'est pas une référence du plugin.
@@ -315,9 +327,7 @@ const toPluginPaths = (v) =>
 
 /** hooks/hooks.json + uniquement les scripts qu'il appelle (et lib/ pour les profils default/full). */
 function addHooks(files, kind) {
-  const fragment = JSON.parse(
-    fs.readFileSync(path.join(HOOKS_SRC, 'templates', HOOK_PLUGINS[kind].fragment), 'utf8')
-  );
+  const fragment = JSON.parse(fs.readFileSync(path.join(HOOKS_SRC, 'templates', HOOK_PLUGINS[kind].fragment), 'utf8'));
   const converted = toPluginPaths(fragment);
   const json = JSON.stringify(converted);
   const called = [...json.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/hooks\/scripts\/([\w./-]+\.sh)/g)].map((m) => m[1]);
@@ -331,7 +341,7 @@ function addHooks(files, kind) {
   } else {
     for (const rel of walk(path.join(srcRoot, 'lib'))) wanted.add(`lib/${rel}`);
   }
-  for (const rel of [...wanted].sort()) {
+  for (const rel of [...wanted].sort(byCodeUnit)) {
     const abs = path.join(srcRoot, rel);
     files.set(`hooks/scripts/${rel}`, { data: fs.readFileSync(abs), mode: exec(abs) ? 'x' : '' });
   }
@@ -373,8 +383,7 @@ function manifestFor(name, ctx) {
   };
 }
 
-const descriptionOf = (abs) =>
-  /^description:\s*(.*)$/m.exec(frontmatter(fs.readFileSync(abs, 'utf8')))?.[1]?.replace(/^["']|["']$/g, '') ?? '';
+const descriptionOf = (abs) => descriptionFromFrontmatter(frontmatter(fs.readFileSync(abs, 'utf8')));
 
 function readmeFor(name, owned, files, ctx) {
   const { display, description } = describe(name);
@@ -391,16 +400,18 @@ function readmeFor(name, owned, files, ctx) {
     ''
   );
   lines.push(`Requires Claude Code ${ctx.minimum} or later. Version ${ctx.version}.`, '');
-  const cmds = [...owned.commands.keys()].sort();
+  const cmds = [...owned.commands.keys()].sort(byCodeUnit);
   if (cmds.length > 0) {
     lines.push('## Commands', '');
     for (const c of cmds)
-      lines.push(`- \`/${pluginName(name)}:${c.replace(/\.md$/, '')}\` — ${descriptionOf(owned.commands.get(c))}`.trimEnd());
+      lines.push(
+        `- \`/${pluginName(name)}:${c.replace(/\.md$/, '')}\` — ${descriptionOf(owned.commands.get(c))}`.trimEnd()
+      );
     lines.push('');
   }
-  const agents = [...owned.agents.keys()].map((a) => a.replace(/^agents\/|\.md$/g, '')).sort();
+  const agents = [...owned.agents.keys()].map((a) => a.replace(/^agents\/|\.md$/g, '')).sort(byCodeUnit);
   if (agents.length > 0) lines.push('## Agents', '', agents.map((a) => `\`${a}\``).join(', '), '');
-  const skills = [...new Set([...owned.skills.keys()].map((s) => s.split('/')[1]))].sort();
+  const skills = [...new Set([...owned.skills.keys()].map((s) => s.split('/')[1]))].sort(byCodeUnit);
   if (skills.length > 0) lines.push('## Skills', '', skills.map((s) => `\`${s}\``).join(', '), '');
   if (HOOK_PLUGINS[name]) {
     lines.push('## Requirements', '', ...HOOK_PLUGINS[name].needs.map((n) => `- ${n}`), '');
@@ -411,7 +422,10 @@ function readmeFor(name, owned, files, ctx) {
       ''
     );
     if (name === 'hooks-full') {
-      lines.push('This plugin only carries what the full profile adds to the default one: install `bear-hooks` as well.', '');
+      lines.push(
+        'This plugin only carries what the full profile adds to the default one: install `bear-hooks` as well.',
+        ''
+      );
     }
     lines.push(
       '**Pick a single channel**: these hook plugins *or* hooks merged into `.claude/settings.json` by an older copy-based installation. Using both runs every guard twice.',
@@ -439,7 +453,7 @@ function generate(work, ctx, lang) {
       (k) =>
         TECH_REGISTRY[k].tier !== null && fs.existsSync(path.join(ROOT, 'Dev/scripts', TECH_REGISTRY[k].installScript))
     )
-    .sort();
+    .sort(byCodeUnit);
   const installs = installAll(work, techs, lang);
 
   const namespaces = new Set();
@@ -458,7 +472,7 @@ function generate(work, ctx, lang) {
       ...Object.keys(HOOK_PLUGINS),
       ...[...namespaces].filter((n) => FIXED_PLUGINS[n] || techs.includes(n) || INFRA_PLUGINS[n]),
     ]),
-  ].sort();
+  ].sort(byCodeUnit);
 
   const owned = collectOwned(installs, names, ctx);
   const unresolved = [];
@@ -479,7 +493,13 @@ function generate(work, ctx, lang) {
 }
 
 const category = (name) =>
-  HOOK_PLUGINS[name] ? 'safety-hooks' : INFRA_PLUGINS[name] ? 'infrastructure' : TECH_REGISTRY[name] ? 'technology-stack' : 'development-framework';
+  HOOK_PLUGINS[name]
+    ? 'safety-hooks'
+    : INFRA_PLUGINS[name]
+      ? 'infrastructure'
+      : TECH_REGISTRY[name]
+        ? 'technology-stack'
+        : 'development-framework';
 
 /** Contenu de marketplace.json : métadonnées reprises du fichier racine, plugins issus du générateur. */
 function marketplaceWith(result, ctx, { name, sourcePrefix }) {
@@ -529,7 +549,7 @@ function compare(tree, out, langs, rootMarket) {
       if (!fs.readFileSync(file).equals(e.data) || exec(file) !== (e.mode === 'x')) diffs.push(`différent : ${key}`);
     }
   }
-  for (const key of [...actual].sort()) if (!tree.has(key)) diffs.push(`en trop : ${key}`);
+  for (const key of [...actual].sort(byCodeUnit)) if (!tree.has(key)) diffs.push(`en trop : ${key}`);
   if (rootMarket !== null && fs.readFileSync(MARKETPLACE, 'utf8') !== rootMarket) {
     diffs.push('différent : .claude-plugin/marketplace.json');
   }
@@ -548,7 +568,8 @@ function countAgentRefs(result) {
   const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])@(${[...agents].join('|')})(?![\w-])`, 'gm');
   let n = 0;
   for (const files of result.values()) {
-    for (const [f, e] of files) if (/\.(md|json|ya?ml|txt|template)$/.test(f)) n += (e.data.toString('utf8').match(re) ?? []).length;
+    for (const [f, e] of files)
+      if (/\.(md|json|ya?ml|txt|template)$/.test(f)) n += (e.data.toString('utf8').match(re) ?? []).length;
   }
   return n;
 }
@@ -580,12 +601,17 @@ function summarize(runs) {
           if (en.result.get(name)?.get(rel)?.data.equals(e.data)) same += 1;
         }
       }
-      lines.push(`  [${r.lang}] ${same}/${total} fichiers de contenu identiques à en (repli des installeurs ou texte non traduit)`);
+      lines.push(
+        `  [${r.lang}] ${same}/${total} fichiers de contenu identiques à en (repli des installeurs ou texte non traduit)`
+      );
     }
   }
   const unique = new Map();
   for (const u of first.unresolved) unique.set(`${u.ref}|${u.cause}`, u);
-  lines.push('', `Références non résolues (${first.lang}) : ${first.unresolved.length} occurrences, ${unique.size} uniques`);
+  lines.push(
+    '',
+    `Références non résolues (${first.lang}) : ${first.unresolved.length} occurrences, ${unique.size} uniques`
+  );
   for (const r of runs.slice(1)) lines.push(`  [${r.lang}] ${r.unresolved.length} occurrences`);
   for (const u of [...unique.values()].sort((a, b) => (a.ref + a.plugin < b.ref + b.plugin ? -1 : 1))) {
     lines.push(`  [${u.cause}] ${u.ref}  (${u.plugin}: ${u.from})`);
@@ -625,7 +651,9 @@ function main() {
         );
         process.exitCode = 1;
       } else {
-        console.log(`marketplaces/ à jour (${langs.join(', ')} : ${runs.map((r) => r.result.size).join('/')} plugins).`);
+        console.log(
+          `marketplaces/ à jour (${langs.join(', ')} : ${runs.map((r) => r.result.size).join('/')} plugins).`
+        );
       }
       return;
     }
