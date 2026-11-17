@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Claude Code minimum 2.1.321 → 2.1.325.** 2.1.323 and 2.1.325 fix Bash and sandbox permission bypasses (no GHSA published): deny/ask rules missed through `sudo`/`env`, `sandbox.excludedCommands` too permissive, Write/Edit on a path covered by a `Read` deny rule, a Bash allow rule running a different program than the one it names, compound commands run without a prompt, sandbox not protecting a worktree's settings, hooks and shared git folder. `claude-craft doctor` now fails below 2.1.325.
+- **Safety guards fail closed.** `guard-network`, `block-dangerous-commands` and `protect-sensitive-files` now set `"onFailure": "block"` (Claude Code 2.1.295+) in the `default` hooks profile, the hook examples and `.claude/settings.json`: a missing, crashing or timed-out guard blocks the tool call instead of letting it through. `merge-hooks` adds the field to guards installed by an older version on reinstall, and never replaces an `onFailure` value the user set. `pre-commit-check` and the informational hooks stay fail-open.
+- **`.claude-plugin/plugin.json` declares `engines["claude-code"]: ">=2.1.325"`** (Claude Code 2.1.323+): Claude Code no longer installs, updates or loads the plugin below the security minimum. `npm run lint:versions` checks that the range matches `claudeCode.minimum`.
+- **CVE-2026-88968** (Edit tool TOCTOU, High, fixed in 2.1.251) added to the CVE tables of `SECURITY.md`, `.claude/COMPATIBILITY.md` and `.claude/references/base/security.md`.
+
+### Changed
+
+- **Claude Code recommended / tested up to 2.1.322 → 2.1.326**, propagated to every doc, guide (5 languages), the website badge and `cli/lib/doctor.js`. `.claude/COMPATIBILITY.md` gains the 2.1.323, 2.1.325 and 2.1.326 rows; 2.1.325 breaking change noted (sandboxed Bash now follows the normal permission flow, `sandbox.autoAllowBashIfSandboxed: true` restores the old behavior — Claude Craft ships no `sandbox` setting).
+- **Rule 12 (5 languages):** the append-only history note lists exactly the models the Anthropic prompting best practices name (Opus/Sonnet/Haiku 5.5, Fable/Mythos 5.1 and 5.2). Fable/Mythos 5.2 think before almost every reply at `high` effort and above. New note on default thinking (on when `thinking` is omitted on Sonnet 5.5 / Haiku 5.5, `between_tools` minimum on Sonnet 5.5), `budget_tokens` returning 400 since Claude 4.7 and prefill removal since Claude 4.6. Cache reads: 2.5% only on Fable/Mythos 5.1 and 5.2, 10% on Fable 5 and Mythos 5 (pricing page).
+- **`.claude/COMPATIBILITY.md`:** PowerShell tool status aligned with the env-vars reference (on automatically on Windows without Git Bash); `CLAUDE_CODE_SUBAGENT_EFFORT` and `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` flagged as CHANGELOG-only (absent from the env-vars reference).
+- **Ecosystem catalogue:** benchmark figures re-read from each README — code-review-graph ~63× median (6.65× vs a grep baseline), claude-token-efficient ~2–11% output tokens when reproduced, context-mode 99.4% median bytes saved. **token-savior downgraded ✅ Integrate → 🔶 Reference**: its −80% headline comes from a non-public harness, the 2026-10-07 re-measure gives −45% cost with +40% wall time.
+- **`scripts/scan-claude-claims.mjs`** now checks the security minimum (`minimum`, `Mindestversion`, `mínimo/mínima`), reads a version's role from its table column header on `Claude Code` rows, and checks `hero_badge` versions; lines marked as history are skipped.
+
 ## [9.3.0] - 2026-11-16
 
 ### Added

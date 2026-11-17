@@ -2,24 +2,34 @@
 // Fusion non destructive de hooks Claude Code dans un settings.json.
 //   add    --settings F --fragment G [--dry-run]   ajoute les handlers absents
 //   remove --settings F --match STR                retire les handlers dont la commande contient STR
-// `add` ne retire ni ne modifie jamais un hook existant et est idempotent : un handler
-// est ignoré si sa commande figure déjà dans l'événement (quel que soit le groupe).
+// `add` ne retire jamais un hook existant et est idempotent : un handler est ignoré si sa
+// commande figure déjà dans l'événement (quel que soit le groupe). Seule modification
+// d'un handler existant : il reçoit le `onFailure` du fragment s'il n'en déclare aucun
+// (mise à niveau fail-closed des hooks de sécurité) ; une valeur déjà posée est conservée.
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const matcherOf = (group) => group.matcher ?? '';
-const commandsOf = (groups) => new Set(groups.flatMap((g) => (g.hooks ?? []).map((x) => x.command)));
+const handlersOf = (groups) => groups.flatMap((g) => g.hooks ?? []);
 
 export function addHooks(settings, fragment) {
   const out = structuredClone(settings);
   let added = 0;
+  let upgraded = 0;
   out.hooks ??= {};
   for (const [event, fragGroups] of Object.entries(fragment.hooks ?? {})) {
     const groups = (out.hooks[event] ??= []);
     for (const fg of fragGroups) {
       for (const handler of fg.hooks ?? []) {
-        if (commandsOf(groups).has(handler.command)) continue;
+        const existing = handlersOf(groups).find((x) => x.command === handler.command);
+        if (existing) {
+          if (handler.onFailure !== undefined && existing.onFailure === undefined) {
+            existing.onFailure = handler.onFailure;
+            upgraded++;
+          }
+          continue;
+        }
         let group = groups.find((g) => matcherOf(g) === matcherOf(fg));
         if (!group) {
           group = { ...(fg.matcher === undefined ? {} : { matcher: fg.matcher }), hooks: [] };
@@ -30,7 +40,7 @@ export function addHooks(settings, fragment) {
       }
     }
   }
-  return { settings: out, added };
+  return { settings: out, added, upgraded };
 }
 
 export function removeHooks(settings, match) {
@@ -96,14 +106,15 @@ function main(argv) {
     return 0;
   }
   if (!opts.fragment) return 1;
-  const { settings: next, added } = addHooks(settings, readJson(opts.fragment));
+  const { settings: next, added, upgraded } = addHooks(settings, readJson(opts.fragment));
+  const upgradeNote = upgraded > 0 ? `, upgraded ${upgraded} handlers (onFailure)` : '';
   if (opts.dryRun) {
-    console.log(`would add ${added} handlers to ${opts.settings}`);
+    console.log(`would add ${added} handlers to ${opts.settings}${upgradeNote}`);
     return 0;
   }
   fs.mkdirSync(path.dirname(opts.settings), { recursive: true });
-  if (added > 0 || !exists) fs.writeFileSync(opts.settings, `${JSON.stringify(next, null, 2)}\n`);
-  console.log(`added ${added} handlers to ${opts.settings}`);
+  if (added > 0 || upgraded > 0 || !exists) fs.writeFileSync(opts.settings, `${JSON.stringify(next, null, 2)}\n`);
+  console.log(`added ${added} handlers to ${opts.settings}${upgradeNote}`);
   return 0;
 }
 

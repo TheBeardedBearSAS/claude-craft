@@ -109,7 +109,7 @@ Claude Code compacte automatiquement le contexte quand il approche les limites. 
 - A partir de **70% de contexte**, lancer `/compact` proactivement
 - `/memory` (v2.1.59+) sauvegarde des apprentissages persistants qui survivent aux compactions
 
-> **Historique append-only (Opus 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Historique append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable/Mythos 5.1 et 5.2) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 **Hooks disponibles** pour gerer la compaction:
 - **PreCompact** — Sauvegarder le contexte critique avant compaction (peut bloquer via exit code 2 depuis v2.1.105)
@@ -167,7 +167,9 @@ La status line affiche le pourcentage de contexte utilise.
 
 > **Effort par défaut (doc Anthropic, novembre 2026) :** `medium` sur Opus 5.5 et Haiku 5.5 ; `high` sur Sonnet 5.5, Fable 5.2 et les modèles *legacy* (Sonnet 5, Opus 4.8, Fable 5.1). Monter explicitement à `high`/`xhigh` sur Opus 5.5 pour les tâches critiques.
 
-> **Fable 5.2 / Mythos :** **Fable 5.2** (`claude-fable-5-2`, $8/$40 par M tokens) est le modèle Fable courant — pertinent pour les agents créatifs/narratifs ; Fable 5.1 et Fable 5 restent disponibles (*legacy*). Sur Fable 5.2 (comme sur Mythos 5.2), la réflexion est toujours active (mode adaptive seul) : pour la réduire, baisser l'effort — une consigne « réponds directement » ne suffit pas à `medium` et au-delà. **Mythos 5 / 5.1 / 5.2** sont en disponibilité limitée (organisations vérifiées via le Cyber Verification Program) — ne pas les recommander par défaut.
+> **Fable 5.2 / Mythos :** **Fable 5.2** (`claude-fable-5-2`, $8/$40 par M tokens) est le modèle Fable courant — pertinent pour les agents créatifs/narratifs ; Fable 5.1 et Fable 5 restent disponibles (*legacy*). Sur Fable 5.2 (comme sur Mythos 5.2), la réflexion est toujours active (mode adaptive seul) et, à `high` et au-delà, précède presque chaque réponse : pour la réduire, baisser l'effort — une consigne « réponds directement » ne suffit pas à `medium` et au-delà. **Mythos 5 / 5.1 / 5.2** sont en disponibilité limitée (organisations vérifiées via le Cyber Verification Program) — ne pas les recommander par défaut.
+
+> **Thinking par défaut et migration API :** sur Sonnet 5.5 et Haiku 5.5 (comme les modèles *legacy* Opus 5 et Sonnet 5), le thinking est actif quand `thinking` est omis : sélectionner les blocs par `type` et non par position, et garder de la marge dans `max_tokens`. Il ne se désactive qu'à effort `high` ou moins ; sur Sonnet 5.5, le réglage minimal est `between_tools`. `budget_tokens` renvoie une erreur 400 depuis Claude 4.7 (régler l'`effort` à la place), et le préremplissage du dernier tour assistant n'est plus supporté depuis Claude 4.6. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 **Alerte d'inactivite** (v2.1.84+): Apres 75+ minutes, Claude suggere `/clear`.
 
@@ -396,7 +398,7 @@ Reglage **fiabilite + cout** : jusqu'a 3 modeles de repli essayes dans l'ordre q
 
 Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), ce repli `opus → sonnet → haiku` evite les interruptions en pic de charge Opus sans degrader le travail courant. Exemple pret a l'emploi dans `.claude/settings.local.json.example`.
 
-**IDs canoniques (novembre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-2` ($8/$40). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5`. Lecture de cache : 5 % du prix d'entrée sur Opus/Sonnet 5.5, 2,5 % sur Fable 5.x et Mythos 5.x. Source : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview).
+**IDs canoniques (novembre 2026) :** `claude-opus-5-5` ($4/$20) | `claude-sonnet-5-5` ($2/$10) | `claude-haiku-5-5` ($0.10/$0.50) | `claude-fable-5-2` ($8/$40). *Legacy* toujours disponibles : `claude-opus-4-8`, `claude-sonnet-5` ($2/$10, tarif devenu standard), `claude-haiku-4-5-20251001`, `claude-fable-5-1`, `claude-fable-5`. Lecture de cache : 5 % du prix d'entrée sur Opus/Sonnet 5.5, 2,5 % sur Fable/Mythos 5.1 et 5.2 ; 10 % sur les autres modèles, dont Fable 5 et Mythos 5. Sources : [models overview](https://platform.claude.com/docs/en/about-claude/models/overview), [pricing](https://platform.claude.com/docs/en/about-claude/pricing).
 
 ---
 
@@ -419,8 +421,8 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
 | **caveman** | Apache-2.0 | Compression des réponses (output) ~65 % | ✅ Intégrer |
-| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (−38× à −528×) | ✅ Intégrer |
-| **token-savior** | MIT | Index symbolique + compaction Bash (−80 %) | ✅ Intégrer |
+| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (~63× médiane, 6,65× vs grep) | ✅ Intégrer |
+| **token-savior** | MIT | Index symbolique + compaction Bash (−80 % non vérifiable, −45 % de coût remesuré) | 🔶 Référencer (gain non reproductible) |
 | **claude-token-efficient** | MIT | Règles CLAUDE.md anti-verbosité (~63 % output) | ✅ Intégrer |
 | **context-mode** | ELv2 | Sandbox des outputs, continuité post-compaction | 🔶 Référencer (licence) |
 | **claude-context** | MIT | Recherche sémantique (vector DB requise) | 🔶 Référencer (infra) |

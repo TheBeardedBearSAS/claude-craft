@@ -17,7 +17,7 @@ See `@docs/ECOSYSTEM.md` for the full catalogue, licenses, and `.mcp.json` snipp
 |------|---------|-----------|-----|
 | **caveman** | Apache-2.0 | Compress agent **output** ~65% | ✅ Integrate |
 | **code-review-graph** | MIT | AST graph → read only the blast radius on review | ✅ Integrate |
-| **token-savior** | MIT | Symbol index + Bash output compaction (−80%), RTK alternative | ✅ Integrate |
+| **token-savior** | MIT | Symbol index + Bash output compaction, RTK alternative (−80% headline unverified; −45% cost re-measured) | 🔶 Reference |
 | **claude-token-efficient** | MIT | Anti-verbosity CLAUDE.md drop-in | ✅ Integrate |
 | **claude-hud** | MIT | Real-time context/agent/todo monitor (status line) | ✅ Integrate |
 | **context-mode** | ELv2 | Output sandboxing — license blocks commercial redistribution | 🔶 Reference |

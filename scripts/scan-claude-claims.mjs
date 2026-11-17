@@ -51,6 +51,9 @@ const LEGACY_KW =
   /legacy|obsol|deprecat|d[ée]pr[ée]ci|ancien|previous|predecess|pr[ée]d[ée]cess|remplac|replaced|retir|veraltet|antiguo|antigo/i;
 const RECO_KW = /recommand|recommend|empfohlen|recomendad/i;
 const TESTED_KW = /tested up to|test[ée] jusqu|getestet bis|probado hasta|testado at[ée]/i;
+const MIN_KW = /\b(?:minimum|mindest\w*|m[ií]nim[ao])\b/i;
+const HISTORY_KW = /histori/i;
+const BADGE_RE = /badge[^:]*:.*Claude Code v?2\.1\.\d/i;
 
 const MODEL_ID_RE = /claude-(?:opus|sonnet|haiku|fable|mythos)-\d+(?:[-.]\d+)*/g;
 const MODEL_NAME_RE = /\b(Opus|Sonnet|Haiku|Fable|Mythos) (\d+(?:\.\d+)?)\b/g;
@@ -136,16 +139,31 @@ function qualifies(kwSource, line, index, length) {
   return false;
 }
 
-function classifyCli(m, line, truth) {
+/** Rôle d'une version : testée, recommandée ou plancher, d'après un mot-clé ou un en-tête de colonne. */
+const ROLES = [
+  [TESTED_KW, (t) => [t.testedUpTo, t.minimum]],
+  [RECO_KW, (t) => [t.recommended, t.minimum]],
+  [MIN_KW, (t) => [t.minimum]],
+];
+
+/** Cellule d'en-tête de la colonne qui contient `index` (ligne de table sous un en-tête). */
+function headerCell(line, index, header) {
+  // Seules les lignes « Claude Code » : une table de minimums par feature n'affirme pas le plancher.
+  if (!header || !line.trimStart().startsWith('|') || !/Claude Code/i.test(line)) return '';
+  return header[line.slice(0, index).split('|').length - 1] ?? '';
+}
+
+function classifyCli(m, line, truth, header) {
   const version = m[0];
-  if (isHistoryRow(line) || isReleaseNote(line)) return 'history';
-  if (qualifies(TESTED_KW.source, line, m.index, version.length)) {
-    return version === truth.testedUpTo || version === truth.minimum ? 'current' : 'stale';
+  if (isHistoryRow(line) || isReleaseNote(line) || HISTORY_KW.test(line)) return 'history';
+  const verdict = (expected) => (expected(truth).includes(version) ? 'current' : 'stale');
+  for (const [kw, expected] of ROLES) {
+    if (qualifies(kw.source, line, m.index, version.length)) return verdict(expected);
   }
-  if (qualifies(RECO_KW.source, line, m.index, version.length)) {
-    return version === truth.recommended || version === truth.minimum ? 'current' : 'stale';
-  }
-  return 'inventory';
+  if (BADGE_RE.test(line)) return verdict(ROLES[1][1]);
+  const head = headerCell(line, m.index, header);
+  const role = ROLES.find(([kw]) => kw.test(head));
+  return role ? verdict(role[1]) : 'inventory';
 }
 
 /** Modèle (ID ou nom) le plus proche avant `index` sur la ligne. */
@@ -177,14 +195,17 @@ function classifyPrice(m, line, truth) {
 export function scanText(file, text, truth) {
   const out = [];
   const lines = text.split('\n');
+  let header = null;
   lines.forEach((line, i) => {
+    if (!line.trimStart().startsWith('|')) header = null;
+    else if (/^\s*\|?[\s:|-]*-{3,}[\s:|-]*$/.test(lines[i + 1] ?? '')) header = line.split('|').map((c) => c.trim());
     const push = (category, match, status) =>
       out.push({ file, line: i + 1, category, match, status, excerpt: line.trim().slice(0, 160) });
     for (const m of line.matchAll(MODEL_ID_RE)) push('model-id', m[0], classifyModel(m[0], line, m.index, truth));
     for (const m of line.matchAll(MODEL_NAME_RE)) {
       push('model-name', m[0], classifyModel(nameToId(m[1], m[2]), line, m.index, truth));
     }
-    for (const m of line.matchAll(CLI_RE)) push('cli-version', m[0], classifyCli(m, line, truth));
+    for (const m of line.matchAll(CLI_RE)) push('cli-version', m[0], classifyCli(m, line, truth, header));
     for (const m of line.matchAll(PRICE_RE)) push('pricing', m[0], classifyPrice(m, line, truth));
     for (const m of line.matchAll(ENV_RE)) push('env-var', m[0], 'inventory');
     for (const m of line.matchAll(DEPRECATED_RE)) push('deprecated-term', m[0], 'review');

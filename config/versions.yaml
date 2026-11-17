@@ -9,6 +9,8 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
+# 2026-11-16 (audit d'alignement Claude --full) : Claude Code minimum 2.1.321 → 2.1.325, recommandé/testé 2.1.322 → 2.1.326
+# (2.1.323 et 2.1.325 : contournements permissions Bash/sandbox sans GHSA ; 2.1.326 relu, sans rupture) ; modèles et prix inchangés.
 # 2026-11-16 (release 9.3.0) : Kanban en écriture, analyse SonarCloud en CI (0 issue) ; Claude Code recommandé/testé inchangé (2.1.322).
 # 2026-11-11 (release 9.2.1) : audit de fraîcheur du 2026-11-11 livré (PR #233) ; Claude Code recommandé/testé inchangé (2.1.322).
 # Dernière mise à jour : 2026-11-11 (audit fraîcheur docs/audit/freshness-2026-11-11.md — correctifs de sécurité :
@@ -33,15 +35,16 @@
 # 2026-10-28 (release 8.27.0) : Claude Code recommandé/testé 2.1.296 → 2.1.312 (changelog 2.1.297–2.1.312 relu).
 
 meta:
-  lastUpdated: '2026-11-11'
+  lastUpdated: '2026-11-17'
 
 claudeCode:
   # minimum : plancher sécurité — couvre GHSA-5j29 (2.1.129), GHSA-7835 (2.1.163),
   # GHSA-pq7j (2.1.179), GHSA-gfvf (2.1.260) et les 4 correctifs permissions Bash / OAuth MCP
-  # de 2.1.321 (sans GHSA publié). Relevé 2.1.260 → 2.1.321 à l'audit d'alignement du 2026-11-10.
-  minimum: '2.1.321'
-  recommended: '2.1.322'
-  testedUpTo: '2.1.322'
+  # de 2.1.321 et les contournements permissions Bash/sandbox de 2.1.323 et 2.1.325 (sans GHSA publié).
+  # Relevé 2.1.260 → 2.1.321 le 2026-11-10, puis 2.1.321 → 2.1.325 à l'audit d'alignement du 2026-11-16.
+  minimum: '2.1.325'
+  recommended: '2.1.326'
+  testedUpTo: '2.1.326'
   # Génération courante (2026-11) : Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.2 (audit d'alignement 2026-11-10).
   # Opus 4.8, Sonnet 5, Haiku 4.5, Fable 5 et Fable 5.1 restent disponibles mais sont legacy.
   models:

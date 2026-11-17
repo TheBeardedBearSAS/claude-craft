@@ -176,7 +176,7 @@ Diese Felder ermoeglichen die Optimierung von Kosten und Umfang der Sub-Agents.
 
 Claude Code kompaktiert den Kontext automatisch, wenn er sich den Fenstergrenzen naehert. Aeltere Nachrichten werden zusammengefasst, um Platz freizugeben.
 
-> **Append-only-Verlauf (Opus 5.5, Fable 5.x, Mythos 5.x):** Eine frühere Nachricht zu ändern, `system` oder `tools` neu aufzubauen oder alte Turns an Ort und Stelle zusammenzufassen, macht die nachfolgenden Thinking-Blöcke ungültig. Am Ende des Verlaufs anhängen statt ihn umzuschreiben. Quelle: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Append-only-Verlauf (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable/Mythos 5.1 und 5.2):** Eine frühere Nachricht zu ändern, `system` oder `tools` neu aufzubauen oder alte Turns an Ort und Stelle zusammenzufassen, macht die nachfolgenden Thinking-Blöcke ungültig. Am Ende des Verlaufs anhängen statt ihn umzuschreiben. Quelle: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Proaktive Kompaktierung
 
@@ -365,7 +365,9 @@ Das Aufwandsniveau des Modells je nach Aufgabenkomplexität anpassen:
 > **Effort wechselt nicht das Modell:** Es steuert die Reasoning-Tiefe des aktuellen Modells; das Modell wählt man mit `/model`. Empfohlene Paare: `low` mit Haiku 5.5, `medium` mit Sonnet 5.5, `high`/`xhigh` mit Opus 5.5.
 
 > **Standard-Effort je Modell:** medium bei Opus 5.5 und Haiku 5.5; high bei Sonnet 5.5, Fable 5.2 und Legacy-Modellen.
-> **Fable 5.2** (`claude-fable-5-2`, $8/$40 pro Mtok) ist das aktuelle Fable-Modell, geeignet für kreative/narrative Agents; Fable 5.1 und Fable 5 bleiben verfügbar (Legacy). Bei Fable 5.2 (wie bei Mythos 5.2) ist das Denken immer aktiv (nur adaptive): Um es zu reduzieren, den Effort senken — eine Anweisung „antworte direkt“ reicht ab `medium` nicht aus. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program). Cache-Lesezugriffe kosten 5 % des Input-Preises bei Opus/Sonnet 5.5 und 2,5 % bei Fable 5.x und Mythos 5.x.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 pro Mtok) ist das aktuelle Fable-Modell, geeignet für kreative/narrative Agents; Fable 5.1 und Fable 5 bleiben verfügbar (Legacy). Bei Fable 5.2 (wie bei Mythos 5.2) ist das Denken immer aktiv (nur adaptive) und geht ab Effort `high` fast jeder Antwort voraus: Um es zu reduzieren, den Effort senken — eine Anweisung „antworte direkt“ reicht ab `medium` nicht aus. **Mythos** hat eingeschränkte Verfügbarkeit (nur Cyber Verification Program). Cache-Lesezugriffe kosten 5 % des Input-Preises bei Opus/Sonnet 5.5 und 2,5 % bei Fable/Mythos 5.1 und 5.2; 10 % bei den übrigen Modellen, darunter Fable 5 und Mythos 5 ([Pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
+
+> **Standard-Thinking und API-Migration:** Bei Sonnet 5.5 und Haiku 5.5 (wie bei den Legacy-Modellen Opus 5 und Sonnet 5) ist Thinking aktiv, wenn `thinking` fehlt: Content-Blöcke nach `type` statt nach Position auswählen und Spielraum in `max_tokens` lassen. Abschalten lässt es sich nur bei Effort `high` oder niedriger; bei Sonnet 5.5 ist die niedrigste Stufe `between_tools`. `budget_tokens` liefert seit Claude 4.7 einen 400-Fehler (stattdessen `effort` setzen), und das Vorbefüllen des letzten Assistant-Turns wird seit Claude 4.6 nicht mehr unterstützt. Quelle: [Prompting Best Practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Inaktivitaetswarnung (v2.1.84+)
 
@@ -814,8 +816,8 @@ Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die
 | Tool | Lizenz | Aspekt | Empf. |
 |------|--------|--------|-------|
 | **caveman** | Apache-2.0 | Komprimierung der Antworten (Output) ~65 % | ✅ Integrieren |
-| **code-review-graph** | MIT | AST-Graph, Blast-Radius-Lesen (−38× bis −528×) | ✅ Integrieren |
-| **token-savior** | MIT | Symbolindex + Bash-Komprimierung (−80 %) | ✅ Integrieren |
+| **code-review-graph** | MIT | AST-Graph, Blast-Radius-Lesen (~63× Median, 6,65× vs. grep) | ✅ Integrieren |
+| **token-savior** | MIT | Symbolindex + Bash-Komprimierung (−80 % nicht verifizierbar, −45 % Kosten nachgemessen) | 🔶 Referenzieren (Gewinn nicht reproduzierbar) |
 | **claude-token-efficient** | MIT | CLAUDE.md-Regeln gegen Geschwätzigkeit (~63 % Output) | ✅ Integrieren |
 | **context-mode** | ELv2 | Output-Sandbox, Kontinuität nach Kompaktierung | 🔶 Referenzieren (Lizenz) |
 | **claude-context** | MIT | Semantische Suche (Vektor-DB erforderlich) | 🔶 Referenzieren (Infra) |

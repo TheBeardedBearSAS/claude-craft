@@ -12,6 +12,9 @@
   "repository": "https://github.com/TheBeardedBearSAS/claude-craft",
   "homepage": "https://the-bearded-bear.com/claude-craft",
   "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
   "keywords": [
     "framework",
     "multi-stack",

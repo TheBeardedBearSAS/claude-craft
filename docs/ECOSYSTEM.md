@@ -11,7 +11,7 @@ replace — that stack.
 > own license terms. We document what each does, how it complements Claude Craft, and how to enable
 > it yourself. This mirrors how Claude Craft already treats RTK: documented, recommended, not embedded.
 
-**Evaluation date:** 2026-10-13 (previous: 2026-06-24; the 2026-09-24 review was skipped and caught up here) · **Next review:** 2027-01-13 (quarterly cadence) · **Sources:** the 10 repositories below (GitHub API, licenses re-read) + the
+**Evaluation date:** 2026-10-13 (previous: 2026-06-24; the 2026-09-24 review was skipped and caught up here) · **Claims re-checked:** 2026-11-17 (benchmark figures re-read from each README) · **Next review:** 2027-01-13 (quarterly cadence) · **Sources:** the 10 repositories below (GitHub API, licenses re-read) + the
 [Top Skills/Plugins Claude Code 2026 (camilleroux.com)](https://www.camilleroux.com/top-skills-plugins-claude-code-2026-v3/)
 roundup.
 
@@ -24,11 +24,11 @@ roundup.
 | Tool | ★ | License | Type | Recommendation | Note |
 |------|----|---------|------|----------------|------|
 | [caveman](https://github.com/juliusbrussee/caveman) | ~119k | **Apache-2.0** | Skill (+ optional MCP) | ✅ **Integrate** | Compresses agent **output** ~65% (telegraphic style, 4 levels). Covers the output side RTK doesn't. |
-| [code-review-graph](https://github.com/tirth8205/code-review-graph) | ~32.1k | MIT | MCP + CLI | ✅ **Integrate** | Tree-sitter/AST code graph → reads only the blast radius on review. 38×–528× token reduction on large repos. |
-| [token-savior](https://github.com/mibayy/token-savior) | ~1.2k | MIT | MCP + hooks | ✅ **Integrate** | Symbol-index + Bash output compaction (−80%). RTK alternative without a Rust binary. |
-| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~6.2k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity ~63% output / 17–41% cost. Zero code. |
+| [code-review-graph](https://github.com/tirth8205/code-review-graph) | ~32.1k | MIT | MCP + CLI | ✅ **Integrate** | Tree-sitter/AST code graph → reads only the blast radius on review. ~63× median per-question token reduction vs reading the whole corpus (35×–358×), 6.65× median vs a realistic grep baseline (README, 2026-09-22). |
+| [claude-token-efficient](https://github.com/drona23/claude-token-efficient) | ~6.2k | MIT | CLAUDE.md drop-in | ✅ **Integrate** | Prompt rules cutting Claude verbosity: ~63% fewer words on a 5-prompt sample, but only ~2–11% fewer output tokens in the project's own reproducible benchmark; −17.4% cost on one external benchmark. Zero code. |
 | [claude-hud](https://github.com/jarrodwatts/claude-hud) | ~28.5k | MIT | Status line / monitor | ✅ **Integrate** | Real-time context, agent and todo monitor. Graduated from "Also worth watching" (2026-10-13). Complements `rtk gain`. |
-| [context-mode](https://github.com/mksglu/context-mode) | ~33.8k | **ELv2** (GitHub: `NOASSERTION`, text re-read 2026-10-13) | MCP + hooks | 🔶 **Reference** | Sandboxes tool outputs (315 KB → 5.4 KB), SQLite session continuity. License blocks commercial redistribution. |
+| [token-savior](https://github.com/mibayy/token-savior) | ~1.2k | MIT | MCP + hooks | 🔶 **Reference** | Symbol-index + Bash output compaction. Headline −80% comes from a non-public harness ("reported, unverified"); the 2026-10-07 re-measure gives −45% cost / −59% new tokens but +40% wall time. Downgraded from ✅ on 2026-11-17 until a reproducible gain is published. RTK alternative without a Rust binary. |
+| [context-mode](https://github.com/mksglu/context-mode) | ~33.8k | **ELv2** (GitHub: `NOASSERTION`, text re-read 2026-10-13) | MCP + hooks | 🔶 **Reference** | Sandboxes tool outputs (median 99.4% of output bytes saved on its 2026-11-01 bench), SQLite session continuity. License blocks commercial redistribution. |
 | [token-optimizer](https://github.com/alexgreensh/token-optimizer) (alexgreensh) | ~2.5k | **PolyForm NC** | Plugin | 🔶 **Reference** | Real-time dashboard + quality scoring. Noncommercial license. |
 | [claude-context](https://github.com/zilliztech/claude-context) (zilliztech) | ~12.6k | MIT | MCP + VSCode ext | 🔶 **Reference** | Hybrid semantic search (BM25 + vectors) over the whole codebase. Requires a Milvus/Zilliz vector DB. |
 | [claude-token-optimizer](https://github.com/nadimtuhin/claude-token-optimizer) (nadimtuhin) | ~0.5k | MIT | CLI | ⚪ **Skip** | Essential/supplemental doc split — already native to Claude Craft (`.claude/rules/`, on-demand skills). |
@@ -62,7 +62,8 @@ Pairs with the verbosity rules already in [`.claude/rules/12-context-management.
 ### code-review-graph — blast-radius-aware review
 
 Builds a structural graph of the codebase (Tree-sitter + AST in SQLite) so the model reads only the
-code impacted by a change. Reported reductions of 38×–528× on large repos. Complements Claude Craft's
+code impacted by a change. Reported median reduction of ~63× per question against the whole corpus
+(6.65× against a realistic grep baseline). Complements Claude Craft's
 review surface (`/qa:*`, `@security-auditor`, the `@{tech}-reviewer` agents).
 
 ```jsonc
@@ -79,8 +80,9 @@ review surface (`/qa:*`, `@security-auditor`, the `@{tech}-reviewer` agents).
 
 ### token-savior — symbol index + Bash compaction
 
-Indexes the codebase by symbols (functions, classes, imports, call graph) and compacts Bash output up
-to −80% via `PreToolUse`/`PostToolUse` hooks. A good **RTK alternative** for teams that prefer an MCP
+Indexes the codebase by symbols (functions, classes, imports, call graph) and compacts Bash output via
+`PreToolUse`/`PostToolUse` hooks. Its −80% headline is unverifiable (benchmark harness not public); the
+2026-10-07 re-measure gives −45% cost / −59% new tokens, with +40% wall time — hence 🔶 Reference. A good **RTK alternative** for teams that prefer an MCP
 server over installing a Rust binary. See [`docs/RTK-ANALYSIS.md`](RTK-ANALYSIS.md) for the RTK comparison.
 
 ```jsonc
@@ -97,7 +99,8 @@ server over installing a Rust binary. See [`docs/RTK-ANALYSIS.md`](RTK-ANALYSIS.
 
 ### claude-token-efficient — CLAUDE.md drop-in
 
-A single `CLAUDE.md` of prompt rules that reduce Claude's verbosity (~63% output / 17–41% cost). Most
+A single `CLAUDE.md` of prompt rules that reduce Claude's verbosity (~63% fewer words on a small sample, ~2–11% fewer output tokens when
+reproduced; −17.4% cost on one external benchmark). Most
 of its guidance overlaps Claude Craft's existing rules (12-context-management, 23-karpathy-principles);
 worth auditing to harvest any prompt rule not already covered.
 
@@ -274,7 +277,7 @@ apply [`.claude/rules/11-security.md`](../.claude/rules/11-security.md):
 
 - **Audit the source** and pin an exact version (no floating `latest`).
 - **Minimal permissions** — grant only the tools/paths the server needs.
-- Prefer Claude Code **v2.1.321+** when combining MCP servers, plugins and hooks.
+- Prefer Claude Code **v2.1.325+** when combining MCP servers, plugins and hooks.
 - See [`docs/MCP.md#security`](MCP.md#security) for the full MCP hardening checklist.
 
 > **Non-affiliation.** Claude Craft is not affiliated with any of the projects listed here. Stars,

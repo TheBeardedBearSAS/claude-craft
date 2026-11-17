@@ -12,7 +12,7 @@ Requirements depend on the install method:
 
 **NPX (recommended) — only 2 requirements:**
 - **Node.js 22+** (Node 26 recommended — Active LTS; Node 24 and 22 are in Maintenance)
-- **Claude Code** v2.1.321+ (2.1.322 recommended)
+- **Claude Code** v2.1.325+ (2.1.326 recommended)
 
 **Makefile / shell scripts — additional requirements:**
 - **yq v4+** (Mike Farah's version, not the Python yq) — for YAML processing
