@@ -329,16 +329,17 @@ export async function runInstallation(cli, { CLI_ROOT, VERSION, execFn }) {
     const sameLang = previous && previous.lang === lang;
     const recordedTechs = [...new Set([...(sameLang ? previous.techs : []), ...installTechs])];
     const recordedInfra = [...new Set([...(sameLang ? previous.infra : []), ...infra])];
-    const { ids, marketplace } = installPlugins(
+    const { ids } = installPlugins(
       {
         target,
         cliRoot: CLI_ROOT,
         install: { lang, techs: recordedTechs, infra: recordedInfra, hooks },
         version: VERSION ?? 'unknown',
       },
-      { ...deps, log: (m) => console.log(`  ${c.dim}${m}${c.reset}`) }
+      deps
     );
-    console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplace})`);
+    // Only a count is printed: ids, names and paths come from files of the project and are not echoed.
+    console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled`);
 
     // Install RTK (Token Optimizer)
     if (cli.config.includeRtk) {

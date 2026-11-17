@@ -11,6 +11,7 @@ import path from 'path';
 import { spawnSync } from 'child_process';
 import { randomUUID } from 'crypto';
 import { MIN_CLAUDE_CODE, assessClaude } from './claude-code.js';
+import { assertSafeLang, assertSafeTarget } from './path-safety.js';
 
 /** Infra namespaces published as plugins (bear-<name>). */
 export const INFRA_PLUGINS = [
@@ -48,6 +49,22 @@ export const marketplaceOf = (record) => record.marketplace ?? marketplaceName(r
 
 /** Error whose message tells the user what to do; the CLI prints it and exits non-zero. */
 export class PluginInstallError extends Error {}
+
+/**
+ * Path below the project directory. The project is validated first (`assertSafeTarget` refuses system
+ * directories) and the joined path must stay inside it (CWE-22).
+ * @param {string} target - project directory
+ * @param {...string} segments
+ * @returns {string}
+ */
+export function inProject(target, ...segments) {
+  const root = assertSafeTarget(target);
+  const resolved = path.resolve(root, ...segments);
+  if (resolved !== root && !resolved.startsWith(root + path.sep)) {
+    throw new PluginInstallError(`Refusing a path outside the project: ${segments.join('/')}`);
+  }
+  return resolved;
+}
 
 /**
  * Default executor: run a program without a shell.
@@ -141,11 +158,11 @@ export function ensureClaude(deps = {}) {
  * @returns {string} destination directory
  */
 export function copyMarketplace(cliRoot, lang, target, marketplace) {
-  const src = path.join(cliRoot, 'marketplaces', lang);
+  const src = path.join(cliRoot, 'marketplaces', assertSafeLang(lang));
   if (!fs.existsSync(path.join(src, '.claude-plugin', 'marketplace.json'))) {
     throw new PluginInstallError(`No marketplace for language "${lang}" in this package (${src}).`);
   }
-  const dest = path.join(target, BEAR_DIR, 'marketplace');
+  const dest = inProject(target, BEAR_DIR, 'marketplace');
   fs.rmSync(dest, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.cpSync(src, dest, { recursive: true });
@@ -173,7 +190,7 @@ const readJson = (file, fallback) => {
  * @returns {boolean} whether the file was rewritten
  */
 export function rewriteMarketplacePath(target, mktName) {
-  const file = path.join(target, '.claude', 'settings.json');
+  const file = inProject(target, '.claude', 'settings.json');
   const settings = readJson(file, null);
   const entry = settings?.extraKnownMarketplaces?.[mktName];
   if (!entry?.source) return false;
@@ -183,11 +200,11 @@ export function rewriteMarketplacePath(target, mktName) {
   return true;
 }
 
-export const installJsonPath = (target) => path.join(target, BEAR_DIR, 'install.json');
+export const installJsonPath = (target) => inProject(target, BEAR_DIR, 'install.json');
 export const readInstallJson = (target) => readJson(installJsonPath(target), null);
 
 export function writeInstallJson(target, data) {
-  fs.mkdirSync(path.join(target, BEAR_DIR), { recursive: true });
+  fs.mkdirSync(inProject(target, BEAR_DIR), { recursive: true });
   fs.writeFileSync(installJsonPath(target), `${JSON.stringify(data, null, 2)}\n`);
 }
 
@@ -235,7 +252,7 @@ export function registerAndInstall(target, install, deps = {}) {
  * Every other key is preserved.
  */
 function migrateGenericMarketplace(target, legacyName, run, log) {
-  const file = path.join(target, '.claude', 'settings.json');
+  const file = inProject(target, '.claude', 'settings.json');
   const settings = readJson(file, null);
   if (!settings) return;
   const suffix = `@${legacyName}`;
@@ -261,7 +278,7 @@ export function installPlugins({ target, cliRoot, install, version }, deps = {})
   const previous = readInstallJson(target);
   const marketplace = install.marketplace ?? previous?.marketplace ?? newMarketplaceId();
   copyMarketplace(cliRoot, install.lang, target, marketplace);
-  fs.writeFileSync(path.join(target, BEAR_DIR, 'VERSION'), `${version}\n`);
+  fs.writeFileSync(inProject(target, BEAR_DIR, 'VERSION'), `${version}\n`);
   if (previous && !previous.marketplace) migrateGenericMarketplace(target, marketplaceName(previous.lang), run, log);
   const ids = registerAndInstall(target, { ...install, marketplace }, deps);
   writeInstallJson(target, buildInstallRecord({ ...install, marketplace, version }));
@@ -279,7 +296,7 @@ export function syncPlugins(target, deps = {}) {
       `No ${BEAR_DIR}/install.json in ${target}: run \`bear-craft install\` (or \`update\`) first.`
     );
   }
-  if (!fs.existsSync(path.join(target, BEAR_DIR, 'marketplace', '.claude-plugin', 'marketplace.json'))) {
+  if (!fs.existsSync(inProject(target, BEAR_DIR, 'marketplace', '.claude-plugin', 'marketplace.json'))) {
     throw new PluginInstallError(
       `${BEAR_DIR}/marketplace is missing in ${target}: run \`bear-craft update\` to restore it.`
     );
@@ -301,7 +318,7 @@ export function diagnosePlugins(target, deps = {}) {
 
   const mkt = marketplaceOf(record);
   const hasMarketplace = fs.existsSync(
-    path.join(target, BEAR_DIR, 'marketplace', '.claude-plugin', 'marketplace.json')
+    inProject(target, BEAR_DIR, 'marketplace', '.claude-plugin', 'marketplace.json')
   );
   out.push(
     hasMarketplace
@@ -309,7 +326,7 @@ export function diagnosePlugins(target, deps = {}) {
       : { level: 'fail', message: `${BEAR_DIR}/marketplace missing — run bear-craft update` }
   );
 
-  const settings = readJson(path.join(target, '.claude', 'settings.json'), {});
+  const settings = readJson(inProject(target, '.claude', 'settings.json'), {});
   const declared = settings.extraKnownMarketplaces?.[mkt];
   if (!declared) {
     out.push({
@@ -339,7 +356,7 @@ export function diagnosePlugins(target, deps = {}) {
   if (list.status === 0) {
     const known = parseJsonSafe(list.stdout);
     const entry = (known ?? []).find((m) => m.name === mkt);
-    const expected = path.resolve(target, BEAR_DIR, 'marketplace');
+    const expected = inProject(target, BEAR_DIR, 'marketplace');
     if (!entry) {
       out.push({
         level: 'warn',
@@ -375,7 +392,7 @@ export function readPluginState(target) {
   const record = readInstallJson(target);
   if (!record) return null;
   const mkt = marketplaceOf(record);
-  const settings = readJson(path.join(target, '.claude', 'settings.json'), {});
+  const settings = readJson(inProject(target, '.claude', 'settings.json'), {});
   const countDir = (dir, test) => {
     try {
       return fs.readdirSync(dir, { withFileTypes: true }).filter(test).length;
@@ -384,10 +401,10 @@ export function readPluginState(target) {
     }
   };
   const plugins = Object.entries(settings.enabledPlugins ?? {})
-    .filter(([id, on]) => on === true && id.endsWith(`@${mkt}`))
+    .filter(([id, on]) => on === true && id.endsWith(`@${mkt}`) && /^bear-[a-z0-9-]+@/.test(id))
     .map(([id]) => {
       const name = id.slice(0, id.lastIndexOf('@'));
-      const dir = path.join(target, BEAR_DIR, 'marketplace', 'plugins', name);
+      const dir = inProject(target, BEAR_DIR, 'marketplace', 'plugins', name);
       return {
         id,
         name,

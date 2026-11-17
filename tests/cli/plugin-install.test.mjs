@@ -418,3 +418,36 @@ describe('unique marketplace id per project', () => {
     expect(readInstallJson(project).marketplace).toBe(marketplace);
   });
 });
+
+describe('path safety (SonarCloud S8707)', () => {
+  it('refuses a system directory as project target', () => {
+    const install = { lang: 'en', techs: [], infra: [], hooks: parseHooks('none') };
+    const never = vi.fn(() => ok('2.1.326'));
+    expect(() => installPlugins({ target: '/etc', cliRoot: ROOT, install, version: '1' }, { execFn: never })).toThrow(
+      /system directory/
+    );
+    expect(() => syncPlugins('/usr', { execFn: never })).toThrow(/system directory/);
+    expect(() => readPluginState('/etc')).toThrow(/system directory/);
+    expect(() => diagnosePlugins('/var', { execFn: never })).toThrow(/system directory/);
+  });
+
+  it('refuses a language that is not a two-letter code (it becomes a path segment)', () => {
+    expect(() => copyMarketplace(ROOT, '../Dev', path.join(TMP, 'p'))).toThrow(/Invalid --lang/);
+  });
+
+  it('ignores enabled plugin names that are not plain bear-* identifiers (no traversal through settings.json)', () => {
+    const project = path.join(TMP, 'p');
+    installPlugins(
+      { target: project, cliRoot: ROOT, install: { lang: 'en', techs: [], infra: [], hooks: parseHooks('none') }, version: '1' },
+      { execFn: fakeClaude(project) }
+    );
+    const mkt = readInstallJson(project).marketplace;
+    const file = path.join(project, '.claude/settings.json');
+    const settings = JSON.parse(fs.readFileSync(file, 'utf8'));
+    settings.enabledPlugins[`../../../etc@${mkt}`] = true;
+    fs.writeFileSync(file, JSON.stringify(settings));
+    const names = readPluginState(project).plugins.map((p) => p.name);
+    expect(names).not.toContain('../../../etc');
+    expect(names).toContain('bear-common');
+  });
+});

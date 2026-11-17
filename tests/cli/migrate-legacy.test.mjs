@@ -150,3 +150,10 @@ describe('migrateLegacyInstall', { timeout: 120_000 }, () => {
     expect(exists(project, 'rules/x.md')).toBe(true);
   });
 });
+
+describe('migrateLegacyInstall path safety (SonarCloud S8707)', () => {
+  it('refuses a system directory and an invalid language before touching anything', () => {
+    expect(() => migrateLegacyInstall({ target: '/etc', lang: 'en', cliRoot: ROOT })).toThrow(/system directory/);
+    expect(() => migrateLegacyInstall({ target: TMP, lang: '../x', cliRoot: ROOT })).toThrow(/Invalid --lang/);
+  });
+});

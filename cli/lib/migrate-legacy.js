@@ -13,6 +13,7 @@ import fs from 'fs';
 import path from 'path';
 import * as yaml from 'js-yaml';
 import { removeHooks } from '../../Dev/scripts/lib/merge-hooks.mjs';
+import { assertSafeLang, assertSafeTarget } from './path-safety.js';
 
 const KINDS = ['commands', 'agents', 'skills', 'templates', 'checklists', 'hooks'];
 
@@ -147,8 +148,10 @@ function removeEmptyDirs(dir) {
  * @returns {{removed: number, kept: string[], hooksRemoved: number}}
  */
 export function migrateLegacyInstall({ target, lang, cliRoot, log = () => {}, warn = () => {} }) {
-  const claude = path.join(target, '.claude');
-  const ours = shippedFiles(cliRoot, lang);
+  // The project and the language are validated before any read or delete (CWE-22).
+  const root = assertSafeTarget(target);
+  const claude = path.join(root, '.claude');
+  const ours = shippedFiles(cliRoot, assertSafeLang(lang));
   let removed = 0;
   const keptByDir = new Map();
 
