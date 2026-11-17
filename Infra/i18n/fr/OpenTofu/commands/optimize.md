@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Cible : resources, costs, tags, full (par defaut : full)
 - (Optionnel) Chemin vers le repertoire de configuration
 
-Exemple : `/opentofu:optimize target:full path:infra/`
+Exemple : `/bear-opentofu:optimize target:full path:infra/`
 
 ## Plan Mode
 

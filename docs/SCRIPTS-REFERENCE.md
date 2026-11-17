@@ -320,7 +320,7 @@ Installs Docker/infrastructure rules and agents.
 
 **Installs:**
 - Docker agents (dockerfile, compose, debug, cicd, architect)
-- Docker commands (`/docker:*`)
+- Docker commands (`/bear-docker:*`)
 
 ---
 

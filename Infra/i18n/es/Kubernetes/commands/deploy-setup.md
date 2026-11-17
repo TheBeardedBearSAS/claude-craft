@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Herramienta GitOps: argocd, flux (por defecto: argocd)
 - (Opcional) Estrategia de versión: rolling, canary, blue-green
 
-Ejemplo: `/kubernetes:deploy-setup "API Node.js" gitops:argocd strategy:canary`
+Ejemplo: `/bear-kubernetes:deploy-setup "API Node.js" gitops:argocd strategy:canary`
 
 ## Modo Plan
 

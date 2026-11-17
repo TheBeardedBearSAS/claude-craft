@@ -16,6 +16,15 @@ const NS = [
   'gate',
   'project',
   ...Object.keys(TECH_REGISTRY).filter((k) => TECH_REGISTRY[k].tier !== null),
+  // infra namespaces are plugins too (bear-docker, bear-kubernetes, …)
+  'docker',
+  'coolify',
+  'kubernetes',
+  'opentofu',
+  'ansible',
+  'hcloud',
+  'pgbouncer',
+  'frankenphp',
 ];
 // History keeps the names of its time.
 const HISTORY =

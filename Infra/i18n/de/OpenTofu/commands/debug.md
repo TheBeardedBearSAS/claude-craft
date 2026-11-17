@@ -15,7 +15,7 @@ Argumente:
 - (Optional) Fehlermeldung
 - (Optional) Ressourcenadresse
 
-Beispiel: `/opentofu:debug "State-Lock-Konflikt in der Prod-Umgebung"`
+Beispiel: `/bear-opentofu:debug "State-Lock-Konflikt in der Prod-Umgebung"`
 
 ## Plan Mode
 

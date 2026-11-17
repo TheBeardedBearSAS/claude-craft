@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) Alcance: encryption, secrets, iam, policies, full (por defecto: full)
 - (Opcional) Ruta al directorio de configuración
 
-Ejemplo: `/opentofu:security-audit scope:full path:infra/`
+Ejemplo: `/bear-opentofu:security-audit scope:full path:infra/`
 
 ## Plan Mode
 

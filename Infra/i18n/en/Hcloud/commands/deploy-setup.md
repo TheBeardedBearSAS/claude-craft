@@ -15,7 +15,7 @@ Arguments:
 - (Optional) CI tool: github-actions, gitlab-ci (default: github-actions)
 - (Optional) Strategy: blue-green, snapshot, rebuild (default: blue-green)
 
-Example: `/hcloud:deploy-setup "Web platform" ci:github-actions strategy:blue-green`
+Example: `/bear-hcloud:deploy-setup "Web platform" ci:github-actions strategy:blue-green`
 
 ## Plan Mode
 
@@ -134,6 +134,6 @@ NEXT STEPS
 1. [ ] Store HCLOUD_TOKEN in CI secrets (per environment)
 2. [ ] Store SSH private key in CI secrets
 3. [ ] Test pipeline end-to-end on a feature branch
-4. [ ] Audit security posture with /hcloud:security-audit
-5. [ ] Optimize costs with /hcloud:optimize
+4. [ ] Audit security posture with /bear-hcloud:security-audit
+5. [ ] Optimize costs with /bear-hcloud:optimize
 ```

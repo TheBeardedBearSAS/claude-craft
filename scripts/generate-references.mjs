@@ -35,7 +35,7 @@ const ROOT = path.resolve(__dirname, '..');
 const AGENTS_DIR = path.join(ROOT, '.claude', 'agents');
 const COMMANDS_DIR = path.join(ROOT, '.claude', 'commands');
 
-/** Namespaces published as `bear-<ns>` (commands read `/bear-react:check`); infra namespaces keep their name. */
+/** Namespaces published as `bear-<ns>` (commands read `/bear-react:check`) */
 const BEAR_NAMESPACES = new Set([
   'common',
   'workflow',
@@ -45,6 +45,14 @@ const BEAR_NAMESPACES = new Set([
   'gate',
   'project',
   ...Object.keys(TECH_REGISTRY).filter((k) => TECH_REGISTRY[k].tier !== null),
+  'docker',
+  'coolify',
+  'kubernetes',
+  'opentofu',
+  'ansible',
+  'hcloud',
+  'pgbouncer',
+  'frankenphp',
 ]);
 const publishedNamespace = (ns) => (BEAR_NAMESPACES.has(ns) ? `bear-${ns}` : ns);
 const AGENTS_OUT = path.join(ROOT, 'docs', 'AGENTS-FULL-REFERENCE.md');

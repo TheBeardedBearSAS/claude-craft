@@ -114,6 +114,37 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
   });
 });
 
+describe('infra installers', { timeout: 120_000 }, () => {
+  const DOCKER = path.join(ROOT, 'Infra/install-docker-rules.sh');
+
+  it('install bear-docker/ with the redundant prefix removed from the command names', () => {
+    const target = path.join(TMP, 'infra');
+    fs.mkdirSync(target, { recursive: true });
+    const r = sh(DOCKER, ['--force', target]);
+    expect(r.status, r.stderr).toBe(0);
+    expect(fs.readdirSync(cmdDir(target, 'bear-docker')).sort()).toEqual([
+      'architecture.md',
+      'cicd-pipeline.md',
+      'compose-setup.md',
+      'debug.md',
+      'optimize.md',
+    ]);
+    expect(fs.existsSync(cmdDir(target, 'docker'))).toBe(false);
+  });
+
+  it('migrate a pre-10.0 .claude/commands/docker/ folder (shipped files removed, user file kept)', () => {
+    const target = path.join(TMP, 'infra-legacy');
+    fs.mkdirSync(cmdDir(target, 'docker'), { recursive: true });
+    fs.writeFileSync(path.join(cmdDir(target, 'docker'), 'docker-architecture.md'), '# old name of ours\n');
+    fs.writeFileSync(path.join(cmdDir(target, 'docker'), 'optimize.md'), '# ours\n');
+    fs.writeFileSync(path.join(cmdDir(target, 'docker'), 'mine.md'), '# mine\n');
+    const r = sh(DOCKER, ['--force', target]);
+    expect(r.status, r.stderr).toBe(0);
+    expect(fs.readdirSync(cmdDir(target, 'docker'))).toEqual(['mine.md']);
+    expect(fs.existsSync(path.join(cmdDir(target, 'bear-docker'), 'architecture.md'))).toBe(true);
+  });
+});
+
 describe('retired commands pruning', () => {
   it('removes a retired file from both layouts', () => {
     const target = path.join(TMP, 'prune');

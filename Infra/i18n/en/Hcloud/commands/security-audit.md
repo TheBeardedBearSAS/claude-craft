@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments:
 - (Optional) Scope: firewall, ssh, network, tokens, certificates, full (default: full)
 
-Example: `/hcloud:security-audit scope:full`
+Example: `/bear-hcloud:security-audit scope:full`
 
 ## Plan Mode
 

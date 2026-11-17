@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Namespace
 - (Opcional) Nombre del pod o del deployment
 
-Ejemplo: `/kubernetes:debug "CrashLoopBackOff en los pods de la api" namespace:app-prod`
+Ejemplo: `/bear-kubernetes:debug "CrashLoopBackOff en los pods de la api" namespace:app-prod`
 
 ## Modo Plan
 

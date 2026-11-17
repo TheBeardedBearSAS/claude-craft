@@ -13,7 +13,7 @@ $ARGUMENTS
 Argumente:
 - (Optional) Umfang: tls, headers, caddyfile, container, php, admin, full (Standard: full)
 
-Beispiel: `/frankenphp:security-audit scope:full`
+Beispiel: `/bear-frankenphp:security-audit scope:full`
 
 ## Plan-Modus
 

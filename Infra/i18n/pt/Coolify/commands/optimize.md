@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) Area de foco: build, resources, cleanup, network, all
 - (Opcional) Nome do servico
 
-Exemplo: `/coolify:optimize` ou `/coolify:optimize focus:build service:api` ou `/coolify:optimize focus:cleanup`
+Exemplo: `/bear-coolify:optimize` ou `/bear-coolify:optimize focus:build service:api` ou `/bear-coolify:optimize focus:cleanup`
 
 ## Modo Plano
 

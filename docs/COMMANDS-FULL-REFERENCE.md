@@ -7,14 +7,21 @@
 
 | Namespace | Count |
 |-----------|-------|
-| `/ansible:*` | 5 |
 | `/bear-angular:*` | 7 |
+| `/bear-ansible:*` | 5 |
 | `/bear-common:*` | 13 |
+| `/bear-coolify:*` | 5 |
 | `/bear-csharp:*` | 7 |
+| `/bear-docker:*` | 5 |
 | `/bear-flutter:*` | 11 |
+| `/bear-frankenphp:*` | 5 |
 | `/bear-gate:*` | 1 |
+| `/bear-hcloud:*` | 5 |
+| `/bear-kubernetes:*` | 5 |
 | `/bear-laravel:*` | 7 |
+| `/bear-opentofu:*` | 5 |
 | `/bear-paperclip:*` | 9 |
+| `/bear-pgbouncer:*` | 5 |
 | `/bear-php:*` | 6 |
 | `/bear-project:*` | 5 |
 | `/bear-python:*` | 11 |
@@ -32,24 +39,7 @@
 | `/bear-vuejs:*` | 7 |
 | `/bear-wordpress:*` | 1 |
 | `/bear-workflow:*` | 9 |
-| `/coolify:*` | 5 |
-| `/docker:*` | 5 |
-| `/frankenphp:*` | 5 |
-| `/hcloud:*` | 5 |
-| `/kubernetes:*` | 5 |
-| `/opentofu:*` | 5 |
-| `/pgbouncer:*` | 5 |
 | **Total** | **201** |
-
-## `/ansible:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/ansible:architecture`](../Infra/i18n/en/Ansible/commands/architecture.md) | Design complete Ansible automation architecture |
-| [`/ansible:debug`](../Infra/i18n/en/Ansible/commands/debug.md) | Diagnose Ansible playbook issues from symptoms |
-| [`/ansible:deploy-setup`](../Infra/i18n/en/Ansible/commands/deploy-setup.md) | Setup CI/CD pipeline for Ansible automation |
-| [`/ansible:optimize`](../Infra/i18n/en/Ansible/commands/optimize.md) | Optimize Ansible performance and playbook quality |
-| [`/ansible:security-audit`](../Infra/i18n/en/Ansible/commands/security-audit.md) | Audit Ansible security posture |
 
 ## `/bear-angular:*`
 
@@ -62,6 +52,16 @@
 | [`/bear-angular:check-security`](../.claude/commands/bear-angular/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check security |
 | [`/bear-angular:check-testing`](../.claude/commands/bear-angular/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check testing |
 | [`/bear-angular:generate-component`](../.claude/commands/bear-angular/generate-component.md) | Generate Angular standalone component with tests |
+
+## `/bear-ansible:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-ansible:architecture`](../Infra/i18n/en/Ansible/commands/architecture.md) | Design complete Ansible automation architecture |
+| [`/bear-ansible:debug`](../Infra/i18n/en/Ansible/commands/debug.md) | Diagnose Ansible playbook issues from symptoms |
+| [`/bear-ansible:deploy-setup`](../Infra/i18n/en/Ansible/commands/deploy-setup.md) | Setup CI/CD pipeline for Ansible automation |
+| [`/bear-ansible:optimize`](../Infra/i18n/en/Ansible/commands/optimize.md) | Optimize Ansible performance and playbook quality |
+| [`/bear-ansible:security-audit`](../Infra/i18n/en/Ansible/commands/security-audit.md) | Audit Ansible security posture |
 
 ## `/bear-common:*`
 
@@ -81,6 +81,16 @@
 | [`/bear-common:setup-ci`](../.claude/commands/bear-common/setup-ci.md) | Configuration CI/CD |
 | [`/bear-common:setup-rtk`](../.claude/commands/bear-common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
 
+## `/bear-coolify:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-coolify:backup`](../Infra/i18n/en/Coolify/commands/backup.md) | Configure and manage Coolify backups |
+| [`/bear-coolify:debug`](../Infra/i18n/en/Coolify/commands/debug.md) | Diagnose Coolify deployment issues |
+| [`/bear-coolify:deploy`](../Infra/i18n/en/Coolify/commands/deploy.md) | Deploy application to Coolify |
+| [`/bear-coolify:optimize`](../Infra/i18n/en/Coolify/commands/optimize.md) | Optimize Coolify deployment |
+| [`/bear-coolify:setup`](../Infra/i18n/en/Coolify/commands/setup.md) | Initialize project for Coolify deployment |
+
 ## `/bear-csharp:*`
 
 | Command | Description |
@@ -92,6 +102,16 @@
 | [`/bear-csharp:check-security`](../.claude/commands/bear-csharp/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check security |
 | [`/bear-csharp:check-testing`](../.claude/commands/bear-csharp/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check testing |
 | [`/bear-csharp:generate-feature`](../.claude/commands/bear-csharp/generate-feature.md) | Generate a complete feature with Clean Architecture structure |
+
+## `/bear-docker:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-docker:architecture`](../Infra/i18n/en/Docker/commands/architecture.md) | Complete Docker Architecture |
+| [`/bear-docker:cicd-pipeline`](../Infra/i18n/en/Docker/commands/cicd-pipeline.md) | Docker CI/CD Pipeline |
+| [`/bear-docker:compose-setup`](../Infra/i18n/en/Docker/commands/compose-setup.md) | Docker Compose Setup |
+| [`/bear-docker:debug`](../Infra/i18n/en/Docker/commands/debug.md) | Docker Diagnostics |
+| [`/bear-docker:optimize`](../Infra/i18n/en/Docker/commands/optimize.md) | Dockerfile Optimization |
 
 ## `/bear-flutter:*`
 
@@ -109,11 +129,41 @@
 | [`/bear-flutter:golden-update`](../.claude/commands/bear-flutter/golden-update.md) | Mise à jour Golden Tests |
 | [`/bear-flutter:localization-check`](../.claude/commands/bear-flutter/localization-check.md) | Vérification des Traductions |
 
+## `/bear-frankenphp:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-frankenphp:architecture`](../Infra/i18n/en/FrankenPHP/commands/architecture.md) | Design complete FrankenPHP serving architecture |
+| [`/bear-frankenphp:debug`](../Infra/i18n/en/FrankenPHP/commands/debug.md) | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
+| [`/bear-frankenphp:deploy-setup`](../Infra/i18n/en/FrankenPHP/commands/deploy-setup.md) | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
+| [`/bear-frankenphp:optimize`](../Infra/i18n/en/FrankenPHP/commands/optimize.md) | Optimize FrankenPHP worker performance and throughput |
+| [`/bear-frankenphp:security-audit`](../Infra/i18n/en/FrankenPHP/commands/security-audit.md) | Audit FrankenPHP security posture |
+
 ## `/bear-gate:*`
 
 | Command | Description |
 |---------|-------------|
 | [`/bear-gate:check`](../.claude/commands/bear-gate/check.md) | Exécuter n'importe quelle porte qualité : portes documentaires (PRD, spec technique, backlog, sprint, story, alignement), portes de code (commit, merge, release), le rapport complet ou un checkpoint de phase |
+
+## `/bear-hcloud:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-hcloud:architecture`](../Infra/i18n/en/Hcloud/commands/architecture.md) | Design complete Hetzner Cloud infrastructure architecture |
+| [`/bear-hcloud:debug`](../Infra/i18n/en/Hcloud/commands/debug.md) | Diagnose Hetzner Cloud infrastructure issues from symptoms |
+| [`/bear-hcloud:deploy-setup`](../Infra/i18n/en/Hcloud/commands/deploy-setup.md) | Setup CI/CD pipeline for Hetzner Cloud deployments |
+| [`/bear-hcloud:optimize`](../Infra/i18n/en/Hcloud/commands/optimize.md) | Optimize Hetzner Cloud cost and performance |
+| [`/bear-hcloud:security-audit`](../Infra/i18n/en/Hcloud/commands/security-audit.md) | Audit Hetzner Cloud security posture |
+
+## `/bear-kubernetes:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-kubernetes:architecture`](../Infra/i18n/en/Kubernetes/commands/architecture.md) | Design complete Kubernetes architecture |
+| [`/bear-kubernetes:debug`](../Infra/i18n/en/Kubernetes/commands/debug.md) | Diagnose Kubernetes issues from symptoms |
+| [`/bear-kubernetes:deploy-setup`](../Infra/i18n/en/Kubernetes/commands/deploy-setup.md) | Setup GitOps deployment pipeline for Kubernetes |
+| [`/bear-kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | Optimize Kubernetes resource usage and costs |
+| [`/bear-kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | Kubernetes security posture audit |
 
 ## `/bear-laravel:*`
 
@@ -126,6 +176,16 @@
 | [`/bear-laravel:check-security`](../.claude/commands/bear-laravel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check security |
 | [`/bear-laravel:check-testing`](../.claude/commands/bear-laravel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check testing |
 | [`/bear-laravel:generate-controller`](../.claude/commands/bear-laravel/generate-controller.md) | Generate a Laravel controller following best practices |
+
+## `/bear-opentofu:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-opentofu:architecture`](../Infra/i18n/en/OpenTofu/commands/architecture.md) | Design complete OpenTofu IaC architecture |
+| [`/bear-opentofu:debug`](../Infra/i18n/en/OpenTofu/commands/debug.md) | Diagnose OpenTofu state issues and drift |
+| [`/bear-opentofu:deploy-setup`](../Infra/i18n/en/OpenTofu/commands/deploy-setup.md) | Setup CI/CD pipeline for OpenTofu |
+| [`/bear-opentofu:optimize`](../Infra/i18n/en/OpenTofu/commands/optimize.md) | OpenTofu cost optimization and resource analysis |
+| [`/bear-opentofu:security-audit`](../Infra/i18n/en/OpenTofu/commands/security-audit.md) | Audit OpenTofu security posture |
 
 ## `/bear-paperclip:*`
 
@@ -140,6 +200,16 @@
 | [`/bear-paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
 | [`/bear-paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
 | [`/bear-paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
+
+## `/bear-pgbouncer:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-pgbouncer:architecture`](../Infra/i18n/en/PgBouncer/commands/architecture.md) | Design complete PgBouncer connection pooling architecture |
+| [`/bear-pgbouncer:debug`](../Infra/i18n/en/PgBouncer/commands/debug.md) | Diagnose PgBouncer connection pool issues from symptoms |
+| [`/bear-pgbouncer:deploy-setup`](../Infra/i18n/en/PgBouncer/commands/deploy-setup.md) | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
+| [`/bear-pgbouncer:optimize`](../Infra/i18n/en/PgBouncer/commands/optimize.md) | Optimize PgBouncer pool performance and connection utilization |
+| [`/bear-pgbouncer:security-audit`](../Infra/i18n/en/PgBouncer/commands/security-audit.md) | Audit PgBouncer security posture |
 
 ## `/bear-php:*`
 
@@ -331,76 +401,6 @@
 | [`/bear-workflow:review`](../.claude/commands/bear-workflow/review.md) | Préparation Sprint Review |
 | [`/bear-workflow:start`](../.claude/commands/bear-workflow/start.md) | Préparation du début de sprint : dossier de sprint, entrées sprint-status.yaml et décomposition en tâches |
 | [`/bear-workflow:status`](../.claude/commands/bear-workflow/status.md) | Où en suis-je + prochaine action : phase du workflow, métriques du sprint, tableau Kanban (--board), file d'attente batch (--queue), daily stand-up (--standup) et gates (--gates) |
-
-## `/coolify:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/coolify:coolify-backup`](../Infra/i18n/en/Coolify/commands/coolify-backup.md) | Configure and manage Coolify backups |
-| [`/coolify:coolify-debug`](../Infra/i18n/en/Coolify/commands/coolify-debug.md) | Diagnose Coolify deployment issues |
-| [`/coolify:coolify-deploy`](../Infra/i18n/en/Coolify/commands/coolify-deploy.md) | Deploy application to Coolify |
-| [`/coolify:coolify-setup`](../Infra/i18n/en/Coolify/commands/coolify-setup.md) | Initialize project for Coolify deployment |
-| [`/coolify:optimize`](../Infra/i18n/en/Coolify/commands/optimize.md) | Optimize Coolify deployment |
-
-## `/docker:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/docker:docker-architecture`](../Infra/i18n/en/Docker/commands/docker-architecture.md) | Complete Docker Architecture |
-| [`/docker:docker-cicd-pipeline`](../Infra/i18n/en/Docker/commands/docker-cicd-pipeline.md) | Docker CI/CD Pipeline |
-| [`/docker:docker-compose-setup`](../Infra/i18n/en/Docker/commands/docker-compose-setup.md) | Docker Compose Setup |
-| [`/docker:docker-debug`](../Infra/i18n/en/Docker/commands/docker-debug.md) | Docker Diagnostics |
-| [`/docker:optimize`](../Infra/i18n/en/Docker/commands/optimize.md) | Dockerfile Optimization |
-
-## `/frankenphp:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/frankenphp:architecture`](../Infra/i18n/en/FrankenPHP/commands/architecture.md) | Design complete FrankenPHP serving architecture |
-| [`/frankenphp:debug`](../Infra/i18n/en/FrankenPHP/commands/debug.md) | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
-| [`/frankenphp:deploy-setup`](../Infra/i18n/en/FrankenPHP/commands/deploy-setup.md) | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
-| [`/frankenphp:optimize`](../Infra/i18n/en/FrankenPHP/commands/optimize.md) | Optimize FrankenPHP worker performance and throughput |
-| [`/frankenphp:security-audit`](../Infra/i18n/en/FrankenPHP/commands/security-audit.md) | Audit FrankenPHP security posture |
-
-## `/hcloud:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/hcloud:architecture`](../Infra/i18n/en/Hcloud/commands/architecture.md) | Design complete Hetzner Cloud infrastructure architecture |
-| [`/hcloud:debug`](../Infra/i18n/en/Hcloud/commands/debug.md) | Diagnose Hetzner Cloud infrastructure issues from symptoms |
-| [`/hcloud:deploy-setup`](../Infra/i18n/en/Hcloud/commands/deploy-setup.md) | Setup CI/CD pipeline for Hetzner Cloud deployments |
-| [`/hcloud:optimize`](../Infra/i18n/en/Hcloud/commands/optimize.md) | Optimize Hetzner Cloud cost and performance |
-| [`/hcloud:security-audit`](../Infra/i18n/en/Hcloud/commands/security-audit.md) | Audit Hetzner Cloud security posture |
-
-## `/kubernetes:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/kubernetes:architecture`](../Infra/i18n/en/Kubernetes/commands/architecture.md) | Design complete Kubernetes architecture |
-| [`/kubernetes:debug`](../Infra/i18n/en/Kubernetes/commands/debug.md) | Diagnose Kubernetes issues from symptoms |
-| [`/kubernetes:deploy-setup`](../Infra/i18n/en/Kubernetes/commands/deploy-setup.md) | Setup GitOps deployment pipeline for Kubernetes |
-| [`/kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | Optimize Kubernetes resource usage and costs |
-| [`/kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | Kubernetes security posture audit |
-
-## `/opentofu:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/opentofu:architecture`](../Infra/i18n/en/OpenTofu/commands/architecture.md) | Design complete OpenTofu IaC architecture |
-| [`/opentofu:debug`](../Infra/i18n/en/OpenTofu/commands/debug.md) | Diagnose OpenTofu state issues and drift |
-| [`/opentofu:deploy-setup`](../Infra/i18n/en/OpenTofu/commands/deploy-setup.md) | Setup CI/CD pipeline for OpenTofu |
-| [`/opentofu:optimize`](../Infra/i18n/en/OpenTofu/commands/optimize.md) | OpenTofu cost optimization and resource analysis |
-| [`/opentofu:security-audit`](../Infra/i18n/en/OpenTofu/commands/security-audit.md) | Audit OpenTofu security posture |
-
-## `/pgbouncer:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/pgbouncer:architecture`](../Infra/i18n/en/PgBouncer/commands/architecture.md) | Design complete PgBouncer connection pooling architecture |
-| [`/pgbouncer:debug`](../Infra/i18n/en/PgBouncer/commands/debug.md) | Diagnose PgBouncer connection pool issues from symptoms |
-| [`/pgbouncer:deploy-setup`](../Infra/i18n/en/PgBouncer/commands/deploy-setup.md) | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
-| [`/pgbouncer:optimize`](../Infra/i18n/en/PgBouncer/commands/optimize.md) | Optimize PgBouncer pool performance and connection utilization |
-| [`/pgbouncer:security-audit`](../Infra/i18n/en/PgBouncer/commands/security-audit.md) | Audit PgBouncer security posture |
 
 <!-- AUTO-GEN-END -->
 

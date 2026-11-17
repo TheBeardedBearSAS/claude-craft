@@ -16,7 +16,7 @@ Argumente:
 - Benotigte Services (z.B. compute, database, networking, storage)
 - Einschrankungen (z.B. multi-env, compliance, migration-from-terraform)
 
-Beispiel: `/opentofu:architecture "E-Commerce-Plattform" cloud:aws services:ecs,rds,redis compliance:soc2`
+Beispiel: `/bear-opentofu:architecture "E-Commerce-Plattform" cloud:aws services:ecs,rds,redis compliance:soc2`
 
 ## Plan Mode
 
@@ -180,7 +180,7 @@ NACHSTE SCHRITTE
 
 1. [ ] Ressourcendimensionierung pro Umgebung uberprufen und anpassen
 2. [ ] State-Verschlusselungs-Passphrase/KMS-Schlussel konfigurieren
-3. [ ] CI/CD mit /opentofu:deploy-setup einrichten
-4. [ ] Sicherheitsaudit mit /opentofu:security-audit durchfuhren
-5. [ ] Kosten mit /opentofu:optimize schatzen
+3. [ ] CI/CD mit /bear-opentofu:deploy-setup einrichten
+4. [ ] Sicherheitsaudit mit /bear-opentofu:security-audit durchfuhren
+5. [ ] Kosten mit /bear-opentofu:optimize schatzen
 ```

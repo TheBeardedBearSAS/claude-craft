@@ -17,7 +17,7 @@ Argumente:
 - (Optional) Ressourcenname oder -typ
 - (Optional) Location oder Standort
 
-Beispiel: `/hcloud:debug "SSH-Verbindung auf web-01 abgelehnt" resource:server`
+Beispiel: `/bear-hcloud:debug "SSH-Verbindung auf web-01 abgelehnt" resource:server`
 
 ## Plan-Modus
 

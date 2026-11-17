@@ -17,7 +17,7 @@ Argumentos:
 - Workload alvo (ex: web-application, microservices, database-cluster)
 - Restricoes (ex: budget, location, compliance)
 
-Exemplo: `/hcloud:architecture "Plataforma E-commerce" workload:web-application location:fsn1 budget:100eur`
+Exemplo: `/bear-hcloud:architecture "Plataforma E-commerce" workload:web-application location:fsn1 budget:100eur`
 
 ## Plan Mode
 
@@ -153,8 +153,8 @@ NEXT STEPS
 ──────────────────────────────────────────────────────────────
 
 1. [ ] Revisar tipos de servidor e ajustar para orcamento
-2. [ ] Auditar postura de seguranca com /hcloud:security-audit
-3. [ ] Configurar pipeline CI/CD com /hcloud:deploy-setup
+2. [ ] Auditar postura de seguranca com /bear-hcloud:security-audit
+3. [ ] Configurar pipeline CI/CD com /bear-hcloud:deploy-setup
 4. [ ] Otimizar custos com @hcloud-cost
 5. [ ] Configurar monitoramento e alertas
 ```

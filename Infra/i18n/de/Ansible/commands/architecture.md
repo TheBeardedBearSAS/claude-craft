@@ -16,7 +16,7 @@ Argumente:
 - Benotigte Automatisierung (z.B. Provisionierung, Konfiguration, Deployment)
 - Einschrankungen (z.B. Multi-Umgebung, Compliance, Teamgrosse)
 
-Beispiel: `/ansible:architecture "E-Commerce-Plattform" infra:aws services:nginx,postgresql,redis compliance:soc2`
+Beispiel: `/bear-ansible:architecture "E-Commerce-Plattform" infra:aws services:nginx,postgresql,redis compliance:soc2`
 
 ## Plan-Modus
 
@@ -168,8 +168,8 @@ NACHSTE SCHRITTE
 ──────────────────────────────────────────────────────────────
 
 1. [ ] group_vars prufen und fur jede Umgebung anpassen
-2. [ ] Ansible Vault mit /ansible:security-audit einrichten
-3. [ ] CI/CD-Pipeline mit /ansible:deploy-setup konfigurieren
+2. [ ] Ansible Vault mit /bear-ansible:security-audit einrichten
+3. [ ] CI/CD-Pipeline mit /bear-ansible:deploy-setup konfigurieren
 4. [ ] Qualitatsprufung mit @ansible-quality durchfuhren
 5. [ ] Rollen mit Molecule vor dem ersten Deployment testen
 ```

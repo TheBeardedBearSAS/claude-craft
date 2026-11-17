@@ -13,7 +13,7 @@ $ARGUMENTS
 Argumente:
 - (Optional) Umfang: vault, ssh, become, secrets, lint, full (Standard: full)
 
-Beispiel: `/ansible:security-audit scope:full`
+Beispiel: `/bear-ansible:security-audit scope:full`
 
 ## Plan-Modus
 

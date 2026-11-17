@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments:
 - (Optional) Scope: auth, tls, access, admin, network, full (default: full)
 
-Example: `/pgbouncer:security-audit scope:full`
+Example: `/bear-pgbouncer:security-audit scope:full`
 
 ## Plan Mode
 

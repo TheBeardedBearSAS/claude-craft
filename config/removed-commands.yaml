@@ -69,6 +69,15 @@ removed:
   # 9.0.0 — redirect stubs of native Claude Code overlaps (8.27.0)
   - common/research-context7.md
   - uiux/orchestrator.md
+  # 10.0.0 — infra command files lost their redundant namespace prefix (/bear-docker:architecture)
+  - docker/docker-architecture.md
+  - docker/docker-cicd-pipeline.md
+  - docker/docker-compose-setup.md
+  - docker/docker-debug.md
+  - coolify/coolify-backup.md
+  - coolify/coolify-debug.md
+  - coolify/coolify-deploy.md
+  - coolify/coolify-setup.md
 
 # Deprecated commands still distributed as redirect stubs, with the release that
 # retires them (they move to `removed:` then). A mapping, not a list, so

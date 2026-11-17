@@ -270,7 +270,7 @@ check_tech_installation() {
         check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
         check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
     elif [[ "$INFRA_TECHS" == *" $tech "* ]]; then
-        check_dir_count "$path/.claude/commands/$tech" "commands/$tech" 1 || ((issues++)) || true
+        check_dir_count "$path/.claude/commands/bear-$tech" "commands/bear-$tech" 1 || ((issues++)) || true
         check_agents_prefix "$path/.claude/agents" "$tech" || ((issues++)) || true
     elif [[ "$tech" == "project" ]]; then
         local ns

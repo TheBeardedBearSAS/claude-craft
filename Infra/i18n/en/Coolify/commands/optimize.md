@@ -14,7 +14,7 @@ Arguments:
 - (Optional) Focus area: build, resources, cleanup, network, all
 - (Optional) Service name
 
-Example: `/coolify:optimize` or `/coolify:optimize focus:build service:api` or `/coolify:optimize focus:cleanup`
+Example: `/bear-coolify:optimize` or `/bear-coolify:optimize focus:build service:api` or `/bear-coolify:optimize focus:cleanup`
 
 ## Plan Mode
 

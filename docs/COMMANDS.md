@@ -123,7 +123,7 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 | Command | Description |
 |---------|-------------|
 | `/bear-common:setup-ci` | Configure CI/CD pipeline |
-| `/docker:optimize` | Optimize Docker configuration |
+| `/bear-docker:optimize` | Optimize Docker configuration |
 
 ### Codebase Packing (v7.33+)
 
@@ -540,16 +540,16 @@ Infrastructure and containerization commands.
 
 | Command | Description |
 |---------|-------------|
-| `/docker:compose-setup <Services>` | Generate docker-compose configuration |
-| `/docker:architecture <Project>` | Design complete Docker architecture |
+| `/bear-docker:compose-setup <Services>` | Generate docker-compose configuration |
+| `/bear-docker:architecture <Project>` | Design complete Docker architecture |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/docker:debug <Symptom>` | Diagnose Docker issues |
-| `/docker:cicd-pipeline <Platform>` | Generate CI/CD pipeline |
-| `/docker:optimize <Target>` | Optimize Docker configuration |
+| `/bear-docker:debug <Symptom>` | Diagnose Docker issues |
+| `/bear-docker:cicd-pipeline <Platform>` | Generate CI/CD pipeline |
+| `/bear-docker:optimize <Target>` | Optimize Docker configuration |
 
 ---
 
@@ -559,11 +559,11 @@ Infrastructure deployment with Coolify self-hosted PaaS.
 
 | Command | Description |
 |---------|-------------|
-| `/coolify:setup` | Initialize project for Coolify deployment |
-| `/coolify:deploy` | Deploy application to Coolify |
-| `/coolify:debug` | Diagnose Coolify deployment issues |
-| `/coolify:backup` | Configure and manage backups |
-| `/coolify:optimize` | Optimize Coolify deployment |
+| `/bear-coolify:setup` | Initialize project for Coolify deployment |
+| `/bear-coolify:deploy` | Deploy application to Coolify |
+| `/bear-coolify:debug` | Diagnose Coolify deployment issues |
+| `/bear-coolify:backup` | Configure and manage backups |
+| `/bear-coolify:optimize` | Optimize Coolify deployment |
 
 ---
 
@@ -575,16 +575,16 @@ Infrastructure orchestration with Kubernetes.
 
 | Command | Description |
 |---------|-------------|
-| `/kubernetes:architecture <Project>` | Design complete Kubernetes architecture |
-| `/kubernetes:deploy-setup <Stack>` | Setup GitOps deployment pipeline |
+| `/bear-kubernetes:architecture <Project>` | Design complete Kubernetes architecture |
+| `/bear-kubernetes:deploy-setup <Stack>` | Setup GitOps deployment pipeline |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/kubernetes:debug <Symptom>` | Diagnose Kubernetes issues |
-| `/kubernetes:security-audit [Scope]` | Kubernetes security posture audit |
-| `/kubernetes:optimize [Target]` | Optimize Kubernetes resource usage and costs |
+| `/bear-kubernetes:debug <Symptom>` | Diagnose Kubernetes issues |
+| `/bear-kubernetes:security-audit [Scope]` | Kubernetes security posture audit |
+| `/bear-kubernetes:optimize [Target]` | Optimize Kubernetes resource usage and costs |
 
 ---
 
@@ -596,16 +596,16 @@ Infrastructure as Code with OpenTofu.
 
 | Command | Description |
 |---------|-------------|
-| `/opentofu:architecture <Project>` | Design complete OpenTofu IaC architecture |
-| `/opentofu:deploy-setup <Platform>` | Setup CI/CD pipeline for OpenTofu |
+| `/bear-opentofu:architecture <Project>` | Design complete OpenTofu IaC architecture |
+| `/bear-opentofu:deploy-setup <Platform>` | Setup CI/CD pipeline for OpenTofu |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/opentofu:debug <Symptom>` | Diagnose OpenTofu state issues and drift |
-| `/opentofu:security-audit [Scope]` | Audit OpenTofu security posture |
-| `/opentofu:optimize [Target]` | Cost optimization and resource analysis |
+| `/bear-opentofu:debug <Symptom>` | Diagnose OpenTofu state issues and drift |
+| `/bear-opentofu:security-audit [Scope]` | Audit OpenTofu security posture |
+| `/bear-opentofu:optimize [Target]` | Cost optimization and resource analysis |
 
 ---
 
@@ -617,16 +617,16 @@ Infrastructure automation with Ansible.
 
 | Command | Description |
 |---------|-------------|
-| `/ansible:architecture <Project>` | Design complete Ansible automation architecture |
-| `/ansible:deploy-setup <Platform>` | Setup CI/CD pipeline for Ansible |
+| `/bear-ansible:architecture <Project>` | Design complete Ansible automation architecture |
+| `/bear-ansible:deploy-setup <Platform>` | Setup CI/CD pipeline for Ansible |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/ansible:debug <Symptom>` | Diagnose Ansible playbook issues |
-| `/ansible:security-audit [Scope]` | Audit Ansible security posture |
-| `/ansible:optimize [Target]` | Optimize Ansible performance and quality |
+| `/bear-ansible:debug <Symptom>` | Diagnose Ansible playbook issues |
+| `/bear-ansible:security-audit [Scope]` | Audit Ansible security posture |
+| `/bear-ansible:optimize [Target]` | Optimize Ansible performance and quality |
 
 ---
 
@@ -638,16 +638,16 @@ Hetzner Cloud infrastructure management with hcloud CLI.
 
 | Command | Description |
 |---------|-------------|
-| `/hcloud:architecture <Project>` | Design complete Hetzner Cloud infrastructure architecture |
-| `/hcloud:deploy-setup <Platform>` | Setup CI/CD pipeline for Hetzner Cloud deployments |
+| `/bear-hcloud:architecture <Project>` | Design complete Hetzner Cloud infrastructure architecture |
+| `/bear-hcloud:deploy-setup <Platform>` | Setup CI/CD pipeline for Hetzner Cloud deployments |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/hcloud:debug <Symptom>` | Diagnose Hetzner Cloud infrastructure issues |
-| `/hcloud:security-audit [Scope]` | Audit Hetzner Cloud security posture |
-| `/hcloud:optimize [Target]` | Optimize Hetzner Cloud cost and performance |
+| `/bear-hcloud:debug <Symptom>` | Diagnose Hetzner Cloud infrastructure issues |
+| `/bear-hcloud:security-audit [Scope]` | Audit Hetzner Cloud security posture |
+| `/bear-hcloud:optimize [Target]` | Optimize Hetzner Cloud cost and performance |
 
 ---
 
@@ -659,16 +659,16 @@ PgBouncer connection pooling management.
 
 | Command | Description |
 |---------|-------------|
-| `/pgbouncer:architecture <Project>` | Design complete PgBouncer connection pooling architecture |
-| `/pgbouncer:deploy-setup <Platform>` | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
+| `/bear-pgbouncer:architecture <Project>` | Design complete PgBouncer connection pooling architecture |
+| `/bear-pgbouncer:deploy-setup <Platform>` | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/pgbouncer:debug <Symptom>` | Diagnose PgBouncer connection pool issues from symptoms |
-| `/pgbouncer:security-audit [Scope]` | Audit PgBouncer security posture |
-| `/pgbouncer:optimize [Target]` | Optimize PgBouncer pool performance and connection utilization |
+| `/bear-pgbouncer:debug <Symptom>` | Diagnose PgBouncer connection pool issues from symptoms |
+| `/bear-pgbouncer:security-audit [Scope]` | Audit PgBouncer security posture |
+| `/bear-pgbouncer:optimize [Target]` | Optimize PgBouncer pool performance and connection utilization |
 
 ---
 
@@ -680,16 +680,16 @@ FrankenPHP PHP application server management.
 
 | Command | Description |
 |---------|-------------|
-| `/frankenphp:architecture <Project>` | Design complete FrankenPHP serving architecture |
-| `/frankenphp:deploy-setup <Platform>` | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
+| `/bear-frankenphp:architecture <Project>` | Design complete FrankenPHP serving architecture |
+| `/bear-frankenphp:deploy-setup <Platform>` | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
 
 ### Operations Commands
 
 | Command | Description |
 |---------|-------------|
-| `/frankenphp:debug <Symptom>` | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
-| `/frankenphp:security-audit [Scope]` | Audit FrankenPHP security posture |
-| `/frankenphp:optimize [Target]` | Optimize FrankenPHP worker performance and throughput |
+| `/bear-frankenphp:debug <Symptom>` | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
+| `/bear-frankenphp:security-audit [Scope]` | Audit FrankenPHP security posture |
+| `/bear-frankenphp:optimize [Target]` | Optimize FrankenPHP worker performance and throughput |
 
 ---
 

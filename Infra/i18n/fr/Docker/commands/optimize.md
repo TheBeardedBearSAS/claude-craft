@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Chemin vers le Dockerfile (défaut: ./Dockerfile)
 
-Exemple : `/docker:optimize ./docker/php/Dockerfile`
+Exemple : `/bear-docker:optimize ./docker/php/Dockerfile`
 
 ## Mode Plan
 
