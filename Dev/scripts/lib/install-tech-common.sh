@@ -498,18 +498,20 @@ install_tcl() {
         fi
     fi
 
-    # 5. Copy skills
-    if [[ "$skip_common" = "false" ]]; then
-        copy_generic_skills "$target_dir" "$dry_run"
+    # 5-6. Skills, templates, checklists, commands and agents are carried by the bear-* plugins (--plugin-mode)
+    if [[ "${PLUGIN_MODE:-false}" != "true" ]]; then
+        if [[ "$skip_common" = "false" ]]; then
+            copy_generic_skills "$target_dir" "$dry_run"
+        fi
+        copy_tech_skills "$target_dir" "$dry_run"
+        copy_templates "$target_dir" "$dry_run"
+        copy_checklists "$target_dir" "$dry_run"
+        copy_commands "$target_dir" "$dry_run"
     fi
-    copy_tech_skills "$target_dir" "$dry_run"
-
-    # 6. Copy templates, checklists, commands, agents
-    copy_templates "$target_dir" "$dry_run"
-    copy_checklists "$target_dir" "$dry_run"
-    copy_commands "$target_dir" "$dry_run"
     copy_checks "$target_dir" "$dry_run"
-    copy_agents "$target_dir" "$dry_run"
+    if [[ "${PLUGIN_MODE:-false}" != "true" ]]; then
+        copy_agents "$target_dir" "$dry_run"
+    fi
 
     # 7. Generate minimal CLAUDE.md
     generate_minimal_claude_md "$target_dir" "$project_name" "$TECH_DISPLAY_NAME" \
@@ -539,6 +541,7 @@ main() {
             --dry-run) dry_run="true"; shift ;;
             --backup) backup="true"; shift ;;
             --skip-common) skip_common="true"; shift ;;
+            --plugin-mode) PLUGIN_MODE="true"; shift ;;
             --interactive) interactive="true"; shift ;;
             --lang=*) lang="${1#--lang=}"; shift ;;
             --version) echo "${_CALLER_SCRIPT} version ${VERSION}"; exit 0 ;;

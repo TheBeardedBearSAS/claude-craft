@@ -36,18 +36,23 @@ create_tcl_directory_structure() {
         ".claude/references"
         ".claude/references/base"
         ".claude/references/${tech_namespace}"
-        ".claude/skills"
-        ".claude/commands"
-        ".claude/commands/bear-common"
-        ".claude/commands/bear-workflow"
-        ".claude/commands/bear-team"
-        ".claude/commands/bear-qa"
-        ".claude/commands/bear-uiux"
-        ".claude/commands/bear-${tech_namespace}"
-        ".claude/agents"
-        ".claude/templates"
-        ".claude/checklists"
     )
+    # Plugin installation: commands, agents, skills, templates and checklists come from the bear-* plugins.
+    if [[ "${PLUGIN_MODE:-false}" != "true" ]]; then
+        dirs+=(
+            ".claude/skills"
+            ".claude/commands"
+            ".claude/commands/bear-common"
+            ".claude/commands/bear-workflow"
+            ".claude/commands/bear-team"
+            ".claude/commands/bear-qa"
+            ".claude/commands/bear-uiux"
+            ".claude/commands/bear-${tech_namespace}"
+            ".claude/agents"
+            ".claude/templates"
+            ".claude/checklists"
+        )
+    fi
 
     for dir in "${dirs[@]}"; do
         if [[ "$dry_run" = "true" ]]; then

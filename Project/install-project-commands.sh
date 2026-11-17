@@ -19,6 +19,7 @@ source "${SCRIPT_DIR}/../Dev/scripts/lib/legacy-commands.sh"
 PROJECT_DIR="."
 skip_common=false
 commands_only=false
+plugin_mode=false
 force=false
 tech_arg=""
 while [[ $# -gt 0 ]]; do
@@ -28,6 +29,7 @@ while [[ $# -gt 0 ]]; do
         --tech=*) tech_arg="${1#--tech=}"; shift ;;
         --force) force=true; shift ;;
         --commands-only) commands_only=true; shift ;;
+        --plugin-mode) plugin_mode=true; shift ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
             echo ""
@@ -36,6 +38,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --skip-common  Skip common rules installation (for multi-tech modules)"
             echo "  --tech=a,b     Project stack, rendered into CLAUDE.md (e.g. python,react,docker)"
             echo "  --force        Overwrite existing CLAUDE.md and project-management scaffold"
+            echo "  --plugin-mode  Plugin installation: no commands/agents/templates (the bear-* plugins carry them), scaffold only"
             echo "  --commands-only  Refresh bear-project/bear-gate commands only (used by update); no scaffold"
             echo "  --help         Show this help"
             echo ""
@@ -74,10 +77,13 @@ ui_info "Source: $SRC_DIR"
 echo ""
 
 # Créer la structure .claude
-mkdir -p "$CLAUDE_DIR/commands/bear-project"
-mkdir -p "$CLAUDE_DIR/commands/bear-gate"
-mkdir -p "$CLAUDE_DIR/agents"
-mkdir -p "$CLAUDE_DIR/templates/project"
+if [[ "$plugin_mode" != "true" ]]; then
+    mkdir -p "$CLAUDE_DIR/commands/bear-project"
+    mkdir -p "$CLAUDE_DIR/commands/bear-gate"
+    mkdir -p "$CLAUDE_DIR/agents"
+    mkdir -p "$CLAUDE_DIR/templates/project"
+fi
+mkdir -p "$CLAUDE_DIR"
 
 if [[ "$commands_only" != "true" ]]; then
     # Créer la structure project-management
@@ -90,62 +96,64 @@ fi
 
 ui_info "Création de la structure..."
 
-# Migration : déplacer les anciens fichiers de commands/ vers commands/bear-project/
-if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
-    ui_info "Migration des anciennes commandes vers commands/bear-project/..."
-    mv "$CLAUDE_DIR/commands/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
-    ui_success "Migration effectuée"
-fi
+if [[ "$plugin_mode" != "true" ]]; then
+    # Migration : déplacer les anciens fichiers de commands/ vers commands/bear-project/
+    if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
+        ui_info "Migration des anciennes commandes vers commands/bear-project/..."
+        mv "$CLAUDE_DIR/commands/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
+        ui_success "Migration effectuée"
+    fi
 
-# Copy project commands from i18n source
-CMD_SRC="$SRC_DIR/commands"
-if [[ ! -d "$CMD_SRC" ]]; then
-    CMD_SRC="$SCRIPT_DIR/claude-commands"
-fi
-if [[ -d "$CMD_SRC" ]]; then
-    cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
-    COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
-    ui_success "$COMMANDS_COUNT project commands copied"
-fi
+    # Copy project commands from i18n source
+    CMD_SRC="$SRC_DIR/commands"
+    if [[ ! -d "$CMD_SRC" ]]; then
+        CMD_SRC="$SCRIPT_DIR/claude-commands"
+    fi
+    if [[ -d "$CMD_SRC" ]]; then
+        cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
+        COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
+        ui_success "$COMMANDS_COUNT project commands copied"
+    fi
 
 
-# Copy gate commands from i18n source
-GATE_CMD_SRC="$SRC_DIR/Gate/commands"
-if [[ -d "$GATE_CMD_SRC" ]]; then
-    cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-gate/" 2>/dev/null || true
-    GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
-    ui_success "$GATE_COUNT gate commands copied"
-fi
+    # Copy gate commands from i18n source
+    GATE_CMD_SRC="$SRC_DIR/Gate/commands"
+    if [[ -d "$GATE_CMD_SRC" ]]; then
+        cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-gate/" 2>/dev/null || true
+        GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
+        ui_success "$GATE_COUNT gate commands copied"
+    fi
 
-# Delete commands retired from the distribution (config/removed-commands.yaml)
-bash "$SCRIPT_DIR/../Dev/scripts/prune-removed-commands.sh" "$PROJECT_DIR"
-migrate_legacy_commands "$PROJECT_DIR" project gate
+    # Delete commands retired from the distribution (config/removed-commands.yaml)
+    bash "$SCRIPT_DIR/../Dev/scripts/prune-removed-commands.sh" "$PROJECT_DIR"
+    migrate_legacy_commands "$PROJECT_DIR" project gate
 
-if [[ "$commands_only" = "true" ]]; then
-    ui_success "Commands refreshed (--commands-only)"
-    exit 0
-fi
+    if [[ "$commands_only" = "true" ]]; then
+        ui_success "Commands refreshed (--commands-only)"
+        exit 0
+    fi
 
-# Copy agents from i18n source
-AGT_SRC="$SRC_DIR/agents"
-if [[ ! -d "$AGT_SRC" ]]; then
-    AGT_SRC="$SCRIPT_DIR/claude-agents"
-fi
-if [[ -d "$AGT_SRC" ]]; then
-    cp "$AGT_SRC/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
-    AGENTS_COUNT=$(ls -1 "$AGT_SRC/"*.md 2>/dev/null | wc -l)
-    ui_success "$AGENTS_COUNT agents copied"
-fi
+    # Copy agents from i18n source
+    AGT_SRC="$SRC_DIR/agents"
+    if [[ ! -d "$AGT_SRC" ]]; then
+        AGT_SRC="$SCRIPT_DIR/claude-agents"
+    fi
+    if [[ -d "$AGT_SRC" ]]; then
+        cp "$AGT_SRC/"*.md "$CLAUDE_DIR/agents/" 2>/dev/null || true
+        AGENTS_COUNT=$(ls -1 "$AGT_SRC/"*.md 2>/dev/null | wc -l)
+        ui_success "$AGENTS_COUNT agents copied"
+    fi
 
-# Copy templates from i18n source
-TPL_SRC="$SRC_DIR/templates"
-if [[ ! -d "$TPL_SRC" ]]; then
-    TPL_SRC="$SCRIPT_DIR/templates"
-fi
-if [[ -d "$TPL_SRC" ]]; then
-    cp "$TPL_SRC/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
-    TEMPLATES_COUNT=$(ls -1 "$TPL_SRC/"*.md 2>/dev/null | wc -l)
-    ui_success "$TEMPLATES_COUNT templates copied"
+    # Copy templates from i18n source
+    TPL_SRC="$SRC_DIR/templates"
+    if [[ ! -d "$TPL_SRC" ]]; then
+        TPL_SRC="$SCRIPT_DIR/templates"
+    fi
+    if [[ -d "$TPL_SRC" ]]; then
+        cp "$TPL_SRC/"*.md "$CLAUDE_DIR/templates/project/" 2>/dev/null || true
+        TEMPLATES_COUNT=$(ls -1 "$TPL_SRC/"*.md 2>/dev/null | wc -l)
+        ui_success "$TEMPLATES_COUNT templates copied"
+    fi
 fi
 
 # Render the CLAUDE.md scaffold placeholders from the --tech stack profiles

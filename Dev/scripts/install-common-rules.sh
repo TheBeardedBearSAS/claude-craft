@@ -18,6 +18,8 @@
 #   --interactive   Interactive mode to choose components
 #   --lang=XX       Language (en, fr, es, de, pt) - default: en
 #   --hooks=MODE    Hooks: default, full or none, + ",memory" for SQLite memory - default: default
+#   --plugin-mode   Plugin installation: copy only what the plugins do not carry
+#                   (rules, config, CLAUDE.md, AGENTS.md, .github templates, AgentTeams lib)
 #   --agents-only   Install agents only
 #   --commands-only Install commands only
 #   --templates-only Install templates only
@@ -67,6 +69,7 @@ lang="en"
 tech_arg=""
 hooks_mode="default"
 hooks_memory=false
+plugin_mode=false
 
 # --hooks=PROFILE[,memory] : un profil (default|full|none) + l'add-on optionnel memory.
 parse_hooks_arg() {
@@ -273,6 +276,10 @@ parse_args() {
                 rules_only=true
                 shift
                 ;;
+            --plugin-mode)
+                plugin_mode=true
+                shift
+                ;;
             -h|--help)
                 load_messages
                 print_usage
@@ -428,7 +435,9 @@ install_rules() {
     local lang_skills="$I18N_DIR/$lang/Common/skills"
     local dest_skills="$target_dir/.claude/skills"
 
-    if [[ -d "$base_skills" ]] || [[ -d "$lang_skills" ]]; then
+    if $plugin_mode; then
+        : # skills are carried by the bear-* plugins
+    elif [[ -d "$base_skills" ]] || [[ -d "$lang_skills" ]]; then
         [[ -d "$base_skills" ]] && copy_directory "$base_skills" "$dest_skills" "*.md"
         [[ -d "$lang_skills" ]] && copy_directory "$lang_skills" "$dest_skills" "*.md"
     else
@@ -660,7 +669,7 @@ install_config() {
     [[ ! -f "$settings_src" ]] && settings_src="$base_templates/settings.json.template"
     local settings_dest="$target_dir/.claude/settings.json"
     if [[ -f "$settings_src" ]]; then
-        if [[ ! -f "$settings_dest" ]] || $force; then
+        if [[ ! -f "$settings_dest" ]] || { $force && ! $plugin_mode; }; then
             if $dry_run; then
                 log_dry_run "${MSG_CREATING:-Creating} .claude/settings.json"
             else
@@ -814,7 +823,7 @@ install_claude_md() {
                     local cmd_desc
                     cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
                     if [[ -n "$cmd_desc" ]]; then
-                        cmds_seen["${ns_prefix}:${cmd_name}"]="- \`/${ns_prefix}:${cmd_name}\` - ${cmd_desc}\n"
+                        cmds_seen["${ns_prefix}:${cmd_name}"]="- \`/bear-${ns_prefix}:${cmd_name}\` - ${cmd_desc}\n"
                     fi
                 done < <(find "$src_commands" -name "*.md" -type f | sort)
             fi
@@ -878,7 +887,7 @@ run_interactive() {
     read -p "Install common agents? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_agents_choice=true
 
-    read -p "Install /common: commands? (y/n) [y]: " choice
+    read -p "Install /bear-common:* commands? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_commands_choice=true
 
     read -p "Install PR/Issues templates? (y/n) [y]: " choice
@@ -958,6 +967,13 @@ main() {
 
     echo ""
 
+    if $plugin_mode; then
+        install_rules
+        install_templates
+        install_agentteams
+        install_config
+        install_claude_md
+    else
     # Install selected components
     if $rules_only; then
         install_rules
@@ -985,6 +1001,7 @@ main() {
         install_config
         install_hooks
         install_claude_md
+    fi
     fi
 
     # Copy AGENTS.md template to target root (idempotent — won't overwrite existing)
