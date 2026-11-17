@@ -55,7 +55,7 @@ la bonne forme à chaque phase :
 |-------|----------------|
 | `start`, `review`, `retro` | `N` brut (ex. `5`) |
 | `start --tasks-only` | `N` nu (ex. `5`) |
-| `team:sprint` (implémentation) | nom libre du sprint résolu depuis le dossier / fichier de statut |
+| `team:delivery --phase=implementation` (implémentation) | nom libre du sprint résolu depuis le dossier / fichier de statut |
 
 Résoudre le dossier du sprint via glob `project-management/sprints/sprint-{N}-*/` et lire
 `.bmad/sprint-status.yaml` pour le nom canonique du sprint et la liste de stories.

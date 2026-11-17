@@ -55,7 +55,7 @@ to each phase:
 |-------|---------------|
 | `start`, `review`, `retro` | bare `N` (e.g. `5`) |
 | `start --tasks-only` | bare `N` (e.g. `5`) |
-| `team:sprint` (implementation) | free-form sprint name resolved from the folder / status file |
+| `team:delivery --phase=implementation` (implementation) | free-form sprint name resolved from the folder / status file |
 
 Resolve the sprint folder by globbing `project-management/sprints/sprint-{N}-*/` and read
 `.bmad/sprint-status.yaml` for the canonical sprint name and story list.

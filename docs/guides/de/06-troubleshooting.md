@@ -43,7 +43,7 @@ Dieser Leitfaden behandelt häufige Probleme und ihre Lösungen bei der Verwendu
 
 3. **Dateiformat des Befehls prüfen**
    ```bash
-   head -5 .claude/commands/bear-symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check.md
    # Sollte mit einem korrekten Markdown-Header beginnen
    ```
 

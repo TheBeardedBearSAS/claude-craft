@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Publisher name**: "The Bearded Bear" replaces "The Bearded CTO" in author, maintainer and footer lines; `LICENSE` copyright holder is The Bearded Bear SAS. Stale `github.com/the-bearded-cto/…` and `TheBeardedCTO/Tools/…` links point to `TheBeardedBearSAS`.
 - **CLI banner** spells BEAR CRAFT, with the frame realigned (the CRAFT glyphs and the version line were off by a few columns).
 
+### Removed
+
+- **BREAKING — the 66 redirect stubs deprecated in 9.0 ("Obsolète (retirée en 10.0)") are removed.** The five per-axis commands of each of the 13 stacks that had them (`check-architecture`, `check-code-quality`, `check-security`, `check-testing`, `check-compliance` for `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `symfony`, `vercel`, `vite` and `vuejs`) and `/bear-team:sprint`, in the 5 languages and in the repository's own `.claude/commands/`. Use `/bear-<tech>:check <axis>` (`check-compliance` → `check all`) and `/bear-team:delivery --phase=implementation`. The files are listed under `removed:` in `config/removed-commands.yaml` (nothing is scheduled any more), so `bear-craft update` and the installers delete them from existing projects. Counts: 82 commands in the 18 namespaces, 135 in the generated reference (infra and project management included). See `docs/MIGRATION-v10.md#removed-in-100`.
+
 ### Deprecated
 
 - **Kept for 10.x, removed in 11.0:** the `claude-craft` command (prints a notice on stderr), the `CLAUDE_CRAFT_USER` fallback for `BEAR_CRAFT_USER`, the `claude-craft-skill-*` prefix (new skills use `bear-craft-skill-*`), the `ClaudeCraftCLI` export (now `BearCraftCLI`), the `~/.local/lib/claude-craft/` shell-lib path, and the `claude_craft_lang` site preference key.

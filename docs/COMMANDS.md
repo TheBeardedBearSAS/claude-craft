@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/bear-team:sprint` → `/bear-team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/bear-common:add-technology` and `/bear-common:audit-*` are maintainer-only (they work on the Bear Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **135 commands** across all namespaces (infra and project management included). The counts below are the commands of the 18 namespaces. `/bear-common:add-technology` and `/bear-common:audit-*` are maintainer-only (they work on the Bear Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -183,7 +183,7 @@ Add a complete technology stack to bear-craft with best practices:
 |---------|-------------|
 | `/bear-team:audit` | Parallel multi-tech audit (Agent Teams) |
 | `/bear-team:security` | Parallel security review (Agent Teams) |
-| `/bear-team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams); `--phase=implementation` implements existing stories (replaces `/bear-team:sprint` in 9.0) |
+| `/bear-team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams); `--phase=implementation` implements existing stories (replaced the former sprint command in 9.0) |
 | skill `sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams (a skill since 8.26.0, no longer a command) |
 
 ---
@@ -875,20 +875,9 @@ Available with BMAD v6 installation.
 
 The 52 deprecated PM commands and the whole sprint namespace were removed in 9.0, together with `/bear-common:research-context7` and `/bear-uiux:orchestrator` (deprecated in 8.27.0). See [MIGRATION-v9.md](MIGRATION-v9.md) for the complete old → new table.
 
-## Deprecated commands (removed in 10.0)
+## Removed commands (10.0)
 
-These redirect stubs print a warning and run their replacement until 10.0.
-
-| Deprecated | Replacement |
-|------------|-------------|
-| `/<tech>:check-architecture` | `/<tech>:check architecture` |
-| `/<tech>:check-code-quality` | `/<tech>:check code-quality` |
-| `/<tech>:check-security` | `/<tech>:check security` |
-| `/<tech>:check-testing` | `/<tech>:check testing` |
-| `/<tech>:check-compliance` | `/<tech>:check all` |
-| `/bear-team:sprint` | `/bear-team:delivery --phase=implementation` |
-
-`<tech>` is any of the 17 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `tauri`, `vercel`, `vite`, `vuejs`, `wordpress`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
+The 66 redirect stubs deprecated in 9.0 were removed in 10.0: the five per-axis commands of each of the 13 stacks that had them (`angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `symfony`, `vercel`, `vite`, `vuejs`) and the sprint command of the team namespace. See [MIGRATION-v10.md](MIGRATION-v10.md#removed-in-100) for the old → new table. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
 ---
 

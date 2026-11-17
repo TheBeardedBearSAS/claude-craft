@@ -7,50 +7,45 @@
 
 | Namespace | Count |
 |-----------|-------|
-| `/bear-angular:*` | 7 |
+| `/bear-angular:*` | 2 |
 | `/bear-ansible:*` | 5 |
 | `/bear-common:*` | 13 |
 | `/bear-coolify:*` | 5 |
-| `/bear-csharp:*` | 7 |
+| `/bear-csharp:*` | 2 |
 | `/bear-docker:*` | 5 |
-| `/bear-flutter:*` | 11 |
+| `/bear-flutter:*` | 6 |
 | `/bear-frankenphp:*` | 5 |
 | `/bear-gate:*` | 1 |
 | `/bear-hcloud:*` | 5 |
 | `/bear-kubernetes:*` | 5 |
-| `/bear-laravel:*` | 7 |
+| `/bear-laravel:*` | 2 |
 | `/bear-opentofu:*` | 5 |
-| `/bear-paperclip:*` | 9 |
+| `/bear-paperclip:*` | 4 |
 | `/bear-pgbouncer:*` | 5 |
-| `/bear-php:*` | 6 |
+| `/bear-php:*` | 1 |
 | `/bear-project:*` | 5 |
-| `/bear-python:*` | 11 |
+| `/bear-python:*` | 6 |
 | `/bear-qa:*` | 5 |
-| `/bear-react:*` | 11 |
-| `/bear-reactnative:*` | 11 |
+| `/bear-react:*` | 6 |
+| `/bear-reactnative:*` | 6 |
 | `/bear-ruby:*` | 1 |
 | `/bear-rust:*` | 1 |
-| `/bear-symfony:*` | 11 |
+| `/bear-symfony:*` | 6 |
 | `/bear-tauri:*` | 1 |
-| `/bear-team:*` | 4 |
+| `/bear-team:*` | 3 |
 | `/bear-uiux:*` | 7 |
-| `/bear-vercel:*` | 7 |
-| `/bear-vite:*` | 8 |
-| `/bear-vuejs:*` | 7 |
+| `/bear-vercel:*` | 2 |
+| `/bear-vite:*` | 3 |
+| `/bear-vuejs:*` | 2 |
 | `/bear-wordpress:*` | 1 |
 | `/bear-workflow:*` | 9 |
-| **Total** | **201** |
+| **Total** | **135** |
 
 ## `/bear-angular:*`
 
 | Command | Description |
 |---------|-------------|
 | [`/bear-angular:check`](../.claude/commands/bear-angular/check.md) | Audit Angular par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-angular:check-architecture`](../.claude/commands/bear-angular/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check architecture |
-| [`/bear-angular:check-code-quality`](../.claude/commands/bear-angular/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check code-quality |
-| [`/bear-angular:check-compliance`](../.claude/commands/bear-angular/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check all |
-| [`/bear-angular:check-security`](../.claude/commands/bear-angular/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check security |
-| [`/bear-angular:check-testing`](../.claude/commands/bear-angular/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check testing |
 | [`/bear-angular:generate-component`](../.claude/commands/bear-angular/generate-component.md) | Generate Angular standalone component with tests |
 
 ## `/bear-ansible:*`
@@ -96,11 +91,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-csharp:check`](../.claude/commands/bear-csharp/check.md) | Audit C#/.NET par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-csharp:check-architecture`](../.claude/commands/bear-csharp/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check architecture |
-| [`/bear-csharp:check-code-quality`](../.claude/commands/bear-csharp/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check code-quality |
-| [`/bear-csharp:check-compliance`](../.claude/commands/bear-csharp/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check all |
-| [`/bear-csharp:check-security`](../.claude/commands/bear-csharp/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check security |
-| [`/bear-csharp:check-testing`](../.claude/commands/bear-csharp/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check testing |
 | [`/bear-csharp:generate-feature`](../.claude/commands/bear-csharp/generate-feature.md) | Generate a complete feature with Clean Architecture structure |
 
 ## `/bear-docker:*`
@@ -119,11 +109,6 @@
 |---------|-------------|
 | [`/bear-flutter:analyze-performance`](../.claude/commands/bear-flutter/analyze-performance.md) | Analyse Performance Flutter |
 | [`/bear-flutter:check`](../.claude/commands/bear-flutter/check.md) | Audit Flutter par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-flutter:check-architecture`](../.claude/commands/bear-flutter/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check architecture |
-| [`/bear-flutter:check-code-quality`](../.claude/commands/bear-flutter/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check code-quality |
-| [`/bear-flutter:check-compliance`](../.claude/commands/bear-flutter/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check all |
-| [`/bear-flutter:check-security`](../.claude/commands/bear-flutter/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check security |
-| [`/bear-flutter:check-testing`](../.claude/commands/bear-flutter/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check testing |
 | [`/bear-flutter:generate-feature`](../.claude/commands/bear-flutter/generate-feature.md) | Génération Feature Flutter Complète |
 | [`/bear-flutter:generate-widget`](../.claude/commands/bear-flutter/generate-widget.md) | Génération Widget Flutter avec Tests |
 | [`/bear-flutter:golden-update`](../.claude/commands/bear-flutter/golden-update.md) | Mise à jour Golden Tests |
@@ -170,11 +155,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-laravel:check`](../.claude/commands/bear-laravel/check.md) | Audit Laravel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-laravel:check-architecture`](../.claude/commands/bear-laravel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check architecture |
-| [`/bear-laravel:check-code-quality`](../.claude/commands/bear-laravel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check code-quality |
-| [`/bear-laravel:check-compliance`](../.claude/commands/bear-laravel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check all |
-| [`/bear-laravel:check-security`](../.claude/commands/bear-laravel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check security |
-| [`/bear-laravel:check-testing`](../.claude/commands/bear-laravel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check testing |
 | [`/bear-laravel:generate-controller`](../.claude/commands/bear-laravel/generate-controller.md) | Generate a Laravel controller following best practices |
 
 ## `/bear-opentofu:*`
@@ -192,11 +172,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-paperclip:check`](../Dev/i18n/en/Paperclip/commands/check.md) | Paperclip audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
-| [`/bear-paperclip:check-architecture`](../Dev/i18n/en/Paperclip/commands/check-architecture.md) | Deprecated (removed in 10.0): use /bear-paperclip:check architecture |
-| [`/bear-paperclip:check-code-quality`](../Dev/i18n/en/Paperclip/commands/check-code-quality.md) | Deprecated (removed in 10.0): use /bear-paperclip:check code-quality |
-| [`/bear-paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Deprecated (removed in 10.0): use /bear-paperclip:check all |
-| [`/bear-paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Deprecated (removed in 10.0): use /bear-paperclip:check security |
-| [`/bear-paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Deprecated (removed in 10.0): use /bear-paperclip:check testing |
 | [`/bear-paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
 | [`/bear-paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
 | [`/bear-paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
@@ -216,11 +191,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-php:check`](../.claude/commands/bear-php/check.md) | Audit PHP par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-php:check-architecture`](../.claude/commands/bear-php/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check architecture |
-| [`/bear-php:check-code-quality`](../.claude/commands/bear-php/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check code-quality |
-| [`/bear-php:check-compliance`](../.claude/commands/bear-php/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check all |
-| [`/bear-php:check-security`](../.claude/commands/bear-php/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check security |
-| [`/bear-php:check-testing`](../.claude/commands/bear-php/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check testing |
 
 ## `/bear-project:*`
 
@@ -238,11 +208,6 @@
 |---------|-------------|
 | [`/bear-python:async-check`](../.claude/commands/bear-python/async-check.md) | Vérification Patterns Async Python |
 | [`/bear-python:check`](../.claude/commands/bear-python/check.md) | Audit Python par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-python:check-architecture`](../.claude/commands/bear-python/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check architecture |
-| [`/bear-python:check-code-quality`](../.claude/commands/bear-python/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check code-quality |
-| [`/bear-python:check-compliance`](../.claude/commands/bear-python/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check all |
-| [`/bear-python:check-security`](../.claude/commands/bear-python/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check security |
-| [`/bear-python:check-testing`](../.claude/commands/bear-python/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check testing |
 | [`/bear-python:dependency-audit`](../.claude/commands/bear-python/dependency-audit.md) | Audit des Dépendances Python |
 | [`/bear-python:generate-endpoint`](../.claude/commands/bear-python/generate-endpoint.md) | Génération Endpoint FastAPI |
 | [`/bear-python:generate-model`](../.claude/commands/bear-python/generate-model.md) | Génération Model SQLAlchemy |
@@ -265,11 +230,6 @@
 | [`/bear-react:accessibility-check`](../.claude/commands/bear-react/accessibility-check.md) | Audit Accessibilité React |
 | [`/bear-react:bundle-analyze`](../.claude/commands/bear-react/bundle-analyze.md) | Analyse du Bundle React |
 | [`/bear-react:check`](../.claude/commands/bear-react/check.md) | Audit React par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-react:check-architecture`](../.claude/commands/bear-react/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check architecture |
-| [`/bear-react:check-code-quality`](../.claude/commands/bear-react/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check code-quality |
-| [`/bear-react:check-compliance`](../.claude/commands/bear-react/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check all |
-| [`/bear-react:check-security`](../.claude/commands/bear-react/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check security |
-| [`/bear-react:check-testing`](../.claude/commands/bear-react/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check testing |
 | [`/bear-react:generate-component`](../.claude/commands/bear-react/generate-component.md) | Génération Composant React |
 | [`/bear-react:generate-hook`](../.claude/commands/bear-react/generate-hook.md) | Génération Custom Hook React |
 | [`/bear-react:storybook-story`](../.claude/commands/bear-react/storybook-story.md) | Génération Story Storybook |
@@ -280,11 +240,6 @@
 |---------|-------------|
 | [`/bear-reactnative:app-size`](../.claude/commands/bear-reactnative/app-size.md) | Analyse Taille Application React Native |
 | [`/bear-reactnative:check`](../.claude/commands/bear-reactnative/check.md) | Audit React Native par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-reactnative:check-architecture`](../.claude/commands/bear-reactnative/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check architecture |
-| [`/bear-reactnative:check-code-quality`](../.claude/commands/bear-reactnative/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check code-quality |
-| [`/bear-reactnative:check-compliance`](../.claude/commands/bear-reactnative/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check all |
-| [`/bear-reactnative:check-security`](../.claude/commands/bear-reactnative/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check security |
-| [`/bear-reactnative:check-testing`](../.claude/commands/bear-reactnative/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check testing |
 | [`/bear-reactnative:deep-link`](../.claude/commands/bear-reactnative/deep-link.md) | Configuration Deep Linking React Native |
 | [`/bear-reactnative:generate-screen`](../.claude/commands/bear-reactnative/generate-screen.md) | Génération Screen React Native |
 | [`/bear-reactnative:native-module`](../.claude/commands/bear-reactnative/native-module.md) | Guide Création Module Natif React Native |
@@ -308,11 +263,6 @@
 |---------|-------------|
 | [`/bear-symfony:api-endpoint`](../.claude/commands/bear-symfony/api-endpoint.md) | Création Endpoint API Platform |
 | [`/bear-symfony:check`](../.claude/commands/bear-symfony/check.md) | Audit Symfony par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-symfony:check-architecture`](../.claude/commands/bear-symfony/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check architecture |
-| [`/bear-symfony:check-code-quality`](../.claude/commands/bear-symfony/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check code-quality |
-| [`/bear-symfony:check-compliance`](../.claude/commands/bear-symfony/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check all |
-| [`/bear-symfony:check-security`](../.claude/commands/bear-symfony/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check security |
-| [`/bear-symfony:check-testing`](../.claude/commands/bear-symfony/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check testing |
 | [`/bear-symfony:generate-command`](../.claude/commands/bear-symfony/generate-command.md) | Génération Commande Symfony |
 | [`/bear-symfony:generate-crud`](../.claude/commands/bear-symfony/generate-crud.md) | Génération CRUD Complet |
 | [`/bear-symfony:migration-plan`](../.claude/commands/bear-symfony/migration-plan.md) | Planification Migration Base de Données |
@@ -331,7 +281,6 @@
 | [`/bear-team:audit`](../.claude/commands/bear-team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
 | [`/bear-team:delivery`](../.claude/commands/bear-team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
 | [`/bear-team:security`](../.claude/commands/bear-team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
-| [`/bear-team:sprint`](../.claude/commands/bear-team/sprint.md) | Obsolète (retirée en 10.0) : utilisez /bear-team:delivery --phase=implementation |
 
 ## `/bear-uiux:*`
 
@@ -350,11 +299,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-vercel:check`](../.claude/commands/bear-vercel/check.md) | Audit Vercel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-vercel:check-architecture`](../.claude/commands/bear-vercel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check architecture |
-| [`/bear-vercel:check-code-quality`](../.claude/commands/bear-vercel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check code-quality |
-| [`/bear-vercel:check-compliance`](../.claude/commands/bear-vercel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check all |
-| [`/bear-vercel:check-security`](../.claude/commands/bear-vercel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check security |
-| [`/bear-vercel:check-testing`](../.claude/commands/bear-vercel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check testing |
 | [`/bear-vercel:deploy-config`](../.claude/commands/bear-vercel/deploy-config.md) | Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json |
 
 ## `/bear-vite:*`
@@ -362,12 +306,7 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-vite:check`](../.claude/commands/bear-vite/check.md) | Audit Vite par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-vite:check-architecture`](../.claude/commands/bear-vite/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check architecture |
-| [`/bear-vite:check-code-quality`](../.claude/commands/bear-vite/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check code-quality |
-| [`/bear-vite:check-compliance`](../.claude/commands/bear-vite/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check all |
 | [`/bear-vite:check-library-build`](../.claude/commands/bear-vite/check-library-build.md) | Validate build.lib output and vite-plugin-dts .d.ts generation for a Vite library |
-| [`/bear-vite:check-security`](../.claude/commands/bear-vite/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check security |
-| [`/bear-vite:check-testing`](../.claude/commands/bear-vite/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check testing |
 | [`/bear-vite:scaffold-project`](../.claude/commands/bear-vite/scaffold-project.md) | Scaffold a new Vite project (vanilla-ts or lit-ts template) or a library skeleton |
 
 ## `/bear-vuejs:*`
@@ -375,11 +314,6 @@
 | Command | Description |
 |---------|-------------|
 | [`/bear-vuejs:check`](../.claude/commands/bear-vuejs/check.md) | Audit Vue.js par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/bear-vuejs:check-architecture`](../.claude/commands/bear-vuejs/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check architecture |
-| [`/bear-vuejs:check-code-quality`](../.claude/commands/bear-vuejs/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check code-quality |
-| [`/bear-vuejs:check-compliance`](../.claude/commands/bear-vuejs/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check all |
-| [`/bear-vuejs:check-security`](../.claude/commands/bear-vuejs/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check security |
-| [`/bear-vuejs:check-testing`](../.claude/commands/bear-vuejs/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check testing |
 | [`/bear-vuejs:generate-component`](../.claude/commands/bear-vuejs/generate-component.md) | Generate a Vue.js component with TypeScript, tests, and Storybook |
 
 ## `/bear-wordpress:*`

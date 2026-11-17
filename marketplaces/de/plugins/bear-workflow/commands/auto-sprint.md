@@ -55,7 +55,7 @@ an jede Phase übergeben:
 |-------|-------------------|
 | `start`, `review`, `retro` | Reine Zahl `N` (z.B. `5`) |
 | `start --tasks-only` | reines `N` (z.B. `5`) |
-| `team:sprint` (Implementierung) | Freier Sprint-Name, aus Ordner / Status-Datei aufgelöst |
+| `team:delivery --phase=implementation` (Implementierung) | Freier Sprint-Name, aus Ordner / Status-Datei aufgelöst |
 
 Den Sprint-Ordner durch Glob-Suche `project-management/sprints/sprint-{N}-*/` auflösen und
 `.bmad/sprint-status.yaml` für den kanonischen Sprint-Namen und die Story-Liste lesen.

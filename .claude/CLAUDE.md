@@ -2,7 +2,7 @@
 
 **Version:** 9.4.0 | **Languages:** en, fr, es, de, pt
 
-A comprehensive AI-assisted development framework for Claude Code with 17 technology stacks, 33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, and BMAD v6 project management.
+A comprehensive AI-assisted development framework for Claude Code with 17 technology stacks, 33 specialized agents (+39 infra agents on-demand), 82 commands across 18 namespaces, and BMAD v6 project management.
 
 ---
 
@@ -57,7 +57,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ---
 
-## Available Commands (18 namespaces, 143 commands)
+## Available Commands (18 namespaces, 82 commands)
 
 Core: `/bear-common:*`, `/bear-workflow:*`, `/bear-team:*`, `/bear-qa:*`, `/bear-uiux:*` | Tech: `/bear-symfony:*`, `/bear-react:*`, `/bear-flutter:*`, `/bear-python:*`, `/bear-angular:*`, `/bear-vuejs:*`, `/bear-laravel:*`, `/bear-reactnative:*`, `/bear-csharp:*`, `/bear-php:*` _(et `/bear-paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.3, Coolify v4.7.5, K8s 1.37.2, OpenTofu 1.13.9, Ansible 2.22.0, FrankenPHP 1.13.5, PgBouncer 1.26.1 | Project: `/bear-gate:*`, `/bear-project:*`
 
