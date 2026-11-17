@@ -80,7 +80,7 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     // Expected minimum counts (from v7.0.0 structure)
     expect(countMatches('Creating:.*commands/bear-common/')).toBeGreaterThanOrEqual(10);
     expect(countMatches('Creating:.*commands/bear-workflow/')).toBeGreaterThanOrEqual(9);
-    expect(countMatches('Creating:.*commands/bear-team/')).toBeGreaterThanOrEqual(4);
+    expect(countMatches('Creating:.*commands/bear-team/')).toBeGreaterThanOrEqual(3);
     expect(countMatches('Creating:.*commands/bear-qa/')).toBeGreaterThanOrEqual(5);
     expect(countMatches('Creating:.*commands/bear-uiux/')).toBeGreaterThanOrEqual(7);
   });
@@ -109,7 +109,7 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     // Minimum file counts per namespace
     expect(countMd(path.join(base, 'bear-common'))).toBeGreaterThanOrEqual(10);
     expect(countMd(path.join(base, 'bear-workflow'))).toBeGreaterThanOrEqual(9);
-    expect(countMd(path.join(base, 'bear-team'))).toBeGreaterThanOrEqual(4);
+    expect(countMd(path.join(base, 'bear-team'))).toBeGreaterThanOrEqual(3);
     expect(countMd(path.join(base, 'bear-qa'))).toBeGreaterThanOrEqual(5);
     expect(countMd(path.join(base, 'bear-uiux'))).toBeGreaterThanOrEqual(7);
   });

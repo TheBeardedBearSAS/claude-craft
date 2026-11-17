@@ -78,75 +78,77 @@ removed:
   - coolify/coolify-debug.md
   - coolify/coolify-deploy.md
   - coolify/coolify-setup.md
+  # 10.0.0 — redirect stubs scheduled for removal since 9.0: /<tech>:check-<axis> → /bear-<tech>:check <axis>,
+  # /team:sprint → /bear-team:delivery --phase=implementation (see docs/MIGRATION-v10.md)
+  - angular/check-architecture.md
+  - angular/check-code-quality.md
+  - angular/check-compliance.md
+  - angular/check-security.md
+  - angular/check-testing.md
+  - csharp/check-architecture.md
+  - csharp/check-code-quality.md
+  - csharp/check-compliance.md
+  - csharp/check-security.md
+  - csharp/check-testing.md
+  - flutter/check-architecture.md
+  - flutter/check-code-quality.md
+  - flutter/check-compliance.md
+  - flutter/check-security.md
+  - flutter/check-testing.md
+  - laravel/check-architecture.md
+  - laravel/check-code-quality.md
+  - laravel/check-compliance.md
+  - laravel/check-security.md
+  - laravel/check-testing.md
+  - paperclip/check-architecture.md
+  - paperclip/check-code-quality.md
+  - paperclip/check-compliance.md
+  - paperclip/check-security.md
+  - paperclip/check-testing.md
+  - php/check-architecture.md
+  - php/check-code-quality.md
+  - php/check-compliance.md
+  - php/check-security.md
+  - php/check-testing.md
+  - python/check-architecture.md
+  - python/check-code-quality.md
+  - python/check-compliance.md
+  - python/check-security.md
+  - python/check-testing.md
+  - react/check-architecture.md
+  - react/check-code-quality.md
+  - react/check-compliance.md
+  - react/check-security.md
+  - react/check-testing.md
+  - reactnative/check-architecture.md
+  - reactnative/check-code-quality.md
+  - reactnative/check-compliance.md
+  - reactnative/check-security.md
+  - reactnative/check-testing.md
+  - symfony/check-architecture.md
+  - symfony/check-code-quality.md
+  - symfony/check-compliance.md
+  - symfony/check-security.md
+  - symfony/check-testing.md
+  - vercel/check-architecture.md
+  - vercel/check-code-quality.md
+  - vercel/check-compliance.md
+  - vercel/check-security.md
+  - vercel/check-testing.md
+  - vite/check-architecture.md
+  - vite/check-code-quality.md
+  - vite/check-compliance.md
+  - vite/check-security.md
+  - vite/check-testing.md
+  - vuejs/check-architecture.md
+  - vuejs/check-code-quality.md
+  - vuejs/check-compliance.md
+  - vuejs/check-security.md
+  - vuejs/check-testing.md
+  - team/sprint.md
 
 # Deprecated commands still distributed as redirect stubs, with the release that
 # retires them (they move to `removed:` then). A mapping, not a list, so
 # prune-removed-commands.sh never deletes them before that release.
-scheduled:
-  # 9.0.0 — /<tech>:check-<axis> → /<tech>:check <axis>, /team:sprint → /team:delivery --phase=implementation
-  angular/check-architecture.md: '10.0'
-  angular/check-code-quality.md: '10.0'
-  angular/check-compliance.md: '10.0'
-  angular/check-security.md: '10.0'
-  angular/check-testing.md: '10.0'
-  csharp/check-architecture.md: '10.0'
-  csharp/check-code-quality.md: '10.0'
-  csharp/check-compliance.md: '10.0'
-  csharp/check-security.md: '10.0'
-  csharp/check-testing.md: '10.0'
-  flutter/check-architecture.md: '10.0'
-  flutter/check-code-quality.md: '10.0'
-  flutter/check-compliance.md: '10.0'
-  flutter/check-security.md: '10.0'
-  flutter/check-testing.md: '10.0'
-  laravel/check-architecture.md: '10.0'
-  laravel/check-code-quality.md: '10.0'
-  laravel/check-compliance.md: '10.0'
-  laravel/check-security.md: '10.0'
-  laravel/check-testing.md: '10.0'
-  paperclip/check-architecture.md: '10.0'
-  paperclip/check-code-quality.md: '10.0'
-  paperclip/check-compliance.md: '10.0'
-  paperclip/check-security.md: '10.0'
-  paperclip/check-testing.md: '10.0'
-  php/check-architecture.md: '10.0'
-  php/check-code-quality.md: '10.0'
-  php/check-compliance.md: '10.0'
-  php/check-security.md: '10.0'
-  php/check-testing.md: '10.0'
-  python/check-architecture.md: '10.0'
-  python/check-code-quality.md: '10.0'
-  python/check-compliance.md: '10.0'
-  python/check-security.md: '10.0'
-  python/check-testing.md: '10.0'
-  react/check-architecture.md: '10.0'
-  react/check-code-quality.md: '10.0'
-  react/check-compliance.md: '10.0'
-  react/check-security.md: '10.0'
-  react/check-testing.md: '10.0'
-  reactnative/check-architecture.md: '10.0'
-  reactnative/check-code-quality.md: '10.0'
-  reactnative/check-compliance.md: '10.0'
-  reactnative/check-security.md: '10.0'
-  reactnative/check-testing.md: '10.0'
-  symfony/check-architecture.md: '10.0'
-  symfony/check-code-quality.md: '10.0'
-  symfony/check-compliance.md: '10.0'
-  symfony/check-security.md: '10.0'
-  symfony/check-testing.md: '10.0'
-  vercel/check-architecture.md: '10.0'
-  vercel/check-code-quality.md: '10.0'
-  vercel/check-compliance.md: '10.0'
-  vercel/check-security.md: '10.0'
-  vercel/check-testing.md: '10.0'
-  vite/check-architecture.md: '10.0'
-  vite/check-code-quality.md: '10.0'
-  vite/check-compliance.md: '10.0'
-  vite/check-security.md: '10.0'
-  vite/check-testing.md: '10.0'
-  vuejs/check-architecture.md: '10.0'
-  vuejs/check-code-quality.md: '10.0'
-  vuejs/check-compliance.md: '10.0'
-  vuejs/check-security.md: '10.0'
-  vuejs/check-testing.md: '10.0'
-  team/sprint.md: '10.0'
+# Empty since 10.0.0: every stub scheduled for 10.0 was removed and listed above.
+scheduled: {}

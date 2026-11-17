@@ -1,9 +1,0 @@
----
-description: "Obsoleto (se elimina en 10.0): usa /bear-react:check code-quality"
-deprecated: true
-replaced-by: /bear-react:check
----
-
-> ⚠️ `/bear-react:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/bear-react:check code-quality`.
-
-Ejecuta `/bear-react:check code-quality $ARGUMENTS`: lee `.claude/commands/bear-react/check.md` y síguelo con estos argumentos.
