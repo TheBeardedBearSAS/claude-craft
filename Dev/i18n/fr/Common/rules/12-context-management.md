@@ -176,7 +176,7 @@ Ces champs permettent d'optimiser les couts et le scope des sous-agents.
 
 Claude Code compacte automatiquement le contexte quand il approche les limites de la fenetre. Les messages anciens sont resumes pour liberer de l'espace.
 
-> **Historique append-only (Opus 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Historique append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Compaction proactive
 
@@ -784,8 +784,8 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
 | **caveman** | Apache-2.0 | Compression des réponses (output) ~65 % | ✅ Intégrer |
-| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (−38× à −528×) | ✅ Intégrer |
-| **token-savior** | MIT | Index symbolique + compaction Bash (−80 %) | ✅ Intégrer |
+| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (~63× médiane, 6,65× vs grep) | ✅ Intégrer |
+| **token-savior** | MIT | Index symbolique + compaction Bash (−80 % non vérifiable, −45 % de coût remesuré) | 🔶 Référencer (gain non reproductible) |
 | **claude-token-efficient** | MIT | Règles CLAUDE.md anti-verbosité (~63 % output) | ✅ Intégrer |
 | **context-mode** | ELv2 | Sandbox des outputs, continuité post-compaction | 🔶 Référencer (licence) |
 | **claude-context** | MIT | Recherche sémantique (vector DB requise) | 🔶 Référencer (infra) |

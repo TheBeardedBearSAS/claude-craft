@@ -176,7 +176,7 @@ Estos campos permiten optimizar los costos y el alcance de los sub-agentes.
 
 Claude Code compacta automaticamente el contexto cuando se acerca a los limites de la ventana. Los mensajes antiguos se resumen para liberar espacio.
 
-> **Historial append-only (Opus 5.5, Fable 5.x, Mythos 5.x):** modificar un mensaje anterior, reconstruir `system` o `tools`, o resumir turnos antiguos en su lugar invalida los bloques de thinking siguientes. Añadir al final del historial en lugar de reescribirlo. Fuente: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Historial append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x):** modificar un mensaje anterior, reconstruir `system` o `tools`, o resumir turnos antiguos en su lugar invalida los bloques de thinking siguientes. Añadir al final del historial en lugar de reescribirlo. Fuente: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Compactacion proactiva
 
@@ -814,8 +814,8 @@ Además de RTK y los hooks nativos, el ecosistema de Claude Code ofrece herramie
 | Herramienta | Licencia | Ángulo | Rec |
 |-------------|----------|--------|-----|
 | **caveman** | Apache-2.0 | Compresión de respuestas (output) ~65 % | ✅ Integrar |
-| **code-review-graph** | MIT | Grafo AST, lectura del blast radius (−38× a −528×) | ✅ Integrar |
-| **token-savior** | MIT | Índice simbólico + compactación de Bash (−80 %) | ✅ Integrar |
+| **code-review-graph** | MIT | Grafo AST, lectura del blast radius (~63× mediana, 6,65× vs grep) | ✅ Integrar |
+| **token-savior** | MIT | Índice simbólico + compactación de Bash (−80 % no verificable, −45 % de coste remedido) | 🔶 Referenciar (ganancia no reproducible) |
 | **claude-token-efficient** | MIT | Reglas CLAUDE.md anti-verbosidad (~63 % output) | ✅ Integrar |
 | **context-mode** | ELv2 | Sandbox de outputs, continuidad tras compactación | 🔶 Referenciar (licencia) |
 | **claude-context** | MIT | Búsqueda semántica (requiere base vectorial) | 🔶 Referenciar (infra) |

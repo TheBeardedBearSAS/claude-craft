@@ -109,7 +109,7 @@ Claude Code compacte automatiquement le contexte quand il approche les limites. 
 - A partir de **70% de contexte**, lancer `/compact` proactivement
 - `/memory` (v2.1.59+) sauvegarde des apprentissages persistants qui survivent aux compactions
 
-> **Historique append-only (Opus 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Historique append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x) :** modifier un message antérieur, reconstruire `system` ou `tools`, ou résumer d'anciens tours sur place invalide les blocs de thinking suivants. Ajouter en fin d'historique plutôt que réécrire. Source : [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 **Hooks disponibles** pour gerer la compaction:
 - **PreCompact** — Sauvegarder le contexte critique avant compaction (peut bloquer via exit code 2 depuis v2.1.105)
@@ -419,8 +419,8 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
 | **caveman** | Apache-2.0 | Compression des réponses (output) ~65 % | ✅ Intégrer |
-| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (−38× à −528×) | ✅ Intégrer |
-| **token-savior** | MIT | Index symbolique + compaction Bash (−80 %) | ✅ Intégrer |
+| **code-review-graph** | MIT | Graphe AST, lecture du blast radius (~63× médiane, 6,65× vs grep) | ✅ Intégrer |
+| **token-savior** | MIT | Index symbolique + compaction Bash (−80 % non vérifiable, −45 % de coût remesuré) | 🔶 Référencer (gain non reproductible) |
 | **claude-token-efficient** | MIT | Règles CLAUDE.md anti-verbosité (~63 % output) | ✅ Intégrer |
 | **context-mode** | ELv2 | Sandbox des outputs, continuité post-compaction | 🔶 Référencer (licence) |
 | **claude-context** | MIT | Recherche sémantique (vector DB requise) | 🔶 Référencer (infra) |

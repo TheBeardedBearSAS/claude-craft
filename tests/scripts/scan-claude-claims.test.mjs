@@ -137,7 +137,7 @@ describe('scan-claude-claims', () => {
         'Minimum 2.1.260, recommandé 2.1.322 ; 2.1.260+ (2.1.322 recommended)',
         truth()
       ).filter((x) => x.category === 'cli-version');
-      expect(occ.map((o) => o.status)).toEqual(['inventory', 'current', 'inventory', 'current']);
+      expect(occ.map((o) => o.status)).toEqual(['current', 'current', 'inventory', 'current']);
     });
 
     it('ne flagge que la version qualifiée par le mot-clé', () => {
@@ -160,6 +160,65 @@ describe('scan-claude-claims', () => {
         (x) => x.category === 'cli-version'
       );
       expect(o.status).toBe('history');
+    });
+
+    it('signale un minimum périmé (5 langues) et accepte le minimum courant', () => {
+      for (const line of [
+        '**Minimum Version:** 2.1.97',
+        'minimum : v2.1.97 — security baseline',
+        'Mindestversion 2.1.97',
+        'versión mínima 2.1.97',
+        'versão mínima 2.1.97',
+      ]) {
+        const o = scanText('a.md', line, truth()).find((x) => x.category === 'cli-version');
+        expect(o?.status, line).toBe('stale');
+      }
+      const ok = scanText('a.md', '**Minimum Version:** 2.1.260', truth()).find((x) => x.category === 'cli-version');
+      expect(ok.status).toBe('current');
+    });
+
+    it('ne prend pas un titre historique de relèvement du minimum pour une affirmation', () => {
+      const o = scanText('a.md', '## Why We Elevated Minimum from 2.1.47 to 2.1.97 (historique)', truth()).filter(
+        (x) => x.category === 'cli-version'
+      );
+      expect(o.map((x) => x.status)).toEqual(['history', 'history']);
+    });
+
+    it('lit le rôle de la version dans l’en-tête de colonne du tableau', () => {
+      const text = [
+        '| Tool | Minimum | Recommandé |',
+        '|------|---------|------------|',
+        '| Claude Code | 2.1.97 (CVE patched) | 2.1.319 |',
+        '| Claude Code | 2.1.260 | 2.1.322 |',
+      ].join('\n');
+      const occ = scanText('a.md', text, truth()).filter((x) => x.category === 'cli-version');
+      expect(occ.map((o) => [o.line, o.match, o.status])).toEqual([
+        [3, '2.1.97', 'stale'],
+        [3, '2.1.319', 'stale'],
+        [4, '2.1.260', 'current'],
+        [4, '2.1.322', 'current'],
+      ]);
+    });
+
+    it('ignore les minimums par feature et les noms de clé contenant « Minimum »', () => {
+      const text = [
+        '| Feature | Minimum Version |',
+        '|---------|-----------------|',
+        '| MCP Tool Search | v2.1.80 |',
+        '| `requiredMinimum/MaximumVersion` | 2.1.163+ |',
+      ].join('\n');
+      const occ = scanText('a.md', text, truth()).filter((x) => x.category === 'cli-version');
+      expect(occ.map((o) => o.status)).toEqual(['inventory', 'inventory']);
+    });
+
+    it('lit la version annoncée par un badge', () => {
+      const stale = scanText('a.vue', 'hero_badge: "v9.3.0 - Claude Code 2.1.319",', truth()).find(
+        (x) => x.category === 'cli-version'
+      );
+      const ok = scanText('a.vue', 'hero_badge: "v9.3.0 - Claude Code 2.1.322",', truth()).find(
+        (x) => x.category === 'cli-version'
+      );
+      expect([stale.status, ok.status]).toEqual(['stale', 'current']);
     });
 
     it('classe une note de version datée en history', () => {

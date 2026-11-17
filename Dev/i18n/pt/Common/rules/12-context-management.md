@@ -176,7 +176,7 @@ Esses campos permitem otimizar os custos e o escopo dos sub-agentes.
 
 O Claude Code compacta automaticamente o contexto quando se aproxima dos limites da janela. Mensagens antigas sao resumidas para liberar espaco.
 
-> **Histórico append-only (Opus 5.5, Fable 5.x, Mythos 5.x):** modificar uma mensagem anterior, reconstruir `system` ou `tools`, ou resumir turnos antigos no lugar invalida os blocos de thinking seguintes. Acrescentar ao final do histórico em vez de reescrevê-lo. Fonte: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Histórico append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x):** modificar uma mensagem anterior, reconstruir `system` ou `tools`, ou resumir turnos antigos no lugar invalida os blocos de thinking seguintes. Acrescentar ao final do histórico em vez de reescrevê-lo. Fonte: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Compactacao proativa
 
@@ -814,8 +814,8 @@ Além do RTK e dos hooks nativos, o ecossistema do Claude Code oferece ferrament
 | Ferramenta | Licença | Ângulo | Rec |
 |------------|---------|--------|-----|
 | **caveman** | Apache-2.0 | Compressão das respostas (output) ~65 % | ✅ Integrar |
-| **code-review-graph** | MIT | Grafo AST, leitura do blast radius (−38× a −528×) | ✅ Integrar |
-| **token-savior** | MIT | Índice simbólico + compactação do Bash (−80 %) | ✅ Integrar |
+| **code-review-graph** | MIT | Grafo AST, leitura do blast radius (~63× mediana, 6,65× vs grep) | ✅ Integrar |
+| **token-savior** | MIT | Índice simbólico + compactação do Bash (−80 % não verificável, −45 % de custo remedido) | 🔶 Referenciar (ganho não reproduzível) |
 | **claude-token-efficient** | MIT | Regras CLAUDE.md anti-verbosidade (~63 % output) | ✅ Integrar |
 | **context-mode** | ELv2 | Sandbox dos outputs, continuidade pós-compactação | 🔶 Referenciar (licença) |
 | **claude-context** | MIT | Busca semântica (requer banco vetorial) | 🔶 Referenciar (infra) |

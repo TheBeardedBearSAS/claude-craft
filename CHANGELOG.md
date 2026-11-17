@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Claude Code minimum 2.1.321 → 2.1.325.** 2.1.323 and 2.1.325 fix Bash and sandbox permission bypasses (no GHSA published): deny/ask rules missed through `sudo`/`env`, `sandbox.excludedCommands` too permissive, Write/Edit on a path covered by a `Read` deny rule, a Bash allow rule running a different program than the one it names, compound commands run without a prompt, sandbox not protecting a worktree's settings, hooks and shared git folder. `claude-craft doctor` now fails below 2.1.325.
+- **CVE-2026-88968** (Edit tool TOCTOU, High, fixed in 2.1.251) added to the CVE tables of `SECURITY.md`, `.claude/COMPATIBILITY.md` and `.claude/references/base/security.md`.
+
+### Changed
+
+- **Claude Code recommended / tested up to 2.1.322 → 2.1.326**, propagated to every doc, guide (5 languages), the website badge and `cli/lib/doctor.js`. `.claude/COMPATIBILITY.md` gains the 2.1.323, 2.1.325 and 2.1.326 rows; 2.1.325 breaking change noted (sandboxed Bash now follows the normal permission flow, `sandbox.autoAllowBashIfSandboxed: true` restores the old behavior — Claude Craft ships no `sandbox` setting).
+- **Rule 12 (5 languages):** the append-only history note now lists Sonnet 5.5 and Haiku 5.5, as the Anthropic prompting best practices do.
+- **Ecosystem catalogue:** benchmark figures re-read from each README — code-review-graph ~63× median (6.65× vs a grep baseline), claude-token-efficient ~2–11% output tokens when reproduced, context-mode 99.4% median bytes saved. **token-savior downgraded ✅ Integrate → 🔶 Reference**: its −80% headline comes from a non-public harness, the 2026-10-07 re-measure gives −45% cost with +40% wall time.
+- **`scripts/scan-claude-claims.mjs`** now checks the security minimum (`minimum`, `Mindestversion`, `mínimo/mínima`), reads a version's role from its table column header on `Claude Code` rows, and checks `hero_badge` versions; lines marked as history are skipped.
+
 ## [9.3.0] - 2026-11-16
 
 ### Added

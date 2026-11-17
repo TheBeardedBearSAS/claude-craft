@@ -176,7 +176,7 @@ These fields allow optimizing costs and scope of sub-agents.
 
 Claude Code automatically compacts context when approaching window limits. Older messages are summarized to free space.
 
-> **Append-only history (Opus 5.5, Fable 5.x, Mythos 5.x):** editing an earlier message, rebuilding `system` or `tools`, or summarizing old turns in place invalidates the thinking blocks that follow. Append to the end of the history instead of rewriting it. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Append-only history (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x):** editing an earlier message, rebuilding `system` or `tools`, or summarizing old turns in place invalidates the thinking blocks that follow. Append to the end of the history instead of rewriting it. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Proactive Compaction
 
@@ -820,8 +820,8 @@ Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover a
 | Tool | License | Angle | Rec |
 |------|---------|-------|-----|
 | **caveman** | Apache-2.0 | Output (response) compression ~65% | ✅ Integrate |
-| **code-review-graph** | MIT | AST graph, blast-radius reads (−38× to −528×) | ✅ Integrate |
-| **token-savior** | MIT | Symbol index + Bash compaction (−80%) | ✅ Integrate |
+| **code-review-graph** | MIT | AST graph, blast-radius reads (~63× median, 6.65× vs grep) | ✅ Integrate |
+| **token-savior** | MIT | Symbol index + Bash compaction (−80% unverified, −45% cost re-measured) | 🔶 Reference (gain not reproducible) |
 | **claude-token-efficient** | MIT | Anti-verbosity CLAUDE.md rules (~63% output) | ✅ Integrate |
 | **context-mode** | ELv2 | Output sandbox, post-compaction continuity | 🔶 Reference (license) |
 | **claude-context** | MIT | Semantic search (vector DB required) | 🔶 Reference (infra) |

@@ -176,7 +176,7 @@ Diese Felder ermoeglichen die Optimierung von Kosten und Umfang der Sub-Agents.
 
 Claude Code kompaktiert den Kontext automatisch, wenn er sich den Fenstergrenzen naehert. Aeltere Nachrichten werden zusammengefasst, um Platz freizugeben.
 
-> **Append-only-Verlauf (Opus 5.5, Fable 5.x, Mythos 5.x):** Eine frühere Nachricht zu ändern, `system` oder `tools` neu aufzubauen oder alte Turns an Ort und Stelle zusammenzufassen, macht die nachfolgenden Thinking-Blöcke ungültig. Am Ende des Verlaufs anhängen statt ihn umzuschreiben. Quelle: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Append-only-Verlauf (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x):** Eine frühere Nachricht zu ändern, `system` oder `tools` neu aufzubauen oder alte Turns an Ort und Stelle zusammenzufassen, macht die nachfolgenden Thinking-Blöcke ungültig. Am Ende des Verlaufs anhängen statt ihn umzuschreiben. Quelle: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Proaktive Kompaktierung
 
@@ -814,8 +814,8 @@ Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die
 | Tool | Lizenz | Aspekt | Empf. |
 |------|--------|--------|-------|
 | **caveman** | Apache-2.0 | Komprimierung der Antworten (Output) ~65 % | ✅ Integrieren |
-| **code-review-graph** | MIT | AST-Graph, Blast-Radius-Lesen (−38× bis −528×) | ✅ Integrieren |
-| **token-savior** | MIT | Symbolindex + Bash-Komprimierung (−80 %) | ✅ Integrieren |
+| **code-review-graph** | MIT | AST-Graph, Blast-Radius-Lesen (~63× Median, 6,65× vs. grep) | ✅ Integrieren |
+| **token-savior** | MIT | Symbolindex + Bash-Komprimierung (−80 % nicht verifizierbar, −45 % Kosten nachgemessen) | 🔶 Referenzieren (Gewinn nicht reproduzierbar) |
 | **claude-token-efficient** | MIT | CLAUDE.md-Regeln gegen Geschwätzigkeit (~63 % Output) | ✅ Integrieren |
 | **context-mode** | ELv2 | Output-Sandbox, Kontinuität nach Kompaktierung | 🔶 Referenzieren (Lizenz) |
 | **claude-context** | MIT | Semantische Suche (Vektor-DB erforderlich) | 🔶 Referenzieren (Infra) |
