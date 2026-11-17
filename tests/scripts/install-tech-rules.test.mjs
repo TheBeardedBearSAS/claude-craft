@@ -139,6 +139,20 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     expect(refs.filter((f) => /woocommerce/i.test(f))).toEqual([]);
   });
 
+  // Régression : le « # » de « C# 13 » (stack par défaut) cassait le délimiteur sed de
+  // project-context.md et faisait échouer l'installeur C# (les autres stacks n'ont pas de « # »).
+  it('csharp install succeeds and renders the stack containing "#" into project-context.md', () => {
+    const tmpDir = makeTmpDir();
+    execSync(`bash "${path.join(SCRIPTS_DIR, 'install-csharp-rules.sh')}" --lang=en --force "${tmpDir}"`, {
+      encoding: 'utf8',
+      stdio: 'pipe',
+      timeout: 30000,
+    });
+    const ctx = fs.readFileSync(path.join(tmpDir, '.claude/references/csharp/project-context.md'), 'utf8');
+    expect(ctx).toContain('C# 13');
+    expect(ctx).not.toContain('{{TECH_STACK}}');
+  });
+
   // Régression : un dossier cible inexistant faisait retomber l'install sur $(pwd),
   // écrivant les règles dans le répertoire courant (ex. le dépôt bear-craft lui-même).
   it('refuses a non-existent target directory instead of installing into the cwd', () => {

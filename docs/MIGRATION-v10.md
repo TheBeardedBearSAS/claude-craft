@@ -13,7 +13,7 @@
 |------------------|----------------|-----------------------|
 | npm package `@the-bearded-bear/claude-craft` | `@the-bearded-bear/bear-craft` | The old package is deprecated on npm and stays at 9.4.0 |
 | Command `claude-craft` | `bear-craft` | `claude-craft` still works and prints a deprecation notice; removed in 11.0 |
-| Claude Code plugin `claude-craft@claude-craft` | `bear-craft@bear-craft` | Reinstall the plugin (see below) |
+| Claude Code plugin `claude-craft@claude-craft` | `common@bear-craft`, `react@bear-craft`, … (one plugin per namespace or stack) | Reinstall the plugins you need (see below) |
 | `CLAUDE_CRAFT_USER` (Kanban author) | `BEAR_CRAFT_USER` | `CLAUDE_CRAFT_USER` is still read when `BEAR_CRAFT_USER` is unset; removed in 11.0 |
 | Community skills `claude-craft-skill-*` | `bear-craft-skill-*` | `bear-craft skill add` still accepts `claude-craft-skill-*` packages; removed in 11.0 |
 | Shared shell lib `~/.local/lib/claude-craft/` | `~/.local/lib/bear-craft/` | `install-rtk.sh` still finds the old path |

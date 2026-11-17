@@ -200,11 +200,18 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
   const universe = universeFor(name, installs);
   const queue = [];
 
+  // 1. installation du plugin, ses couches de base, common, project ; 2. à défaut, les autres installeurs,
+  //    à condition que le fichier soit identique partout où il existe (sinon ambigu : non résolu).
   const lookup = (rel) => {
-    for (const u of universe) if (u.files.has(rel)) return u.files.get(rel);
-    return null;
+    for (const u of universe) if (u.files.has(rel)) return { abs: u.files.get(rel) };
+    const others = Object.values(installs)
+      .filter((i) => i.files.has(rel))
+      .map((i) => i.files.get(rel));
+    if (others.length === 0) return null;
+    const first = fs.readFileSync(others[0]);
+    return others.every((o) => fs.readFileSync(o).equals(first)) ? { abs: others[0] } : { ambiguous: true };
   };
-  const isDir = (rel) => universe.some((u) => [...u.files.keys()].some((f) => f.startsWith(`${rel}/`)));
+  const isDir = (rel) => Object.values(installs).some((u) => [...u.files.keys()].some((f) => f.startsWith(`${rel}/`)));
 
   const put = (pluginPath, abs) => {
     if (files.has(pluginPath)) return false;
@@ -233,9 +240,12 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
         if (ns === name && file && ownCommands.has(file)) return `\${CLAUDE_PLUGIN_ROOT}/commands/${file}${tail}`;
         return (report('command-outside-plugin'), match);
       }
-      const abs = lookup(rel);
-      if (!abs) return (report(isDir(rel) || tail.endsWith('/') ? 'directory' : 'missing'), match);
-      put(rel, abs);
+      // project-context.md est généré dans le projet de l'utilisateur (nom du projet, stack) : ce n'est pas une référence du plugin.
+      if (/(^|\/)project-context\.md$/.test(rel)) return (report('project-artifact'), match);
+      const found = lookup(rel);
+      if (found?.ambiguous) return (report('ambiguous'), match);
+      if (!found) return (report(isDir(rel) || tail.endsWith('/') ? 'directory' : 'missing'), match);
+      put(rel, found.abs);
       return `\${CLAUDE_PLUGIN_ROOT}/${rel}${tail}`;
     });
 

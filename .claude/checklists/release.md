@@ -45,7 +45,6 @@
 
 ### Avant le Déploiement
 
-- [ ] `npm run plugins:generate` après le bump de version (les plugins portent la version de `package.json`), puis `npm run plugins:check` et `npm run lint:versions` verts
 - [ ] Team release briefée
 - [ ] Channels de communication prêts (Slack, email)
 - [ ] Rollback plan prêt et testé

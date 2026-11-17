@@ -150,6 +150,15 @@ describe('generate-plugins : hooks (plugin common uniquement)', () => {
     expect(fs.existsSync(path.join(GEN_A, 'common/hooks/scripts/lib/hook-io.sh'))).toBe(true);
   });
 
+  it('un script de hook généré bloque une commande destructrice (exécuté depuis le plugin)', () => {
+    const r = spawnSync('bash', [path.join(GEN_A, 'common/hooks/scripts/block-dangerous-commands.sh')], {
+      input: JSON.stringify({ tool_input: { command: 'rm -rf /' } }),
+      encoding: 'utf8',
+    });
+    expect(r.status).toBe(2);
+    expect(r.stderr).toMatch(/BLOCKED/);
+  });
+
   it("aucun autre plugin n'embarque de hooks", () => {
     for (const name of EXPECTED.filter((n) => n !== 'common')) {
       expect(fs.existsSync(path.join(GEN_A, name, 'hooks')), name).toBe(false);
