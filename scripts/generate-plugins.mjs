@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * generate-plugins.mjs — génère `plugins/bear-<namespace>/` : un plugin Claude Code par
+ * generate-plugins.mjs — génère `marketplaces/<lang>/plugins/bear-<namespace>/` : un plugin Claude Code par
  * namespace de commandes du CLI (common, workflow, team, qa, uiux, gate, project) et
  * par stack du registre (react, symfony, …).
  *
@@ -30,7 +30,7 @@ import { TECH_REGISTRY } from '../cli/lib/tech-registry.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MARKETPLACE = path.join(ROOT, '.claude-plugin', 'marketplace.json');
-const ICON_SRC = path.join(ROOT, 'Tools', 'PluginExport', 'icon.png');
+const ICON_SRC = path.join(ROOT, 'Tools', 'PluginExport', 'icon-256.png');
 const HOOKS_SRC = path.join(ROOT, 'Dev', 'i18n', 'base', 'Common', 'hooks');
 const REPO_URL = 'https://github.com/TheBeardedBearSAS/bear-craft';
 const AUTHOR = { name: 'The Bearded Bear', url: 'https://the-bearded-bear.com' };
@@ -38,11 +38,51 @@ const AUTHOR = { name: 'The Bearded Bear', url: 'https://the-bearded-bear.com' }
 /** Nom publié d'un plugin : préfixe `bear-` pour éviter les conflits avec les commandes du projet ou d'autres plugins. */
 const pluginName = (ns) => `bear-${ns}`;
 
+/** Langues distribuées ; `en` est la référence (marketplace racine). */
+const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
+const marketplaceName = (lang) => (lang === 'en' ? 'bear-craft' : `bear-craft-${lang}`);
+
+/** Namespaces d'infra : un installeur Infra/install-<n>-rules.sh et un plugin chacun. */
+const INFRA_PLUGINS = {
+  docker: ['Docker', 'Docker: Dockerfile, Compose, CI/CD image pipelines and debugging, with specialist agents.'],
+  coolify: ['Coolify', 'Coolify: self-hosted PaaS setup, deployment, backups and debugging.'],
+  kubernetes: ['Kubernetes', 'Kubernetes: architecture, deployment setup, security audit and troubleshooting.'],
+  opentofu: ['OpenTofu', 'OpenTofu: infrastructure-as-code architecture, deployment setup, security audit and debugging.'],
+  ansible: ['Ansible', 'Ansible: automation architecture, deployment setup, security audit and debugging.'],
+  hcloud: ['Hetzner Cloud', 'Hetzner Cloud (hcloud): architecture, deployment setup, security audit and debugging.'],
+  pgbouncer: ['PgBouncer', 'PgBouncer: connection pooling architecture, deployment setup, security audit and debugging.'],
+  frankenphp: ['FrankenPHP', 'FrankenPHP: PHP application server architecture, deployment setup, security audit and debugging.'],
+};
+
+/** Plugins de hooks (aucune commande) : fragment source, dépendances. */
+const HOOK_PLUGINS = {
+  hooks: {
+    display: 'Hooks',
+    fragment: 'hooks.default.json',
+    description:
+      'Default safety hooks: network guard, dangerous-command blocker, sensitive-file protection, pre-commit check and output-size hint (guards fail closed).',
+    needs: ['`jq` or `node` (hook payload parsing)', '`bash`'],
+  },
+  'hooks-full': {
+    display: 'Hooks (full)',
+    fragment: 'hooks.full.json',
+    description:
+      'Extra hooks of the full profile: quality gate on stop, post-edit lint, tool-failure log, session init/end and Slack notifications. Install it next to bear-hooks.',
+    needs: ['`jq` or `node` (hook payload parsing)', '`bash`', 'optional: a Slack webhook for notifications'],
+  },
+  'hooks-memory': {
+    display: 'Hooks (memory)',
+    fragment: 'hooks.memory.json',
+    description: 'Cross-session memory hooks backed by SQLite (session start, prompt submit, post-tool, pre-compact, session end).',
+    needs: ['`sqlite3` (system package)', '`jq` (system package)', '`bash`'],
+  },
+};
+
 const REF_DIRS = ['rules', 'references', 'templates', 'checklists', 'skills', 'agents'];
 
 /** Namespaces de commandes qui ne sont pas des stacks. */
 const FIXED_PLUGINS = {
-  common: 'Shared agents, skills, rules, checklists and token/CI/ADR utilities, plus the optional safety hooks.',
+  common: 'Shared agents, skills, rules, checklists and token/CI/ADR utilities (hooks live in bear-hooks).',
   workflow: 'BMAD v6 sprint workflow: init, plan, design, start, implement, review, retro and status.',
   team: 'Parallel multi-agent teams: audit, security review and sprint delivery.',
   qa: 'Browser acceptance testing (QA Recette) with regression registry and TDD bug fixing.',
@@ -91,9 +131,9 @@ function loadContext() {
 
 // --- Exécution des installeurs ---------------------------------------------------
 
-function runInstaller(script, args, dir) {
+function runInstaller(script, args, dir, lang) {
   fs.mkdirSync(dir, { recursive: true });
-  const r = spawnSync('bash', [path.join(ROOT, script), '--lang=en', ...args, dir], {
+  const r = spawnSync('bash', [path.join(ROOT, script), `--lang=${lang}`, ...args, dir], {
     cwd: ROOT,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -113,16 +153,17 @@ function indexClaude(dir) {
   return { base, files };
 }
 
-function installAll(work, techs) {
+function installAll(work, techs, lang) {
   const installs = {};
   const jobs = [
     ['common', 'Dev/scripts/install-common-rules.sh', ['--hooks=none', '--force']],
     ['project', 'Project/install-project-commands.sh', ['--skip-common', '--force']],
     ...techs.map((t) => [t, `Dev/scripts/${TECH_REGISTRY[t].installScript}`, ['--force']]),
+    ...Object.keys(INFRA_PLUGINS).map((n) => [n, `Infra/install-${n}-rules.sh`, ['--force']]),
   ];
   for (const [name, script, args] of jobs) {
     const dir = path.join(work, `install-${name}`);
-    runInstaller(script, args, dir);
+    runInstaller(script, args, dir, lang);
     installs[name] = indexClaude(dir);
   }
   return installs;
@@ -261,29 +302,47 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
   return files;
 }
 
-// --- Hooks (plugin common) -----------------------------------------------------------
+// --- Plugins de hooks --------------------------------------------------------------
 
-function addHooks(files) {
-  const scriptsDir = path.join(HOOKS_SRC, 'scripts');
-  for (const rel of walk(scriptsDir)) {
-    const abs = path.join(scriptsDir, rel);
+const toPluginPaths = (v) =>
+  typeof v === 'string'
+    ? v.replaceAll('$CLAUDE_PROJECT_DIR/.claude/hooks/', '${CLAUDE_PLUGIN_ROOT}/hooks/scripts/')
+    : Array.isArray(v)
+      ? v.map(toPluginPaths)
+      : v && typeof v === 'object'
+        ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, toPluginPaths(x)]))
+        : v;
+
+/** hooks/hooks.json + uniquement les scripts qu'il appelle (et lib/ pour les profils default/full). */
+function addHooks(files, kind) {
+  const fragment = JSON.parse(
+    fs.readFileSync(path.join(HOOKS_SRC, 'templates', HOOK_PLUGINS[kind].fragment), 'utf8')
+  );
+  const converted = toPluginPaths(fragment);
+  const json = JSON.stringify(converted);
+  const called = [...json.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/hooks\/scripts\/([\w./-]+\.sh)/g)].map((m) => m[1]);
+  const memory = kind === 'hooks-memory';
+  const srcRoot = memory ? path.join(ROOT, 'Dev', 'scripts') : path.join(HOOKS_SRC, 'scripts');
+  const wanted = new Set(called);
+  if (memory) {
+    for (const rel of walk(path.join(srcRoot, 'memory-lifecycle'))) {
+      if (rel.endsWith('.sh')) wanted.add(`memory-lifecycle/${rel}`);
+    }
+  } else {
+    for (const rel of walk(path.join(srcRoot, 'lib'))) wanted.add(`lib/${rel}`);
+  }
+  for (const rel of [...wanted].sort()) {
+    const abs = path.join(srcRoot, rel);
     files.set(`hooks/scripts/${rel}`, { data: fs.readFileSync(abs), mode: exec(abs) ? 'x' : '' });
   }
-  const template = JSON.parse(fs.readFileSync(path.join(HOOKS_SRC, 'templates', 'hooks.default.json'), 'utf8'));
-  const convert = (v) =>
-    typeof v === 'string'
-      ? v.replaceAll('$CLAUDE_PROJECT_DIR/.claude/hooks/', '${CLAUDE_PLUGIN_ROOT}/hooks/scripts/')
-      : Array.isArray(v)
-        ? v.map(convert)
-        : v && typeof v === 'object'
-          ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, convert(x)]))
-          : v;
-  files.set('hooks/hooks.json', { data: Buffer.from(`${JSON.stringify(convert(template), null, 2)}\n`), mode: '' });
+  files.set('hooks/hooks.json', { data: Buffer.from(`${JSON.stringify(converted, null, 2)}\n`), mode: '' });
 }
 
 // --- Manifestes et README -----------------------------------------------------------
 
 function describe(name) {
+  if (HOOK_PLUGINS[name]) return { display: HOOK_PLUGINS[name].display, description: HOOK_PLUGINS[name].description };
+  if (INFRA_PLUGINS[name]) return { display: INFRA_PLUGINS[name][0], description: INFRA_PLUGINS[name][1] };
   const entry = TECH_REGISTRY[name];
   if (FIXED_PLUGINS[name]) return { display: DISPLAY[name], description: FIXED_PLUGINS[name] };
   return {
@@ -343,13 +402,19 @@ function readmeFor(name, owned, files, ctx) {
   if (agents.length > 0) lines.push('## Agents', '', agents.map((a) => `\`${a}\``).join(', '), '');
   const skills = [...new Set([...owned.skills.keys()].map((s) => s.split('/')[1]))].sort();
   if (skills.length > 0) lines.push('## Skills', '', skills.map((s) => `\`${s}\``).join(', '), '');
-  if (name === 'common') {
+  if (HOOK_PLUGINS[name]) {
+    lines.push('## Requirements', '', ...HOOK_PLUGINS[name].needs.map((n) => `- ${n}`), '');
     lines.push(
       '## Hooks',
       '',
-      'This plugin ships the default safety hooks (network guard, dangerous-command blocker, sensitive-file protection, output hint).',
-      '',
-      '**Pick a single channel**: either this plugin or the CLI installation with hooks (`bear-craft install --hooks=default`). Using both runs every guard twice.',
+      'The hooks are declared in `hooks/hooks.json`; their scripts live in `hooks/scripts/` and run through `${CLAUDE_PLUGIN_ROOT}`.',
+      ''
+    );
+    if (name === 'hooks-full') {
+      lines.push('This plugin only carries what the full profile adds to the default one: install `bear-hooks` as well.', '');
+    }
+    lines.push(
+      '**Pick a single channel**: these hook plugins *or* hooks merged into `.claude/settings.json` by an older copy-based installation. Using both runs every guard twice.',
       ''
     );
   }
@@ -368,14 +433,14 @@ function readmeFor(name, owned, files, ctx) {
 
 // --- Orchestration -----------------------------------------------------------------
 
-function generate(work, ctx) {
+function generate(work, ctx, lang) {
   const techs = Object.keys(TECH_REGISTRY)
     .filter(
       (k) =>
         TECH_REGISTRY[k].tier !== null && fs.existsSync(path.join(ROOT, 'Dev/scripts', TECH_REGISTRY[k].installScript))
     )
     .sort();
-  const installs = installAll(work, techs);
+  const installs = installAll(work, techs, lang);
 
   const namespaces = new Set();
   for (const install of Object.values(installs)) {
@@ -389,7 +454,9 @@ function generate(work, ctx) {
       'common',
       ...Object.keys(FIXED_PLUGINS),
       ...techs,
-      ...[...namespaces].filter((n) => FIXED_PLUGINS[n] || techs.includes(n)),
+      ...Object.keys(INFRA_PLUGINS),
+      ...Object.keys(HOOK_PLUGINS),
+      ...[...namespaces].filter((n) => FIXED_PLUGINS[n] || techs.includes(n) || INFRA_PLUGINS[n]),
     ]),
   ].sort();
 
@@ -398,7 +465,7 @@ function generate(work, ctx) {
   const result = new Map(); // nom → Map(chemin → entry)
   for (const name of names) {
     const files = buildPlugin(name, owned.get(name), installs, ctx, unresolved);
-    if (name === 'common') addHooks(files);
+    if (HOOK_PLUGINS[name]) addHooks(files, name);
     files.set('.claude-plugin/plugin.json', {
       data: Buffer.from(`${JSON.stringify(manifestFor(name, ctx), null, 2)}\n`),
       mode: '',
@@ -411,48 +478,61 @@ function generate(work, ctx) {
   return { result, unresolved, owned };
 }
 
-function writeTree(result, out) {
-  fs.rmSync(out, { recursive: true, force: true });
-  for (const name of sortedKeys(result)) {
-    const files = result.get(name);
-    for (const rel of sortedKeys(files)) {
-      const dest = path.join(out, pluginName(name), rel);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.writeFileSync(dest, files.get(rel).data);
-      fs.chmodSync(dest, files.get(rel).mode === 'x' ? 0o755 : 0o644);
-    }
-  }
-}
+const category = (name) =>
+  HOOK_PLUGINS[name] ? 'safety-hooks' : INFRA_PLUGINS[name] ? 'infrastructure' : TECH_REGISTRY[name] ? 'technology-stack' : 'development-framework';
 
-function marketplaceWith(result, ctx) {
+/** Contenu de marketplace.json : métadonnées reprises du fichier racine, plugins issus du générateur. */
+function marketplaceWith(result, ctx, { name, sourcePrefix }) {
   const market = JSON.parse(fs.readFileSync(MARKETPLACE, 'utf8'));
-  market.plugins = sortedKeys(result).map((name) => ({
-    name: pluginName(name),
-    source: `./plugins/${pluginName(name)}`,
-    description: describe(name).description,
+  market.name = name;
+  market.plugins = sortedKeys(result).map((n) => ({
+    name: pluginName(n),
+    source: `${sourcePrefix}/${pluginName(n)}`,
+    description: describe(n).description,
     version: ctx.version,
-    category: TECH_REGISTRY[name] ? 'technology-stack' : 'development-framework',
-    keywords: keywordsFor(name),
+    category: category(n),
+    keywords: keywordsFor(n),
     license: 'MIT',
   }));
   return `${JSON.stringify(market, null, 2)}\n`;
 }
 
-function compare(result, out, market) {
+/** Arbre d'une langue : chemin relatif à `out` → { data, mode }. */
+function treeFor(lang, result, ctx) {
+  const tree = new Map();
+  for (const name of result.keys()) {
+    for (const [rel, e] of result.get(name)) tree.set(`${lang}/plugins/${pluginName(name)}/${rel}`, e);
+  }
+  const market = marketplaceWith(result, ctx, { name: marketplaceName(lang), sourcePrefix: './plugins' });
+  tree.set(`${lang}/.claude-plugin/marketplace.json`, { data: Buffer.from(market), mode: '' });
+  return tree;
+}
+
+function writeTree(tree, out, langs) {
+  for (const lang of langs) fs.rmSync(path.join(out, lang), { recursive: true, force: true });
+  for (const rel of sortedKeys(tree)) {
+    const dest = path.join(out, rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, tree.get(rel).data);
+    fs.chmodSync(dest, tree.get(rel).mode === 'x' ? 0o755 : 0o644);
+  }
+}
+
+function compare(tree, out, langs, rootMarket) {
   const diffs = [];
-  const expected = new Map();
-  for (const name of result.keys()) for (const [rel, e] of result.get(name)) expected.set(`${pluginName(name)}/${rel}`, e);
-  const actual = new Set(walk(out));
-  for (const key of [...expected.keys()].sort()) {
+  const actual = new Set(langs.flatMap((l) => walk(path.join(out, l)).map((f) => `${l}/${f}`)));
+  for (const key of sortedKeys(tree)) {
     const file = path.join(out, key);
     if (!actual.has(key)) diffs.push(`manquant : ${key}`);
     else {
-      const e = expected.get(key);
+      const e = tree.get(key);
       if (!fs.readFileSync(file).equals(e.data) || exec(file) !== (e.mode === 'x')) diffs.push(`différent : ${key}`);
     }
   }
-  for (const key of [...actual].sort()) if (!expected.has(key)) diffs.push(`en trop : ${key}`);
-  if (fs.readFileSync(MARKETPLACE, 'utf8') !== market) diffs.push('différent : .claude-plugin/marketplace.json');
+  for (const key of [...actual].sort()) if (!tree.has(key)) diffs.push(`en trop : ${key}`);
+  if (rootMarket !== null && fs.readFileSync(MARKETPLACE, 'utf8') !== rootMarket) {
+    diffs.push('différent : .claude-plugin/marketplace.json');
+  }
   return diffs;
 }
 
@@ -473,20 +553,40 @@ function countAgentRefs(result) {
   return n;
 }
 
-function summarize(result, unresolved, owned) {
-  const lines = ['', 'Plugins :'];
-  for (const name of sortedKeys(result)) {
-    const files = result.get(name);
+function summarize(runs) {
+  const lines = [];
+  const first = runs[0];
+  lines.push('', `Plugins par langue : ${runs.map((r) => `${r.lang}=${r.result.size}`).join(' ')}`);
+  lines.push('', `Plugins (${first.lang}) :`);
+  for (const name of sortedKeys(first.result)) {
+    const files = first.result.get(name);
     const count = (re) => [...files.keys()].filter((f) => re.test(f)).length;
     const refs = count(/^(rules|references|templates|checklists)\//);
     lines.push(
-      `  ${name.padEnd(12)} commandes=${owned.get(name).commands.size} agents=${count(/^agents\/[^/]+\.md$/)} skills=${new Set([...files.keys()].filter((f) => f.startsWith('skills/')).map((f) => f.split('/')[1])).size} références=${refs}`
+      `  ${name.padEnd(14)} commandes=${first.owned.get(name).commands.size} agents=${count(/^agents\/[^/]+\.md$/)} skills=${new Set([...files.keys()].filter((f) => f.startsWith('skills/')).map((f) => f.split('/')[1])).size} références=${refs}`
     );
   }
-  lines.push('', `Références @agent laissées telles quelles : ${countAgentRefs(result)}`);
+  lines.push('', `Références @agent laissées telles quelles (${first.lang}) : ${countAgentRefs(first.result)}`);
+  const en = runs.find((r) => r.lang === 'en');
+  if (en) {
+    const content = /^(commands|agents|skills|rules|references|templates|checklists)\//;
+    for (const r of runs.filter((x) => x.lang !== 'en')) {
+      let same = 0;
+      let total = 0;
+      for (const [name, files] of r.result) {
+        for (const [rel, e] of files) {
+          if (!content.test(rel)) continue;
+          total += 1;
+          if (en.result.get(name)?.get(rel)?.data.equals(e.data)) same += 1;
+        }
+      }
+      lines.push(`  [${r.lang}] ${same}/${total} fichiers de contenu identiques à en (repli des installeurs ou texte non traduit)`);
+    }
+  }
   const unique = new Map();
-  for (const u of unresolved) unique.set(`${u.ref}|${u.cause}`, u);
-  lines.push('', `Références non résolues : ${unresolved.length} occurrences, ${unique.size} uniques`);
+  for (const u of first.unresolved) unique.set(`${u.ref}|${u.cause}`, u);
+  lines.push('', `Références non résolues (${first.lang}) : ${first.unresolved.length} occurrences, ${unique.size} uniques`);
+  for (const r of runs.slice(1)) lines.push(`  [${r.lang}] ${r.unresolved.length} occurrences`);
   for (const u of [...unique.values()].sort((a, b) => (a.ref + a.plugin < b.ref + b.plugin ? -1 : 1))) {
     lines.push(`  [${u.cause}] ${u.ref}  (${u.plugin}: ${u.from})`);
   }
@@ -497,19 +597,27 @@ function main() {
   const args = process.argv.slice(2);
   const check = args.includes('--check');
   const opt = (flag) => (args.includes(flag) ? args[args.indexOf(flag) + 1] : null);
-  const out = path.resolve(ROOT, opt('--out') ?? 'plugins');
+  const out = path.resolve(ROOT, opt('--out') ?? 'marketplaces');
   const reportFile = opt('--report');
+  const langOpt = args.find((a) => a.startsWith('--lang='))?.slice('--lang='.length);
+  const langs = args.includes('--all-langs') ? LANGS : [langOpt ?? 'en'];
+  for (const l of langs) if (!LANGS.includes(l)) throw new Error(`Langue inconnue : ${l} (${LANGS.join(', ')})`);
 
   const tmpBase = path.join(ROOT, '.test-tmp');
   fs.mkdirSync(tmpBase, { recursive: true });
   const work = fs.mkdtempSync(path.join(tmpBase, 'plugin-gen-'));
   try {
     const ctx = loadContext();
-    const { result, unresolved, owned } = generate(work, ctx);
-    const market = marketplaceWith(result, ctx);
+    const runs = langs.map((lang) => ({ lang, ...generate(path.join(work, lang), ctx, lang) }));
+    const tree = new Map();
+    for (const r of runs) for (const [k, v] of treeFor(r.lang, r.result, ctx)) tree.set(k, v);
+    const enRun = runs.find((r) => r.lang === 'en');
+    const rootMarket = enRun
+      ? marketplaceWith(enRun.result, ctx, { name: 'bear-craft', sourcePrefix: './marketplaces/en/plugins' })
+      : null;
     if (check) {
       const diffs = fs.existsSync(out)
-        ? compare(result, out, market)
+        ? compare(tree, out, langs, rootMarket)
         : ['dossier absent : ' + path.relative(ROOT, out)];
       if (diffs.length > 0) {
         console.error(
@@ -517,14 +625,19 @@ function main() {
         );
         process.exitCode = 1;
       } else {
-        console.log(`plugins/ à jour (${result.size} plugins).`);
+        console.log(`marketplaces/ à jour (${langs.join(', ')} : ${runs.map((r) => r.result.size).join('/')} plugins).`);
       }
       return;
     }
-    writeTree(result, out);
-    if (out === path.join(ROOT, 'plugins')) fs.writeFileSync(MARKETPLACE, market);
-    if (reportFile) fs.writeFileSync(path.resolve(ROOT, reportFile), `${JSON.stringify({ unresolved }, null, 2)}\n`);
-    console.log(summarize(result, unresolved, owned));
+    writeTree(tree, out, langs);
+    if (rootMarket !== null && out === path.join(ROOT, 'marketplaces')) fs.writeFileSync(MARKETPLACE, rootMarket);
+    if (reportFile) {
+      fs.writeFileSync(
+        path.resolve(ROOT, reportFile),
+        `${JSON.stringify(Object.fromEntries(runs.map((r) => [r.lang, r.unresolved])), null, 2)}\n`
+      );
+    }
+    console.log(summarize(runs));
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }

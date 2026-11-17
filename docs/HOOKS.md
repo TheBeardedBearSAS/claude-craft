@@ -252,14 +252,19 @@ bash Dev/scripts/install-common-rules.sh --hooks=default|full|none[,memory] <pro
 
 Hook examples (`auto-format`, `output-filter`, ...) are copied to `.claude/templates/hooks/`; see the README next to them. `pre-compact.sh` (BMAD state backup) is shipped but not wired by any profile. Output contract: only exit code 2 blocks, except that the three safety guards (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) set `"onFailure": "block"` (Claude Code 2.1.295+), so a missing, crashing or timed-out guard blocks the tool call (fail-closed); re-running the install adds `onFailure` to guards installed by an older version without replacing a value you set; only `hookSpecificOutput.additionalContext` reaches the model; PreCompact plain-text stdout is read as compaction instructions. For a plugin, `Tools/PluginExport/export-plugin.sh --tech=common` generates a `hooks.json` pointing to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`.
 
-### Shipping the hooks through the `common` plugin
+### Shipping the hooks as plugins
 
-The `common` Claude Code plugin (`/plugin install bear-common@bear-craft`) ships the `default` profile as `hooks/hooks.json`
-(commands point to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`, `onFailure` is kept). No other plugin carries hooks.
+Three Claude Code plugins carry the hook profiles (`hooks/hooks.json`, commands pointing to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`, `onFailure` kept; each embeds only the scripts it calls plus `lib/`). They exist in every language marketplace:
 
-> **Pick a single channel: the `common` plugin *or* the CLI installation with hooks (`--hooks=default|full`).** Enabling both
-> registers every guard twice, so each Bash/Edit call runs it two times. To use the plugin, install the CLI with
-> `--hooks=none`; to use the CLI hooks, do not install the `common` plugin.
+| Plugin | Content | Requires |
+|--------|---------|----------|
+| `bear-hooks` | `default` profile (guards fail closed) | `jq` or `node`, `bash` |
+| `bear-hooks-full` | only what `full` adds to `default` — install it next to `bear-hooks` | `jq` or `node`, `bash` |
+| `bear-hooks-memory` | `memory` add-on (`memory-lifecycle`) | `sqlite3`, `jq`, `bash` |
+
+> **Pick a single channel: the `bear-hooks*` plugins *or* the CLI installation with hooks (`--hooks=default|full`).** Enabling both
+> registers every guard twice, so each Bash/Edit call runs it two times. To use the plugins, install the CLI with
+> `--hooks=none`; to use the CLI hooks, do not install the `bear-hooks*` plugins. `bear-common` no longer carries hooks.
 
 ---
 

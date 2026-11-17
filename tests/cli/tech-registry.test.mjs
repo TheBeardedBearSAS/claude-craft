@@ -189,7 +189,7 @@ describe('tech-registry consistency with i18n directories', () => {
 });
 
 describe('tech-registry consistency with marketplace.json', () => {
-  // Chaque stack est distribué comme un plugin du même nom (plugins/<stack>/) ; ses mots-clés
+  // Chaque stack est distribué comme un plugin du même nom (marketplaces/en/plugins/bear-<stack>/) ; ses mots-clés
   // vivent dans .claude-plugin/marketplace.json. Ce test garde le registre et la marketplace synchronisés.
   it('marketplace.json keywords cover every registry application stack', () => {
     const marketPath = path.join(PROJECT_ROOT, '.claude-plugin', 'marketplace.json');

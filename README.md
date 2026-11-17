@@ -342,14 +342,16 @@ One plugin per command namespace and per stack, each prefixed with `bear-` so co
 
 ```
 /plugin marketplace add TheBeardedBearSAS/bear-craft
-/plugin install bear-common@bear-craft      # shared agents, skills, rules and the optional safety hooks
+/plugin install bear-common@bear-craft      # shared agents, skills, rules and checklists
+/plugin install bear-hooks@bear-craft       # default safety hooks (also: bear-hooks-full, bear-hooks-memory)
+/plugin install bear-docker@bear-craft      # infrastructure (also: bear-coolify, bear-kubernetes, bear-opentofu, bear-ansible, bear-hcloud, bear-pgbouncer, bear-frankenphp)
 /plugin install bear-workflow@bear-craft    # BMAD sprint workflow (also: bear-team, bear-qa, bear-uiux, bear-gate, bear-project)
 /plugin install bear-react@bear-craft       # a stack: bear-react, bear-symfony, bear-flutter, bear-python, …
 ```
 
-Plugins live in [`plugins/`](plugins/) and are generated from the installers (`npm run plugins:generate`).
-**Pick a single channel for hooks:** the `common` plugin *or* the CLI installation with hooks — using both runs every
-guard twice ([docs/HOOKS.md](docs/HOOKS.md#shipping-the-hooks-through-the-common-plugin)).
+Plugins live in [`marketplaces/<lang>/plugins/`](marketplaces/) — one marketplace per language (`en`, `fr`, `es`, `de`, `pt`; same plugin names, marketplaces `bear-craft`, `bear-craft-fr`, …) — and are generated from the installers (`npm run plugins:generate`). The repository root marketplace is the English one.
+**Pick a single channel for hooks:** the `bear-hooks*` plugins *or* hooks merged into `settings.json` by the CLI — using both runs every
+guard twice ([docs/HOOKS.md](docs/HOOKS.md#shipping-the-hooks-as-plugins)).
 
 ### Clone + Makefile
 

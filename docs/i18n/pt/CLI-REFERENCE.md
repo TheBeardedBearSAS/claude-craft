@@ -215,8 +215,8 @@ make migrate-check                         # Verificar o estado de migração
 ### Export Plugin
 
 ```bash
-make plugin-export-all                     # plugins/bear-<namespace>/ (generated)
-make plugin-check                          # plugins/ in sync with the installers
+make plugin-export-all                     # marketplaces/<lang>/plugins/bear-<ns>/ (generated)
+make plugin-check                          # marketplaces/ in sync with the installers
 ```
 
 ---

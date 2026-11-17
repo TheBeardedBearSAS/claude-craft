@@ -199,11 +199,11 @@ config-check-fix: ## Vérifie et propose de corriger les problèmes
 # Plugin Export
 #===============================================================================
 
-plugin-export-all: ## Génère plugins/<namespace>/ (un plugin Claude Code par namespace) depuis les installeurs
-	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs
+plugin-export-all: ## Génère marketplaces/<lang>/plugins/bear-<ns>/ (5 langues) depuis les installeurs
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --all-langs
 
-plugin-check: ## Vérifie que plugins/ est synchronisé avec le générateur (code ≠ 0 en cas de dérive)
-	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --check
+plugin-check: ## Vérifie que marketplaces/ est synchronisé avec le générateur (code ≠ 0 en cas de dérive)
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --all-langs --check
 
 #===============================================================================
 # Lister les Composants

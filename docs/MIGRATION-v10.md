@@ -44,7 +44,7 @@ to `.claude/commands/bear-<ns>/` (`references/<tech>/`, agents, skills and hooks
 3. **Reinstall the Claude Code plugin** if you use it. In Claude Code, run `/plugin`, remove `claude-craft`, then
    add the `bear-craft` marketplace (`TheBeardedBearSAS/bear-craft`), then install the plugins you need — one per
    namespace or stack, named `bear-<namespace>`; commands become `/bear-<namespace>:<command>` (e.g. `/bear-react:check`): `/plugin install bear-common@bear-craft`, `/plugin install bear-react@bear-craft`
-   Use either the `common` plugin or the CLI installation for hooks, not both.
+   Hooks moved out of `bear-common` into `bear-hooks`, `bear-hooks-full` and `bear-hooks-memory`; infrastructure is available as `bear-docker`, `bear-coolify`, `bear-kubernetes`, `bear-opentofu`, `bear-ansible`, `bear-hcloud`, `bear-pgbouncer` and `bear-frankenphp` (infra command files lost their redundant prefix: `/bear-docker:architecture`). Use either the `bear-hooks*` plugins or the CLI installation for hooks, not both.
 
 4. **Migrate your projects' commands**: run `bear-craft update` in each project. It installs `.claude/commands/bear-<ns>/` and deletes, in each old `.claude/commands/<ns>/` folder, **every file we ship** (same file name as the distribution) and **keeps the files you added**. The folder is removed when nothing is left; otherwise it stays, with a warning naming your files (`kept for your files (my-own.md): our commands moved to /bear-<ns>:*`), so no command of ours exists twice. Move your files wherever you like. Update your own notes and scripts to the prefixed names.
 

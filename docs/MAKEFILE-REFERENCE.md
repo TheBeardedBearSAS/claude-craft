@@ -189,8 +189,8 @@ make migrate-check
 
 | Target | Description |
 |--------|-------------|
-| `plugin-export-all` | Generate `plugins/bear-<namespace>/` (one Claude Code plugin per namespace and stack) |
-| `plugin-check` | Fail when `plugins/` drifts from the installers |
+| `plugin-export-all` | Generate `marketplaces/<lang>/plugins/bear-<ns>/` (5 languages: namespaces, stacks, infra, hooks) |
+| `plugin-check` | Fail when `marketplaces/` drifts from the installers |
 
 **Usage:**
 ```bash

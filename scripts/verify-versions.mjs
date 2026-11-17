@@ -91,51 +91,65 @@ for (const rule of versions.claimDenylist ?? []) {
 }
 
 // 3. Cohérence des manifestes de version (audit 2026-07-03, GAP-01 : éviter la dérive
-//    plugins/*/plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
+//    marketplaces/*/plugins/*/plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 const expectedEngine = `>=${versions.claudeCode?.minimum}`;
-const pluginsDir = path.join(ROOT, 'plugins');
-const pluginNames = fs.existsSync(pluginsDir)
-  ? fs
-      .readdirSync(pluginsDir, { withFileTypes: true })
-      .filter((d) => d.isDirectory())
-      .map((d) => d.name)
-      .sort()
-  : [];
-if (pluginNames.length === 0) errors.push('plugins/ est absent ou vide (npm run plugins:generate)');
-for (const name of pluginNames) {
-  const rel = `plugins/${name}/.claude-plugin/plugin.json`;
-  const manifestPath = path.join(ROOT, rel);
-  if (!fs.existsSync(manifestPath)) {
-    errors.push(`${rel} manquant`);
-    continue;
+const listDirs = (dir) =>
+  fs.existsSync(dir)
+    ? fs
+        .readdirSync(dir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => d.name)
+        .sort()
+    : [];
+const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
+
+// Une marketplace par langue : marketplaces/<lang>/.claude-plugin/marketplace.json + marketplaces/<lang>/plugins/bear-*.
+const langs = listDirs(path.join(ROOT, 'marketplaces'));
+if (langs.length === 0) errors.push('marketplaces/ est absent ou vide (npm run plugins:generate)');
+const checkMarketplace = (marketRel, pluginNames, pluginRel) => {
+  const marketplace = readJson(path.join(ROOT, marketRel));
+  const listed = new Map((marketplace.plugins ?? []).map((p) => [p.name, p]));
+  for (const name of pluginNames) {
+    if (!listed.has(name)) errors.push(`${marketRel} ne liste pas le plugin "${name}"`);
   }
-  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  if (manifest.name !== name) errors.push(`${rel} name="${manifest.name}" ≠ dossier "${name}"`);
-  if (!name.startsWith('bear-')) errors.push(`plugins/${name} : les plugins doivent être préfixés "bear-"`);
-  if (manifest.version !== pkg.version) {
-    errors.push(`${rel} version="${manifest.version}" ≠ package.json version="${pkg.version}"`);
+  for (const [name, entry] of listed) {
+    if (!pluginNames.includes(name)) errors.push(`${marketRel} liste "${name}" sans dossier ${pluginRel}/${name}`);
+    if (entry.version !== pkg.version) {
+      errors.push(
+        `${marketRel} "${name}" version="${entry.version}" ≠ package.json version="${pkg.version}" (dérive de manifeste)`
+      );
+    }
   }
-  // engines["claude-code"] (Claude Code 2.1.323+) : le plugin ne se charge pas sous le plancher sécurité.
-  if (manifest.engines?.['claude-code'] !== expectedEngine) {
-    errors.push(
-      `${rel} engines["claude-code"]="${manifest.engines?.['claude-code']}" ≠ "${expectedEngine}" (claudeCode.minimum)`
-    );
+};
+for (const lang of langs) {
+  const pluginsRel = `marketplaces/${lang}/plugins`;
+  const pluginNames = listDirs(path.join(ROOT, pluginsRel));
+  if (pluginNames.length === 0) errors.push(`${pluginsRel} est vide (npm run plugins:generate)`);
+  for (const name of pluginNames) {
+    const rel = `${pluginsRel}/${name}/.claude-plugin/plugin.json`;
+    const manifestPath = path.join(ROOT, rel);
+    if (!fs.existsSync(manifestPath)) {
+      errors.push(`${rel} manquant`);
+      continue;
+    }
+    const manifest = readJson(manifestPath);
+    if (manifest.name !== name) errors.push(`${rel} name="${manifest.name}" ≠ dossier "${name}"`);
+    if (!name.startsWith('bear-')) errors.push(`${pluginsRel}/${name} : les plugins doivent être préfixés "bear-"`);
+    if (manifest.version !== pkg.version) {
+      errors.push(`${rel} version="${manifest.version}" ≠ package.json version="${pkg.version}"`);
+    }
+    // engines["claude-code"] (Claude Code 2.1.323+) : le plugin ne se charge pas sous le plancher sécurité.
+    if (manifest.engines?.['claude-code'] !== expectedEngine) {
+      errors.push(
+        `${rel} engines["claude-code"]="${manifest.engines?.['claude-code']}" ≠ "${expectedEngine}" (claudeCode.minimum)`
+      );
+    }
   }
+  checkMarketplace(`marketplaces/${lang}/.claude-plugin/marketplace.json`, pluginNames, pluginsRel);
 }
-const marketplace = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8'));
-const listed = new Map((marketplace.plugins ?? []).map((p) => [p.name, p]));
-for (const name of pluginNames) {
-  if (!listed.has(name)) errors.push(`.claude-plugin/marketplace.json ne liste pas le plugin "${name}"`);
-}
-for (const [name, entry] of listed) {
-  if (!pluginNames.includes(name)) errors.push(`.claude-plugin/marketplace.json liste "${name}" sans dossier plugins/${name}`);
-  if (entry.version !== pkg.version) {
-    errors.push(
-      `.claude-plugin/marketplace.json "${name}" version="${entry.version}" ≠ package.json version="${pkg.version}" (dérive de manifeste)`
-    );
-  }
-}
+// La marketplace racine est la marketplace anglaise (sources ./marketplaces/en/plugins/…).
+checkMarketplace('.claude-plugin/marketplace.json', listDirs(path.join(ROOT, 'marketplaces/en/plugins')), 'marketplaces/en/plugins');
 
 if (errors.length > 0) {
   console.error('\n❌ verify-versions : dérive de versions détectée\n');
