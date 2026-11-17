@@ -5,7 +5,7 @@
 
 import c from './colors.js';
 import { assertSafeTarget } from './path-safety.js';
-import { PluginInstallError, marketplaceName, syncPlugins } from './plugin-install.js';
+import { PluginInstallError, syncPlugins } from './plugin-install.js';
 
 /**
  * Re-register the project marketplace and (re)install the recorded plugins. Idempotent, rules untouched.
@@ -17,11 +17,11 @@ function runSync(targetPath, deps = {}) {
   console.log(`\n${c.bold}Bear Craft Sync${c.reset}`);
   console.log(`${c.dim}Directory: ${target}${c.reset}\n`);
   try {
-    const { ids, record } = syncPlugins(target, {
+    const { ids, marketplace } = syncPlugins(target, {
       ...deps,
       log: (m) => console.log(`  ${c.dim}${m}${c.reset}`),
     });
-    console.log(`\n${c.green}[OK]${c.reset} ${ids.length} plugins enabled from ${marketplaceName(record.lang)}\n`);
+    console.log(`\n${c.green}[OK]${c.reset} ${ids.length} plugins enabled from ${marketplace}\n`);
   } catch (err) {
     if (!(err instanceof PluginInstallError)) throw err;
     console.error(`${c.red}${err.message}${c.reset}\n`);

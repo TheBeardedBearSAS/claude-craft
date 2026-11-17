@@ -44,6 +44,9 @@ function fakeClaude(project, calls = []) {
     if (args[1] === 'install') {
       settings.enabledPlugins = { ...settings.enabledPlugins, [args[2]]: true };
     }
+    if (args[1] === 'uninstall') {
+      delete settings.enabledPlugins?.[args[2]];
+    }
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(file, JSON.stringify(settings, null, 2));
     return ok();
@@ -149,10 +152,11 @@ describe('installPlugins / syncPlugins (fake claude)', () => {
     const project = path.join(TMP, 'p');
     fs.mkdirSync(project, { recursive: true });
     const calls = [];
-    const { ids } = installPlugins(
+    const { ids, marketplace } = installPlugins(
       { target: project, cliRoot: ROOT, install, version: '10.0.0' },
       { execFn: fakeClaude(project, calls) }
     );
+    expect(marketplace).toMatch(/^bear-craft-[0-9a-f]{8}$/);
 
     const add = calls.find((c) => c.args[1] === 'marketplace');
     expect(add.args).toEqual(['plugin', 'marketplace', 'add', './.bear-craft/marketplace', '--scope', 'project']);
@@ -162,11 +166,11 @@ describe('installPlugins / syncPlugins (fake claude)', () => {
       installs.every((c) => c.args.includes('--scope') && c.args.includes('project') && c.args.includes('-y'))
     ).toBe(true);
     expect(ids).toEqual(
-      [...CORE_PLUGINS, 'react', 'docker', 'hooks', 'hooks-full'].map((n) => `bear-${n}@bear-craft-fr`)
+      [...CORE_PLUGINS, 'react', 'docker', 'hooks', 'hooks-full'].map((n) => `bear-${n}@${marketplace}`)
     );
 
     const settings = JSON.parse(fs.readFileSync(path.join(project, '.claude/settings.json'), 'utf8'));
-    expect(settings.extraKnownMarketplaces['bear-craft-fr'].source.path).toBe('./.bear-craft/marketplace');
+    expect(settings.extraKnownMarketplaces[marketplace].source.path).toBe('./.bear-craft/marketplace');
     expect(Object.keys(settings.enabledPlugins)).toEqual(ids);
     expect(fs.readFileSync(path.join(project, '.bear-craft/VERSION'), 'utf8').trim()).toBe('10.0.0');
     expect(readInstallJson(project)).toEqual({
@@ -174,6 +178,7 @@ describe('installPlugins / syncPlugins (fake claude)', () => {
       techs: ['react'],
       infra: ['docker'],
       hooks: { profile: 'full', memory: false },
+      marketplace,
       version: '10.0.0',
     });
   });
@@ -210,7 +215,9 @@ describe('installPlugins / syncPlugins (fake claude)', () => {
     const { ids } = syncPlugins(project, { execFn: fakeClaude(project, calls) });
     expect(ids).toHaveLength(CORE_PLUGINS.length + 4);
     const settings = JSON.parse(fs.readFileSync(path.join(project, '.claude/settings.json'), 'utf8'));
-    expect(settings.extraKnownMarketplaces['bear-craft-fr'].source.path).toBe('./.bear-craft/marketplace');
+    expect(settings.extraKnownMarketplaces[readInstallJson(project).marketplace].source.path).toBe(
+      './.bear-craft/marketplace'
+    );
 
     fs.rmSync(path.join(project, '.bear-craft/marketplace'), { recursive: true });
     expect(() => syncPlugins(project, { execFn: fakeClaude(project) })).toThrow(/marketplace is missing/);
@@ -235,6 +242,7 @@ describe('diagnosePlugins and readPluginState', () => {
     return project;
   }
   const list = (project, entries) => vi.fn(() => ok(JSON.stringify(entries)));
+  const mktOf = (project) => readInstallJson(project).marketplace;
   const levels = (res) => res.map((r) => r.level);
 
   it('is silent for a project without install.json', () => {
@@ -245,7 +253,7 @@ describe('diagnosePlugins and readPluginState', () => {
     const project = installed();
     const res = diagnosePlugins(project, {
       execFn: list(project, [
-        { name: 'bear-craft', source: 'directory', path: path.join(project, '.bear-craft/marketplace') },
+        { name: mktOf(project), source: 'directory', path: path.join(project, '.bear-craft/marketplace') },
       ]),
     });
     expect(levels(res)).toEqual(['ok', 'ok', 'ok', 'ok']);
@@ -261,7 +269,9 @@ describe('diagnosePlugins and readPluginState', () => {
   it('flags a marketplace registered for another path', () => {
     const project = installed();
     const res = diagnosePlugins(project, {
-      execFn: list(project, [{ name: 'bear-craft', source: 'directory', path: '/elsewhere/.bear-craft/marketplace' }]),
+      execFn: list(project, [
+        { name: mktOf(project), source: 'directory', path: '/elsewhere/.bear-craft/marketplace' },
+      ]),
     });
     expect(res.at(-1).message).toContain('another path');
   });
@@ -270,17 +280,17 @@ describe('diagnosePlugins and readPluginState', () => {
     const project = installed();
     const file = path.join(project, '.claude/settings.json');
     const settings = JSON.parse(fs.readFileSync(file, 'utf8'));
-    delete settings.enabledPlugins['bear-react@bear-craft'];
+    delete settings.enabledPlugins[`bear-react@${mktOf(project)}`];
     fs.writeFileSync(file, JSON.stringify(settings));
     const res = diagnosePlugins(project, { execFn: list(project, []) });
-    expect(res.some((r) => r.level === 'fail' && r.message.includes('bear-react@bear-craft'))).toBe(true);
+    expect(res.some((r) => r.level === 'fail' && r.message.includes(`bear-react@${mktOf(project)}`))).toBe(true);
   });
 
   it('flags an absolute marketplace path (not portable)', () => {
     const project = installed();
     const file = path.join(project, '.claude/settings.json');
     const settings = JSON.parse(fs.readFileSync(file, 'utf8'));
-    settings.extraKnownMarketplaces['bear-craft'].source.path = project;
+    settings.extraKnownMarketplaces[mktOf(project)].source.path = project;
     fs.writeFileSync(file, JSON.stringify(settings));
     const res = diagnosePlugins(project, { execFn: list(project, []) });
     expect(res.some((r) => r.level === 'warn' && r.message.includes('expected ./.bear-craft/marketplace'))).toBe(true);
@@ -289,11 +299,122 @@ describe('diagnosePlugins and readPluginState', () => {
   it('reads the enabled plugins and their content from the marketplace copy', () => {
     const project = installed();
     const state = readPluginState(project);
-    expect(state.marketplace).toBe('bear-craft');
+    expect(state.marketplace).toBe(mktOf(project));
     const react = state.plugins.find((p) => p.name === 'bear-react');
     expect(react.commands).toBeGreaterThanOrEqual(5);
     expect(react.agents).toBe(1);
     expect(state.plugins.find((p) => p.name === 'bear-common').agents).toBe(20);
     expect(readPluginState(TMP)).toBeNull();
+  });
+});
+
+describe('unique marketplace id per project', () => {
+  const install = { lang: 'fr', techs: ['react'], infra: [], hooks: parseHooks('none') };
+  const proj = (name) => {
+    const dir = path.join(TMP, name);
+    fs.mkdirSync(dir, { recursive: true });
+    return dir;
+  };
+  const run = (project, extra = {}) =>
+    installPlugins(
+      { target: project, cliRoot: ROOT, install: { ...install, ...extra }, version: '10.0.0' },
+      { execFn: fakeClaude(project) }
+    );
+
+  it('generates bear-craft-<8 hex> on the first install, persists it and writes it in the copied manifest only', () => {
+    const project = proj('a');
+    const { marketplace } = run(project);
+    expect(marketplace).toMatch(/^bear-craft-[0-9a-f]{8}$/);
+    expect(readInstallJson(project).marketplace).toBe(marketplace);
+    const copy = JSON.parse(
+      fs.readFileSync(path.join(project, '.bear-craft/marketplace/.claude-plugin/marketplace.json'), 'utf8')
+    );
+    expect(copy.name).toBe(marketplace);
+    // the sources of the package keep the language name
+    const source = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'marketplaces/fr/.claude-plugin/marketplace.json'), 'utf8')
+    );
+    expect(source.name).toBe('bear-craft-fr');
+    // component names do not depend on the marketplace name
+    expect(fs.existsSync(path.join(project, '.bear-craft/marketplace/plugins/bear-react/commands/check.md'))).toBe(
+      true
+    );
+  });
+
+  it('gives two projects (en and fr) different ids, so they never share a registry entry', () => {
+    const a = run(proj('a'), { lang: 'en' }).marketplace;
+    const b = run(proj('b'), { lang: 'fr' }).marketplace;
+    expect(a).not.toBe(b);
+  });
+
+  it('update reuses the recorded id, even when the language changes', () => {
+    const project = proj('a');
+    const first = run(project).marketplace;
+    expect(run(project).marketplace).toBe(first);
+    expect(run(project, { lang: 'de' }).marketplace).toBe(first);
+    const copy = JSON.parse(
+      fs.readFileSync(path.join(project, '.bear-craft/marketplace/.claude-plugin/marketplace.json'), 'utf8')
+    );
+    expect(copy.name).toBe(first);
+  });
+
+  it('sync reuses the recorded id', () => {
+    const project = proj('a');
+    const { marketplace } = run(project);
+    fs.rmSync(path.join(project, '.claude'), { recursive: true });
+    const res = syncPlugins(project, { execFn: fakeClaude(project) });
+    expect(res.marketplace).toBe(marketplace);
+    expect(res.ids.every((id) => id.endsWith(`@${marketplace}`))).toBe(true);
+    expect(readInstallJson(project).marketplace).toBe(marketplace);
+  });
+
+  it('migrates a generic-name installation: new id, old entries removed, plugins uninstalled at project scope', () => {
+    const project = proj('legacy');
+    fs.mkdirSync(path.join(project, '.bear-craft'), { recursive: true });
+    fs.mkdirSync(path.join(project, '.claude'), { recursive: true });
+    fs.writeFileSync(
+      path.join(project, '.bear-craft/install.json'),
+      JSON.stringify({
+        lang: 'fr',
+        techs: ['react'],
+        infra: [],
+        hooks: { profile: 'none', memory: false },
+        version: '10.0.0',
+      })
+    );
+    fs.writeFileSync(
+      path.join(project, '.claude/settings.json'),
+      JSON.stringify({
+        permissions: { allow: ['Bash(ls)'] },
+        enabledPlugins: {
+          'bear-react@bear-craft-fr': true,
+          'bear-common@bear-craft-fr': true,
+          'other@somewhere': true,
+        },
+        extraKnownMarketplaces: {
+          'bear-craft-fr': { source: { source: 'directory', path: './.bear-craft/marketplace' } },
+          somewhere: { source: { source: 'github', repo: 'a/b' } },
+        },
+      })
+    );
+    const calls = [];
+    const { marketplace } = installPlugins(
+      { target: project, cliRoot: ROOT, install: { ...install }, version: '10.0.1' },
+      { execFn: fakeClaude(project, calls) }
+    );
+
+    expect(marketplace).toMatch(/^bear-craft-[0-9a-f]{8}$/);
+    const unins = calls.filter((c) => c.args[1] === 'uninstall');
+    expect(unins.map((c) => c.args[2]).sort()).toEqual(['bear-common@bear-craft-fr', 'bear-react@bear-craft-fr']);
+    expect(unins.every((c) => c.cwd === project && c.args.includes('project'))).toBe(true);
+
+    const settings = JSON.parse(fs.readFileSync(path.join(project, '.claude/settings.json'), 'utf8'));
+    expect(settings.extraKnownMarketplaces['bear-craft-fr']).toBeUndefined();
+    expect(Object.keys(settings.enabledPlugins).filter((id) => id.endsWith('@bear-craft-fr'))).toEqual([]);
+    expect(settings.enabledPlugins[`bear-react@${marketplace}`]).toBe(true);
+    expect(settings.enabledPlugins['other@somewhere']).toBe(true);
+    expect(settings.extraKnownMarketplaces.somewhere.source.repo).toBe('a/b');
+    expect(settings.permissions.allow).toEqual(['Bash(ls)']);
+    expect(readInstallJson(project).marketplace).toBe(marketplace);
   });
 });

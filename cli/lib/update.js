@@ -15,7 +15,6 @@ import {
   PluginInstallError,
   ensureClaude,
   installPlugins,
-  marketplaceName,
   parseHooks,
   readInstallJson,
 } from './plugin-install.js';
@@ -134,6 +133,7 @@ function runUpdate(targetPath, options, cliRoot, deps = {}) {
     lang,
     techs: options.tech ? [options.tech] : [...(base.techs ?? [])],
     infra: [...(base.infra ?? [])],
+    marketplace: recorded?.marketplace,
     hooks: typeof base.hooks === 'string' ? parseHooks(base.hooks) : (base.hooks ?? parseHooks('default')),
   };
   if (!recorded) {
@@ -209,11 +209,11 @@ function runUpdate(targetPath, options, cliRoot, deps = {}) {
 
     // 3. Marketplace of the current version, plugins, install.json.
     try {
-      const { ids } = installPlugins(
+      const { ids, marketplace } = installPlugins(
         { target: safeTarget, cliRoot, install, version: deps.version ?? readPackageVersion(cliRoot) },
         { ...deps, log: (m) => console.log(`  ${c.dim}${m}${c.reset}`) }
       );
-      console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplaceName(lang)})`);
+      console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplace})`);
       updated++;
     } catch (err) {
       console.log(`  ${c.red}[FAIL]${c.reset} Plugins: ${err.message}`);

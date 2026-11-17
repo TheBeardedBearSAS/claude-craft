@@ -16,7 +16,6 @@ import {
   PluginInstallError,
   ensureClaude,
   installPlugins,
-  marketplaceName,
   parseHooks,
   readInstallJson,
   resolveInfra,
@@ -330,7 +329,7 @@ export async function runInstallation(cli, { CLI_ROOT, VERSION, execFn }) {
     const sameLang = previous && previous.lang === lang;
     const recordedTechs = [...new Set([...(sameLang ? previous.techs : []), ...installTechs])];
     const recordedInfra = [...new Set([...(sameLang ? previous.infra : []), ...infra])];
-    const { ids } = installPlugins(
+    const { ids, marketplace } = installPlugins(
       {
         target,
         cliRoot: CLI_ROOT,
@@ -339,7 +338,7 @@ export async function runInstallation(cli, { CLI_ROOT, VERSION, execFn }) {
       },
       { ...deps, log: (m) => console.log(`  ${c.dim}${m}${c.reset}`) }
     );
-    console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplaceName(lang)})`);
+    console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplace})`);
 
     // Install RTK (Token Optimizer)
     if (cli.config.includeRtk) {

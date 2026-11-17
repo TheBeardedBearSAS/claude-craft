@@ -9,6 +9,7 @@
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
+import { randomUUID } from 'crypto';
 import { MIN_CLAUDE_CODE, assessClaude } from './claude-code.js';
 
 /** Infra namespaces published as plugins (bear-<name>). */
@@ -31,6 +32,19 @@ export const MARKETPLACE_REL = './.bear-craft/marketplace';
 
 /** Marketplace name per language: `bear-craft` (en), `bear-craft-fr`, … */
 export const marketplaceName = (lang) => (lang === 'en' || !lang ? 'bear-craft' : `bear-craft-${lang}`);
+
+/**
+ * Unique marketplace id of a project: `bear-craft-<8 hex>`. Claude Code keeps ONE registry of marketplaces per
+ * machine keyed by name, so two projects sharing a name would load each other's plugins.
+ */
+export const newMarketplaceId = () => `bear-craft-${randomUUID().replace(/-/g, '').slice(0, 8)}`;
+
+/**
+ * Marketplace name recorded for a project; installations made before the unique id used the generic
+ * `bear-craft` / `bear-craft-<lang>` name.
+ * @param {{marketplace?: string, lang?: string}} record
+ */
+export const marketplaceOf = (record) => record.marketplace ?? marketplaceName(record.lang);
 
 /** Error whose message tells the user what to do; the CLI prints it and exits non-zero. */
 export class PluginInstallError extends Error {}
@@ -126,7 +140,7 @@ export function ensureClaude(deps = {}) {
  * Copy marketplaces/<lang>/ of the package to <target>/.bear-craft/marketplace/ (replacing a previous copy).
  * @returns {string} destination directory
  */
-export function copyMarketplace(cliRoot, lang, target) {
+export function copyMarketplace(cliRoot, lang, target, marketplace) {
   const src = path.join(cliRoot, 'marketplaces', lang);
   if (!fs.existsSync(path.join(src, '.claude-plugin', 'marketplace.json'))) {
     throw new PluginInstallError(`No marketplace for language "${lang}" in this package (${src}).`);
@@ -135,6 +149,13 @@ export function copyMarketplace(cliRoot, lang, target) {
   fs.rmSync(dest, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.cpSync(src, dest, { recursive: true });
+  if (marketplace) {
+    // Only the project copy is renamed: the sources of the package (and the GitHub marketplace) keep `bear-craft`.
+    const file = path.join(dest, '.claude-plugin', 'marketplace.json');
+    const manifest = JSON.parse(fs.readFileSync(file, 'utf8'));
+    manifest.name = marketplace;
+    fs.writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
+  }
   return dest;
 }
 
@@ -171,8 +192,8 @@ export function writeInstallJson(target, data) {
 }
 
 /** Install record: what `update` and `sync` replay. */
-export function buildInstallRecord({ lang, techs, infra, hooks, version }) {
-  return { lang, techs: [...techs], infra: [...infra], hooks: { ...hooks }, version };
+export function buildInstallRecord({ lang, techs, infra, hooks, marketplace, version }) {
+  return { lang, techs: [...techs], infra: [...infra], hooks: { ...hooks }, marketplace, version };
 }
 
 const claudeFailure = (what, r) =>
@@ -191,7 +212,7 @@ const claudeFailure = (what, r) =>
 export function registerAndInstall(target, install, deps = {}) {
   const run = deps.execFn ?? defaultExec;
   const log = deps.log ?? (() => {});
-  const mkt = marketplaceName(install.lang);
+  const mkt = marketplaceOf(install);
 
   const add = run('claude', ['plugin', 'marketplace', 'add', MARKETPLACE_REL, '--scope', 'project'], { cwd: target });
   if (add.status !== 0) throw claudeFailure('plugin marketplace add', add);
@@ -209,16 +230,42 @@ export function registerAndInstall(target, install, deps = {}) {
 }
 
 /**
+ * Drop the generic-name entries (`bear-craft`, `bear-craft-<lang>`) of an installation made before projects got
+ * a unique marketplace id: uninstall their plugins at project scope, then remove the settings.json entries.
+ * Every other key is preserved.
+ */
+function migrateGenericMarketplace(target, legacyName, run, log) {
+  const file = path.join(target, '.claude', 'settings.json');
+  const settings = readJson(file, null);
+  if (!settings) return;
+  const suffix = `@${legacyName}`;
+  const old = Object.keys(settings.enabledPlugins ?? {}).filter((id) => id.endsWith(suffix));
+  for (const id of old) run('claude', ['plugin', 'uninstall', id, '--scope', 'project', '-y'], { cwd: target });
+  // `claude` may have rewritten the file while uninstalling: read it again
+  const fresh = readJson(file, settings);
+  for (const id of Object.keys(fresh.enabledPlugins ?? {})) if (id.endsWith(suffix)) delete fresh.enabledPlugins[id];
+  if (fresh.extraKnownMarketplaces) delete fresh.extraKnownMarketplaces[legacyName];
+  fs.writeFileSync(file, `${JSON.stringify(fresh, null, 2)}\n`);
+  log(`migrated from the generic marketplace ${legacyName}`);
+}
+
+/**
  * Full plugin installation: claude check, marketplace copy, registration, plugins, install.json.
- * @returns {{ids: string[], claudeVersion: string}}
+ * The marketplace id is generated on the first installation and then reused (committed `enabledPlugins` depend on it).
+ * @returns {{ids: string[], claudeVersion: string, marketplace: string}}
  */
 export function installPlugins({ target, cliRoot, install, version }, deps = {}) {
+  const run = deps.execFn ?? defaultExec;
+  const log = deps.log ?? (() => {});
   const claudeVersion = ensureClaude(deps);
-  copyMarketplace(cliRoot, install.lang, target);
+  const previous = readInstallJson(target);
+  const marketplace = install.marketplace ?? previous?.marketplace ?? newMarketplaceId();
+  copyMarketplace(cliRoot, install.lang, target, marketplace);
   fs.writeFileSync(path.join(target, BEAR_DIR, 'VERSION'), `${version}\n`);
-  const ids = registerAndInstall(target, install, deps);
-  writeInstallJson(target, buildInstallRecord({ ...install, version }));
-  return { ids, claudeVersion };
+  if (previous && !previous.marketplace) migrateGenericMarketplace(target, marketplaceName(previous.lang), run, log);
+  const ids = registerAndInstall(target, { ...install, marketplace }, deps);
+  writeInstallJson(target, buildInstallRecord({ ...install, marketplace, version }));
+  return { ids, claudeVersion, marketplace };
 }
 
 /**
@@ -239,7 +286,7 @@ export function syncPlugins(target, deps = {}) {
   }
   const claudeVersion = ensureClaude(deps);
   const ids = registerAndInstall(target, record, deps);
-  return { ids, claudeVersion, record };
+  return { ids, claudeVersion, record, marketplace: marketplaceOf(record) };
 }
 
 /**
@@ -252,7 +299,7 @@ export function diagnosePlugins(target, deps = {}) {
   const record = readInstallJson(target);
   if (!record) return out;
 
-  const mkt = marketplaceName(record.lang);
+  const mkt = marketplaceOf(record);
   const hasMarketplace = fs.existsSync(
     path.join(target, BEAR_DIR, 'marketplace', '.claude-plugin', 'marketplace.json')
   );
@@ -327,7 +374,7 @@ function parseJsonSafe(text) {
 export function readPluginState(target) {
   const record = readInstallJson(target);
   if (!record) return null;
-  const mkt = marketplaceName(record.lang);
+  const mkt = marketplaceOf(record);
   const settings = readJson(path.join(target, '.claude', 'settings.json'), {});
   const countDir = (dir, test) => {
     try {

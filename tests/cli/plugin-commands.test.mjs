@@ -23,7 +23,9 @@ function fakeExec(projectDir) {
     const s = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
     if (args[1] === 'marketplace') {
       s.extraKnownMarketplaces = {
-        'bear-craft': { source: { source: 'directory', path: path.join(projectDir, '.bear-craft/marketplace') } },
+        [JSON.parse(
+          fs.readFileSync(path.join(projectDir, '.bear-craft/marketplace/.claude-plugin/marketplace.json'), 'utf8')
+        ).name]: { source: { source: 'directory', path: path.join(projectDir, '.bear-craft/marketplace') } },
       };
     }
     if (args[1] === 'install') s.enabledPlugins = { ...s.enabledPlugins, [args[2]]: true };
@@ -58,11 +60,12 @@ afterEach(() => {
 });
 
 const text = () => out.join('\n');
+const mktOf = (dir) => JSON.parse(fs.readFileSync(path.join(dir, '.bear-craft/install.json'), 'utf8')).marketplace;
 
 describe('list', () => {
   it('lists the enabled plugins and their content instead of .claude/commands', () => {
     runList(project);
-    expect(text()).toContain('Plugins (bear-craft, v10.0.0)');
+    expect(text()).toContain(`Plugins (${mktOf(project)}, v10.0.0)`);
     expect(text()).toContain('/bear-react:*');
     expect(text()).toContain('/bear-common:*');
     expect(text()).toMatch(/Total: 8 plugin\(s\)/);
@@ -73,7 +76,7 @@ describe('list', () => {
 describe('check', () => {
   it('checks the enabled plugins and the references', () => {
     runCheck(project);
-    expect(text()).toContain('plugins — 8 enabled (bear-craft)');
+    expect(text()).toContain(`plugins — 8 enabled (${mktOf(project)})`);
     expect(text()).toContain('references/');
     expect(text()).toContain('Installation looks good!');
   });
@@ -110,7 +113,7 @@ describe('doctor', () => {
 
   it('is happy when the marketplace is registered for this project', () => {
     const list = JSON.stringify([
-      { name: 'bear-craft', source: 'directory', path: path.join(project, '.bear-craft/marketplace') },
+      { name: mktOf(project), source: 'directory', path: path.join(project, '.bear-craft/marketplace') },
     ]);
     runDoctor(project, { execFn: claude({ list }) });
     expect(text()).toContain('registered on this machine');
@@ -126,10 +129,10 @@ describe('doctor', () => {
   it('fails when plugins recorded in install.json are not enabled', () => {
     const file = path.join(project, '.claude/settings.json');
     const s = JSON.parse(fs.readFileSync(file, 'utf8'));
-    delete s.enabledPlugins['bear-react@bear-craft'];
+    delete s.enabledPlugins[`bear-react@${mktOf(project)}`];
     fs.writeFileSync(file, JSON.stringify(s));
     runDoctor(project, { execFn: claude() });
-    expect(text()).toContain('plugins not enabled: bear-react@bear-craft');
+    expect(text()).toContain(`plugins not enabled: bear-react@${mktOf(project)}`);
     expect(process.exitCode).toBe(1);
   });
 });
@@ -187,9 +190,10 @@ describe('infra detection and CLI options', () => {
       'bear-hooks-memory',
       'bear-gate',
     ]) {
-      expect(settings.enabledPlugins[`${id}@bear-craft-fr`], id).toBe(true);
+      expect(settings.enabledPlugins[`${id}@${mktOf(target)}`], id).toBe(true);
     }
-    expect(settings.enabledPlugins['bear-hooks-full@bear-craft-fr']).toBeUndefined();
+    expect(settings.enabledPlugins[`bear-hooks-full@${mktOf(target)}`]).toBeUndefined();
+    expect(mktOf(target)).toMatch(/^bear-craft-[0-9a-f]{8}$/);
     for (const d of ['commands', 'agents', 'skills'])
       expect(fs.existsSync(path.join(target, '.claude', d)), d).toBe(false);
 
@@ -215,7 +219,7 @@ describe('infra detection and CLI options', () => {
     expect(sync.status, sync.stdout + sync.stderr).toBe(0);
     expect(
       JSON.parse(fs.readFileSync(path.join(target, '.claude/settings.json'), 'utf8')).enabledPlugins[
-        'bear-react@bear-craft'
+        `bear-react@${mktOf(target)}`
       ]
     ).toBe(true);
 

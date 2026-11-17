@@ -117,9 +117,11 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
     expect(fs.existsSync(path.join(target, '.claude/agents'))).toBe(false);
     // the plugins replaced them
     const settings = JSON.parse(fs.readFileSync(path.join(target, '.claude/settings.json'), 'utf8'));
-    expect(settings.enabledPlugins['bear-common@bear-craft']).toBe(true);
-    expect(settings.enabledPlugins['bear-react@bear-craft']).toBe(true);
-    expect(settings.extraKnownMarketplaces['bear-craft'].source.path).toBe('./.bear-craft/marketplace');
+    const mkt = JSON.parse(fs.readFileSync(path.join(target, '.bear-craft/install.json'), 'utf8')).marketplace;
+    expect(mkt).toMatch(/^bear-craft-[0-9a-f]{8}$/);
+    expect(settings.enabledPlugins[`bear-common@${mkt}`]).toBe(true);
+    expect(settings.enabledPlugins[`bear-react@${mkt}`]).toBe(true);
+    expect(settings.extraKnownMarketplaces[mkt].source.path).toBe('./.bear-craft/marketplace');
     expect(fs.existsSync(path.join(target, '.bear-craft/marketplace/plugins/bear-react/commands/check.md'))).toBe(true);
   });
 });

@@ -56,6 +56,31 @@ describe('runSync', () => {
     expect(logSpy.mock.calls.map((c) => c[0]).join('\n')).toContain('plugins enabled from bear-craft-es');
   });
 
+  it('uses the unique marketplace id recorded in install.json', () => {
+    fs.mkdirSync(path.join(TMP, '.bear-craft/marketplace/.claude-plugin'), { recursive: true });
+    fs.writeFileSync(path.join(TMP, '.bear-craft/marketplace/.claude-plugin/marketplace.json'), '{}');
+    fs.writeFileSync(
+      path.join(TMP, '.bear-craft/install.json'),
+      JSON.stringify({
+        lang: 'fr',
+        techs: [],
+        infra: [],
+        hooks: { profile: 'none', memory: false },
+        marketplace: 'bear-craft-0a1b2c3d',
+        version: '10.0.0',
+      })
+    );
+    const calls = [];
+    const execFn = vi.fn((cmd, args) => {
+      calls.push(args);
+      return { status: 0, stdout: args[0] === '--version' ? '2.1.326' : '', stderr: '' };
+    });
+    runSync(TMP, { execFn });
+    const ids = calls.filter((a) => a[1] === 'install').map((a) => a[2]);
+    expect(ids.length).toBeGreaterThan(5);
+    expect(ids.every((id) => id.endsWith('@bear-craft-0a1b2c3d'))).toBe(true);
+  });
+
   it('exits non-zero when claude is missing', () => {
     fs.mkdirSync(path.join(TMP, '.bear-craft/marketplace/.claude-plugin'), { recursive: true });
     fs.writeFileSync(path.join(TMP, '.bear-craft/marketplace/.claude-plugin/marketplace.json'), '{}');

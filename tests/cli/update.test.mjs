@@ -205,6 +205,24 @@ describe('runUpdate', () => {
     });
   });
 
+  it('hands the recorded marketplace id to the plugin installation (never regenerated)', () => {
+    mkdirSync(join(tempDir, '.claude'));
+    mkdirSync(join(tempDir, '.bear-craft'));
+    writeFileSync(
+      join(tempDir, '.bear-craft', 'install.json'),
+      JSON.stringify({
+        lang: 'en',
+        techs: [],
+        infra: [],
+        hooks: { profile: 'default', memory: false },
+        marketplace: 'bear-craft-deadbeef',
+        version: '10.0.0',
+      })
+    );
+    runUpdate(tempDir, {}, cliRoot);
+    expect(pluginInstall.installPlugins.mock.calls[0][0].install.marketplace).toBe('bear-craft-deadbeef');
+  });
+
   it('detects techs, infra and hooks of a 9.x copy-based installation (no install.json)', () => {
     mkdirSync(join(tempDir, '.claude', 'references', 'symfony'), { recursive: true });
     mkdirSync(join(tempDir, '.claude', 'commands', 'docker'), { recursive: true });
