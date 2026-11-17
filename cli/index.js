@@ -43,6 +43,7 @@ import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
 import { flatten as flattenCodebaseFn } from './lib/flattener.js';
 import { assertSafeTarget } from './lib/path-safety.js';
+import { legacyNameNotice } from './lib/legacy-name.js';
 
 // CLI package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -51,7 +52,7 @@ const CLI_ROOT = path.resolve(__dirname, '..');
 // Package version
 const { version: VERSION } = JSON.parse(fs.readFileSync(path.join(CLI_ROOT, 'package.json'), 'utf8'));
 
-class ClaudeCraftCLI {
+class BearCraftCLI {
   /**
    * Initialize the CLI with default configuration.
    */
@@ -289,14 +290,16 @@ class ClaudeCraftCLI {
   }
 }
 
-// Export class for testing
-export { ClaudeCraftCLI };
+// Export class for testing. `ClaudeCraftCLI` : alias déprécié, retiré en 11.0.
+export { BearCraftCLI, BearCraftCLI as ClaudeCraftCLI };
 
 // Run CLI only when executed directly (not imported by tests)
 const isDirectRun =
   process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
 if (isDirectRun) {
-  const cli = new ClaudeCraftCLI();
+  const notice = legacyNameNotice(process.argv[1]);
+  if (notice) console.error(`${colors.yellow}${notice}${colors.reset}`);
+  const cli = new BearCraftCLI();
   cli.run().catch((error) => {
     console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
     process.exit(1);

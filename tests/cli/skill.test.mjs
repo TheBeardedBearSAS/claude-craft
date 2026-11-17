@@ -5,26 +5,31 @@ import os from 'os';
 import { validateSkillPackageName, runSkillAdd, runSkillList, runSkillRemove } from '../../cli/lib/skill.js';
 
 describe('validateSkillPackageName', () => {
-  it('accepts unscoped claude-craft-skill-* names', () => {
-    expect(validateSkillPackageName('claude-craft-skill-foo')).toEqual({
-      pkg: 'claude-craft-skill-foo',
+  it('accepts unscoped bear-craft-skill-* names', () => {
+    expect(validateSkillPackageName('bear-craft-skill-foo')).toEqual({
+      pkg: 'bear-craft-skill-foo',
       shortName: 'foo',
     });
   });
 
   it('accepts scoped names', () => {
-    expect(validateSkillPackageName('@acme/claude-craft-skill-bar-baz')).toEqual({
-      pkg: '@acme/claude-craft-skill-bar-baz',
+    expect(validateSkillPackageName('@acme/bear-craft-skill-bar-baz')).toEqual({
+      pkg: '@acme/bear-craft-skill-bar-baz',
       shortName: 'bar-baz',
     });
   });
 
   it('accepts names with version specs', () => {
-    expect(validateSkillPackageName('claude-craft-skill-foo@1.2.3').shortName).toBe('foo');
+    expect(validateSkillPackageName('bear-craft-skill-foo@1.2.3').shortName).toBe('foo');
+  });
+
+  it('still accepts the legacy claude-craft-skill-* prefix (10.x compatibility)', () => {
+    expect(validateSkillPackageName('claude-craft-skill-foo')).toEqual({ pkg: 'claude-craft-skill-foo', shortName: 'foo' });
+    expect(validateSkillPackageName('@acme/claude-craft-skill-bar').shortName).toBe('bar');
   });
 
   it('rejects names without the convention prefix', () => {
-    expect(() => validateSkillPackageName('lodash')).toThrow(/must start with "claude-craft-skill-"/);
+    expect(() => validateSkillPackageName('lodash')).toThrow(/must start with "bear-craft-skill-"/);
   });
 
   it('rejects empty input', () => {
@@ -36,7 +41,7 @@ describe('validateSkillPackageName', () => {
   });
 
   it('rejects short-names with invalid chars', () => {
-    expect(() => validateSkillPackageName('claude-craft-skill-Bad_Name')).toThrow(/invalid skill short-name/);
+    expect(() => validateSkillPackageName('bear-craft-skill-Bad_Name')).toThrow(/invalid skill short-name/);
   });
 });
 
@@ -122,7 +127,7 @@ describe('runSkillAdd', () => {
   });
 
   it('installs a skill and copies SKILL.md + skills/*.md', () => {
-    const result = runSkillAdd('claude-craft-skill-foo', tmpDir, { spawn: spawnMock });
+    const result = runSkillAdd('bear-craft-skill-foo', tmpDir, { spawn: spawnMock });
     expect(result.shortName).toBe('foo');
     expect(result.files.sort()).toEqual(['SKILL.md', 'skills/extra.md']);
     const dest = path.join(tmpDir, '.claude', 'skills', 'community', 'foo');
@@ -132,7 +137,7 @@ describe('runSkillAdd', () => {
 
   it('throws if npm install fails', () => {
     spawnMock = vi.fn(() => ({ status: 1, error: null }));
-    expect(() => runSkillAdd('claude-craft-skill-foo', tmpDir, { spawn: spawnMock })).toThrow(/exited with code 1/);
+    expect(() => runSkillAdd('bear-craft-skill-foo', tmpDir, { spawn: spawnMock })).toThrow(/exited with code 1/);
   });
 
   it('throws if the package contains no skill files', () => {
@@ -142,10 +147,10 @@ describe('runSkillAdd', () => {
       fs.mkdirSync(path.join(cwd, 'node_modules', pkgArg), { recursive: true });
       return { status: 0, error: null };
     });
-    expect(() => runSkillAdd('claude-craft-skill-foo', tmpDir, { spawn: spawnMock })).toThrow(/no SKILL\.md or skills/);
+    expect(() => runSkillAdd('bear-craft-skill-foo', tmpDir, { spawn: spawnMock })).toThrow(/no SKILL\.md or skills/);
   });
 
   it('rejects system targets via assertSafeTarget', () => {
-    expect(() => runSkillAdd('claude-craft-skill-foo', '/etc', { spawn: spawnMock })).toThrow(/system directory/);
+    expect(() => runSkillAdd('bear-craft-skill-foo', '/etc', { spawn: spawnMock })).toThrow(/system directory/);
   });
 });

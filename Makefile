@@ -116,7 +116,7 @@ install-completions: ## Installe les completions bash/zsh
 	cp "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ~/.zsh/completions/
 
 install-tools-lib: ## Installe la librairie partagee
-	@mkdir -p ~/.local/lib/claude-craft && cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/claude-craft/
+	@mkdir -p ~/.local/lib/bear-craft && cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/bear-craft/
 
 #===============================================================================
 # Tests

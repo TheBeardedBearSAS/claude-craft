@@ -296,12 +296,12 @@ describe('ClaudeCraftCLI.run() — switch branch coverage', () => {
   });
 
   it('skill add <pkg> → runSkillAdd', async () => {
-    process.argv = ['node', 'index.js', 'skill', 'add', 'claude-craft-skill-my-skill'];
+    process.argv = ['node', 'index.js', 'skill', 'add', 'bear-craft-skill-my-skill'];
     const { ClaudeCraftCLI } = await import('../../cli/index.js');
     const { runSkillAdd } = await import('../../cli/lib/skill.js');
     const cli = new ClaudeCraftCLI();
     await cli.run();
-    expect(runSkillAdd).toHaveBeenCalledWith('claude-craft-skill-my-skill', expect.any(String));
+    expect(runSkillAdd).toHaveBeenCalledWith('bear-craft-skill-my-skill', expect.any(String));
   });
 
   it('skill add (no arg) → error + exit(1)', async () => {

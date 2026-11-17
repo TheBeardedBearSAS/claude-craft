@@ -25,7 +25,10 @@ TOOLS_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # Source UI helpers
 if [[ -f "$TOOLS_DIR/lib/tools-ui.sh" ]]; then
     source "$TOOLS_DIR/lib/tools-ui.sh"
+elif [[ -f "$HOME/.local/lib/bear-craft/tools-ui.sh" ]]; then
+    source "$HOME/.local/lib/bear-craft/tools-ui.sh"
 elif [[ -f "$HOME/.local/lib/claude-craft/tools-ui.sh" ]]; then
+    # Installation antérieure au renommage claude-craft → bear-craft (10.0.0)
     source "$HOME/.local/lib/claude-craft/tools-ui.sh"
 else
     # Minimal fallback

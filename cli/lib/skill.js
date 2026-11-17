@@ -1,7 +1,7 @@
 /**
  * Community skill management — install/list/remove skills from npm.
  *
- * Convention: skill packages MUST be named `claude-craft-skill-*` and ship
+ * Convention: skill packages MUST be named `bear-craft-skill-*` (legacy `claude-craft-skill-*` accepted in 10.x) and ship
  * at least one Markdown file at `skills/*.md` or a root `SKILL.md`. The CLI
  * delegates the download to `npm install` (no custom registry) and then
  * symlinks the package's skills into `.claude/skills/<name>/` on the target
@@ -24,12 +24,15 @@ import { spawnSync } from 'child_process';
 import c from './colors.js';
 import { assertSafeTarget } from './path-safety.js';
 
-const SKILL_PREFIX = 'claude-craft-skill-';
+const SKILL_PREFIX = 'bear-craft-skill-';
+// Préfixe d'avant le renommage (claude-craft → bear-craft) : accepté en 10.x, retiré en 11.0.
+const LEGACY_SKILL_PREFIX = 'claude-craft-skill-';
 const COMMUNITY_DIR = path.join('.claude', 'skills', 'community');
 
 /**
- * Validate a skill package name follows the `claude-craft-skill-*` convention.
- * Allows optional npm scopes (e.g. `@org/claude-craft-skill-foo`).
+ * Validate a skill package name follows the `bear-craft-skill-*` convention
+ * (legacy `claude-craft-skill-*` still accepted in 10.x).
+ * Allows optional npm scopes (e.g. `@org/bear-craft-skill-foo`).
  * @param {string} pkg
  * @returns {{ pkg: string, shortName: string }}
  * @throws {Error}
@@ -47,10 +50,11 @@ export function validateSkillPackageName(pkg) {
     if (slash === -1) throw new Error(`skill add: invalid scoped name "${pkg}"`);
     unscoped = baseName.slice(slash + 1);
   }
-  if (!unscoped.startsWith(SKILL_PREFIX)) {
+  const prefix = [SKILL_PREFIX, LEGACY_SKILL_PREFIX].find((p) => unscoped.startsWith(p));
+  if (!prefix) {
     throw new Error(`skill add: package name must start with "${SKILL_PREFIX}" (got "${unscoped}")`);
   }
-  const shortName = unscoped.slice(SKILL_PREFIX.length);
+  const shortName = unscoped.slice(prefix.length);
   if (!/^[a-z0-9][a-z0-9-]*$/.test(shortName)) {
     throw new Error(`skill add: invalid skill short-name "${shortName}"`);
   }
@@ -113,7 +117,7 @@ function copySkillFiles(pkgDir, destDir) {
 
 /**
  * Install a community skill from npm into `<targetPath>/.claude/skills/community/<short-name>/`.
- * @param {string} pkg - npm package name (must start with `claude-craft-skill-`)
+ * @param {string} pkg - npm package name (must start with `bear-craft-skill-`)
  * @param {string} targetPath - Absolute path to the target project
  * @param {Object} [deps]
  * @param {Function} [deps.spawn=spawnSync] - Injectable for testing

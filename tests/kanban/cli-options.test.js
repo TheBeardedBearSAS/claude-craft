@@ -26,10 +26,16 @@ describe('parsePort', () => {
 describe('resolveUser', () => {
   const env = {};
   it('--user wins over env and git', () => {
-    expect(resolveUser({ user: 'cli' }, { CLAUDE_CRAFT_USER: 'env' }, { gitUserName: 'git' })).toBe('cli');
+    expect(resolveUser({ user: 'cli' }, { BEAR_CRAFT_USER: 'env' }, { gitUserName: 'git' })).toBe('cli');
   });
   it('env wins over git', () => {
-    expect(resolveUser({}, { CLAUDE_CRAFT_USER: 'env' }, { gitUserName: 'git' })).toBe('env');
+    expect(resolveUser({}, { BEAR_CRAFT_USER: 'env' }, { gitUserName: 'git' })).toBe('env');
+  });
+  it('BEAR_CRAFT_USER wins over the legacy CLAUDE_CRAFT_USER', () => {
+    expect(resolveUser({}, { BEAR_CRAFT_USER: 'new', CLAUDE_CRAFT_USER: 'old' }, { gitUserName: 'git' })).toBe('new');
+  });
+  it('still reads the legacy CLAUDE_CRAFT_USER (10.x compatibility)', () => {
+    expect(resolveUser({}, { CLAUDE_CRAFT_USER: 'old' }, { gitUserName: 'git' })).toBe('old');
   });
   it('falls back to git user.name', () => {
     expect(resolveUser({}, env, { gitUserName: 'Jane Doe' })).toBe('Jane Doe');
@@ -39,7 +45,7 @@ describe('resolveUser', () => {
     expect(u.length).toBeGreaterThan(0);
   });
   it('ignores a bare --user (true) and blank values', () => {
-    expect(resolveUser({ user: true }, { CLAUDE_CRAFT_USER: '  ' }, { gitUserName: 'git' })).toBe('git');
+    expect(resolveUser({ user: true }, { BEAR_CRAFT_USER: '  ' }, { gitUserName: 'git' })).toBe('git');
   });
   it('trims, strips newlines and caps at 60 characters', () => {
     expect(resolveUser({ user: '  bob  ' }, env, { gitUserName: '' })).toBe('bob');
