@@ -146,6 +146,9 @@ jobs:
           echo "CLI entry point verified"
 
       - name: Check package size
+        # 10.0.0 ships the plugin marketplaces of the 5 languages (marketplaces/<lang>/), which
+        # `bear-craft install` copies into the project: about 45 MB unpacked (9 MB compressed).
+        # The gate stays to catch accidental bloat (stray build output, binaries).
         run: |
           npm pack --dry-run 2>&1 | tee pack-output.txt
           TARBALL_SIZE=$(grep -E "^npm notice tarball" pack-output.txt | awk '{print $NF}' || echo "unknown")
@@ -155,11 +158,11 @@ jobs:
             else if ($2 == "MB") print $1 * 1024;
             else if ($2 == "GB") print $1 * 1048576;
           }')
-          if [ -n "$SIZE_KB" ] && [ "$(echo "$SIZE_KB > 25600" | bc -l)" = "1" ]; then
-            echo "::error::Package unpacked size exceeds 25 MB threshold"
+          if [ -n "$SIZE_KB" ] && [ "$(echo "$SIZE_KB > 51200" | bc -l)" = "1" ]; then
+            echo "::error::Package unpacked size exceeds 50 MB threshold"
             exit 1
           fi
-          echo "Unpacked size: ${SIZE_KB} kB (threshold: 25600 kB)"
+          echo "Unpacked size: ${SIZE_KB} kB (threshold: 51200 kB)"
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
