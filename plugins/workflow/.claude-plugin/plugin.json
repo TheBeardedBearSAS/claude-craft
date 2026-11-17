@@ -1,0 +1,21 @@
+{
+  "name": "workflow",
+  "displayName": "Bear Craft — Workflow",
+  "description": "BMAD v6 sprint workflow: init, plan, design, start, implement, review, retro and status.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "workflow"
+  ]
+}

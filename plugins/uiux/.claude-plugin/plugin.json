@@ -1,0 +1,21 @@
+{
+  "name": "uiux",
+  "displayName": "Bear Craft — UI/UX",
+  "description": "UI/UX/accessibility audits, component specs, design tokens, user flows and DESIGN.md.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "uiux"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "team",
+  "displayName": "Bear Craft — Team",
+  "description": "Parallel multi-agent teams: audit, security review and sprint delivery.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "team"
+  ]
+}

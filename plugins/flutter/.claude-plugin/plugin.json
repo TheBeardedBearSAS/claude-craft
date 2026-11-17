@@ -1,0 +1,21 @@
+{
+  "name": "flutter",
+  "displayName": "Bear Craft — Flutter / Dart",
+  "description": "Flutter / Dart 3.47 / Dart 3.13: Mobile Dart with BLoC v9, Riverpod 3, Material 3, Impeller. Audit and generation commands, reviewer agent and stack skills.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "flutter"
+  ]
+}
