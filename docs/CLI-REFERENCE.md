@@ -349,8 +349,8 @@ make migrate-check                         # Check migration status
 ### Plugin Export
 
 ```bash
-make plugin-export                         # Export as Claude Code plugin
-make plugin-export-all                     # Export all technologies
+make plugin-export-all                     # plugins/<namespace>/ (generated)
+make plugin-check                          # plugins/ in sync with the installers
 ```
 
 ---

@@ -39,7 +39,7 @@ Identifier : nom officiel et alias, type (framework, bibliothèque, langage, out
 | **Périmètre** | Langage seul / framework seul / langage + framework (ex : Ruby / Rails) | Nom du dossier `Dev/i18n/<lang>/<Tech>/`, `displayName`, `DEFAULT_STACK` |
 | **Tier** (`cli/lib/tech-registry.js`) | Tier 2 (supporté) / Tier 3 (communautaire) | Rules traduites ×5 (tier 2) ou en anglais dans `base/` (tier 3) |
 | **Couche mainteneur `.claude/`** | Oui / Non (défaut : non, comme Ruby et Paperclip) | Copie dans `.claude/commands/<ns>/`, `.claude/agents/`, `.claude/references/<ns>/` + compteurs |
-| **Catégorie** | frontend, backend, mobile, devops, fullstack | `desc` du registry, mots-clés `plugin.json`, docs |
+| **Catégorie** | frontend, backend, mobile, devops, fullstack | `desc` du registry, mots-clés `marketplace.json` (générés), docs |
 
 Le tier 1 (core) n'est jamais attribué à un nouveau stack.
 
@@ -146,7 +146,7 @@ Pas de cible Makefile dédiée : la cible générique `install-%` couvre tout st
 | `Makefile` | Ajouter `<ns>` à `TECHS` |
 | `Dev/scripts/check-config.sh` | Ajouter `<ns>` à `DEV_TECHS` |
 | `Dev/scripts/install-from-config.sh` | Nouveau `case` pointant vers `install-<ns>-rules.sh` |
-| `.claude-plugin/plugin.json` | Mots-clés |
+| `plugins/<ns>/` + `.claude-plugin/marketplace.json` | Générés : `npm run plugins:generate` (puis `plugins:check`) — le plugin du stack porte le nom du namespace |
 | `Dev/stack-profiles/<ns>/stack.txt` | **Obligatoire** (testé par `tests/content/stack-profiles.test.mjs`) : ligne 1 libellé, ligne 2 stack |
 | `Dev/stack-profiles/<ns>/permissions.txt` | Règles `Bash(...)` uniquement |
 | `Dev/stack-profiles/<ns>/quality.md` | Outils qualité en liste |
@@ -203,7 +203,7 @@ Pas de cible Makefile dédiée : la cible générique `install-%` couvre tout st
 
 🔌 INTÉGRATION
 - [ ] install-<ns>-rules.sh, tech-registry.js, versions.yaml
-- [ ] Makefile TECHS, check-config.sh, install-from-config.sh, plugin.json
+- [ ] Makefile TECHS, check-config.sh, install-from-config.sh, `npm run plugins:generate`
 - [ ] Dev/stack-profiles/<ns>/{stack.txt,permissions.txt,quality.md}
 - [ ] 6 tests à listes en dur mis à jour (avant l'intégration)
 

@@ -36,7 +36,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Dernière version 9.x — sécurité Claude Code et hooks fail-closed (2026-11-17, v9.4.0) :**
 
-- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `bear-craft doctor` échoue sous le minimum, et le plugin déclare `engines["claude-code"]: ">=2.1.325"`.
+- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `bear-craft doctor` échoue sous le minimum, et chaque plugin déclare `engines["claude-code"]: ">=2.1.325"`.
 - **Hooks** : les trois gardes de sécurité bloquent l'appel d'outil si leur script manque, plante ou dépasse son timeout (`onFailure: "block"`) ; la réinstallation met à niveau les projets existants.
 - **Annonce** : Claude Craft devient **bear-craft** en 10.0.0 (paquet `@the-bearded-bear/bear-craft`, commande `bear-craft`, alias `claude-craft` conservé en 10.x). Détails : [CHANGELOG](CHANGELOG.md#940---2026-11-17).
 
@@ -338,10 +338,18 @@ npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
 
 ### Claude Code plugin
 
+One plugin per command namespace and per stack, so every command keeps its name (`/react:check`, `/workflow:init`):
+
 ```
 /plugin marketplace add TheBeardedBearSAS/bear-craft
-/plugin install bear-craft@bear-craft
+/plugin install common@bear-craft      # shared agents, skills, rules and the optional safety hooks
+/plugin install workflow@bear-craft    # BMAD sprint workflow (also: team, qa, uiux, gate, project)
+/plugin install react@bear-craft       # a stack: react, symfony, flutter, python, rust, …
 ```
+
+Plugins live in [`plugins/`](plugins/) and are generated from the installers (`npm run plugins:generate`).
+**Pick a single channel for hooks:** the `common` plugin *or* the CLI installation with hooks — using both runs every
+guard twice ([docs/HOOKS.md](docs/HOOKS.md#shipping-the-hooks-through-the-common-plugin)).
 
 ### Clone + Makefile
 

@@ -127,7 +127,7 @@ Les fichiers pivots ne sont qu'un point d'entrée ; la couverture vient des occu
 |---|---|---|
 | `cli-release` | `cli-version` | `config/versions.yaml` (`claudeCode.*`), `.claude/COMPATIBILITY.md`, `.claude/rules/12-context-management.md`, `docs/PREREQUISITES.md` |
 | `models-pricing` | `model-id`, `model-name`, `pricing` | `config/versions.yaml` (`claudeCode.models`, `denylist`), `.claude/rules/12-context-management.md`, `.claude/settings.json`, `.claude/settings.local.json.example` — charger le skill `claude-api` pour la référence modèles/pricing |
-| `cc-features` | `env-var` (inventaire seul : vérifier les noms retirés ou renommés) | `.claude/COMPATIBILITY.md`, `.claude/settings.json`, `.claude-plugin/plugin.json`, `.claude/agents/*.md`, `.claude/skills/*/SKILL.md` — identifier les features de la plateforme non encore adoptées |
+| `cc-features` | `env-var` (inventaire seul : vérifier les noms retirés ou renommés) | `.claude/COMPATIBILITY.md`, `.claude/settings.json`, `.claude-plugin/marketplace.json` (`plugins/` est généré : `npm run plugins:generate`), `.claude/agents/*.md`, `.claude/skills/*/SKILL.md` — identifier les features de la plateforme non encore adoptées |
 | `prompt-context` | `deprecated-term` | `.claude/rules/12-context-management.md`, `.claude/rules/23-karpathy-principles.md`, `.claude/CLAUDE.md` |
 | `security-cve` | — | `.claude/rules/11-security.md`, `.claude/settings.json` (permissions), `.claude/COMPATIBILITY.md` (section CVE) |
 | `community` | — | `.claude/skills/ecosystem-tools/SKILL.md`, `docs/ECOSYSTEM.md` |

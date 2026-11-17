@@ -41,7 +41,9 @@ working. Generated files only carry the new name the next time you run `bear-cra
    10.x, with a deprecation notice on stderr.
 
 3. **Reinstall the Claude Code plugin** if you use it. In Claude Code, run `/plugin`, remove `claude-craft`, then
-   add the `bear-craft` marketplace (`TheBeardedBearSAS/bear-craft`) and install `bear-craft`.
+   add the `bear-craft` marketplace (`TheBeardedBearSAS/bear-craft`), then install the plugins you need — one per
+   namespace or stack, named like the namespace: `/plugin install common@bear-craft`, `/plugin install react@bear-craft`
+   (commands keep their names, e.g. `/react:check`). Use either the `common` plugin or the CLI installation for hooks, not both.
 
 4. **Rename environment variables**: `export BEAR_CRAFT_USER="…"` instead of `CLAUDE_CRAFT_USER`.
 

@@ -189,13 +189,13 @@ make migrate-check
 
 | Target | Description |
 |--------|-------------|
-| `plugin-export` | Export as Claude Code plugin |
-| `plugin-export-all` | Export all technologies |
+| `plugin-export-all` | Generate `plugins/<namespace>/` (one Claude Code plugin per namespace and stack) |
+| `plugin-check` | Fail when `plugins/` drifts from the installers |
 
 **Usage:**
 ```bash
-make plugin-export
 make plugin-export-all
+make plugin-check
 ```
 
 ---
