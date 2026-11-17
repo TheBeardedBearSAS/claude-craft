@@ -86,6 +86,7 @@ claudeCode:
 claimScan:
   exclude:
     - 'docs/audit/'
+    - 'plugins/'
     - 'docs/internal/'
     - 'CHANGELOG.md'
     - 'tests/'

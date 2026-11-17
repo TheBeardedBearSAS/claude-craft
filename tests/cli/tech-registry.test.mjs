@@ -188,22 +188,20 @@ describe('tech-registry consistency with i18n directories', () => {
   });
 });
 
-describe('tech-registry consistency with plugin.json', () => {
-  // Since v8.12.1 the plugin manifest is strictly schema-valid (custom `stacks`
-  // metadata removed to pass `claude plugin validate`). Stack names now live in
-  // the schema-recognized `keywords` array; this test keeps them in sync with the
-  // registry so a new supported stack is surfaced in the published manifest.
-  it('plugin.json keywords cover every registry application stack', () => {
-    const pluginPath = path.join(PROJECT_ROOT, '.claude-plugin', 'plugin.json');
-    if (!fs.existsSync(pluginPath)) return; // Skip if no plugin.json
-    const plugin = JSON.parse(fs.readFileSync(pluginPath, 'utf8'));
-    const keywords = plugin.keywords || [];
+describe('tech-registry consistency with marketplace.json', () => {
+  // Chaque stack est distribué comme un plugin du même nom (plugins/<stack>/) ; ses mots-clés
+  // vivent dans .claude-plugin/marketplace.json. Ce test garde le registre et la marketplace synchronisés.
+  it('marketplace.json keywords cover every registry application stack', () => {
+    const marketPath = path.join(PROJECT_ROOT, '.claude-plugin', 'marketplace.json');
+    expect(fs.existsSync(marketPath), 'marketplace.json absent').toBe(true);
+    const market = JSON.parse(fs.readFileSync(marketPath, 'utf8'));
+    const keywords = new Set(market.plugins.flatMap((p) => p.keywords ?? []));
 
     for (const [key, entry] of Object.entries(TECH_REGISTRY)) {
       if (entry.tier === null) continue; // skip infra (not application stacks)
       // plugin keywords use 'react-native' for the reactnative registry key
       const keyword = key === 'reactnative' ? 'react-native' : key;
-      expect(keywords, `Registry stack '${key}' missing from plugin.json keywords`).toContain(keyword);
+      expect(keywords.has(keyword), `Registry stack '${key}' missing from marketplace.json keywords`).toBe(true);
     }
   });
 });

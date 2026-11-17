@@ -20,7 +20,7 @@
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
         migrate-check test-tools test-rtk test-statusline test-agent-teams test-bmad test-bats test-all \
-        plugin-export plugin-export-all
+        plugin-export-all plugin-check
 
 # Configuration
 SHELL := /bin/bash
@@ -199,13 +199,11 @@ config-check-fix: ## Vérifie et propose de corriger les problèmes
 # Plugin Export
 #===============================================================================
 
-PLUGIN_OUTPUT ?= ./dist/plugins
+plugin-export-all: ## Génère plugins/<namespace>/ (un plugin Claude Code par namespace) depuis les installeurs
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs
 
-plugin-export-%: ## Exporte une techno comme plugin (ex: make plugin-export-symfony)
-	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --tech=$* --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
-
-plugin-export-all: ## Exporte toutes les technologies
-	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --all --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
+plugin-check: ## Vérifie que plugins/ est synchronisé avec le générateur (code ≠ 0 en cas de dérive)
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --check
 
 #===============================================================================
 # Lister les Composants

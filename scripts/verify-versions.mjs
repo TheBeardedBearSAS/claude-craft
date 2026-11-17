@@ -91,24 +91,48 @@ for (const rule of versions.claimDenylist ?? []) {
 }
 
 // 3. Cohérence des manifestes de version (audit 2026-07-03, GAP-01 : éviter la dérive
-//    plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
+//    plugins/*/plugin.json / marketplace.json ↔ package.json constatée à 8.16.1 vs 8.19.1).
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-const pluginManifest = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin', 'plugin.json'), 'utf8'));
-if (pluginManifest.version !== pkg.version) {
-  errors.push(`.claude-plugin/plugin.json version="${pluginManifest.version}" ≠ package.json version="${pkg.version}"`);
-}
-// engines["claude-code"] (Claude Code 2.1.323+) : le plugin ne se charge pas sous le plancher sécurité.
 const expectedEngine = `>=${versions.claudeCode?.minimum}`;
-if (pluginManifest.engines?.['claude-code'] !== expectedEngine) {
-  errors.push(
-    `.claude-plugin/plugin.json engines["claude-code"]="${pluginManifest.engines?.['claude-code']}" ≠ "${expectedEngine}" (claudeCode.minimum)`
-  );
+const pluginsDir = path.join(ROOT, 'plugins');
+const pluginNames = fs.existsSync(pluginsDir)
+  ? fs
+      .readdirSync(pluginsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name)
+      .sort()
+  : [];
+if (pluginNames.length === 0) errors.push('plugins/ est absent ou vide (npm run plugins:generate)');
+for (const name of pluginNames) {
+  const rel = `plugins/${name}/.claude-plugin/plugin.json`;
+  const manifestPath = path.join(ROOT, rel);
+  if (!fs.existsSync(manifestPath)) {
+    errors.push(`${rel} manquant`);
+    continue;
+  }
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  if (manifest.version !== pkg.version) {
+    errors.push(`${rel} version="${manifest.version}" ≠ package.json version="${pkg.version}"`);
+  }
+  // engines["claude-code"] (Claude Code 2.1.323+) : le plugin ne se charge pas sous le plancher sécurité.
+  if (manifest.engines?.['claude-code'] !== expectedEngine) {
+    errors.push(
+      `${rel} engines["claude-code"]="${manifest.engines?.['claude-code']}" ≠ "${expectedEngine}" (claudeCode.minimum)`
+    );
+  }
 }
-const marketRaw = fs.readFileSync(path.join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8');
-if (!marketRaw.includes(`"version": "${pkg.version}"`)) {
-  errors.push(
-    `.claude-plugin/marketplace.json ne référence pas la version courante "${pkg.version}" (dérive de manifeste)`
-  );
+const marketplace = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8'));
+const listed = new Map((marketplace.plugins ?? []).map((p) => [p.name, p]));
+for (const name of pluginNames) {
+  if (!listed.has(name)) errors.push(`.claude-plugin/marketplace.json ne liste pas le plugin "${name}"`);
+}
+for (const [name, entry] of listed) {
+  if (!pluginNames.includes(name)) errors.push(`.claude-plugin/marketplace.json liste "${name}" sans dossier plugins/${name}`);
+  if (entry.version !== pkg.version) {
+    errors.push(
+      `.claude-plugin/marketplace.json "${name}" version="${entry.version}" ≠ package.json version="${pkg.version}" (dérive de manifeste)`
+    );
+  }
 }
 
 if (errors.length > 0) {

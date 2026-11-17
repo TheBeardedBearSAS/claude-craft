@@ -482,7 +482,11 @@ install_tcl() {
             ctx_template="${src_dir}/rules/00-project-context.md.template"
         fi
         if [[ -f "$ctx_template" ]]; then
-            local sed_args=(-e "s#{{PROJECT_NAME}}#${project_name}#g" -e "s#{{TECH_STACK}}#${tech_stack}#g")
+            # Échapper \, & et # (délimiteur) : "C# 13" cassait sed (installeur C# en échec)
+            local sed_name="${project_name//\\/\\\\}" sed_stack="${tech_stack//\\/\\\\}"
+            sed_name="${sed_name//&/\\&}"; sed_name="${sed_name//#/\\#}"
+            sed_stack="${sed_stack//&/\\&}"; sed_stack="${sed_stack//#/\\#}"
+            local sed_args=(-e "s#{{PROJECT_NAME}}#${sed_name}#g" -e "s#{{TECH_STACK}}#${sed_stack}#g")
             if [[ ${#TECH_EXTRA_SED_ARGS[@]} -gt 0 ]]; then
                 sed_args+=("${TECH_EXTRA_SED_ARGS[@]}")
             fi
