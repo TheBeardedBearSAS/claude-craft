@@ -11,6 +11,17 @@ import { TECHNOLOGIES, LANGUAGES } from './constants.js';
 import { getBaseLayerTechsFor } from './tech-registry.js';
 import { printBanner, printSuccess } from './banner.js';
 import { assertSafeTarget } from './path-safety.js';
+import {
+  INFRA_PLUGINS,
+  PluginInstallError,
+  ensureClaude,
+  installPlugins,
+  marketplaceName,
+  parseHooks,
+  readInstallJson,
+  resolveInfra,
+} from './plugin-install.js';
+import { migrateLegacyInstall } from './migrate-legacy.js';
 
 /**
  * Detect the preferred language from environment locale variables.
@@ -217,6 +228,7 @@ export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
     if (detected.hasDockerfile) {
       cli.config.includeInfra = true;
     }
+    if (!cli.config.infra || cli.config.infra.length === 0) cli.config.infra = detected.suggestedInfra ?? [];
   }
 
   // Defaults: include project commands; skip RTK unless asked
@@ -237,103 +249,114 @@ export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
 }
 
 /**
- * Execute the installation scripts based on the current configuration.
- * Installs common rules, technology-specific rules, infrastructure, and project commands.
+ * Execute the installation based on the current configuration: the bear-* plugins are installed in project
+ * scope through Claude Code, and the installers only copy what the plugins do not carry (rules, references,
+ * CLAUDE.md, settings, scaffold…). Copy-based leftovers of older versions are migrated.
  * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {Object} ctx - Context object
  * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
+ * @param {string} [ctx.VERSION] - Package version (recorded in .bear-craft/VERSION)
+ * @param {Function} [ctx.execFn] - Injectable executor for `claude` (tests)
  * @returns {Promise<void>}
  * @throws {Error} If any installation script fails
  */
-export async function runInstallation(cli, { CLI_ROOT }) {
+export async function runInstallation(cli, { CLI_ROOT, VERSION, execFn }) {
   console.log(`\n${c.bold}Installing Bear-Craft...${c.reset}\n`);
 
   // Auto-include base-layer techs (e.g. php is pulled in by symfony/laravel — audit DA-PM-03).
   // Computed into a local list so the user's selection (cli.config.technologies) stays untouched.
   const baseLayers = getBaseLayerTechsFor(cli.config.technologies);
-  const installTechs = [...new Set([...cli.config.technologies, ...baseLayers])];
+  const installTechs = [...new Set([...cli.config.technologies, ...baseLayers])].filter(
+    (t) => t !== 'docker' && t !== 'coolify'
+  );
   if (baseLayers.length > 0) {
     console.log(`  ${c.cyan}Base layer:${c.reset} auto-including ${baseLayers.join(', ')} (PHP framework selected)`);
   }
 
+  const infra = resolveInfra({
+    infra: [...(cli.config.infra ?? []), ...cli.config.technologies.filter((t) => INFRA_PLUGINS.includes(t))],
+    includeInfra: cli.config.includeInfra,
+  });
+  const hooks = parseHooks(cli.config.hooks);
+  const target = cli.config.targetPath;
   const scriptsDir = path.join(CLI_ROOT, 'Dev', 'scripts');
-  const langArg = `--lang=${cli.config.language}`;
-  const hasDocker = installTechs.includes('docker');
-  const includeInfra = cli.config.includeInfra || hasDocker;
-  const techsWithoutDocker = installTechs.filter((t) => t !== 'docker');
-  // Full project stack, rendered by common (AGENTS.md, settings.json) and project (CLAUDE.md) scripts
-  const stackTechs = includeInfra && !hasDocker ? [...installTechs, 'docker'] : installTechs;
+  const lang = cli.config.language;
+  const langArg = `--lang=${lang}`;
+  const stackTechs = [...installTechs, ...(infra.includes('docker') ? ['docker'] : [])];
   const stackArgs = stackTechs.length > 0 ? [`--tech=${stackTechs.join(',')}`] : [];
-  // 1 base step (common rules) + installable tech scripts + optional infra + optional project + optional rtk
-  const totalSteps =
-    1 +
-    techsWithoutDocker.filter((t) => fs.existsSync(path.join(scriptsDir, `install-${t}-rules.sh`))).length +
-    (includeInfra ? 1 : 0) +
-    (cli.config.includeProject ? 1 : 0) +
-    (cli.config.includeRtk ? 1 : 0);
+  const deps = { execFn };
 
   try {
-    // Always install common rules
-    console.log(`${c.cyan}[1/${totalSteps}]${c.reset} Installing common rules...`);
+    // Fail before touching anything when Claude Code is missing or too old (no fallback by design).
+    const claudeVersion = ensureClaude(deps);
+    console.log(`  ${c.green}[OK]${c.reset} Claude Code ${claudeVersion}`);
+
+    // 1. What the plugins do not carry: rules, references, CLAUDE.md, settings, scaffold…
+    let step = 1;
+    const total = 2 + installTechs.length + (cli.config.includeProject ? 1 : 0) + (cli.config.includeRtk ? 1 : 0);
+    console.log(`${c.cyan}[${step++}/${total}]${c.reset} Copying rules and project files...`);
     runScript(
       path.join(scriptsDir, 'install-common-rules.sh'),
-      [langArg, ...stackArgs, ...(cli.config.hooks ? [`--hooks=${cli.config.hooks}`] : []), cli.config.targetPath],
+      [langArg, ...stackArgs, '--plugin-mode', ...(cli.config.hooks ? [`--hooks=${cli.config.hooks}`] : []), target],
       CLI_ROOT
     );
-
-    // Install technology-specific rules (incl. auto-included base layers)
-    let step = 2;
     for (const tech of installTechs) {
-      if (tech === 'docker') continue; // Handled by infra
-      if (tech === 'coolify') {
-        // coolify is an infrastructure tech — it has no install script in Dev/scripts/.
-        // Inform the user rather than silently skipping (audit CLI-03).
-        console.log(
-          `  ${c.yellow}Note:${c.reset} 'coolify' is an infra tech — use Docker/Infrastructure rules instead (--infra or step 4).`
-        );
-        continue;
-      }
-      const scriptName = `install-${tech}-rules.sh`;
-      const scriptPath = path.join(scriptsDir, scriptName);
-      if (fs.existsSync(scriptPath)) {
-        console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing ${tech} rules...`);
-        runScript(scriptPath, [langArg, cli.config.targetPath], CLI_ROOT);
-        step++;
-      }
+      const scriptPath = path.join(scriptsDir, `install-${tech}-rules.sh`);
+      if (!fs.existsSync(scriptPath)) continue;
+      console.log(`${c.cyan}[${step++}/${total}]${c.reset} Copying ${tech} references...`);
+      runScript(scriptPath, [langArg, '--plugin-mode', target], CLI_ROOT);
     }
-
-    // Install infrastructure rules
-    if (includeInfra) {
-      console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing infrastructure rules...`);
-      const infraScript = path.join(CLI_ROOT, 'Infra', 'install-docker-rules.sh');
-      if (fs.existsSync(infraScript)) {
-        runScript(infraScript, [langArg, cli.config.targetPath], CLI_ROOT);
-      }
-      step++;
-    }
-
-    // Install project commands
     if (cli.config.includeProject) {
-      console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing project commands...`);
+      console.log(`${c.cyan}[${step++}/${total}]${c.reset} Creating the project-management scaffold...`);
       const projectScript = path.join(CLI_ROOT, 'Project', 'install-project-commands.sh');
       if (fs.existsSync(projectScript)) {
-        runScript(projectScript, [langArg, ...stackArgs, cli.config.targetPath], CLI_ROOT);
+        runScript(projectScript, [langArg, ...stackArgs, '--plugin-mode', target], CLI_ROOT);
       }
-      step++;
     }
+
+    // 2. Copy-based leftovers of 9.x / 10.0 pre-releases: remove our files, keep the user's.
+    migrateLegacyInstall({
+      target,
+      lang,
+      cliRoot: CLI_ROOT,
+      log: (m) => console.log(`  ${c.green}[OK]${c.reset} ${m}`),
+      warn: (m) => console.log(`  ${c.yellow}[WARN]${c.reset} ${m}`),
+    });
+
+    // 3. The plugins themselves (project scope, marketplace copied into .bear-craft/).
+    console.log(`${c.cyan}[${step++}/${total}]${c.reset} Installing plugins through Claude Code...`);
+    // `install` is additive (monorepo modules, second run): keep what a previous run of the same language recorded.
+    const previous = readInstallJson(target);
+    const sameLang = previous && previous.lang === lang;
+    const recordedTechs = [...new Set([...(sameLang ? previous.techs : []), ...installTechs])];
+    const recordedInfra = [...new Set([...(sameLang ? previous.infra : []), ...infra])];
+    const { ids } = installPlugins(
+      {
+        target,
+        cliRoot: CLI_ROOT,
+        install: { lang, techs: recordedTechs, infra: recordedInfra, hooks },
+        version: VERSION ?? 'unknown',
+      },
+      { ...deps, log: (m) => console.log(`  ${c.dim}${m}${c.reset}`) }
+    );
+    console.log(`  ${c.green}[OK]${c.reset} ${ids.length} plugins enabled (${marketplaceName(lang)})`);
 
     // Install RTK (Token Optimizer)
     if (cli.config.includeRtk) {
-      console.log(`${c.cyan}[${step}/${totalSteps}]${c.reset} Installing RTK (Token Optimizer)...`);
+      console.log(`${c.cyan}[${step}/${total}]${c.reset} Installing RTK (Token Optimizer)...`);
       const rtkScript = path.join(CLI_ROOT, 'Tools', 'RTK', 'install-rtk.sh');
       if (fs.existsSync(rtkScript)) {
         runScript(rtkScript, [langArg], CLI_ROOT);
       }
     }
 
-    printSuccess(cli.config.targetPath);
+    printSuccess(target);
   } catch (error) {
-    console.error(`${c.red}Installation failed: ${error.message}${c.reset}`);
+    if (error instanceof PluginInstallError) {
+      console.error(`${c.red}${error.message}${c.reset}`);
+    } else {
+      console.error(`${c.red}Installation failed: ${error.message}${c.reset}`);
+    }
     process.exit(1);
   }
 }

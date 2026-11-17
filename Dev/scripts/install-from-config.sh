@@ -492,6 +492,25 @@ get_install_script() {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Installation d'un module : `bear-craft install` (plugins en scope projet + règles copiées)
+# ─────────────────────────────────────────────────────────────────────────────
+run_plugin_install() {
+    local target_path="$1" tech="$2" lang="$3"
+    local cli="${SCRIPT_DIR}/../../cli/index.js"
+    if ! command -v node >/dev/null 2>&1 || [[ ! -f "$cli" ]]; then
+        log_error "node et cli/index.js sont requis (l'installation passe par les plugins Claude Code)"
+        return 1
+    fi
+    local args=(install "$target_path" "--lang=$lang")
+    case "$tech" in
+        common|project) args+=(--yes) ;;
+        docker|coolify|kubernetes|opentofu|ansible|hcloud|pgbouncer|frankenphp) args+=(--yes "--infra=$tech") ;;
+        *) args+=("--tech=$tech") ;;
+    esac
+    node "$cli" "${args[@]}"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Installer les règles pour un module
 # ─────────────────────────────────────────────────────────────────────────────
 install_module() {
@@ -561,15 +580,15 @@ install_module() {
     log_info "  Langue: $lang"
 
     if [[ "$dry_run" == "true" ]]; then
-        log_info "  [DRY-RUN] Exécuterait: $script ${opts[*]} $target_path"
+        log_info "  [DRY-RUN] Exécuterait: bear-craft install $target_path --lang=$lang ($tech)"
     else
         # Créer le répertoire si nécessaire
         if [[ ! -d "$target_path" ]]; then
             mkdir -p "$target_path"
         fi
 
-        # Exécuter le script
-        if "$script" "${opts[@]}" "$target_path"; then
+        # Exécuter l'installation : plugins Claude Code (scope projet) via le CLI bear-craft
+        if run_plugin_install "$target_path" "$tech" "$lang"; then
             log_success "  Installation réussie"
 
             # Compter les fichiers installés

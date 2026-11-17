@@ -17,6 +17,7 @@ import path from 'path';
  * @property {boolean} hasDockerfile - Whether Dockerfile or docker-compose.yml exists
  * @property {boolean} hasCsproj - Whether *.csproj or *.sln files exist
  * @property {string[]} suggestedTechs - Technology identifiers detected from project files
+ * @property {string[]} suggestedInfra - Infra plugins detected (docker, kubernetes, opentofu, ansible, pgbouncer)
  * @property {string} complexity - Estimated complexity (quick, standard, enterprise)
  */
 
@@ -55,6 +56,7 @@ function detectProject(targetPath, options = {}) {
     hasDockerfile: false,
     hasCsproj: false,
     suggestedTechs: [],
+    suggestedInfra: [],
     complexity: 'standard',
   };
 
@@ -176,9 +178,26 @@ function detectProject(targetPath, options = {}) {
       ) {
         detected.hasDockerfile = true;
         detected.suggestedTechs.push('docker');
+        detected.suggestedInfra.push('docker');
       }
     },
     'docker',
+    debug
+  );
+
+  // Other infrastructure tools
+  safeDetect(
+    () => {
+      const has = (f) => fs.existsSync(path.join(targetPath, f));
+      const entries = fs.readdirSync(targetPath);
+      if (has('k8s') || has('kubernetes') || has('Chart.yaml') || has('kustomization.yaml')) {
+        detected.suggestedInfra.push('kubernetes');
+      }
+      if (entries.some((f) => f.endsWith('.tf'))) detected.suggestedInfra.push('opentofu');
+      if (has('ansible.cfg') || has('ansible') || has('playbook.yml')) detected.suggestedInfra.push('ansible');
+      if (has('pgbouncer.ini')) detected.suggestedInfra.push('pgbouncer');
+    },
+    'infra',
     debug
   );
 

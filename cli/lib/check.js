@@ -9,6 +9,7 @@ import c from './colors.js';
 import { success, warning, error } from './symbols.js';
 import { detectProject } from './detect-project.js';
 import { countFiles, listDirs } from './fs-utils.js';
+import { readPluginState } from './plugin-install.js';
 
 /**
  * Run the check command against a target directory.
@@ -39,6 +40,40 @@ function runCheck(targetPath) {
   } else {
     console.log(`  ${warning('.claude/CLAUDE.md not found')}`);
     warnings++;
+  }
+
+  // Plugin installation: check the enabled plugins instead of copied folders
+  const state = readPluginState(targetPath);
+  if (state) {
+    const totals = state.plugins.reduce(
+      (t, p) => ({ commands: t.commands + p.commands, agents: t.agents + p.agents }),
+      {
+        commands: 0,
+        agents: 0,
+      }
+    );
+    if (state.plugins.length > 0) {
+      console.log(
+        `  ${success(`plugins — ${state.plugins.length} enabled (${state.marketplace}): ${totals.commands} commands, ${totals.agents} agents`)}`
+      );
+    } else {
+      console.log(`  ${warning('plugins — none enabled in .claude/settings.json (run bear-craft sync)')}`);
+      warnings++;
+    }
+    const refDirsP = listDirs(path.join(claudeDir, 'references'));
+    console.log(
+      refDirsP.length > 0
+        ? `  ${c.green}[OK]${c.reset} references/ — ${c.cyan}${refDirsP.join(', ')}${c.reset}`
+        : `  ${c.yellow}[WARN]${c.reset} references/ — no tech references found`
+    );
+    if (refDirsP.length === 0) warnings++;
+    console.log('');
+    console.log(
+      warnings === 0
+        ? `${success('Installation looks good!')}\n`
+        : `${warning(`${warnings} warning(s) — some components may be missing.`)}\n`
+    );
+    return;
   }
 
   // 3. Commands — count namespace dirs and files

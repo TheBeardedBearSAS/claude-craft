@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import { installFakeClaude } from '../helpers/fake-claude.mjs';
 import path from 'node:path';
 
 // Commands are identical whatever the channel: the CLI installs /bear-react:check like the
@@ -95,22 +96,31 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
     expect(fs.readdirSync(cmdDir(target, 'react'))).toEqual(['my-own-command.md']);
   });
 
-  it('bear-craft update migrates a 9.4.0-style install, project commands included', () => {
+  it('bear-craft update migrates a 9.4.0-style install to plugins (fake claude), keeping the user files', () => {
     const target = path.join(TMP, 'legacy-update');
     install(target);
     downgradeToLegacyLayout(target);
     fs.writeFileSync(path.join(cmdDir(target, 'project'), 'my-own-command.md'), '# mine\n');
     fs.writeFileSync(path.join(cmdDir(target, 'common'), 'my-own-command.md'), '# mine\n');
+    const fake = installFakeClaude(path.join(TMP, 'fake-bin'));
 
-    const r = spawnSync(process.execPath, [CLI, 'update', target, '--lang=en'], { encoding: 'utf8', cwd: ROOT });
+    const r = spawnSync(process.execPath, [CLI, 'update', target, '--lang=en'], {
+      encoding: 'utf8',
+      cwd: ROOT,
+      env: fake.env(),
+    });
     expect(r.status, r.stdout + r.stderr).toBe(0);
-    const left = dirs(target).filter((d) => !d.startsWith('bear-'));
-    expect(left).toEqual(['common', 'project']); // only folders holding a user file survive
-    for (const d of left) expect(fs.readdirSync(cmdDir(target, d))).toEqual(['my-own-command.md']);
+    // our files are gone, only the folders holding a user file survive
+    expect(dirs(target).sort()).toEqual(['common', 'project']);
+    for (const d of ['common', 'project']) expect(fs.readdirSync(cmdDir(target, d))).toEqual(['my-own-command.md']);
     expect(r.stdout).toMatch(/commands\/project\/ kept for your files/);
-    for (const ns of ['common', 'workflow', 'gate', 'project', 'react']) {
-      expect(fs.existsSync(cmdDir(target, `bear-${ns}`)), `bear-${ns}`).toBe(true);
-    }
+    expect(fs.existsSync(path.join(target, '.claude/agents'))).toBe(false);
+    // the plugins replaced them
+    const settings = JSON.parse(fs.readFileSync(path.join(target, '.claude/settings.json'), 'utf8'));
+    expect(settings.enabledPlugins['bear-common@bear-craft']).toBe(true);
+    expect(settings.enabledPlugins['bear-react@bear-craft']).toBe(true);
+    expect(settings.extraKnownMarketplaces['bear-craft'].source.path).toBe('./.bear-craft/marketplace');
+    expect(fs.existsSync(path.join(target, '.bear-craft/marketplace/plugins/bear-react/commands/check.md'))).toBe(true);
   });
 });
 
@@ -152,7 +162,9 @@ describe('retired commands pruning', () => {
     fs.mkdirSync(cmdDir(target, 'project'), { recursive: true });
     fs.writeFileSync(path.join(cmdDir(target, 'bear-project'), 'add-epic.md'), '#');
     fs.writeFileSync(path.join(cmdDir(target, 'project'), 'add-epic.md'), '#');
-    const r = spawnSync('bash', [path.join(ROOT, 'Dev/scripts/prune-removed-commands.sh'), target], { encoding: 'utf8' });
+    const r = spawnSync('bash', [path.join(ROOT, 'Dev/scripts/prune-removed-commands.sh'), target], {
+      encoding: 'utf8',
+    });
     expect(r.status).toBe(0);
     expect(fs.existsSync(cmdDir(target, 'bear-project'))).toBe(false);
     expect(fs.existsSync(cmdDir(target, 'project'))).toBe(false);

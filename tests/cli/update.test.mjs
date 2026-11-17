@@ -24,7 +24,20 @@ vi.mock('child_process', () => ({
   spawnSync: vi.fn(() => ({ status: 0, stdout: '', stderr: '' })),
 }));
 
+// The real `claude` binary is never run: plugin installation and legacy migration are replaced.
+vi.mock('../../cli/lib/plugin-install.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    ensureClaude: vi.fn(() => '2.1.326'),
+    installPlugins: vi.fn(() => ({ ids: ['bear-common@bear-craft'], claudeVersion: '2.1.326' })),
+  };
+});
+vi.mock('../../cli/lib/migrate-legacy.js', () => ({ migrateLegacyInstall: vi.fn() }));
+
 import { runUpdate } from '../../cli/lib/update.js';
+import * as pluginInstall from '../../cli/lib/plugin-install.js';
+import { migrateLegacyInstall } from '../../cli/lib/migrate-legacy.js';
 import { spawnSync } from 'child_process';
 
 describe('runUpdate', () => {
@@ -39,6 +52,9 @@ describe('runUpdate', () => {
     process.exitCode = undefined;
     spawnSync.mockClear();
     spawnSync.mockReturnValue({ status: 0, stdout: '', stderr: '' });
+    pluginInstall.ensureClaude.mockClear();
+    pluginInstall.installPlugins.mockClear();
+    migrateLegacyInstall.mockReset();
   });
 
   afterEach(() => {
@@ -127,7 +143,7 @@ describe('runUpdate', () => {
     expect(output).toContain('Update complete');
   });
 
-  it('warns when no tech references and no common script', () => {
+  it('still refreshes the plugins when no tech references and no common script exist', () => {
     mkdirSync(join(tempDir, '.claude', 'references'), { recursive: true });
     mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
     // No install scripts at all
@@ -135,7 +151,98 @@ describe('runUpdate', () => {
     runUpdate(tempDir, {}, cliRoot);
 
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('No tech references detected');
+    expect(output).toContain('plugins enabled');
+    expect(pluginInstall.installPlugins).toHaveBeenCalledTimes(1);
+  });
+
+  it('runs the rules scripts in plugin mode and migrates copied leftovers before installing the plugins', () => {
+    mkdirSync(join(tempDir, '.claude', 'references', 'react'), { recursive: true });
+    mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-react-rules.sh'), '#!/bin/bash');
+    const order = [];
+    spawnSync.mockImplementation((_c, args) => {
+      order.push(`script:${String(args[0]).split('/').pop()}`);
+      return { status: 0, stdout: '', stderr: '' };
+    });
+    migrateLegacyInstall.mockImplementation(() => order.push('migrate'));
+    pluginInstall.installPlugins.mockImplementation(() => {
+      order.push('plugins');
+      return { ids: [], claudeVersion: '2.1.326' };
+    });
+
+    runUpdate(tempDir, { lang: 'fr' }, cliRoot);
+
+    expect(order).toEqual(['script:install-common-rules.sh', 'script:install-react-rules.sh', 'migrate', 'plugins']);
+    expect(spawnSync).toHaveBeenCalledWith('bash', expect.arrayContaining(['--plugin-mode']), expect.any(Object));
+    expect(pluginInstall.installPlugins.mock.calls[0][0].install).toMatchObject({ lang: 'fr', techs: ['react'] });
+  });
+
+  it('replays .bear-craft/install.json (techs, infra, hooks, language) when it exists', () => {
+    mkdirSync(join(tempDir, '.claude'));
+    mkdirSync(join(tempDir, '.bear-craft'));
+    writeFileSync(
+      join(tempDir, '.bear-craft', 'install.json'),
+      JSON.stringify({
+        lang: 'de',
+        techs: ['python'],
+        infra: ['kubernetes'],
+        hooks: { profile: 'full', memory: false },
+        version: '10.0.0',
+      })
+    );
+    mkdirSync(join(cliRoot, 'Dev', 'scripts'), { recursive: true });
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-common-rules.sh'), '#!/bin/bash');
+    writeFileSync(join(cliRoot, 'Dev', 'scripts', 'install-python-rules.sh'), '#!/bin/bash');
+
+    runUpdate(tempDir, {}, cliRoot);
+
+    expect(pluginInstall.installPlugins.mock.calls[0][0].install).toEqual({
+      lang: 'de',
+      techs: ['python'],
+      infra: ['kubernetes'],
+      hooks: { profile: 'full', memory: false },
+    });
+  });
+
+  it('detects techs, infra and hooks of a 9.x copy-based installation (no install.json)', () => {
+    mkdirSync(join(tempDir, '.claude', 'references', 'symfony'), { recursive: true });
+    mkdirSync(join(tempDir, '.claude', 'commands', 'docker'), { recursive: true });
+    writeFileSync(
+      join(tempDir, '.claude', 'settings.json'),
+      JSON.stringify({
+        hooks: {
+          Stop: [{ hooks: [{ command: 'bash x/quality-gate.sh' }] }],
+          PreToolUse: [{ hooks: [{ command: 'bash x/guard-network.sh' }] }],
+        },
+      })
+    );
+
+    runUpdate(tempDir, {}, cliRoot);
+
+    expect(pluginInstall.installPlugins.mock.calls[0][0].install).toEqual({
+      lang: 'en',
+      techs: ['symfony'],
+      infra: ['docker'],
+      hooks: { profile: 'full', memory: false },
+    });
+  });
+
+  it('fails without touching anything when claude is missing (no fallback)', () => {
+    mkdirSync(join(tempDir, '.claude'));
+    writeFileSync(join(tempDir, '.claude', 'BEFORE.txt'), 'x');
+    pluginInstall.ensureClaude.mockImplementationOnce(() => {
+      throw new pluginInstall.PluginInstallError('Claude Code (the `claude` command) was not found in your PATH.');
+    });
+    const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    runUpdate(tempDir, {}, cliRoot);
+
+    expect(errSpy.mock.calls.map((c) => c[0]).join('\n')).toContain('was not found in your PATH');
+    expect(process.exitCode).toBe(1);
+    expect(spawnSync).not.toHaveBeenCalled();
+    expect(pluginInstall.installPlugins).not.toHaveBeenCalled();
+    errSpy.mockRestore();
   });
 
   it('handles install script failure gracefully', () => {

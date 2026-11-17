@@ -7,7 +7,7 @@ _bear_craft_completions() {
     local prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     # Namespaces
-    local namespaces="angular common csharp flutter laravel php python qa react reactnative symfony team uiux vuejs workflow"
+    local namespaces="install update sync doctor list check angular common csharp flutter laravel php python qa react reactnative symfony team uiux vuejs workflow"
 
     # Commands by namespace
     local angular_commands="check generate-component"

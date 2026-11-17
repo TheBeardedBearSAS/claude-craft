@@ -161,10 +161,13 @@ describe('prune-removed-commands.sh', () => {
     fs.rmSync(target, { recursive: true, force: true });
   });
 
-  it.each(['Project/install-project-commands.sh', 'Dev/scripts/install-common-rules.sh', 'cli/lib/update.js'])(
-    'is called by %s',
-    (file) => {
-      expect(fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8')).toContain('prune-removed-commands.sh');
-    }
-  );
+  it.each(['Project/install-project-commands.sh', 'Dev/scripts/install-common-rules.sh'])('is called by %s', (file) => {
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8')).toContain('prune-removed-commands.sh');
+  });
+
+  // The CLI no longer copies commands: its migration reads the same manifest (removed and scheduled commands).
+  it('is read by the plugin migration of install and update', () => {
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, 'cli/lib/migrate-legacy.js'), 'utf8')).toContain('removed-commands.yaml');
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, 'cli/lib/update.js'), 'utf8')).toContain('migrateLegacyInstall');
+  });
 });

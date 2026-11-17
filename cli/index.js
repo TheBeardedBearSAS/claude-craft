@@ -38,6 +38,8 @@ import { runCheck } from './lib/check.js';
 import { runList } from './lib/list.js';
 import { runDoctor } from './lib/doctor.js';
 import { runUpdate } from './lib/update.js';
+import { runSync } from './lib/sync.js';
+import { INFRA_PLUGINS } from './lib/plugin-install.js';
 import { runInstallFromUrl } from './lib/install-from-url.js';
 import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
@@ -150,13 +152,26 @@ class BearCraftCLI {
       this.config.language = options.lang;
     }
     if (options.tech) {
-      if (!TECHNOLOGIES[options.tech]) {
-        console.error(
-          `${c.red}Error: Unknown technology '${options.tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`
-        );
-        process.exit(1);
+      const techs = String(options.tech).split(',').filter(Boolean);
+      for (const tech of techs) {
+        if (!TECHNOLOGIES[tech]) {
+          console.error(
+            `${c.red}Error: Unknown technology '${tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`
+          );
+          process.exit(1);
+        }
       }
-      this.config.technologies = [options.tech];
+      this.config.technologies = techs;
+    }
+    if (options.infra) {
+      const infra = options.infra === true ? ['docker'] : String(options.infra).split(',').filter(Boolean);
+      for (const name of infra) {
+        if (!INFRA_PLUGINS.includes(name)) {
+          console.error(`${c.red}Error: Unknown infra '${name}'. Available: ${INFRA_PLUGINS.join(', ')}${c.reset}`);
+          process.exit(1);
+        }
+      }
+      this.config.infra = infra;
     }
     if (options.hooks) this.config.hooks = options.hooks;
     this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
@@ -169,7 +184,7 @@ class BearCraftCLI {
           await runInstallFromUrl(options.from, this, ctx);
         } else if (options.auto) {
           await autoInstall(this, ctx);
-        } else if (targetPath && options.tech) {
+        } else if (targetPath && (options.tech || options.infra || options.yes)) {
           // Non-interactive install
           await runInstallation(this, ctx);
         } else {
@@ -215,6 +230,11 @@ class BearCraftCLI {
       case 'list':
         printBanner(VERSION);
         runList(this.config.targetPath);
+        break;
+
+      case 'sync':
+        printBanner(VERSION);
+        runSync(this.config.targetPath);
         break;
 
       case 'doctor':

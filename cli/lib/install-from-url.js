@@ -21,6 +21,7 @@ import c from './colors.js';
 import { LANGUAGES } from './constants.js';
 import { TECH_REGISTRY } from './tech-registry.js';
 import { runInstallation } from './installer.js';
+import { INFRA_PLUGINS } from './plugin-install.js';
 
 const SUPPORTED_SCHEMA_VERSIONS = [1];
 
@@ -134,6 +135,13 @@ export function validateConfig(cfg) {
     out.technologies = cfg.technologies;
   }
 
+  if (cfg.infra !== undefined) {
+    if (!Array.isArray(cfg.infra) || !cfg.infra.every((n) => INFRA_PLUGINS.includes(n))) {
+      throw new Error(`--from: "infra" must be an array of ${INFRA_PLUGINS.join(', ')}`);
+    }
+    out.infra = cfg.infra;
+  }
+
   for (const flag of ['includeInfra', 'includeProject', 'includeRtk']) {
     if (cfg[flag] !== undefined) {
       if (typeof cfg[flag] !== 'boolean') {
@@ -155,7 +163,7 @@ export function validateConfig(cfg) {
  * @param {Function} [fetchFn=globalThis.fetch] - Injectable fetch (for testing)
  * @returns {Promise<void>}
  */
-export async function runInstallFromUrl(url, cli, { CLI_ROOT }, fetchFn = globalThis.fetch) {
+export async function runInstallFromUrl(url, cli, { CLI_ROOT, VERSION, execFn }, fetchFn = globalThis.fetch) {
   validateUrl(url);
 
   console.log(`${c.bold}Fetching team config…${c.reset} ${c.dim}${url}${c.reset}`);
@@ -212,6 +220,7 @@ export async function runInstallFromUrl(url, cli, { CLI_ROOT }, fetchFn = global
   if (validated.language && cli.config.language === 'en') cli.config.language = validated.language;
   if (validated.technologies && cli.config.technologies.length === 0) cli.config.technologies = validated.technologies;
   if (validated.includeInfra !== undefined) cli.config.includeInfra = validated.includeInfra;
+  if (validated.infra && !(cli.config.infra?.length > 0)) cli.config.infra = validated.infra;
   if (validated.includeProject !== undefined) cli.config.includeProject = validated.includeProject;
   if (validated.includeRtk !== undefined) cli.config.includeRtk = validated.includeRtk;
 
@@ -221,5 +230,5 @@ export async function runInstallFromUrl(url, cli, { CLI_ROOT }, fetchFn = global
     `  ${c.cyan}Technologies${c.reset} ${cli.config.technologies.length > 0 ? cli.config.technologies.join(', ') : 'common only'}\n`
   );
 
-  await runInstallation(cli, { CLI_ROOT });
+  await runInstallation(cli, { CLI_ROOT, VERSION, execFn });
 }

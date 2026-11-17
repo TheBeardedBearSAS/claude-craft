@@ -7,65 +7,11 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-import * as yaml from 'js-yaml';
 import c from './colors.js';
 import { listDirs } from './fs-utils.js';
 import { assertSafeTarget } from './path-safety.js';
-
-/**
- * Read a Claude Code version from config/versions.yaml (`claudeCode.<key>`).
- * Falls back to the given hardcoded value if the file is unavailable.
- * @param {'minimum'|'recommended'} key
- * @param {string} fallback
- * @returns {string}
- */
-function loadClaudeCodeVersion(key, fallback) {
-  try {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const versionsPath = path.resolve(__dirname, '..', '..', 'config', 'versions.yaml');
-    if (!fs.existsSync(versionsPath)) return fallback;
-    const parsed = yaml.load(fs.readFileSync(versionsPath, 'utf8'));
-    return parsed?.claudeCode?.[key] ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-// Security floor: plugin SHA-pin bypass (CVE-2026-86063, fixed 2.1.179), symlink
-// TOCTOU write (CVE-2026-103435, 2.1.129), managed settings bypass (CVE-2026-103012, 2.1.260),
-// Bash permission and MCP OAuth fixes (2.1.321), Bash/sandbox permission bypasses
-// (2.1.323, 2.1.325) — no GHSA published.
-const MIN_CLAUDE_CODE = loadClaudeCodeVersion('minimum', '2.1.325');
-const RECOMMENDED_CLAUDE_CODE = loadClaudeCodeVersion('recommended', '2.1.326');
-
-/**
- * Compare two semver-ish version strings (`major.minor.patch`).
- * Returns -1 if a < b, 0 if equal, 1 if a > b.
- * @param {string} a
- * @param {string} b
- * @returns {-1|0|1}
- */
-function semverCmp(a, b) {
-  const pa = a.split('.').map((n) => Number.parseInt(n, 10));
-  const pb = b.split('.').map((n) => Number.parseInt(n, 10));
-  for (let i = 0; i < 3; i++) {
-    const da = pa[i] || 0;
-    const db = pb[i] || 0;
-    if (da !== db) return da < db ? -1 : 1;
-  }
-  return 0;
-}
-
-/**
- * Extract the first `X.Y.Z` triple from a free-form `claude --version` output.
- * @param {string} output
- * @returns {string|null}
- */
-function extractSemver(output) {
-  const m = output.match(/(?<!\d)(\d+)\.(\d+)\.(\d+)/);
-  return m ? m[0] : null;
-}
+import { MIN_CLAUDE_CODE, RECOMMENDED_CLAUDE_CODE, assessClaude } from './claude-code.js';
+import { diagnosePlugins, readInstallJson } from './plugin-install.js';
 
 /**
  * OS-specific yq installation hints. Returned as a list of one-liner instructions
@@ -144,27 +90,29 @@ function runDoctor(targetPath, deps = {}) {
 
   // 3. Claude Code installed and >= MIN_CLAUDE_CODE (security baseline)
   const claudeVerRaw = exec('claude --version');
-  if (claudeVerRaw) {
-    const semver = extractSemver(claudeVerRaw);
-    if (semver && semverCmp(semver, MIN_CLAUDE_CODE) < 0) {
+  const claude = assessClaude(claudeVerRaw);
+  if (claude.found) {
+    if (claude.tooOld) {
       console.log(
-        `  ${c.red}[FAIL]${c.reset} Claude Code ${semver} — requires >= ${MIN_CLAUDE_CODE} (security fixes: CVE-2026-86063, CVE-2026-103435, CVE-2026-103012)`
+        `  ${c.red}[FAIL]${c.reset} Claude Code ${claude.version} — requires >= ${MIN_CLAUDE_CODE} (security fixes: CVE-2026-86063, CVE-2026-103435, CVE-2026-103012)`
       );
       console.log(`         Upgrade: ${c.cyan}npm install -g @anthropic-ai/claude-code@latest${c.reset}`);
       failed++;
-    } else if (semver && semverCmp(semver, RECOMMENDED_CLAUDE_CODE) < 0) {
+    } else if (claude.belowRecommended) {
       console.log(
-        `  ${c.yellow}[WARN]${c.reset} Claude Code ${semver} — recommended ${RECOMMENDED_CLAUDE_CODE} (latest permission fixes)`
+        `  ${c.yellow}[WARN]${c.reset} Claude Code ${claude.version} — recommended ${RECOMMENDED_CLAUDE_CODE} (latest permission fixes)`
       );
       warned++;
     } else {
-      console.log(`  ${c.green}[OK]${c.reset} Claude Code ${semver || claudeVerRaw}`);
+      console.log(`  ${c.green}[OK]${c.reset} Claude Code ${claude.version || claude.raw}`);
       passed++;
     }
   } else {
-    console.log(`  ${c.yellow}[WARN]${c.reset} Claude Code not found (optional for install, required for usage)`);
+    console.log(
+      `  ${c.red}[FAIL]${c.reset} Claude Code not found (required: bear-craft installs its plugins through it)`
+    );
     console.log(`         Install: ${c.cyan}npm install -g @anthropic-ai/claude-code${c.reset}`);
-    warned++;
+    failed++;
   }
 
   // 4. Git available
@@ -198,8 +146,9 @@ function runDoctor(targetPath, deps = {}) {
     console.log(`  ${c.green}[OK]${c.reset} .claude/ directory exists`);
     passed++;
 
-    // Check required subdirs
-    const requiredDirs = ['commands', 'agents', 'references', 'skills'];
+    // Check required subdirs: a plugin installation (.bear-craft/install.json) only copies references
+    const pluginInstall = readInstallJson(targetPath) !== null;
+    const requiredDirs = pluginInstall ? ['references'] : ['commands', 'agents', 'references', 'skills'];
     for (const dir of requiredDirs) {
       if (fs.existsSync(path.join(claudeDir, dir))) {
         console.log(`  ${c.green}[OK]${c.reset} .claude/${dir}/`);
@@ -221,6 +170,26 @@ function runDoctor(targetPath, deps = {}) {
   } else {
     console.log(`  ${c.yellow}[WARN]${c.reset} .claude/ directory not found (not installed here)`);
     warned++;
+  }
+
+  // 6b. Plugins: marketplace copy, settings.json entries and registration on this machine
+  const runFn =
+    deps.runFn ||
+    ((cmd, args) => {
+      const out = exec([cmd, ...args].join(' '));
+      return { status: out === null ? 1 : 0, stdout: out ?? '', stderr: '' };
+    });
+  for (const { level, message } of diagnosePlugins(targetPath, { execFn: runFn })) {
+    if (level === 'ok') {
+      console.log(`  ${c.green}[OK]${c.reset} ${message}`);
+      passed++;
+    } else if (level === 'warn') {
+      console.log(`  ${c.yellow}[WARN]${c.reset} ${message}`);
+      warned++;
+    } else {
+      console.log(`  ${c.red}[FAIL]${c.reset} ${message}`);
+      failed++;
+    }
   }
 
   // 7. Shell scripts have execute permissions

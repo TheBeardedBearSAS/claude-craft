@@ -5,6 +5,12 @@
 _bear-craft() {
     local -a namespaces
     namespaces=(
+        'install:Install bear-craft plugins and rules'
+        'update:Refresh an installation'
+        'sync:Re-register the project marketplace and plugins on this machine'
+        'doctor:Environment diagnostics'
+        'list:List installed plugins'
+        'check:Verify the installation'
         'angular:Angular commands'
         'common:Common commands'
         'csharp:C# commands'
