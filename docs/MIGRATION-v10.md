@@ -14,7 +14,7 @@
 | npm package `@the-bearded-bear/claude-craft` | `@the-bearded-bear/bear-craft` | The old package is deprecated on npm and stays at 9.4.0 |
 | Command `claude-craft` | `bear-craft` | `claude-craft` still works and prints a deprecation notice; removed in 11.0 |
 | Claude Code plugin `claude-craft@claude-craft` | `bear-common@bear-craft`, `bear-react@bear-craft`, … (one plugin per namespace or stack) | Reinstall the plugins you need (see below) |
-| Slash commands `/<ns>:<cmd>` (e.g. `react:check`, `workflow:init`), in every channel | `/bear-<ns>:<cmd>` (e.g. `/bear-react:check`, `/bear-workflow:init`) | `bear-craft update` removes the old `.claude/commands/<ns>/` folders and keeps any folder that holds your own files; the CLI and the plugins now expose identical commands, and nothing clashes with your project's commands or other plugins |
+| Slash commands `/<ns>:<cmd>` (e.g. `react:check`, `workflow:init`), in every channel | `/bear-<ns>:<cmd>` (e.g. `/bear-react:check`, `/bear-workflow:init`) | `bear-craft update` deletes the old `.claude/commands/<ns>/` files we shipped and keeps your own; the CLI and the plugins now expose identical commands, and nothing clashes with your project's commands or other plugins |
 | `CLAUDE_CRAFT_USER` (Kanban author) | `BEAR_CRAFT_USER` | `CLAUDE_CRAFT_USER` is still read when `BEAR_CRAFT_USER` is unset; removed in 11.0 |
 | Community skills `claude-craft-skill-*` | `bear-craft-skill-*` | `bear-craft skill add` still accepts `claude-craft-skill-*` packages; removed in 11.0 |
 | Shared shell lib `~/.local/lib/claude-craft/` | `~/.local/lib/bear-craft/` | `install-rtk.sh` still finds the old path |
@@ -46,7 +46,7 @@ to `.claude/commands/bear-<ns>/` (`references/<tech>/`, agents, skills and hooks
    namespace or stack, named `bear-<namespace>`; commands become `/bear-<namespace>:<command>` (e.g. `/bear-react:check`): `/plugin install bear-common@bear-craft`, `/plugin install bear-react@bear-craft`
    Use either the `common` plugin or the CLI installation for hooks, not both.
 
-4. **Migrate your projects' commands**: run `bear-craft update` in each project. It installs `.claude/commands/bear-<ns>/` and deletes the old `.claude/commands/<ns>/` folder **only when every file in it is one we ship** (same file name as the distribution). A folder that holds a file you added is kept untouched and a warning names the file: move your file into `.claude/commands/` under your own name, or delete the old folder yourself, otherwise both the old and the `bear-` command names stay available. Update your own notes and scripts to the prefixed names.
+4. **Migrate your projects' commands**: run `bear-craft update` in each project. It installs `.claude/commands/bear-<ns>/` and deletes, in each old `.claude/commands/<ns>/` folder, **every file we ship** (same file name as the distribution) and **keeps the files you added**. The folder is removed when nothing is left; otherwise it stays, with a warning naming your files (`kept for your files (my-own.md): our commands moved to /bear-<ns>:*`), so no command of ours exists twice. Move your files wherever you like. Update your own notes and scripts to the prefixed names.
 
 5. **Rename environment variables**: `export BEAR_CRAFT_USER="…"` instead of `CLAUDE_CRAFT_USER`.
 

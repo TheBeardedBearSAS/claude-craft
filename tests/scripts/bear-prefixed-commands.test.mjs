@@ -77,7 +77,7 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
     expect(fs.existsSync(path.join(cmdDir(target, 'bear-react'), 'check.md'))).toBe(true);
   });
 
-  it('keeps an old folder holding a user file, warns, and still installs the new one', () => {
+  it('mixed old folder: our files are deleted, the user file is kept with a warning', () => {
     const target = path.join(TMP, 'legacy-user-file');
     install(target);
     downgradeToLegacyLayout(target);
@@ -85,13 +85,14 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
 
     const r = sh(REACT, ['--force', target]);
     expect(r.status, r.stderr).toBe(0);
-    expect(r.stderr).toMatch(/\.claude\/commands\/react\/ kept.*my-own-command\.md/);
+    expect(r.stderr).toMatch(/\.claude\/commands\/react\/ kept for your files \(my-own-command\.md\)/);
+    expect(fs.readdirSync(cmdDir(target, 'react'))).toEqual(['my-own-command.md']);
     expect(fs.readFileSync(path.join(cmdDir(target, 'react'), 'my-own-command.md'), 'utf8')).toBe('# mine\n');
     expect(fs.existsSync(path.join(cmdDir(target, 'bear-react'), 'check.md'))).toBe(true);
     // the other, clean legacy folders are still migrated by their own installers
     install(target);
     expect(fs.existsSync(cmdDir(target, 'common'))).toBe(false);
-    expect(fs.existsSync(path.join(cmdDir(target, 'react'), 'my-own-command.md'))).toBe(true);
+    expect(fs.readdirSync(cmdDir(target, 'react'))).toEqual(['my-own-command.md']);
   });
 
   it('bear-craft update migrates a 9.4.0-style install, project commands included', () => {
@@ -99,12 +100,14 @@ describe('upgrade from a pre-10.0 install', { timeout: 180_000 }, () => {
     install(target);
     downgradeToLegacyLayout(target);
     fs.writeFileSync(path.join(cmdDir(target, 'project'), 'my-own-command.md'), '# mine\n');
+    fs.writeFileSync(path.join(cmdDir(target, 'common'), 'my-own-command.md'), '# mine\n');
 
     const r = spawnSync(process.execPath, [CLI, 'update', target, '--lang=en'], { encoding: 'utf8', cwd: ROOT });
     expect(r.status, r.stdout + r.stderr).toBe(0);
     const left = dirs(target).filter((d) => !d.startsWith('bear-'));
-    expect(left).toEqual(['project']); // only the folder with the user's file survives
-    expect(r.stdout).toMatch(/commands\/project\/ kept/);
+    expect(left).toEqual(['common', 'project']); // only folders holding a user file survive
+    for (const d of left) expect(fs.readdirSync(cmdDir(target, d))).toEqual(['my-own-command.md']);
+    expect(r.stdout).toMatch(/commands\/project\/ kept for your files/);
     for (const ns of ['common', 'workflow', 'gate', 'project', 'react']) {
       expect(fs.existsSync(cmdDir(target, `bear-${ns}`)), `bear-${ns}`).toBe(true);
     }

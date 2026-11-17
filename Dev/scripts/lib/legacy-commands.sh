@@ -2,10 +2,10 @@
 # legacy-commands.sh — migrate pre-10.0 command folders to their bear- prefixed names.
 #
 # Since 10.0 commands live in .claude/commands/bear-<ns>/ (prefixed). An installation
-# made by an older version still has .claude/commands/<ns>/ (unprefixed names): left alone, every
-# command would exist twice. The old folder is removed ONLY when every file in it is one we ship
-# (same name as a file of bear-<ns>/, or listed in config/removed-commands.yaml). A folder holding
-# a file the user added is kept as is, with a warning.
+# made by an older version still has .claude/commands/<ns>/ (unprefixed): left alone, every
+# command would exist twice. In the old folder every file we ship (same name as a file of
+# bear-<ns>/, or listed in config/removed-commands.yaml) is deleted and every other file (the
+# user's own) is kept. The folder is removed when empty, otherwise kept with a warning.
 #
 # Usage (sourced): migrate_legacy_commands <target_dir> <ns>...
 
@@ -23,18 +23,20 @@ migrate_legacy_commands() {
         foreign=()
         while IFS= read -r -d '' f; do
             name="${f#"$old"/}"
-            [[ -f "$new/$name" ]] && continue
-            if [[ -f "$LEGACY_COMMANDS_MANIFEST" ]] &&
-                grep -qE "^[[:space:]]*(-[[:space:]]+)?${ns}/${name//./\\.}(:|[[:space:]]|$)" "$LEGACY_COMMANDS_MANIFEST"; then
-                continue
+            if [[ -f "$new/$name" ]] ||
+                { [[ -f "$LEGACY_COMMANDS_MANIFEST" ]] &&
+                    grep -qE "^[[:space:]]*(-[[:space:]]+)?${ns}/${name//./\\.}(:|[[:space:]]|$)" "$LEGACY_COMMANDS_MANIFEST"; }; then
+                rm -f "$f"
+            else
+                foreign+=("$name")
             fi
-            foreign+=("$name")
         done < <(find "$old" -type f -print0 | sort -z)
         if [[ ${#foreign[@]} -eq 0 ]]; then
             find "$old" -depth -delete
             echo "  migrated .claude/commands/$ns/ -> .claude/commands/bear-$ns/ (old folder removed)"
         else
-            echo "  [WARN] .claude/commands/$ns/ kept: it holds files that are not ours (${foreign[*]}); /$ns:* commands now also exist as /bear-$ns:*" >&2
+            find "$old" -mindepth 1 -type d -empty -delete
+            echo "  [WARN] .claude/commands/$ns/ kept for your files (${foreign[*]}): our commands moved to /bear-$ns:*" >&2
         fi
     done
 }
