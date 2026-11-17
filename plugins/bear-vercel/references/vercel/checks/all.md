@@ -10,7 +10,7 @@ $ARGUMENTS (optional: path to project to analyze)
 
 ## MISSION
 
-Perform a complete compliance audit of the Vercel deployment configuration and platform-surface code by orchestrating the 4 major checks: Architecture, Code Quality, Tests, and Security. Produce a consolidated report with an overall score out of 100 points. **Scope reminder**: this audit covers framework-agnostic Vercel platform usage only (`vercel.json`, Serverless Functions on Node.js/Fluid Compute, ISR cache primitives, Cron Jobs, Storage). Do not evaluate Next.js-specific routing, rendering, or data-fetching (`revalidatePath`, `revalidateTag`, App Router, etc.) — that belongs to the corresponding framework stack's own compliance check (`/react:*`, `/vuejs:*`, `/angular:*`).
+Perform a complete compliance audit of the Vercel deployment configuration and platform-surface code by orchestrating the 4 major checks: Architecture, Code Quality, Tests, and Security. Produce a consolidated report with an overall score out of 100 points. **Scope reminder**: this audit covers framework-agnostic Vercel platform usage only (`vercel.json`, Serverless Functions on Node.js/Fluid Compute, ISR cache primitives, Cron Jobs, Storage). Do not evaluate Next.js-specific routing, rendering, or data-fetching (`revalidatePath`, `revalidateTag`, App Router, etc.) — that belongs to the corresponding framework stack's own compliance check (`/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`).
 
 ### Step 1: Audit Preparation
 
@@ -245,4 +245,4 @@ Major refactoring / Overhaul necessary]
 - Adapt recommendations to project business context
 - An unguarded Cron endpoint and a hardcoded secret are ALWAYS top priority when found
 - A `runtime: 'edge'` finding on new/modified code is always flagged, but is migration debt (not a hard failure) on unmodified legacy code
-- Do NOT evaluate Next.js-specific routing/rendering/data-fetching — out of scope (see `/react:*`, `/vuejs:*`, `/angular:*`)
+- Do NOT evaluate Next.js-specific routing/rendering/data-fetching — out of scope (see `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`)

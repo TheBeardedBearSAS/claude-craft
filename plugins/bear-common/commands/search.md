@@ -100,11 +100,11 @@ When a user invokes `/bear-common:search <keyword>`:
 | `testing` | /bear-qa:tdd, testing skill, @tdd-coach |
 | `security` | /bear-team:security, security skill, @security-auditor |
 | `architecture` | architecture skill, @database-architect |
-| `react` | /react:* commands, @react-reviewer |
-| `symfony` | /symfony:* commands, @symfony-reviewer |
+| `react` | /bear-react:* commands, @react-reviewer |
+| `symfony` | /bear-symfony:* commands, @symfony-reviewer |
 | `audit` | /bear-team:audit, /bear-team:security |
 | `claude code` | /bear-common:setup-rtk, .claude/COMPATIBILITY.md |
-| `workflow` | /workflow:* commands, workflow-analysis skill |
+| `workflow` | /bear-workflow:* commands, workflow-analysis skill |
 
 ---
 

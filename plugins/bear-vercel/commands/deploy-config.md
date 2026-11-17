@@ -99,7 +99,7 @@ VERCEL DEPLOY CONFIG
 🧩 FRAMEWORK DETECTION
 ──────────────────────────────────────────────────────────────
 Detected: React (vite.config.ts + @vitejs/plugin-react)
-Deferred to: /react:* stack's own 06-tooling.md for build/routing config
+Deferred to: /bear-react:* stack's own 06-tooling.md for build/routing config
 Vercel-platform keys added here: functions, crons only
 
 📄 EXISTING vercel.json
