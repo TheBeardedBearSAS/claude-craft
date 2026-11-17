@@ -11,7 +11,7 @@ Inside Claude Code:
 /plugin install bear-hooks-full@bear-craft
 ```
 
-Requires Claude Code 2.1.325 or later. Version 9.4.0.
+Requires Claude Code 2.1.325 or later. Version 10.0.0.
 
 ## Requirements
 

@@ -2,7 +2,7 @@
   "name": "bear-hooks-full",
   "displayName": "Bear Craft — Hooks (full)",
   "description": "Extra hooks of the full profile: quality gate on stop, post-edit lint, tool-failure log, session init/end and Slack notifications. Install it next to bear-hooks.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

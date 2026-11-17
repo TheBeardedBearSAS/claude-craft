@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Bear Craft v9.4.0
+# Claude Code Compatibility — Bear Craft v10.0.0
 
 **Minimum Version:** 2.1.325 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21325))
 **Recommended Version:** 2.1.326 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`, Fable 5.2, correctifs permissions/OAuth MCP 2.1.321)

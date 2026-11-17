@@ -2,7 +2,7 @@
   "name": "bear-csharp",
   "displayName": "Bear Craft — C# / .NET",
   "description": "C# / .NET 10 LTS / C# 14: Backend with Clean Architecture, CQRS, MediatR, EF Core. Audit and generation commands, reviewer agent and stack skills.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

@@ -9,6 +9,7 @@
 # PROCÉDURE DE BUMP : modifier ICI, puis propager dans les fichiers listés, puis
 # `npm run lint:versions` pour garantir l'absence de dérive.
 #
+# 2026-11-17 (release 10.0.0) : claude-craft devient bear-craft (paquet @the-bearded-bear/bear-craft), installation par plugins (5 langues), commandes /bear-<ns>:*, 66 commandes dépréciées retirées.
 # 2026-11-17 (release 9.4.0) : dernière version 9.x avant le renommage en bear-craft (10.0.0) ; livre l'audit d'alignement du 2026-11-16 (PR #252).
 # 2026-11-16 (audit d'alignement Claude --full) : Claude Code minimum 2.1.321 → 2.1.325, recommandé/testé 2.1.322 → 2.1.326
 # (2.1.323 et 2.1.325 : contournements permissions Bash/sandbox sans GHSA ; 2.1.326 relu, sans rupture) ; modèles et prix inchangés.
@@ -188,6 +189,7 @@ denylist:
   - 'v9.2.0 - Claude Code'
   - 'v9.2.1 - Claude Code'
   - 'v9.3.0 - Claude Code'
+  - 'v9.4.0 - Claude Code'
   # Renommage claude-craft → bear-craft (10.0.0) et marque The Bearded Bear
   - '@the-bearded-bear/claude-craft'
   - 'The Bearded CTO'

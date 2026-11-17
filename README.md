@@ -32,6 +32,15 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 82 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v10.0.0
+
+**Claude Craft devient Bear Craft (2026-11-17, v10.0.0) :**
+
+- **Nouveau nom** : paquet `@the-bearded-bear/bear-craft`, commande `bear-craft` (l'alias `claude-craft` reste en 10.x), dépôt `TheBeardedBearSAS/bear-craft`, plugins et marketplace `bear-craft`. Claude Code réserve le préfixe `claude-` aux plugins d'Anthropic.
+- **Installation par plugins Claude Code** : `bear-craft install` installe dans le projet les plugins de la langue choisie (5 langues, 35 plugins chacune), puis copie les règles. Commandes, agents et skills portent **le même nom quel que soit le canal** : `/bear-react:check`, `/bear-workflow:plan`, `bear-common:tdd-coach`. Infra en plugins (`/bear-docker:architecture`…), hooks en plugins dédiés (`bear-hooks`, `bear-hooks-full`, `bear-hooks-memory`). Nouvelle commande `bear-craft sync` après un clone. Prérequis : Claude Code (`claude`).
+- **Retraits** : les stubs de redirection dépréciés depuis la 9.0 disparaissent (table de correspondance dans le guide de migration) ; `bear-craft update` les nettoie.
+- **Migration** : `bear-craft update` convertit une installation 9.x (fichiers de l'utilisateur conservés). Guide : [MIGRATION-v10](docs/MIGRATION-v10.md). Détails : [CHANGELOG](CHANGELOG.md#1000---2026-11-17).
+
 ## What's New in v9.4.0
 
 **Dernière version 9.x — sécurité Claude Code et hooks fail-closed (2026-11-17, v9.4.0) :**
