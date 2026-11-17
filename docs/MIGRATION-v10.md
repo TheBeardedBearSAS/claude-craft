@@ -18,8 +18,8 @@
 | `CLAUDE_CRAFT_USER` (Kanban author) | `BEAR_CRAFT_USER` | `CLAUDE_CRAFT_USER` is still read when `BEAR_CRAFT_USER` is unset; removed in 11.0 |
 | Community skills `claude-craft-skill-*` | `bear-craft-skill-*` | `bear-craft skill add` still accepts `claude-craft-skill-*` packages; removed in 11.0 |
 | Shared shell lib `~/.local/lib/claude-craft/` | `~/.local/lib/bear-craft/` | `install-rtk.sh` still finds the old path |
-| Repository `github.com/TheBeardedBearSAS/claude-craft` | `github.com/TheBeardedBearSAS/bear-craft` | A `claude-craft` placeholder repository points to the new one |
-| Site `thebeardedbearsas.github.io/claude-craft/` | `thebeardedbearsas.github.io/bear-craft/` | Old URLs redirect to the same page on the new site |
+| Repository `github.com/TheBeardedBearSAS/claude-craft` | `github.com/TheBeardedBearSAS/bear-craft` | GitHub redirects the old repository URL, issues, pull requests and `git` remotes to the new one |
+| Site `thebeardedbearsas.github.io/claude-craft/` | `thebeardedbearsas.github.io/bear-craft/` | Old site URLs are not redirected: update your bookmarks and links |
 | Shell completions `_claude-craft`, `claude-craft.bash`, `claude-craft.fish` | `_bear-craft`, `bear-craft.bash`, `bear-craft.fish` | The new files also complete the `claude-craft` alias |
 | Bundles `bundles/*/claude-craft-bundle.md` | `bundles/*/bear-craft-bundle.md` | — |
 
@@ -55,7 +55,7 @@ to `.claude/commands/bear-<ns>/` (`references/<tech>/`, agents, skills and hooks
 6. **Skill authors**: publish new versions as `bear-craft-skill-<name>`. The `claude-craft-skill-<name>`
    packages keep installing in 10.x.
 
-7. **Contributors**: point your clone to the new repository.
+7. **Contributors**: GitHub redirects the old remote, but point your clone to the new repository:
 
    ```bash
    git remote set-url origin git@github.com:TheBeardedBearSAS/bear-craft.git
