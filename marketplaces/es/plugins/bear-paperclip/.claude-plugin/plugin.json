@@ -2,7 +2,7 @@
   "name": "bear-paperclip",
   "displayName": "Bear Craft — Paperclip",
   "description": "Paperclip 2026.1106.0: Governance-first integration platform (control plane + adapters). Audit and generation commands, reviewer agent and stack skills.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

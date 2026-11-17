@@ -2,7 +2,7 @@
   "name": "bear-flutter",
   "displayName": "Bear Craft — Flutter / Dart",
   "description": "Flutter / Dart 3.47 / Dart 3.13: Mobile Dart with BLoC v9, Riverpod 3, Material 3, Impeller. Audit and generation commands, reviewer agent and stack skills.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

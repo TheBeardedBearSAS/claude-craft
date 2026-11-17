@@ -2,7 +2,7 @@
   "name": "bear-vercel",
   "displayName": "Bear Craft — Vercel",
   "description": "Vercel 65.14.0: Framework-agnostic deployment platform: vercel.json, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage. Audit and generation commands, reviewer agent and stack skills.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

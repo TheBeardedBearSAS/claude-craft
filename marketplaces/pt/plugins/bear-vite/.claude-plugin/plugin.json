@@ -2,7 +2,7 @@
   "name": "bear-vite",
   "displayName": "Bear Craft — Vite",
   "description": "Vite 8.3: Framework-agnostic build tool: vanilla JS/TS, library authoring, multi-page apps. Audit and generation commands, reviewer agent and stack skills.",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"

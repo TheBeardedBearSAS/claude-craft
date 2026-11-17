@@ -2,7 +2,7 @@
   "name": "bear-common",
   "displayName": "Bear Craft — Common",
   "description": "Shared agents, skills, rules, checklists and token/CI/ADR utilities (hooks live in bear-hooks).",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "author": {
     "name": "The Bearded Bear",
     "url": "https://the-bearded-bear.com"
