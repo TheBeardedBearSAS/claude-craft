@@ -55,7 +55,7 @@ la forma correcta a cada fase:
 |------|-----------------|
 | `start`, `review`, `retro` | `N` simple (p. ej. `5`) |
 | `start --tasks-only` | `N` simple (p. ej. `5`) |
-| `team:sprint` (implementación) | nombre libre de sprint resuelto desde la carpeta / archivo de estado |
+| `team:delivery --phase=implementation` (implementación) | nombre libre de sprint resuelto desde la carpeta / archivo de estado |
 
 Resolver la carpeta del sprint mediante un glob `project-management/sprints/sprint-{N}-*/` y leer
 `.bmad/sprint-status.yaml` para obtener el nombre canónico del sprint y la lista de historias.
