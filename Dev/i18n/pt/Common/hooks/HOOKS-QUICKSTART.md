@@ -40,6 +40,7 @@ Hooks do Claude Code para controlo de qualidade e segurança automatizados, inst
 - O payload chega como **JSON no stdin**; só o **código de saída 2** bloqueia (qualquer outro código diferente de zero é um erro não bloqueante).
 - Só `hookSpecificOutput.additionalContext` chega ao modelo; o stdout em texto simples do PreCompact é lido como instruções de compactação.
 - Os scripts precisam de `jq` ou `node` para ler o payload: as guardas de segurança bloqueiam se nenhum estiver disponível, os hooks informativos não fazem nada.
+- As três guardas de segurança (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) declaram `"onFailure": "block"` (Claude Code 2.1.295+): se o script estiver ausente, falhar ou exceder o timeout, a chamada da ferramenta é bloqueada em vez de prosseguir. Se uma guarda bloquear todas as chamadas após uma instalação quebrada, execute a instalação novamente ou remova os hooks com `--hooks=none`. Reinstalar adiciona `onFailure` às guardas instaladas por uma versão anterior, sem nunca substituir um valor que você definiu.
 
 ## Mais informações
 

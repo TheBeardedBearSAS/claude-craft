@@ -40,6 +40,7 @@ Claude-Code-Hooks für automatisierte Qualitätskontrolle und Sicherheit, die cl
 - Die Nutzdaten kommen als **JSON über stdin**; nur der **Exit-Code 2** blockiert (jeder andere Wert ungleich null ist ein nicht blockierender Fehler).
 - Nur `hookSpecificOutput.additionalContext` erreicht das Modell; der Klartext-stdout von PreCompact wird als Compaction-Anweisung gelesen.
 - Die Skripte brauchen `jq` oder `node`, um die Nutzdaten zu lesen: Die Sicherheitswächter blockieren, wenn keines verfügbar ist, die informativen Hooks tun nichts.
+- Die drei Sicherheitswächter (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) setzen `"onFailure": "block"` (Claude Code 2.1.295+): Fehlt das Skript, stürzt es ab oder überschreitet es sein Timeout, wird der Tool-Aufruf blockiert statt ausgeführt. Blockiert ein Wächter nach einer defekten Installation jeden Aufruf, die Installation erneut ausführen oder die Hooks mit `--hooks=none` entfernen. Eine erneute Installation ergänzt `onFailure` bei Wächtern aus einer älteren Version und ersetzt nie einen selbst gesetzten Wert.
 
 ## Weitere Informationen
 

@@ -97,6 +97,13 @@ const pluginManifest = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugi
 if (pluginManifest.version !== pkg.version) {
   errors.push(`.claude-plugin/plugin.json version="${pluginManifest.version}" ≠ package.json version="${pkg.version}"`);
 }
+// engines["claude-code"] (Claude Code 2.1.323+) : le plugin ne se charge pas sous le plancher sécurité.
+const expectedEngine = `>=${versions.claudeCode?.minimum}`;
+if (pluginManifest.engines?.['claude-code'] !== expectedEngine) {
+  errors.push(
+    `.claude-plugin/plugin.json engines["claude-code"]="${pluginManifest.engines?.['claude-code']}" ≠ "${expectedEngine}" (claudeCode.minimum)`
+  );
+}
 const marketRaw = fs.readFileSync(path.join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8');
 if (!marketRaw.includes(`"version": "${pkg.version}"`)) {
   errors.push(

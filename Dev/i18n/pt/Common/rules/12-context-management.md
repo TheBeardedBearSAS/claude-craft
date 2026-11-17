@@ -176,7 +176,7 @@ Esses campos permitem otimizar os custos e o escopo dos sub-agentes.
 
 O Claude Code compacta automaticamente o contexto quando se aproxima dos limites da janela. Mensagens antigas sao resumidas para liberar espaco.
 
-> **Histórico append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable 5.x, Mythos 5.x):** modificar uma mensagem anterior, reconstruir `system` ou `tools`, ou resumir turnos antigos no lugar invalida os blocos de thinking seguintes. Acrescentar ao final do histórico em vez de reescrevê-lo. Fonte: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+> **Histórico append-only (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable/Mythos 5.1 e 5.2):** modificar uma mensagem anterior, reconstruir `system` ou `tools`, ou resumir turnos antigos no lugar invalida os blocos de thinking seguintes. Acrescentar ao final do histórico em vez de reescrevê-lo. Fonte: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Compactacao proativa
 
@@ -365,7 +365,9 @@ Ajustar o nível de esforço do modelo de acordo com a complexidade da tarefa:
 > **O esforço não troca de modelo:** ajusta a profundidade de raciocínio do modelo atual; o modelo é escolhido com `/model`. Pares recomendados: `low` com Haiku 5.5, `medium` com Sonnet 5.5, `high`/`xhigh` com Opus 5.5.
 
 > **Esforço padrão por modelo:** medium no Opus 5.5 e Haiku 5.5; high no Sonnet 5.5, Fable 5.2 e modelos legacy.
-> **Fable 5.2** (`claude-fable-5-2`, $8/$40 por Mtok) é o modelo Fable atual, adequado para agentes criativos/narrativos; Fable 5.1 e Fable 5 continuam disponíveis (legacy). No Fable 5.2 (como no Mythos 5.2) o raciocínio está sempre ativo (apenas modo adaptive): para reduzi-lo, baixe o esforço — uma instrução «responda diretamente» não basta a partir de `medium`. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program). A leitura de cache custa 5 % do preço de entrada no Opus/Sonnet 5.5 e 2,5 % no Fable 5.x e Mythos 5.x.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 por Mtok) é o modelo Fable atual, adequado para agentes criativos/narrativos; Fable 5.1 e Fable 5 continuam disponíveis (legacy). No Fable 5.2 (como no Mythos 5.2) o raciocínio está sempre ativo (apenas modo adaptive) e, a partir de `high`, precede quase toda resposta: para reduzi-lo, baixe o esforço — uma instrução «responda diretamente» não basta a partir de `medium`. **Mythos** tem disponibilidade limitada (apenas Cyber Verification Program). A leitura de cache custa 5 % do preço de entrada no Opus/Sonnet 5.5 e 2,5 % no Fable/Mythos 5.1 e 5.2; 10 % nos demais modelos, incluindo Fable 5 e Mythos 5 ([pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
+
+> **Thinking por padrão e migração da API:** no Sonnet 5.5 e no Haiku 5.5 (como nos modelos legacy Opus 5 e Sonnet 5), o thinking fica ativo quando `thinking` é omitido: selecionar os blocos por `type`, não por posição, e deixar margem em `max_tokens`. Só pode ser desativado com esforço `high` ou inferior; no Sonnet 5.5 o ajuste mínimo é `between_tools`. `budget_tokens` retorna erro 400 desde o Claude 4.7 (use `effort`), e o preenchimento prévio do último turno do assistente não é mais suportado desde o Claude 4.6. Fonte: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 ### Alerta de inatividade (v2.1.84+)
 

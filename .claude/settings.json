@@ -16,12 +16,14 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/Dev/i18n/base/Common/hooks/scripts/guard-network.sh\"",
-            "timeout": 5
+            "timeout": 5,
+            "onFailure": "block"
           },
           {
             "type": "command",
             "command": "BLOCK_RM_RF=all bash \"$CLAUDE_PROJECT_DIR/Dev/i18n/base/Common/hooks/scripts/block-dangerous-commands.sh\"",
-            "timeout": 5
+            "timeout": 5,
+            "onFailure": "block"
           }
         ]
       },
@@ -31,7 +33,8 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/Dev/i18n/base/Common/hooks/scripts/protect-sensitive-files.sh\"",
-            "timeout": 5
+            "timeout": 5,
+            "onFailure": "block"
           }
         ]
       }

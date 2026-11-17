@@ -57,6 +57,30 @@ describe('addHooks', () => {
   });
 });
 
+describe('addHooks — mise à niveau onFailure', () => {
+  const guard = (extra = {}) => ({ ...h('guard'), ...extra });
+  const fragment = frag({ PreToolUse: [{ matcher: 'Bash', hooks: [guard({ onFailure: 'block' })] }] });
+
+  it('complète onFailure sur un handler déjà installé qui ne l’a pas', () => {
+    const user = { hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [guard()] }] } };
+    const { settings, added, upgraded } = addHooks(user, fragment);
+    expect([added, upgraded]).toEqual([0, 1]);
+    expect(settings.hooks.PreToolUse[0].hooks).toEqual([guard({ onFailure: 'block' })]);
+  });
+
+  it('ne remplace jamais un onFailure choisi par l’utilisateur', () => {
+    const user = { hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [guard({ onFailure: 'continue' })] }] } };
+    const { settings, upgraded } = addHooks(user, fragment);
+    expect(upgraded).toBe(0);
+    expect(settings.hooks.PreToolUse[0].hooks[0].onFailure).toBe('continue');
+  });
+
+  it('est idempotent', () => {
+    const once = addHooks({}, fragment).settings;
+    expect(addHooks(once, fragment)).toMatchObject({ added: 0, upgraded: 0, settings: once });
+  });
+});
+
 describe('removeHooks', () => {
   it('retire seulement les handlers qui contiennent la chaîne puis nettoie les groupes et événements vides', () => {
     const s = {
@@ -101,6 +125,18 @@ describe('CLI', () => {
     const r = cli('add', '--settings', settingsPath(), '--fragment', fragPath());
     expect(r.status).toBe(0);
     expect(fs.readFileSync(settingsPath(), 'utf8')).toBe(before);
+  });
+
+  it('add écrit la mise à niveau onFailure d’un handler déjà installé', () => {
+    fs.writeFileSync(settingsPath(), JSON.stringify(frag({ Stop: [{ matcher: '', hooks: [h('a')] }] })));
+    fs.writeFileSync(
+      fragPath(),
+      JSON.stringify(frag({ Stop: [{ matcher: '', hooks: [{ ...h('a'), onFailure: 'block' }] }] }))
+    );
+    const r = cli('add', '--settings', settingsPath(), '--fragment', fragPath());
+    expect(r.status).toBe(0);
+    expect(r.stdout).toMatch(/upgraded 1 handlers/);
+    expect(JSON.parse(fs.readFileSync(settingsPath(), 'utf8')).hooks.Stop[0].hooks[0].onFailure).toBe('block');
   });
 
   it('add --dry-run annonce sans écrire', () => {

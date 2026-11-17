@@ -40,6 +40,7 @@ Claude Code hooks for automated quality control and safety, installed in your pr
 - The payload arrives as **JSON on stdin**; only **exit code 2** blocks (any other non-zero code is a non-blocking error).
 - Only `hookSpecificOutput.additionalContext` reaches the model; PreCompact plain-text stdout is read as compaction instructions.
 - Scripts need `jq` or `node` to read the payload: the safety guards block when neither is available, the informational hooks do nothing.
+- The three safety guards (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) set `"onFailure": "block"` (Claude Code 2.1.295+): if the script is missing, crashes or times out, the tool call is blocked instead of going ahead. If a guard blocks every call after a broken install, re-run the install, or remove the hooks with `--hooks=none`. Re-running the install adds `onFailure` to guards installed by an older version, and never replaces a value you set.
 
 ## More Information
 
