@@ -329,14 +329,24 @@ jobs:
           fi
 
       - name: Smoke test installed package
-        # Use npm dist-tag (next/beta/latest) rather than the static package.json version,
-        # because main-branch pushes publish as 8.5.0-next.<sha>, not 8.5.0.
-        # Propagation is already confirmed by the previous step; --prefer-online forces npx
-        # to refetch metadata so it never resolves a stale cached version.
+        # Install the exact version that was just published. The previous step only proves the
+        # metadata propagated: npm serves the tarball later (404 for several minutes observed on
+        # 2026-11-17 for @the-bearded-bear/bear-craft), so retry for up to 15 min.
+        # --prefer-online forces npx to refetch metadata so it never resolves a stale cached version.
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
-          NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
-          npx --yes --prefer-online "@the-bearded-bear/bear-craft@${NPM_TAG}" --version
+          EXPECTED="${{ needs.validate.outputs.version }}"
+          for i in $(seq 1 60); do
+            if INSTALLED=$(npx --yes --prefer-online "@the-bearded-bear/bear-craft@${EXPECTED}" --version 2>/dev/null | tail -1) \
+              && [[ "${INSTALLED}" == "${EXPECTED}" ]]; then
+              echo "✓ Installed and ran ${INSTALLED} after ~$(( (i - 1) * 15 ))s"
+              exit 0
+            fi
+            echo "Attempt ${i}/60: tarball for ${EXPECTED} not served yet — waiting 15s…"
+            sleep 15
+          done
+          echo "::error::Could not install @the-bearded-bear/bear-craft@${EXPECTED} within 900s"
+          exit 1
 
   release:
     name: Create GitHub Release
