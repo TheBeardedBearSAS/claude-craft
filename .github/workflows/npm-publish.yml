@@ -288,6 +288,25 @@ jobs:
           npm pack --dry-run 2>&1 | grep -q "cli/kanban/client/dist/index.html" \
             || { echo "::error::Kanban UI (cli/kanban/client/dist) missing from package — kanban:build did not run"; exit 1; }
 
+      - name: Smoke test the packed tarball
+        # Install the exact tarball that is about to be published and run both binaries.
+        # Done before publishing, on the local file: the registry serves a new tarball long
+        # after its metadata (more than 20 min observed on 2026-11-17), so a post-publish
+        # install was flaky red although the publish had succeeded.
+        run: |
+          EXPECTED="${{ needs.validate.outputs.version }}"
+          TARBALL=$(npm pack --ignore-scripts --silent | tail -1)
+          PREFIX="$(mktemp -d)"
+          npm install --global --prefix "$PREFIX" --ignore-scripts "./${TARBALL}"
+          INSTALLED=$("$PREFIX/bin/bear-craft" --version | tail -1)
+          LEGACY=$("$PREFIX/bin/claude-craft" --version 2>/dev/null | tail -1)
+          rm -f "$TARBALL"
+          if [[ "$INSTALLED" != "$EXPECTED" || "$LEGACY" != "$EXPECTED" ]]; then
+            echo "::error::Packed tarball reports bear-craft='${INSTALLED}', claude-craft='${LEGACY}', expected '${EXPECTED}'"
+            exit 1
+          fi
+          echo "✓ Tarball installs; bear-craft and claude-craft report ${INSTALLED}"
+
       - name: Publish (dry run)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
         run: |
@@ -327,26 +346,6 @@ jobs:
             echo "::error::Version ${EXPECTED} (tag ${NPM_TAG}) did not propagate to NPM within 900s (last seen: '${PUBLISHED_VERSION:-<none>}')"
             exit 1
           fi
-
-      - name: Smoke test installed package
-        # Install the exact version that was just published. The previous step only proves the
-        # metadata propagated: npm serves the tarball later (404 for several minutes observed on
-        # 2026-11-17 for @the-bearded-bear/bear-craft), so retry for up to 15 min.
-        # --prefer-online forces npx to refetch metadata so it never resolves a stale cached version.
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        run: |
-          EXPECTED="${{ needs.validate.outputs.version }}"
-          for i in $(seq 1 60); do
-            if INSTALLED=$(npx --yes --prefer-online "@the-bearded-bear/bear-craft@${EXPECTED}" --version 2>/dev/null | tail -1) \
-              && [[ "${INSTALLED}" == "${EXPECTED}" ]]; then
-              echo "✓ Installed and ran ${INSTALLED} after ~$(( (i - 1) * 15 ))s"
-              exit 0
-            fi
-            echo "Attempt ${i}/60: tarball for ${EXPECTED} not served yet — waiting 15s…"
-            sleep 15
-          done
-          echo "::error::Could not install @the-bearded-bear/bear-craft@${EXPECTED} within 900s"
-          exit 1
 
   release:
     name: Create GitHub Release
