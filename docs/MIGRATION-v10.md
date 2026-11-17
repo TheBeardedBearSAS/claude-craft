@@ -61,6 +61,21 @@ to `.claude/commands/bear-<ns>/` (`references/<tech>/`, agents, skills and hooks
    git remote set-url origin git@github.com:TheBeardedBearSAS/bear-craft.git
    ```
 
+## Removed in 10.0
+
+The 66 redirect stubs that printed "Obsolète (retirée en 10.0)" since 9.0 are gone: the five per-axis commands of each of the 13 stacks that had them (`angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `symfony`, `vercel`, `vite`, `vuejs`) and the sprint command of the team namespace. `bear-craft update` deletes any copy left in your project (files listed in `config/removed-commands.yaml`).
+
+| Removed | Use instead |
+|---------|-------------|
+| `/<tech>:check-architecture` | `/bear-<tech>:check architecture` |
+| `/<tech>:check-code-quality` | `/bear-<tech>:check code-quality` |
+| `/<tech>:check-security` | `/bear-<tech>:check security` |
+| `/<tech>:check-testing` | `/bear-<tech>:check testing` |
+| `/<tech>:check-compliance` | `/bear-<tech>:check all` |
+| the team sprint command (`team:sprint`) | `/bear-team:delivery --phase=implementation` |
+
+`<tech>` is any of the 13 stacks above. The per-axis checklists stay in `.claude/references/<tech>/checks/`. The earlier 9.0 removals are listed in [MIGRATION-v9.md](MIGRATION-v9.md).
+
 ## Removed in 11.0
 
 The `claude-craft` command, the `CLAUDE_CRAFT_USER` fallback, the `claude-craft-skill-*` prefix, the

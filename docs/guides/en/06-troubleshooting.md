@@ -43,7 +43,7 @@ This guide covers common issues and their solutions when using Bear-Craft.
 
 3. **Check command file format**
    ```bash
-   head -5 .claude/commands/bear-symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check.md
    # Should start with proper markdown header
    ```
 

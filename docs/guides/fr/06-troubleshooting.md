@@ -43,7 +43,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 3. **Vérifier le format des fichiers de commandes**
    ```bash
-   head -5 .claude/commands/bear-symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check.md
    # Devrait commencer par un en-tête markdown correct
    ```
 

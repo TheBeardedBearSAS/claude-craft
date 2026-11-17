@@ -30,7 +30,7 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 
-A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
+A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 82 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
 ## What's New in v9.4.0
 
@@ -240,7 +240,7 @@ Claude Code is powerful on its own. Bear Craft makes it **consistent and team-re
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (72 total potentially installable)
-- **143 slash commands across 18 namespaces** -- repeatable workflows for audits, code generation, sprint management
+- **82 slash commands across 18 namespaces** -- repeatable workflows for audits, code generation, sprint management
 - **Quality gates** -- automated checks at every stage from PRD to deployment
 - **5 languages** -- English, French, Spanish, German, Portuguese
 
@@ -282,7 +282,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 143 across 18 namespaces (201 total with infra/project, including 66 redirect stubs kept until 10.0) | `/bear-workflow:init`, `/bear-team:audit`, `/bear-react:generate-component` |
+| **Commands** | 82 across 18 namespaces (135 total with infra/project) | `/bear-workflow:init`, `/bear-team:audit`, `/bear-react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -324,7 +324,7 @@ These are the commands you'll use most:
 | `/bear-common:ralph-run "task"` | Run Claude in continuous loop until task is done |
 | `/bear-qa:recette` | Automated acceptance testing via Chrome |
 
-See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (201 total including infra, project management and the redirect stubs kept until 10.0).
+See [CLI Reference](docs/CLI-REFERENCE.md) for all 82 commands across 18 namespaces (135 total including infra and project management).
 
 ## Installation
 
@@ -434,7 +434,7 @@ Context usage is optimized: ~3,500 tokens always loaded vs ~70,000 if everything
 | [Installation](docs/INSTALLATION.md) | All installation methods |
 | [Configuration](docs/CONFIGURATION.md) | Project configuration |
 | [CLI Reference](docs/CLI-REFERENCE.md) | Full CLI documentation |
-| [Commands](docs/COMMANDS.md) | All 143 commands |
+| [Commands](docs/COMMANDS.md) | All 82 commands |
 | [Agents](docs/AGENTS.md) | All 31 default agents (+ 39 infra on-demand) |
 | [Skills](docs/SKILLS.md) | Best practices reference |
 | [Technologies](docs/TECHNOLOGIES.md) | Stack-specific guides |
