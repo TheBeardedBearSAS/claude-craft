@@ -1,12 +1,12 @@
 # Guide de Gestion du Backlog
 
-Workflow complet pour créer et gérer un backlog SCRUM avec Claude-Craft.
+Workflow complet pour créer et gérer un backlog SCRUM avec Bear-Craft.
 
 ---
 
 ## Vue d'ensemble
 
-Claude-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM :
+Bear-Craft fournit un ensemble complet de commandes pour gérer votre product backlog selon la méthodologie SCRUM :
 
 - **Une commande `/project:backlog`** (`add`, `list`, `edit`, `move`, plus `next story` et `move story --auto` pour le routage des stories) ainsi que `/workflow:plan --only=backlog`, `/workflow:start`, `/workflow:status --board`, `/project:reverse`, `/project:trace`, `/project:report` et `/project:migrate` pour le backlog et la gestion de projet ; les anciennes commandes par entité (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) et le namespace sprint ont été retirées en 9.0 (voir MIGRATION-v9)
 - **Le chemin `/workflow:`** (`init`, `plan`, `design`, `start`, `implement`, `review`, `retro`, `status`) pour le cycle de sprint 
@@ -225,7 +225,7 @@ Cela génère `scrum-validation-report.md` avec :
 Affiche le tableau Kanban avec les colonnes :
 - To Do | In Progress | In Review | Done | Blocked
 
-> On peut aussi gérer le backlog depuis l'interface web Kanban (`npx @the-bearded-bear/claude-craft kanban`) : créer, modifier et supprimer des stories, les planifier dans un sprint, créer, démarrer et clôturer des sprints. Elle complète les commandes `/workflow:*` et `/project:*`, qui restent valables et écrivent le même fichier (`.bmad/sprint-status.yaml`).
+> On peut aussi gérer le backlog depuis l'interface web Kanban (`npx @the-bearded-bear/bear-craft kanban`) : créer, modifier et supprimer des stories, les planifier dans un sprint, créer, démarrer et clôturer des sprints. Elle complète les commandes `/workflow:*` et `/project:*`, qui restent valables et écrivent le même fichier (`.bmad/sprint-status.yaml`).
 
 ### Étape 4 : Décomposer en Tâches
 
@@ -267,7 +267,7 @@ Affiche :
 
 ## Templates
 
-Claude-Craft fournit 5 templates pour une structure de backlog cohérente :
+Bear-Craft fournit 5 templates pour une structure de backlog cohérente :
 
 | Template | Objectif |
 |----------|----------|

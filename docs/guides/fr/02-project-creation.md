@@ -1,6 +1,6 @@
 # Guide de Création de Projet
 
-Ce guide vous accompagne dans la configuration d'un nouveau projet avec Claude-Craft, du choix de la stack technologique à la configuration de votre environnement de développement.
+Ce guide vous accompagne dans la configuration d'un nouveau projet avec Bear-Craft, du choix de la stack technologique à la configuration de votre environnement de développement.
 
 ---
 
@@ -19,7 +19,7 @@ Ce guide vous accompagne dans la configuration d'un nouveau projet avec Claude-C
 
 ### Comparatif des Technologies
 
-Claude-Craft supporte **11 stacks applicatifs** (+ 8 d'infrastructure) :
+Bear-Craft supporte **11 stacks applicatifs** (+ 8 d'infrastructure) :
 
 #### Stacks de Développement
 
@@ -68,7 +68,7 @@ API Laravel:          Laravel (backend) + Vue.js (frontend)
 
 ## Méthodes d'Installation
 
-Claude-Craft offre plusieurs méthodes d'installation selon vos workflows.
+Bear-Craft offre plusieurs méthodes d'installation selon vos workflows.
 
 ### Méthode 1 : Makefile (Recommandée)
 
@@ -175,7 +175,7 @@ cd ~/mon-api-symfony
 composer create-project symfony/skeleton .
 git init
 
-# Installer les règles Claude-Craft
+# Installer les règles Bear-Craft
 make install-symfony TARGET=. RULES_LANG=fr
 
 # Vérifier l'installation
@@ -197,7 +197,7 @@ flutter create mon_app_flutter
 cd mon_app_flutter
 git init
 
-# Installer les règles Claude-Craft
+# Installer les règles Bear-Craft
 make install-flutter TARGET=. RULES_LANG=fr
 
 # Vérifier
@@ -220,7 +220,7 @@ cd ~/mon-api-python
 python -m venv venv
 git init
 
-# Installer les règles Claude-Craft
+# Installer les règles Bear-Craft
 make install-python TARGET=. RULES_LANG=fr
 
 # Vérifier
@@ -241,7 +241,7 @@ ls -la .claude/
 npx create-react-app mon-app-react
 cd mon-app-react
 
-# Installer les règles Claude-Craft
+# Installer les règles Bear-Craft
 make install-react TARGET=. RULES_LANG=fr
 
 # Vérifier
@@ -255,7 +255,7 @@ ls -la .claude/
 npx react-native init MonApp
 cd MonApp
 
-# Installer les règles Claude-Craft
+# Installer les règles Bear-Craft
 make install-reactnative TARGET=. RULES_LANG=fr
 
 # Vérifier
@@ -286,7 +286,7 @@ ma-plateforme/
 
 settings:
   default_lang: "fr"              # Langue par défaut pour tous les projets
-  claude_craft_path: "~/claude-craft"  # Chemin vers claude-craft (optionnel)
+  bear_craft_path: "~/bear-craft"  # Chemin vers bear-craft (optionnel)
 
 projects:
   - name: "ma-plateforme"
@@ -517,7 +517,7 @@ Utilisez cette checklist lors de la configuration d'un nouveau projet :
 
 ### Installation
 
-- [ ] Règles Claude-Craft installées
+- [ ] Règles Bear-Craft installées
 - [ ] Installation vérifiée (`ls .claude/`)
 - [ ] Pas d'erreurs dans la sortie d'installation
 
@@ -538,7 +538,7 @@ Utilisez cette checklist lors de la configuration d'un nouveau projet :
 
 - [ ] Répertoire `.claude/` commité dans git
 - [ ] Membres de l'équipe informés des commandes disponibles
-- [ ] README mis à jour avec les infos d'utilisation Claude-Craft
+- [ ] README mis à jour avec les infos d'utilisation Bear-Craft
 
 ---
 
@@ -578,7 +578,7 @@ make install-all TARGET=. RULES_LANG=fr
 
 ## Mise à Jour des Règles
 
-Quand Claude-Craft publie de nouvelles versions :
+Quand Bear-Craft publie de nouvelles versions :
 
 ```bash
 # Mettre à jour vers la dernière (préserve les fichiers spécifiques)

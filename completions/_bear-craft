@@ -1,8 +1,8 @@
-#compdef claude-craft
-# Claude Craft - Zsh Completion
+#compdef bear-craft claude-craft
+# Bear Craft - Zsh Completion
 # Installation: copy to $fpath directory (e.g., /usr/local/share/zsh/site-functions/)
 
-_claude-craft() {
+_bear-craft() {
     local -a namespaces
     namespaces=(
         'angular:Angular commands'
@@ -33,7 +33,7 @@ _claude-craft() {
         'architecture-decision:Create ADR'
         'generate-changelog:Generate CHANGELOG'
         'getting-started:Getting started guide'
-        'init:Initialize Claude Craft'
+        'init:Initialize Bear Craft'
         'pack-repo:Pack repository for sharing'
         'ralph-run:Run Ralph continuous loop'
         'setup-ci:Setup CI/CD'
@@ -213,4 +213,4 @@ _claude-craft() {
     esac
 }
 
-_claude-craft "$@"
+_bear-craft "$@"

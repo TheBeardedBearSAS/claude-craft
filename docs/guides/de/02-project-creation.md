@@ -1,6 +1,6 @@
 # Leitfaden zur Projekterstellung
 
-Dieser Leitfaden führt Sie durch die Einrichtung eines neuen Projekts mit Claude-Craft, von der Wahl des Technologie-Stacks bis zur Konfiguration Ihrer Entwicklungsumgebung.
+Dieser Leitfaden führt Sie durch die Einrichtung eines neuen Projekts mit Bear-Craft, von der Wahl des Technologie-Stacks bis zur Konfiguration Ihrer Entwicklungsumgebung.
 
 ---
 
@@ -57,7 +57,7 @@ Datenplattform:         Python (API) + React (Dashboard)
 
 ## Installationsmethoden
 
-Claude-Craft bietet mehrere Installationsmethoden für verschiedene Workflows.
+Bear-Craft bietet mehrere Installationsmethoden für verschiedene Workflows.
 
 ### Methode 1: Makefile (Empfohlen)
 
@@ -164,7 +164,7 @@ cd ~/my-symfony-api
 composer create-project symfony/skeleton .
 git init
 
-# Claude-Craft-Regeln installieren
+# Bear-Craft-Regeln installieren
 make install-symfony TARGET=. RULES_LANG=fr
 
 # Installation verifizieren
@@ -186,7 +186,7 @@ flutter create my_flutter_app
 cd my_flutter_app
 git init
 
-# Claude-Craft-Regeln installieren
+# Bear-Craft-Regeln installieren
 make install-flutter TARGET=. RULES_LANG=en
 
 # Verifizieren
@@ -209,7 +209,7 @@ cd ~/my-python-api
 python -m venv venv
 git init
 
-# Claude-Craft-Regeln installieren
+# Bear-Craft-Regeln installieren
 make install-python TARGET=. RULES_LANG=en
 
 # Verifizieren
@@ -230,7 +230,7 @@ ls -la .claude/
 npx create-react-app my-react-app
 cd my-react-app
 
-# Claude-Craft-Regeln installieren
+# Bear-Craft-Regeln installieren
 make install-react TARGET=. RULES_LANG=en
 
 # Verifizieren
@@ -244,7 +244,7 @@ ls -la .claude/
 npx react-native init MyApp
 cd MyApp
 
-# Claude-Craft-Regeln installieren
+# Bear-Craft-Regeln installieren
 make install-reactnative TARGET=. RULES_LANG=en
 
 # Verifizieren
@@ -275,7 +275,7 @@ my-platform/
 
 settings:
   default_lang: "fr"              # Standardsprache für alle Projekte
-  claude_craft_path: "~/claude-craft"  # Pfad zu claude-craft (optional)
+  bear_craft_path: "~/bear-craft"  # Pfad zu bear-craft (optional)
 
 projects:
   - name: "my-platform"
@@ -506,7 +506,7 @@ Verwenden Sie diese Checkliste bei der Einrichtung eines neuen Projekts:
 
 ### Installation
 
-- [ ] Claude-Craft-Regeln installiert
+- [ ] Bear-Craft-Regeln installiert
 - [ ] Installation verifiziert (`ls .claude/`)
 - [ ] Keine Fehler in der Installationsausgabe
 
@@ -527,7 +527,7 @@ Verwenden Sie diese Checkliste bei der Einrichtung eines neuen Projekts:
 
 - [ ] `.claude/`-Verzeichnis in Git committet
 - [ ] Team-Mitglieder über verfügbare Befehle informiert
-- [ ] README mit Claude-Craft-Nutzungshinweisen aktualisiert
+- [ ] README mit Bear-Craft-Nutzungshinweisen aktualisiert
 
 ---
 
@@ -580,7 +580,7 @@ Dies richtet den RTK-Proxy, die Sub-Agent-Modelloptimierung und Hook-Templates f
 
 ## Regeln aktualisieren
 
-Wenn Claude-Craft neue Versionen veröffentlicht:
+Wenn Bear-Craft neue Versionen veröffentlicht:
 
 ```bash
 # Auf die neueste Version aktualisieren (projektspezifische Dateien werden beibehalten)

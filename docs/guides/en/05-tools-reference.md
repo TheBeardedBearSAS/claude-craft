@@ -1,6 +1,6 @@
 # Tools Reference Guide
 
-This guide covers the utility tools included with Claude-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v8.7).
+This guide covers the utility tools included with Bear-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v8.7).
 
 ---
 
@@ -182,7 +182,7 @@ Available for Team plans with admin approval.
 
 ## Hook Templates
 
-Claude-Craft provides ready-to-use hook templates in `.claude/templates/hooks/`:
+Bear-Craft provides ready-to-use hook templates in `.claude/templates/hooks/`:
 
 | Template | Purpose |
 |----------|---------|
@@ -518,7 +518,7 @@ rm /tmp/.ccusage_*
 
 ## ProjectConfig Manager
 
-Manage Claude-Craft project configurations via YAML.
+Manage Bear-Craft project configurations via YAML.
 
 ### Purpose
 

@@ -1,5 +1,5 @@
 {
-  "description": "Block destructive shell commands (rm -rf on dangerous targets, sudo, chmod 777, dd/mkfs on disks, fork bombs) via the tested script installed by claude-craft.",
+  "description": "Block destructive shell commands (rm -rf on dangerous targets, sudo, chmod 777, dd/mkfs on disks, fork bombs) via the tested script installed by bear-craft.",
   "hooks": {
     "PreToolUse": [
       {

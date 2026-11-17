@@ -1,4 +1,4 @@
 ---
 layout: landing
-title: Claude Craft - AI-Assisted Development Framework
+title: Bear Craft - AI-Assisted Development Framework
 ---

@@ -393,4 +393,4 @@ Die Geschäftslogik ist von technischen Details isoliert
 
 **Datum der letzten Aktualisierung:** 2025-01
 **Version:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

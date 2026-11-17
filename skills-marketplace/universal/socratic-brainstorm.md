@@ -1,12 +1,12 @@
 ---
 name: socratic-brainstorm
 description: Socratic questioning before coding — clarify requirements through targeted questions instead of jumping to solutions
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [brainstorming, requirements, planning, socratic-method, clarification]
 category: planning
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Socratic Brainstorm — Clarify Before Coding
@@ -109,5 +109,5 @@ Why 5: Why? → No PR checklist for migrations
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

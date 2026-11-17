@@ -7,7 +7,7 @@
 import { readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-export const SITE_URL = 'https://thebeardedbearsas.github.io/claude-craft/'
+export const SITE_URL = 'https://thebeardedbearsas.github.io/bear-craft/'
 export const LOCALES = ['en', 'fr', 'es', 'de', 'pt']
 
 // VitePress page ids are the source path relative to srcDir, e.g. "en/reference/cli.md"

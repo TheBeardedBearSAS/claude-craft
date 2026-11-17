@@ -97,7 +97,7 @@ Priorizar: ahorro elevado × esfuerzo bajo × riesgo bajo.
 - Reducción de la factura Anthropic/OpenAI
 - Revisión de arquitectura desde la perspectiva de costes
 
-## Integración Claude Craft
+## Integración Bear Craft
 
 - `@devops-engineer` — infraestructura
 - `@performance-auditor` — balance rendimiento vs coste

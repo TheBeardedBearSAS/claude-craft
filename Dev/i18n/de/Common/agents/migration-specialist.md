@@ -116,7 +116,7 @@ Du bist ein **Senior Migration Specialist** mit über 12 Jahren Erfahrung in kri
 - Legacy Rewrite
 - Migration zur New Architecture (React Native, Flutter Impeller)
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@database-architect` — Design des Zielschemas
 - `@devops-engineer` — Infra, Blue-Green, Canary

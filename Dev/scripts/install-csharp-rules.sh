@@ -16,7 +16,7 @@ DEFAULT_STACK=".NET 9, C# 13, Clean Architecture, CQRS, MediatR, Entity Framewor
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

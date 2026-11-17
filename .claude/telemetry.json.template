@@ -1,5 +1,5 @@
 {
-  "$schema": "https://claude-craft.dev/schema/telemetry-v1.json",
+  "$schema": "https://bear-craft.dev/schema/telemetry-v1.json",
   "_comment": "DRAFT P3-30. Configuration télémétrie opt-in. Jamais activé par défaut.",
   "enabled": false,
   "consentedAt": null,
@@ -41,7 +41,7 @@
     "errors": "30days"
   },
   "override": {
-    "envVar": "CLAUDE_CRAFT_TELEMETRY",
-    "_note": "CLAUDE_CRAFT_TELEMETRY=off désactive globalement, ignorant cette config."
+    "envVar": "BEAR_CRAFT_TELEMETRY",
+    "_note": "BEAR_CRAFT_TELEMETRY=off désactive globalement, ignorant cette config."
   }
 }

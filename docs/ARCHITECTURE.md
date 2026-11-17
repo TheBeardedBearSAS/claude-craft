@@ -1,6 +1,6 @@
-# Claude Craft Architecture
+# Bear Craft Architecture
 
-Technical documentation of Claude Craft's internal architecture and extension points.
+Technical documentation of Bear Craft's internal architecture and extension points.
 
 ---
 
@@ -103,7 +103,7 @@ graph TD
                                    │ Claude Code
                                    ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      Claude Craft Repository                         │
+│                      Bear Craft Repository                         │
 │  ┌───────────────────────────────────────────────────────────────┐  │
 │  │ Dev/i18n/{lang}/                                               │  │
 │  │  ├── Common/  (agents, commands, rules)                        │  │
@@ -123,7 +123,7 @@ graph TD
 
 ## Tiered Context Loading (TCL)
 
-Claude Craft uses a tiered loading strategy to minimize token usage:
+Bear Craft uses a tiered loading strategy to minimize token usage:
 
 ### Tier 1: Always Loaded (~200 tokens)
 

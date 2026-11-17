@@ -4,7 +4,7 @@
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Référence :** ISO 27001:2022 A.5.1  
 **Owner :** CTO  
 **Revue :** Annuelle (avril)  
@@ -13,9 +13,9 @@
 
 ## 1. Objectif
 
-Cette Information Security Policy (ISP) définit l'engagement de The Bearded CTO à protéger la confidentialité, l'intégrité et la disponibilité de toutes les informations et systèmes de Claude Craft.
+Cette Information Security Policy (ISP) définit l'engagement de The Bearded Bear à protéger la confidentialité, l'intégrité et la disponibilité de toutes les informations et systèmes de Bear Craft.
 
-L'ISP s'applique à tous les employés, contractors, partenaires et fournisseurs ayant accès aux systèmes et données de Claude Craft.
+L'ISP s'applique à tous les employés, contractors, partenaires et fournisseurs ayant accès aux systèmes et données de Bear Craft.
 
 ---
 
@@ -24,20 +24,20 @@ L'ISP s'applique à tous les employés, contractors, partenaires et fournisseurs
 ### 2.1 Périmètre
 
 **Systèmes couverts :**
-- Repositories GitHub (github.com/TheBeardedBearSAS/claude-craft)
+- Repositories GitHub (github.com/TheBeardedBearSAS/bear-craft)
 - Infrastructure cloud (Cloudflare, AWS/GCP si SaaS)
 - Services tiers (Anthropic API, Posthog, Sentry, Stripe)
 - Devices équipe (laptops, smartphones)
 - Communications (email, Slack)
 
 **Données couvertes :**
-- Code source Claude Craft (propriété intellectuelle)
+- Code source Bear Craft (propriété intellectuelle)
 - Données utilisateurs (emails, usage analytics, support tickets)
 - Secrets (API keys, tokens, credentials)
 - Données internes (contrats, finances, RH)
 
 **Personnes concernées :**
-- Employés The Bearded CTO (8 personnes : 5 dev, 1 product, 1 legal, 1 admin)
+- Employés The Bearded Bear (8 personnes : 5 dev, 1 product, 1 legal, 1 admin)
 - Contractors (développeurs externes occasionnels)
 - Fournisseurs critiques (Anthropic, GitHub, Cloudflare, Stripe)
 
@@ -49,7 +49,7 @@ L'ISP s'applique à tous les employés, contractors, partenaires et fournisseurs
 
 La sécurité de l'information repose sur trois piliers :
 
-| Principe | Définition | Application Claude Craft |
+| Principe | Définition | Application Bear Craft |
 |----------|------------|--------------------------|
 | **Confidentialité** | Seules les personnes autorisées accèdent aux données | Classification données (section 5), access control (A.9), chiffrement (A.10) |
 | **Intégrité** | Les données ne sont pas altérées de manière non autorisée | Git signatures commits, branch protection, audit logs |
@@ -88,7 +88,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ## 4. Engagement Direction
 
-**The Bearded CTO s'engage à :**
+**The Bearded Bear s'engage à :**
 
 1. **Allouer les ressources** nécessaires à la sécurité de l'information (budget, temps, formation)
 2. **Désigner un responsable sécurité** (CTO assume rôle CISO jusqu'à 20 personnes)
@@ -109,9 +109,9 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 5.1 Niveaux de Classification
 
-| Niveau | Définition | Exemples Claude Craft | Handling |
+| Niveau | Définition | Exemples Bear Craft | Handling |
 |--------|------------|------------------------|----------|
-| **Public** | Information destinée au public, aucun impact si divulguée | Documentation Claude Craft publique (docs.claude-craft.com), blog posts, releases notes | Libre diffusion |
+| **Public** | Information destinée au public, aucun impact si divulguée | Documentation Bear Craft publique (docs.bear-craft.com), blog posts, releases notes | Libre diffusion |
 | **Internal** | Information usage interne, impact faible si divulguée | Roadmap produit interne, analytics agrégées, specs techniques internes | Partage équipe uniquement, NDA contractors |
 | **Confidential** | Information sensible, impact moyen si divulguée | Liste utilisateurs emails, support tickets, contrats clients, finances | Accès restreint (need-to-know), chiffrement transferts, NDA obligatoire |
 | **Restricted** | Information critique, impact sévère si divulguée | Secrets API (Anthropic, Stripe), données paiement, vulnérabilités 0-day, données personnelles sensibles (RGPD art. 9) | Accès minimal (dual approval), chiffrement E2E, MFA hardware keys, audit logs |
@@ -209,7 +209,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 7.1 RGPD (Règlement Général sur la Protection des Données)
 
-**Applicabilité :** Claude Craft traite données personnelles utilisateurs EU (emails, analytics).
+**Applicabilité :** Bear Craft traite données personnelles utilisateurs EU (emails, analytics).
 
 **Obligations :**
 - **Licéité traitement :** Consentement ou intérêt légitime (analytics produit)
@@ -223,7 +223,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 7.2 ePrivacy Directive (EU)
 
-**Applicabilité :** Cookies analytics site web Claude Craft.
+**Applicabilité :** Cookies analytics site web Bear Craft.
 
 **Obligations :**
 - Consentement explicite cookies non-essentiels (analytics Posthog)
@@ -231,7 +231,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 7.3 NIS 2 Directive (Network and Information Security)
 
-**Applicabilité potentielle :** Si Claude Craft devient service numérique essentiel (>50 employés, CA >€10M).
+**Applicabilité potentielle :** Si Bear Craft devient service numérique essentiel (>50 employés, CA >€10M).
 
 **Obligations :**
 - Mesures techniques sécurité (ISO 27001 couvre majoritairement)
@@ -242,7 +242,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 7.4 DORA (Digital Operational Resilience Act)
 
-**Applicabilité :** Si Claude Craft fournit services ICT à entités financières EU.
+**Applicabilité :** Si Bear Craft fournit services ICT à entités financières EU.
 
 **Obligations :**
 - Tests résilience opérationnelle
@@ -252,7 +252,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ### 7.5 AI Act (Règlement IA EU 2024)
 
-**Applicabilité :** Claude Craft utilise Anthropic API (modèles IA), potentiellement système IA "à risque limité".
+**Applicabilité :** Bear Craft utilise Anthropic API (modèles IA), potentiellement système IA "à risque limité".
 
 **Obligations :**
 - Transparence utilisation IA (disclosure utilisateurs)
@@ -425,7 +425,7 @@ La sécurité de l'information repose sur trois piliers :
 
 ## Annexe A — Attestation Lecture Employé
 
-**Je soussigné(e), [NOM PRÉNOM], [POSTE], certifie avoir lu, compris et m'engage à respecter l'Information Security Policy de The Bearded CTO version 1.0.0.**
+**Je soussigné(e), [NOM PRÉNOM], [POSTE], certifie avoir lu, compris et m'engage à respecter l'Information Security Policy de The Bearded Bear version 1.0.0.**
 
 **Date :** _______________  
 **Signature :** _______________

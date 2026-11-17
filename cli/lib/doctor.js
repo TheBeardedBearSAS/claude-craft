@@ -117,7 +117,7 @@ function runDoctor(targetPath, deps = {}) {
   let failed = 0;
   let warned = 0;
 
-  console.log(`\n${c.bold}Claude Craft Doctor — Environment Diagnostics${c.reset}`);
+  console.log(`\n${c.bold}Bear Craft Doctor — Environment Diagnostics${c.reset}`);
   console.log(`${c.dim}Directory: ${safeTarget}${c.reset}\n`);
   targetPath = safeTarget;
 

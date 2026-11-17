@@ -16,7 +16,7 @@ DEFAULT_STACK="Vue 3+, TypeScript 5+, Vite, Pinia, Vue Router, TailwindCSS"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

@@ -7,7 +7,7 @@ import { createApp } from '../../cli/kanban/server/app.js';
 import { groupStoriesByEpic } from '../../cli/kanban/client/src/lib/backlog.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Backlog written from the claude-craft templates: no YAML frontmatter, metadata
+// Backlog written from the bear-craft templates: no YAML frontmatter, metadata
 // as a "## Métadonnées" bullet list. Regression: the Backlog screen was empty.
 const PM_DIR = path.resolve(__dirname, '../fixtures/metadata-backlog/project-management');
 const PORT = 3737;

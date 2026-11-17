@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-Solutions to common problems with Claude Craft.
+Solutions to common problems with Bear Craft.
 
 ---
 
@@ -28,7 +28,7 @@ sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd6
 sudo chmod +x /usr/local/bin/yq
 ```
 
-**Note:** There are multiple tools named "yq". Claude Craft requires Mike Farah's version (v4+), not the Python version.
+**Note:** There are multiple tools named "yq". Bear Craft requires Mike Farah's version (v4+), not the Python version.
 
 ---
 
@@ -91,7 +91,7 @@ make install-symfony TARGET=~/my-project OPTIONS="--force"
 
 ### NPX cache issues
 
-**Problem:** NPX uses old cached version of Claude Craft.
+**Problem:** NPX uses old cached version of Bear Craft.
 
 **Solution:**
 ```bash
@@ -102,7 +102,7 @@ npx clear-npx-cache
 rm -rf ~/.npm/_npx
 
 # Then reinstall
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony
 ```
 
 ---
@@ -649,7 +649,7 @@ make config-install PROJECT=my-monorepo
 
 1. **Flatten large codebases**
    ```bash
-   npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
+   npx @the-bearded-bear/bear-craft flatten --max-tokens=50000
    ```
 
 2. **Use document sharding**
@@ -713,9 +713,9 @@ docker compose logs -f
 
 If you can't find a solution:
 
-1. Search existing issues: https://github.com/TheBeardedBearSAS/claude-craft/issues
+1. Search existing issues: https://github.com/TheBeardedBearSAS/bear-craft/issues
 2. Create a new issue with:
-   - Claude Craft version
+   - Bear Craft version
    - OS and version
    - Steps to reproduce
    - Error messages
@@ -729,7 +729,7 @@ Run this to diagnose common issues:
 
 ```bash
 #!/bin/bash
-echo "=== Claude Craft Diagnostics ==="
+echo "=== Bear Craft Diagnostics ==="
 
 echo -e "\n--- System Info ---"
 echo "OS: $(uname -a)"
@@ -928,7 +928,7 @@ Les fichiers `project-management/backlog/user-stories/US-*.md` portent le conten
 **Cause 4 : port déjà utilisé**
 ```bash
 # Changer le port (forme avec « = » obligatoire)
-npx @the-bearded-bear/claude-craft kanban --port=3142
+npx @the-bearded-bear/bear-craft kanban --port=3142
 ```
 `--port 4000` (avec une espace) est refusé avec un message d'usage : écrire `--port=4000`.
 

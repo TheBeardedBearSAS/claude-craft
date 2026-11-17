@@ -1,10 +1,10 @@
 # {{PROJECT_NAME}}
 
-> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Generado: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Que (Stack & Estructura)
 
-Este proyecto utiliza las reglas de **Claude Craft** para el desarrollo asistido por IA.
+Este proyecto utiliza las reglas de **Bear Craft** para el desarrollo asistido por IA.
 
 ### Tecnologias
 {TECH_LIST}

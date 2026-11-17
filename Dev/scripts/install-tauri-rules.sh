@@ -16,7 +16,7 @@ DEFAULT_STACK="Tauri 2.12 (Rust core, MSRV 1.90), @tauri-apps/api 2.12, Vite fro
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

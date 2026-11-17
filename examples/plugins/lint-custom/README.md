@@ -7,8 +7,8 @@ Enforce custom lint rules (ex : "no direct DB access in controllers") during `/t
 ## Usage
 
 ```bash
-claude-craft plugin install lint-custom
-claude-craft plugin config lint-custom
+bear-craft plugin install lint-custom
+bear-craft plugin config lint-custom
 ```
 
 Configure rules in `.claude/plugins/lint-custom.json` :
@@ -46,4 +46,4 @@ src/
 
 - [ ] Implémenter `lint-engine.ts` (regex + AST optionnel)
 - [ ] Tests Vitest (coverage ≥ 80%)
-- [ ] Release NPM `claude-craft-plugin-lint-custom@1.0.0`
+- [ ] Release NPM `bear-craft-plugin-lint-custom@1.0.0`

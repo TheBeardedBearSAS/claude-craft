@@ -129,4 +129,4 @@ Avant de couper une release :
 
 ---
 
-**Dernière mise à jour :** 2026-04 | **Version :** 1.0.0 | **Auteur :** The Bearded CTO
+**Dernière mise à jour :** 2026-04 | **Version :** 1.0.0 | **Auteur :** The Bearded Bear

@@ -4,9 +4,9 @@ argument-hint: "[--quick|--full] [--lens=<nom>] [--since=YYYY-MM-DD] [--dry-run]
 model: sonnet
 ---
 
-# Audit d'alignement Claude — claude-craft
+# Audit d'alignement Claude — bear-craft
 
-Vérifie que claude-craft reste aligné sur l'état réel de l'écosystème Claude : version du CLI Claude Code, modèles et pricing, best practices Anthropic, features de la plateforme, avis de sécurité, et pratiques de la communauté.
+Vérifie que bear-craft reste aligné sur l'état réel de l'écosystème Claude : version du CLI Claude Code, modèles et pricing, best practices Anthropic, features de la plateforme, avis de sécurité, et pratiques de la communauté.
 
 Complémentaire de `/common:audit-freshness`, qui couvre les stacks applicatifs (React, Symfony, Flutter…) et **jamais Claude Code lui-même**.
 
@@ -79,7 +79,7 @@ Les six lentilles reçoivent les URLs exactes issues de `signals-<date>.json` �
 **Socle commun à injecter dans chaque prompt d'agent :**
 
 ```
-Tu audites la lentille "<LENTILLE>" du dépôt claude-craft (framework Claude Code, v<version de package.json>).
+Tu audites la lentille "<LENTILLE>" du dépôt bear-craft (framework Claude Code, v<version de package.json>).
 
 CONTEXTE PRÉ-COLLECTÉ (ne pas re-chercher ce qui est déjà donné) :
 <coller le bloc lenses["<LENTILLE>"] de docs/audit/claude-alignment/signals-<date>.json>
@@ -142,7 +142,7 @@ Les fichiers pivots ne sont qu'un point d'entrée ; la couverture vient des occu
 ```markdown
 # Audit d'alignement Claude — <date>
 
-**Version claude-craft** : <package.json>
+**Version bear-craft** : <package.json>
 **Mode** : quick | full
 **Baseline** : <date> (<N> jours) <⚠️ si > 10 jours>
 **Lentilles auditées** : <n>/6 — <liste> (les autres inchangées depuis la baseline)

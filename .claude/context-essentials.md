@@ -1,4 +1,4 @@
-# Claude Craft - Contexte Essentiel
+# Bear Craft - Contexte Essentiel
 
 ## Projet
 - **Version:** 9.4.0

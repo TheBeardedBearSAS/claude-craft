@@ -1,12 +1,12 @@
 # Backlog Management Guide
 
-Complete workflow for creating and managing a SCRUM backlog with Claude-Craft.
+Complete workflow for creating and managing a SCRUM backlog with Bear-Craft.
 
 ---
 
 ## Overview
 
-Claude-Craft provides a comprehensive set of commands for managing your product backlog following SCRUM methodology:
+Bear-Craft provides a comprehensive set of commands for managing your product backlog following SCRUM methodology:
 
 - **One `/project:backlog` command** (`add`, `list`, `edit`, `move`, plus `next story` and `move story --auto` for story routing) together with `/workflow:plan --only=backlog`, `/workflow:start` and `/workflow:status --board`; the former per-entity commands (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) and the sprint namespace were removed in 9.0 (see MIGRATION-v9)
 - **5 templates** for consistent structure
@@ -224,7 +224,7 @@ This generates `scrum-validation-report.md` with:
 Displays Kanban board with columns:
 - To Do | In Progress | In Review | Done | Blocked
 
-> You can also manage the backlog from the Kanban web interface (`npx @the-bearded-bear/claude-craft kanban`): create, edit and delete stories, plan them into a sprint, create, start and close sprints. It complements the `/workflow:*` and `/project:*` commands, which stay valid and write the same file (`.bmad/sprint-status.yaml`).
+> You can also manage the backlog from the Kanban web interface (`npx @the-bearded-bear/bear-craft kanban`): create, edit and delete stories, plan them into a sprint, create, start and close sprints. It complements the `/workflow:*` and `/project:*` commands, which stay valid and write the same file (`.bmad/sprint-status.yaml`).
 
 ### Step 4: Decompose into Tasks
 
@@ -280,7 +280,7 @@ Shows:
 
 ## Templates
 
-Claude-Craft provides 5 templates for consistent backlog structure:
+Bear-Craft provides 5 templates for consistent backlog structure:
 
 | Template | Purpose |
 |----------|---------|

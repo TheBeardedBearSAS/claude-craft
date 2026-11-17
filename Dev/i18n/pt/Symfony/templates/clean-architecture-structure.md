@@ -642,4 +642,4 @@ make deptrac
 
 **Date de création:** 2025-11-26
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

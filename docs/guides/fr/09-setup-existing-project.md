@@ -1,6 +1,6 @@
-# Ajouter Claude-Craft à un Projet Existant
+# Ajouter Bear-Craft à un Projet Existant
 
-Ce tutoriel complet vous guide à travers l'ajout de Claude-Craft à un projet qui a déjà du code. Vous apprendrez à installer en toute sécurité, faire comprendre votre codebase à Claude, et pousser vos premières modifications assistées par IA.
+Ce tutoriel complet vous guide à travers l'ajout de Bear-Craft à un projet qui a déjà du code. Vous apprendrez à installer en toute sécurité, faire comprendre votre codebase à Claude, et pousser vos premières modifications assistées par IA.
 
 **Temps requis :** ~20-30 minutes
 
@@ -13,7 +13,7 @@ Ce tutoriel complet vous guide à travers l'ajout de Claude-Craft à un projet q
 3. [Analyser la Structure de Votre Projet](#3-analyser-la-structure-de-votre-projet)
 4. [Vérifier les Conflits](#4-vérifier-les-conflits)
 5. [Choisir Votre Stack Technologique](#5-choisir-votre-stack-technologique)
-6. [Installer Claude-Craft](#6-installer-claude-craft)
+6. [Installer Bear-Craft](#6-installer-bear-craft)
 7. [Fusionner les Configurations](#7-fusionner-les-configurations)
 8. [Faire Comprendre Votre Codebase à Claude](#8-faire-comprendre-votre-codebase-à-claude)
 9. [Votre Première Modification](#9-votre-première-modification)
@@ -27,7 +27,7 @@ Ce tutoriel complet vous guide à travers l'ajout de Claude-Craft à un projet q
 
 ### Avertissements Importants
 
-> **Attention :** L'installation de Claude-Craft créera un répertoire `.claude/` dans votre projet. Si un tel répertoire existe déjà, vous devrez décider de le fusionner, le remplacer ou le préserver.
+> **Attention :** L'installation de Bear-Craft créera un répertoire `.claude/` dans votre projet. Si un tel répertoire existe déjà, vous devrez décider de le fusionner, le remplacer ou le préserver.
 
 > **Attention :** Créez toujours une branche de sauvegarde avant l'installation. Cela permet un retour arrière facile si quelque chose se passe mal.
 
@@ -66,13 +66,13 @@ git status
 Si vous voyez des changements non commités :
 ```bash
 git add .
-git commit -m "chore: save work before Claude-Craft installation"
+git commit -m "chore: save work before Bear-Craft installation"
 ```
 
 Maintenant créez la sauvegarde :
 ```bash
 # Créer et rester sur la branche de sauvegarde
-git checkout -b backup/before-claude-craft
+git checkout -b backup/before-bear-craft
 
 # Retourner sur votre branche principale
 git checkout main  # ou 'master' ou votre branche par défaut
@@ -87,7 +87,7 @@ git branch | grep backup
 
 Sortie attendue :
 ```
-  backup/before-claude-craft
+  backup/before-bear-craft
 ```
 
 ### Plan de Retour Arrière
@@ -95,7 +95,7 @@ Sortie attendue :
 Si quelque chose se passe mal, vous pouvez revenir en arrière :
 ```bash
 # Abandonner tous les changements et retourner à la sauvegarde
-git checkout backup/before-claude-craft
+git checkout backup/before-bear-craft
 git branch -D main
 git checkout -b main
 ```
@@ -155,7 +155,7 @@ Notez les configurations existantes - vous pourriez vouloir les migrer (voir [Se
 
 ### Fichiers Pouvant Entrer en Conflit
 
-| Fichier/Répertoire | Claude-Craft Crée | Votre Projet Peut Avoir |
+| Fichier/Répertoire | Bear-Craft Crée | Votre Projet Peut Avoir |
 |--------------------|-------------------|-------------------------|
 | `.claude/` | Oui | Peut-être |
 | `.claude/CLAUDE.md` | Oui | Peut-être |
@@ -195,19 +195,19 @@ Identifiez la technologie principale de votre projet :
 
 ---
 
-## 6. Installer Claude-Craft
+## 6. Installer Bear-Craft
 
 ### Installation Standard
 
 **Méthode A : NPX (Recommandée)**
 ```bash
 cd ~/votre-projet-existant
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=fr
 ```
 
 **Méthode B : Makefile**
 ```bash
-cd ~/claude-craft
+cd ~/bear-craft
 make install-symfony TARGET=~/votre-projet-existant RULES_LANG=fr
 ```
 
@@ -217,7 +217,7 @@ Si vous avez des fichiers `.claude/` existants que vous voulez garder :
 
 ```bash
 # NPX avec flag de préservation
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr --preserve-config
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=fr --preserve-config
 
 # Makefile avec flag de préservation
 make install-symfony TARGET=~/votre-projet-existant RULES_LANG=fr OPTIONS="--preserve-config"
@@ -242,13 +242,13 @@ mon-monorepo/
 Installez dans chaque répertoire :
 ```bash
 # Installer React dans frontend
-npx @the-bearded-bear/claude-craft install ./frontend --tech=react --lang=fr
+npx @the-bearded-bear/bear-craft install ./frontend --tech=react --lang=fr
 
 # Installer Symfony dans backend
-npx @the-bearded-bear/claude-craft install ./backend --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install ./backend --tech=symfony --lang=fr
 
 # Installer Flutter dans mobile
-npx @the-bearded-bear/claude-craft install ./mobile --tech=flutter --lang=fr
+npx @the-bearded-bear/bear-craft install ./mobile --tech=flutter --lang=fr
 ```
 
 ### Vérifier l'Installation
@@ -283,18 +283,18 @@ Si vous aviez un `CLAUDE.md` personnalisé :
    # Votre ancien fichier (si sauvegardé)
    cat .claude/CLAUDE.md.backup
 
-   # Nouveau fichier Claude-Craft
+   # Nouveau fichier Bear-Craft
    cat .claude/CLAUDE.md
    ```
 
 2. Copiez vos sections personnalisées dans le nouveau fichier
-3. Gardez la structure Claude-Craft, ajoutez votre contenu
+3. Gardez la structure Bear-Craft, ajoutez votre contenu
 
 ### Fusionner les Règles Personnalisées
 
 Si vous aviez des règles personnalisées dans `rules/` :
 
-1. Les règles Claude-Craft sont numérotées de `01-xx.md` à `12-xx.md`
+1. Les règles Bear-Craft sont numérotées de `01-xx.md` à `12-xx.md`
 2. Ajoutez vos règles personnalisées comme `90-custom-rule.md`, `91-another-rule.md`
 3. Les numéros plus élevés = priorité plus basse, mais toujours incluses
 
@@ -309,7 +309,7 @@ mv .claude/rules/my-custom-rules.md .claude/rules/90-project-custom-rules.md
 
 ## 8. Faire Comprendre Votre Codebase à Claude
 
-**C'est la section la plus importante.** Une installation réussie de Claude-Craft ne consiste pas seulement à installer des fichiers—c'est faire en sorte que Claude comprenne vraiment votre projet.
+**C'est la section la plus importante.** Une installation réussie de Bear-Craft ne consiste pas seulement à installer des fichiers—c'est faire en sorte que Claude comprenne vraiment votre projet.
 
 ### 8.1 Exploration Initiale de la Codebase
 
@@ -549,16 +549,16 @@ gh run list --limit 1
 
 ## 10. Intégration de l'Équipe
 
-Partagez Claude-Craft avec votre équipe.
+Partagez Bear-Craft avec votre équipe.
 
 ### Commiter la Configuration
 
 ```bash
-# Ajouter les fichiers Claude-Craft à git
+# Ajouter les fichiers Bear-Craft à git
 git add .claude/
 
 # Commiter
-git commit -m "feat: add Claude-Craft AI development configuration
+git commit -m "feat: add Bear-Craft AI development configuration
 
 - Added rules for [votre stack tech]
 - Configured project context
@@ -573,7 +573,7 @@ git push origin main
 Créez un guide bref pour les collègues :
 
 ```markdown
-## Utiliser Claude-Craft dans Ce Projet
+## Utiliser Bear-Craft dans Ce Projet
 
 1. Installer Claude Code : [lien]
 2. Tirer les derniers changements : `git pull`
@@ -616,7 +616,7 @@ Migration :
 1. Ouvrez `.cursorrules`
 2. Copiez les règles pertinentes
 3. Ajoutez dans `.claude/rules/90-migrated-cursor-rules.md`
-4. Adaptez le format au style Claude-Craft
+4. Adaptez le format au style Bear-Craft
 
 ### Depuis GitHub Copilot Instructions
 
@@ -646,7 +646,7 @@ Migration :
 
 ### Tableau de Mapping de Migration
 
-| Ancien Emplacement | Emplacement Claude-Craft |
+| Ancien Emplacement | Emplacement Bear-Craft |
 |--------------------|--------------------------|
 | `.cursorrules` | `.claude/rules/90-custom.md` |
 | `.github/copilot-instructions.md` | `.claude/references/<your-tech>/project-context.md` |
@@ -662,7 +662,7 @@ Migration :
 **Problème :** Erreur "Directory already exists"
 ```bash
 # Solution : Utiliser le flag force
-npx @the-bearded-bear/claude-craft install . --tech=symfony --force
+npx @the-bearded-bear/bear-craft install . --tech=symfony --force
 ```
 
 **Problème :** "Permission denied"
@@ -676,7 +676,7 @@ chmod -R 755 .claude/
 **Problème :** "CLAUDE.md not found" après installation
 ```bash
 # Solution : Relancer l'installation
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=fr
 ```
 
 ### Problèmes de Compréhension de Claude
@@ -706,14 +706,14 @@ Solution : Assurez-vous que `00-project-context.md` est complet. Les information
 Si vous devez annuler l'installation :
 
 ```bash
-# Supprimer les fichiers Claude-Craft
+# Supprimer les fichiers Bear-Craft
 rm -rf .claude/
 
 # Restaurer depuis la branche de sauvegarde
-git checkout backup/before-claude-craft -- .
+git checkout backup/before-bear-craft -- .
 
 # Ou hard reset
-git checkout backup/before-claude-craft
+git checkout backup/before-bear-craft
 ```
 
 ---
@@ -735,7 +735,7 @@ Cela configure RTK, les hooks de filtrage et le modèle des sous-agents automati
 
 Vous avez réussi à :
 - [x] Sauvegarder votre projet
-- [x] Installer Claude-Craft en toute sécurité
+- [x] Installer Bear-Craft en toute sécurité
 - [x] Faire comprendre votre codebase à Claude
 - [x] Faire votre première modification assistée par IA
 - [x] Pousser des changements vers votre dépôt

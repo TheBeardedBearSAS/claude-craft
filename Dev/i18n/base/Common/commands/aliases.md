@@ -4,9 +4,9 @@ description: CLI aliases for frequently used commands
 tags: [shortcuts, aliases, productivity, quick-access]
 ---
 
-# Claude Craft CLI Aliases
+# Bear Craft CLI Aliases
 
-Quick shortcuts for the most frequently used Claude Craft commands.
+Quick shortcuts for the most frequently used Bear Craft commands.
 
 ## Overview
 
@@ -18,7 +18,7 @@ These aliases reduce typing and improve productivity by providing short mnemonic
 
 | Alias | Full Command | Description |
 |-------|-------------|-------------|
-| `/ci` | `/common:init` | Initialize Claude Craft |
+| `/ci` | `/common:init` | Initialize Bear Craft |
 | `/cr` | `/gate:check release` | Pre-release verification checklist |
 | `/cs` | `/common:init --context` | Setup project context for Claude |
 
@@ -122,7 +122,7 @@ These aliases are **virtual** — they exist as documentation shortcuts. Users c
 Add to `~/.bashrc` or `~/.zshrc`:
 
 ```bash
-# Claude Craft Aliases
+# Bear Craft Aliases
 alias ci='claude -p /common:init'
 alias cr='claude -p "/gate:check release"'
 alias cs='claude -p "/common:init --context"'
@@ -154,7 +154,7 @@ alias rr='claude -p /common:ralph-run'
 Add to `~/.config/fish/config.fish`:
 
 ```fish
-# Claude Craft Aliases
+# Bear Craft Aliases
 alias ci 'claude -p /common:init'
 alias cr 'claude -p "/gate:check release"'
 alias cs 'claude -p "/common:init --context"'
@@ -232,5 +232,5 @@ A: Add to `~/.claude/commands/custom/aliases.md` (project-specific)
 ---
 
 **Version:** 1.0.0  
-**Author:** The Bearded CTO  
+**Author:** The Bearded Bear  
 **Date:** 2026-04-17

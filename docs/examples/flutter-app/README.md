@@ -1,6 +1,6 @@
 # Flutter App Example
 
-A complete mobile application built with Flutter 3.44, BLoC pattern, and Riverpod, demonstrating Claude Craft best practices.
+A complete mobile application built with Flutter 3.44, BLoC pattern, and Riverpod, demonstrating Bear Craft best practices.
 
 ---
 
@@ -12,7 +12,7 @@ This example demonstrates:
 - **BLoC Pattern** - State management
 - **Riverpod** - Dependency injection
 - **Widget Testing** - Unit and golden tests
-- **BMAD** - Project management with Claude Craft
+- **BMAD** - Project management with Bear Craft
 
 ---
 
@@ -33,7 +33,7 @@ This example demonstrates:
 
 ```
 flutter-app/
-├── .claude/                    # Claude Craft configuration
+├── .claude/                    # Bear Craft configuration
 ├── .bmad/                      # BMAD configuration
 ├── docs/
 │   ├── prd.md
@@ -69,8 +69,8 @@ flutter-app/
 cp -r docs/examples/flutter-app ~/my-app
 cd ~/my-app
 
-# Install Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=flutter --lang=en
+# Install Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=flutter --lang=en
 
 # Get dependencies
 flutter pub get

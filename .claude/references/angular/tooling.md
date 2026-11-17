@@ -279,9 +279,9 @@ module.exports = {
 };
 ```
 
-### Playwright for E2E (Standard claude-craft)
+### Playwright for E2E (Standard bear-craft)
 
-> **Standard claude-craft :** Playwright est l'outil E2E requis pour tous les projets JS/TS.
+> **Standard bear-craft :** Playwright est l'outil E2E requis pour tous les projets JS/TS.
 > Cypress reste compatible pour les projets legacy mais ne doit pas être utilisé pour de
 > nouveaux projets Angular.
 

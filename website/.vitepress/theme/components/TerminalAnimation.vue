@@ -119,7 +119,7 @@ const badgeColors: Record<string, { bg: string; text: string; border: string }> 
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
         <span style="color: #a78bfa; font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          claude-craft
+          bear-craft
         </span>
         <span style="background: rgba(29,78,216,0.3); color: #93c5fd; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; border: 1px solid rgba(59,130,246,0.2);">git:main</span>
         <span :style="{ background: badgeColors[ctxClass].bg, color: badgeColors[ctxClass].text, padding: '0.125rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.75rem', border: '1px solid ' + badgeColors[ctxClass].border, transition: 'all 0.3s' }">{{ ctxBadge }}</span>

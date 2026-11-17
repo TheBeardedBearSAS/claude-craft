@@ -1,12 +1,12 @@
 # Backlog-Management-Leitfaden
 
-Vollständiger Workflow zur Erstellung und Verwaltung eines SCRUM-Backlogs mit Claude-Craft.
+Vollständiger Workflow zur Erstellung und Verwaltung eines SCRUM-Backlogs mit Bear-Craft.
 
 ---
 
 ## Überblick
 
-Claude-Craft bietet einen umfassenden Satz von Befehlen zur Verwaltung Ihres Product Backlogs nach der SCRUM-Methodik:
+Bear-Craft bietet einen umfassenden Satz von Befehlen zur Verwaltung Ihres Product Backlogs nach der SCRUM-Methodik:
 
 - **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/workflow:plan --only=backlog`, `/workflow:start` und `/workflow:status --board`; die früheren Einzelbefehle (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) und der Sprint-Namespace wurden in 9.0 entfernt (siehe MIGRATION-v9)
 - **5 Vorlagen** für eine konsistente Struktur
@@ -224,7 +224,7 @@ Dies generiert `scrum-validation-report.md` mit:
 Zeigt Kanban-Board mit Spalten:
 - To Do | In Progress | In Review | Done | Blocked
 
-> Das Backlog lässt sich auch in der Kanban-Weboberfläche (`npx @the-bearded-bear/claude-craft kanban`) verwalten: Stories erstellen, bearbeiten und löschen, in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Sie ergänzt die Befehle `/workflow:*` und `/project:*`, die gültig bleiben und dieselbe Datei schreiben (`.bmad/sprint-status.yaml`).
+> Das Backlog lässt sich auch in der Kanban-Weboberfläche (`npx @the-bearded-bear/bear-craft kanban`) verwalten: Stories erstellen, bearbeiten und löschen, in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Sie ergänzt die Befehle `/workflow:*` und `/project:*`, die gültig bleiben und dieselbe Datei schreiben (`.bmad/sprint-status.yaml`).
 
 ### Schritt 4: In Aufgaben zerlegen
 
@@ -280,7 +280,7 @@ Zeigt:
 
 ## Vorlagen
 
-Claude-Craft bietet 5 Vorlagen für eine konsistente Backlog-Struktur:
+Bear-Craft bietet 5 Vorlagen für eine konsistente Backlog-Struktur:
 
 | Vorlage | Zweck |
 |---------|-------|

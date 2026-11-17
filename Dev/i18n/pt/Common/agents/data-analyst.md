@@ -99,7 +99,7 @@ Antes de qualquer consulta: qual decisão será tomada com esse resultado?
 - Investigação de anomalia (queda de conversão, pico de erros)
 - Seleção da ferramenta BI adequada
 
-## Integração com Claude Craft
+## Integração com Bear Craft
 
 - `@database-architect` — design de esquema
 - `@performance-auditor` — métricas de sistema

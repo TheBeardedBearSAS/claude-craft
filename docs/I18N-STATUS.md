@@ -1,12 +1,12 @@
 # Internationalization (i18n) Status
 
-This document describes the i18n strategy and current parity status for Claude Craft.
+This document describes the i18n strategy and current parity status for Bear Craft.
 
 ---
 
 ## Strategy
 
-Claude Craft supports **5 languages**: English (en), French (fr), Spanish (es), German (de), Portuguese (pt).
+Bear Craft supports **5 languages**: English (en), French (fr), Spanish (es), German (de), Portuguese (pt).
 
 ### Fully Maintained: `Dev/i18n/`
 
@@ -24,7 +24,7 @@ The `Dev/i18n/{lang}/` directory contains all installable content (agents, comma
 
 The `docs/` directory documentation is written in **English only** as the maintained version. Translated docs (in `docs/i18n/` or language-suffixed files) are:
 
-- **Opt-in**: Not required for using Claude Craft
+- **Opt-in**: Not required for using Bear Craft
 - **Community-contributed**: Contributions welcome via pull requests
 - **Not guaranteed up-to-date**: May lag behind the English version
 

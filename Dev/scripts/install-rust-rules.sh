@@ -16,7 +16,7 @@ DEFAULT_STACK="Rust 1.99 (edition 2024), Axum 0.8, Tokio, Tower, SQLx, cargo-nex
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

@@ -4,7 +4,7 @@
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Référence :** ISO 27001:2022 A.15  
 **Owner :** CTO  
 **Revue :** Annuelle (avril)  
@@ -13,7 +13,7 @@
 
 ## 1. Objectif
 
-Cette Supplier Management Policy définit les processus de sélection, évaluation, contractualisation et surveillance des fournisseurs critiques de Claude Craft, conformément ISO 27001 A.15 (Supplier Relationships) et RGPD (sous-traitants).
+Cette Supplier Management Policy définit les processus de sélection, évaluation, contractualisation et surveillance des fournisseurs critiques de Bear Craft, conformément ISO 27001 A.15 (Supplier Relationships) et RGPD (sous-traitants).
 
 **Objectifs :**
 - Assurer que les fournisseurs respectent nos exigences de sécurité et confidentialité
@@ -27,7 +27,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 ### 2.1 Fournisseurs Couverts
 
 **Critères inclusion :**
-- Accès données utilisateurs Claude Craft (emails, analytics)
+- Accès données utilisateurs Bear Craft (emails, analytics)
 - Accès code source propriétaire ou configurations sensibles
 - Service critique (downtime >4h impacte opérations)
 - Traitement données personnelles (sous-traitant RGPD)
@@ -66,7 +66,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 **Déclencheurs :**
 - Changement usage (ex: Notion Faible → Moyenne si stockage specs confidentielles)
 - Incident sécurité fournisseur (downgrade confiance)
-- Croissance Claude Craft (dépendance accrue → criticité augmente)
+- Croissance Bear Craft (dépendance accrue → criticité augmente)
 
 **Process :** CTO revoit classification trimestriellement, reclassifie si critères évoluent, met à jour exigences contractuelles si upgrade criticité.
 
@@ -128,11 +128,11 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 
 | Clause | Contenu | Justification |
 |--------|---------|---------------|
-| **SLA Disponibilité** | Uptime ≥99.9% (8.76h downtime/an max), pénalités si breach | Continuité service Claude Craft |
+| **SLA Disponibilité** | Uptime ≥99.9% (8.76h downtime/an max), pénalités si breach | Continuité service Bear Craft |
 | **SLA Support** | Réponse <4h incidents critiques (Sev1), <24h Sev2 | Résolution rapide incidents |
 | **Notification Breach** | Notification <24h si incident sécurité affectant nos données | Compliance RGPD art. 33 (notification CNIL <72h) |
 | **Audit Rights** | Droit audit sécurité annuel (sur préavis 30j) ou acceptation audit tiers (SOC 2) | Vérification conformité continue |
-| **Confidentialité** | NDA couvrant données clients Claude Craft, code source | Protection IP et privacy |
+| **Confidentialité** | NDA couvrant données clients Bear Craft, code source | Protection IP et privacy |
 | **Sous-traitance** | Autorisation préalable sous-traitants, liste fournie, DPA cascade | Compliance RGPD art. 28 |
 | **Data Residency** | Données stockées UE (RGPD) ou USA avec Standard Contractual Clauses (SCC) | Transferts internationaux RGPD |
 | **Suppression Données** | Suppression <30j résiliation, attestation destruction | RGPD droit à l'oubli |
@@ -141,13 +141,13 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 
 ### 5.2 DPA (Data Processing Agreement) RGPD
 
-**Obligatoire si :** Fournisseur traite données personnelles pour compte Claude Craft (sous-traitant RGPD art. 28).
+**Obligatoire si :** Fournisseur traite données personnelles pour compte Bear Craft (sous-traitant RGPD art. 28).
 
 **Contenu DPA minimal :**
 - **Objet traitement :** Décrire finalités (ex: analytics utilisateurs, support client)
 - **Durée :** Durée contrat + 30j post-résiliation (suppression)
 - **Nature données :** Catégories (emails, IPs, données usage)
-- **Catégories personnes :** Utilisateurs Claude Craft (développeurs, entreprises)
+- **Catégories personnes :** Utilisateurs Bear Craft (développeurs, entreprises)
 - **Obligations sous-traitant :** Sécurité, confidentialité, assistance DPO, notification breach
 - **Transferts hors UE :** SCC (Standard Contractual Clauses) si USA/autres pays non-adequacy decision
 - **Sous-traitants ultérieurs :** Liste, autorisation préalable, responsabilité cascade
@@ -369,7 +369,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 **Export données :** Aucune (prompts éphémères, pas stockés Anthropic selon ToS).
 
 **Tests migration :**
-- Feature parity : 100% commandes Claude Craft fonctionnelles OpenAI
+- Feature parity : 100% commandes Bear Craft fonctionnelles OpenAI
 - Performance : Latency ≤ +20% vs. Anthropic (acceptable)
 - Qualité : Score humain évaluation réponses ≥90% satisfaction (vs. 95% Anthropic baseline)
 
@@ -425,7 +425,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 
 **Process :**
 1. **Détection :** Monitoring (section 8.2) ou notification fournisseur
-2. **Triage :** IT Admin confirme criticité (impact Claude Craft)
+2. **Triage :** IT Admin confirme criticité (impact Bear Craft)
 3. **Escalation interne :** Notification CTO si Sev1/2 (section IRP classification)
 4. **Escalation fournisseur :**
    - **Support standard :** Ticket support (fournisseur Moyenne/Faible)
@@ -450,7 +450,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 
 ### 11.1 Obligations RGPD Art. 28
 
-**Claude Craft = Responsable traitement, Fournisseurs = Sous-traitants.**
+**Bear Craft = Responsable traitement, Fournisseurs = Sous-traitants.**
 
 **Obligations :**
 
@@ -472,7 +472,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 
 **Mécanismes autorisés (post-Schrems II) :**
 
-| Mécanisme | Application Claude Craft |
+| Mécanisme | Application Bear Craft |
 |-----------|--------------------------|
 | **Adequacy Decision** | UK, Suisse, Japon OK (Commission UE décision adéquation) |
 | **Standard Contractual Clauses (SCC)** | USA (Anthropic, GitHub, Stripe) : SCC 2021 obligatoires + Transfer Impact Assessment |
@@ -625,7 +625,7 @@ Cette Supplier Management Policy définit les processus de sélection, évaluati
 ### Annexe C — Template Email Demande Due Diligence
 
 ```
-Objet : [Claude Craft] Questionnaire Sécurité — Évaluation Fournisseur
+Objet : [Bear Craft] Questionnaire Sécurité — Évaluation Fournisseur
 
 Bonjour [Contact Fournisseur],
 
@@ -647,7 +647,7 @@ de vos pratiques de sécurité avec nos exigences internes (ISO 27001, RGPD).
 
 Cordialement,
 [CTO NAME]
-CTO, The Bearded CTO
+CTO, The Bearded Bear
 cto@the-bearded-bear.com
 ```
 

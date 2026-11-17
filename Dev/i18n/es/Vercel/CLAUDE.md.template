@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - Vercel
 
-> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Generado: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Qué (Stack y Estructura)
 
@@ -8,7 +8,7 @@
 
 **Alcance**: únicamente funcionalidades de plataforma agnósticas de framework — vercel.json, Functions, ISR, Cron, Storage. Explícitamente no cubre Next.js, ni el adaptador de despliegue propio de ningún framework.
 
-> **Nota:** Vercel (este stack) cubre únicamente la **superficie de plataforma de despliegue agnóstica de framework**: la configuración de `vercel.json` (rewrites, redirects, headers, regions), las Serverless Functions en el runtime de Node.js / Fluid Compute, las primitivas de caché ISR, los Cron Jobs, Vercel Storage (Blob nativo; Postgres/KV vía Marketplace — Neon/Upstash), Analytics/Speed Insights, y el flujo de trabajo de variables de entorno/Preview Deployment. **No** es un stack de Next.js — Next.js en sí queda fuera de alcance y no es una tecnología soportada por claude-craft (no existe ningún namespace `/nextjs:*`). Los patrones de enrutamiento, renderizado o data-fetching específicos de cada framework pertenecen al stack propio de ese framework (`/react:*`, `/vuejs:*`, `/angular:*`) — consultar el `tooling.md` de ese stack para saber cómo se integra con el build output de Vercel. Además, el Edge Runtime (`export const runtime = 'edge'`) **no es recomendado por Vercel**, que prefiere Fluid Compute sobre el runtime de Node.js; este stack documenta el Edge Runtime únicamente para ayudar a identificar y migrar código legacy, no como un patrón recomendado para trabajo nuevo.
+> **Nota:** Vercel (este stack) cubre únicamente la **superficie de plataforma de despliegue agnóstica de framework**: la configuración de `vercel.json` (rewrites, redirects, headers, regions), las Serverless Functions en el runtime de Node.js / Fluid Compute, las primitivas de caché ISR, los Cron Jobs, Vercel Storage (Blob nativo; Postgres/KV vía Marketplace — Neon/Upstash), Analytics/Speed Insights, y el flujo de trabajo de variables de entorno/Preview Deployment. **No** es un stack de Next.js — Next.js en sí queda fuera de alcance y no es una tecnología soportada por bear-craft (no existe ningún namespace `/nextjs:*`). Los patrones de enrutamiento, renderizado o data-fetching específicos de cada framework pertenecen al stack propio de ese framework (`/react:*`, `/vuejs:*`, `/angular:*`) — consultar el `tooling.md` de ese stack para saber cómo se integra con el build output de Vercel. Además, el Edge Runtime (`export const runtime = 'edge'`) **no es recomendado por Vercel**, que prefiere Fluid Compute sobre el runtime de Node.js; este stack documenta el Edge Runtime únicamente para ayudar a identificar y migrar código legacy, no como un patrón recomendado para trabajo nuevo.
 
 ### Estructura del Proyecto
 ```

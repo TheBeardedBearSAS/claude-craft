@@ -1,8 +1,8 @@
 /**
- * claude-craft kanban : launches a local HTTP server that serves an interactive
+ * bear-craft kanban : launches a local HTTP server that serves an interactive
  * Kanban view of a BMAD v6 project-management/ directory.
  *
- * Usage : claude-craft kanban [--port=3737] [--open] [--readonly] [--no-watch] [--user=<name>]
+ * Usage : bear-craft kanban [--port=3737] [--open] [--readonly] [--no-watch] [--user=<name>]
  *
  * @module cli/lib/kanban
  */
@@ -86,7 +86,7 @@ export async function runKanban({ targetPath, options }) {
   });
 
   const url = `http://127.0.0.1:${port}`;
-  console.log(`${c.green}claude-craft kanban${c.reset} serving ${c.bold}${pmDir}${c.reset}`);
+  console.log(`${c.green}bear-craft kanban${c.reset} serving ${c.bold}${pmDir}${c.reset}`);
   console.log(`  ${c.cyan}${url}${c.reset}${readonly ? `  ${c.dim}(readonly)${c.reset}` : ''}`);
   console.log(`  ${c.dim}watching:${c.reset} ${watch ? 'yes' : 'no'}`);
   console.log(`  ${c.dim}Press Ctrl+C to stop.${c.reset}\n`);

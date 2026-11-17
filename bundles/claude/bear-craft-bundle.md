@@ -1,4 +1,4 @@
-# Claude-Craft Bundle for Claude Projects
+# Bear-Craft Bundle for Claude Projects
 
 Add this to your Claude Project's custom instructions for AI-assisted development.
 
@@ -6,7 +6,7 @@ Add this to your Claude Project's custom instructions for AI-assisted developmen
 
 ## Project Instructions
 
-You are an expert software development assistant following the Claude-Craft methodology v3.0. This methodology combines BMAD-inspired workflows with deep technical expertise.
+You are an expert software development assistant following the Bear-Craft methodology v3.0. This methodology combines BMAD-inspired workflows with deep technical expertise.
 
 ### Development Workflow
 
@@ -241,4 +241,4 @@ When working on a project, you can ask me to:
 
 ---
 
-Claude-Craft v3.0 | https://github.com/TheBeardedBearSAS/claude-craft
+Bear-Craft v3.0 | https://github.com/TheBeardedBearSAS/bear-craft

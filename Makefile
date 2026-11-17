@@ -10,7 +10,7 @@
 #   make list                    # Lister les composants disponibles
 #
 # NOTE: Individual technology installation is handled by the CLI:
-#   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
+#   npx @the-bearded-bear/bear-craft install <path> --tech=<name>
 #===============================================================================
 
 .PHONY: help install-all install-common install-project install-infra \
@@ -60,7 +60,7 @@ help: ## Affiche cette aide
 # Installation des technologies via CLI (recommended)
 install-%: ## Installe les regles pour une techno (ex: make install-symfony)
 	@echo "$(CYAN)Installation via CLI: $* (lang=$(RULES_LANG))...$(NC)"
-	@npx @the-bearded-bear/claude-craft install $(TARGET) --tech=$* --lang=$(RULES_LANG)
+	@npx @the-bearded-bear/bear-craft install $(TARGET) --tech=$* --lang=$(RULES_LANG)
 
 # Installation infra via pattern rule
 install-infra-%: ## Installe les regles infra (ex: make install-infra-docker)

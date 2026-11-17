@@ -102,18 +102,18 @@ describe('config/removed-commands.yaml', () => {
 
 // `<ns>/<cmd>.md` offered by each shell completion script.
 const COMPLETIONS = {
-  'completions/claude-craft.bash': (src) =>
+  'completions/bear-craft.bash': (src) =>
     [...src.matchAll(/local ([a-z]+)_commands="([^"]*)"/g)].flatMap(([, ns, cmds]) =>
       cmds
         .split(/\s+/)
         .filter(Boolean)
         .map((c) => `${ns}/${c}.md`)
     ),
-  'completions/_claude-craft': (src) =>
+  'completions/_bear-craft': (src) =>
     [...src.matchAll(/([a-z]+)_commands=\(\n([\s\S]*?)\n\s*\)/g)].flatMap(([, ns, body]) =>
       [...body.matchAll(/'([a-z0-9-]+):/g)].map(([, c]) => `${ns}/${c}.md`)
     ),
-  'completions/claude-craft.fish': (src) =>
+  'completions/bear-craft.fish': (src) =>
     [...src.matchAll(/__fish_seen_subcommand_from ([a-z]+)" -a "([a-z0-9-]+)"/g)].map(([, ns, c]) => `${ns}/${c}.md`),
 };
 

@@ -712,4 +712,4 @@ Vor der Installation eines MCP-Servers von Drittanbietern:
 
 **Letzte Aktualisierung:** 2026-06
 **Version:** 1.2.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

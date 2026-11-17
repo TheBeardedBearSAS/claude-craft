@@ -1,6 +1,6 @@
 # Quel chemin choisir ? Votre workflow en 30 secondes
 
-> **Pour qui ?** Toute personne sur le point de démarrer avec Claude Craft et qui se demande « quelles commandes lancer, et dans quel ordre ? ». Répondez à deux questions, suivez un seul chemin.
+> **Pour qui ?** Toute personne sur le point de démarrer avec Bear Craft et qui se demande « quelles commandes lancer, et dans quel ordre ? ». Répondez à deux questions, suivez un seul chemin.
 >
 > **Règle d'or :** une situation = un chemin = une courte séquence de commandes. Vous n'avez jamais besoin des 100+ autres commandes pour démarrer.
 
@@ -98,7 +98,7 @@ Voir le [guide de correction de bugs](04-bug-fixing.md) pour le détail.
 
 ## 5. Sprint autonome : une commande, du démarrage au merge
 
-Quand le travail est déjà planifié, laissez Claude Craft piloter tout le sprint :
+Quand le travail est déjà planifié, laissez Bear Craft piloter tout le sprint :
 
 ```
 /workflow:auto-sprint N

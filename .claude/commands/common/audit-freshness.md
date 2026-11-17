@@ -4,9 +4,9 @@ argument-hint: "[--wave=1|2|3|all] [--stack=<clé versions.yaml>] [--full] [--dr
 model: sonnet
 ---
 
-# Audit de Fraîcheur claude-craft
+# Audit de Fraîcheur bear-craft
 
-Vérifie que les stacks, l'infra et les règles transverses de claude-craft suivent les dernières versions stables et best practices des outils déclarés.
+Vérifie que les stacks, l'infra et les règles transverses de bear-craft suivent les dernières versions stables et best practices des outils déclarés.
 
 Le périmètre n'est **jamais codé en dur** : il découle de `config/versions.yaml` (SSOT des versions) et de `config/freshness-sources.yaml` (où lire la version stable et quels fichiers confronter). Ajouter un stack sans source fait échouer `tests/scripts/collect-freshness-signals.test.mjs`.
 
@@ -34,7 +34,7 @@ $ARGUMENTS
    ```bash
    docker run --rm -v "$PWD:/app" -w /app node:24 node scripts/collect-freshness-signals.mjs [--wave=…] [--stack=…] [--full] [--dry-run]
    ```
-   Elle écrit `docs/audit/freshness/signals-<date>.json`. Pour chaque clé, ce fichier donne `declared`, `stable`, `gap` (`aucun` | `mineur` | `majeur` | `inconnu`), `source_url` et `paths`. Il donne aussi `claude_craft_version`, `previous_report` et **`agents_to_launch`**.
+   Elle écrit `docs/audit/freshness/signals-<date>.json`. Pour chaque clé, ce fichier donne `declared`, `stable`, `gap` (`aucun` | `mineur` | `majeur` | `inconnu`), `source_url` et `paths`. Il donne aussi `bear_craft_version`, `previous_report` et **`agents_to_launch`**.
 4. **`agents_to_launch` est la liste exacte des agents.** Une clé absente n'est pas auditée : elle figure dans le rapport en `✅ à jour (<stable>, <source_url>)`. Un écart `inconnu`, dû à une source injoignable, est **toujours** audité (fail-open).
 5. En `--dry-run`, s'arrêter ici en affichant la table du collecteur, puis les agents avec leur routing et leur nombre.
 
@@ -54,7 +54,7 @@ Les agents sont envoyés **en un seul message, au plus 10 appels Agent par messa
 **Prompt pour une entrée (stack ou outil infra) :**
 
 ```
-Tu audites la fraîcheur de « <CLÉ> » dans le dépôt claude-craft (v<claude_craft_version>).
+Tu audites la fraîcheur de « <CLÉ> » dans le dépôt bear-craft (v<bear_craft_version>).
 
 FAITS PRÉ-COLLECTÉS (registre officiel, ne pas re-chercher) :
 <coller le bloc entries["<CLÉ>"] de signals-<date>.json>
@@ -106,9 +106,9 @@ Refaire `git ls-files --others --exclude-standard` et comparer à l'instantané 
 4. Écrire `docs/audit/freshness-<date>.md` en fin de run. Ne pas créer le fichier avant le retour des agents.
 
 ```markdown
-# Audit de Fraîcheur claude-craft — <date>
+# Audit de Fraîcheur bear-craft — <date>
 
-**Version claude-craft** : <claude_craft_version>
+**Version bear-craft** : <bear_craft_version>
 **Mode** : défaut | full | wave=<n> | stack=<clé>
 **Agents lancés** : <n> (<x> stacks + <y> infra + <z> transverse) — <n>/<n> terminés
 **Audit précédent** : <previous_report>

@@ -1,6 +1,6 @@
 # Bug Fixing Guide
 
-This guide covers the systematic approach to fixing bugs using Claude-Craft, from diagnosis to validation.
+This guide covers the systematic approach to fixing bugs using Bear-Craft, from diagnosis to validation.
 
 ---
 

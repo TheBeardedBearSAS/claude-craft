@@ -1,6 +1,6 @@
-# Agent Skills Spec Alignment — Audit Claude Craft
+# Agent Skills Spec Alignment — Audit Bear Craft
 
-> **Audit de conformité** des 42 skills Claude Craft vis-à-vis de la spécification officielle Anthropic [agent-skills-spec.md](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md).
+> **Audit de conformité** des 42 skills Bear Craft vis-à-vis de la spécification officielle Anthropic [agent-skills-spec.md](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md).
 >
 > **Status v8.0.0 :** migration stricte réalisée — 41/41 skills conformes à la spec Anthropic.
 > **Validation CI :** `Dev/scripts/validate-skills-spec.sh` (exit 1 si non-conforme).
@@ -40,16 +40,16 @@ auto_suggest: true         # Extension Claude Code
 - `description` doit aider Claude à choisir quand l'invoquer
 - Pas de dépendance entre skills (composition libre)
 
-## État actuel Claude Craft (42 skills)
+## État actuel Bear Craft (42 skills)
 
 ### Skills conformes ✅ (40/42)
 
-Tous les skills Claude Craft respectent déjà :
+Tous les skills Bear Craft respectent déjà :
 - Structure dossier `<skill>/SKILL.md` ✅
 - Frontmatter `name` + `description` ✅
 - Description en une ligne ✅
 
-**Extensions Claude Craft présentes :**
+**Extensions Bear Craft présentes :**
 - `triggers.files` — glob patterns (supporté par Claude Code, pas dans spec Anthropic stricte)
 - `triggers.keywords` — liste de mots-clés (idem)
 - `auto_suggest` — boolean (idem)
@@ -83,7 +83,7 @@ Pour interopérabilité avec [Anthropic marketplace](https://github.com/anthropi
 
 | Critère | Status |
 |---------|--------|
-| `name` unique cross-repository | ✅ Tous les skills Claude Craft préfixés implicitement |
+| `name` unique cross-repository | ✅ Tous les skills Bear Craft préfixés implicitement |
 | `description` qui déclenche bien l'auto-load | ✅ Pattern "Use when..." appliqué |
 | Self-contained folder | ✅ 100% |
 | Pas de chemins absolus | ✅ À auditer PR par PR |
@@ -128,10 +128,10 @@ grep -rn "/home/\|/Users/\|C:\\\\" .claude/skills/ && echo "ABSOLUTE PATH FOUND"
 - [Spec officielle Anthropic](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md)
 - [17 skills officiels Anthropic](https://github.com/anthropics/skills)
 - [Superpowers marketplace](https://github.com/obra/superpowers-marketplace)
-- Skills Claude Craft : `.claude/skills/`
+- Skills Bear Craft : `.claude/skills/`
 
 ---
 
 **Date d'audit :** 2026-04-15
-**Version Claude Craft auditée :** 7.33.0 (→ 7.34.0)
+**Version Bear Craft auditée :** 7.33.0 (→ 7.34.0)
 **Migration stricte prévue :** v8.0.0

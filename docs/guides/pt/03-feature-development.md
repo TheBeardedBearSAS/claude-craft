@@ -1,6 +1,6 @@
 # Guia de Desenvolvimento de Funcionalidades
 
-Este guia cobre o fluxo de trabalho completo para desenvolver novas funcionalidades usando o Claude-Craft, desde a análise inicial até a revisão final.
+Este guia cobre o fluxo de trabalho completo para desenvolver novas funcionalidades usando o Bear-Craft, desde a análise inicial até a revisão final.
 
 ---
 
@@ -20,7 +20,7 @@ Este guia cobre o fluxo de trabalho completo para desenvolver novas funcionalida
 
 ## Visão Geral do Fluxo TDD
 
-O Claude-Craft impõe um fluxo de Desenvolvimento Orientado a Testes (TDD):
+O Bear-Craft impõe um fluxo de Desenvolvimento Orientado a Testes (TDD):
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐

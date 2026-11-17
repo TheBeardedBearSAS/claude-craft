@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - Vercel
 
-> Gerado em: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Gerado em: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## O Quê (Stack & Estrutura)
 
@@ -8,7 +8,7 @@
 
 **Escopo**: apenas funcionalidades da plataforma agnósticas de framework — vercel.json, Functions, ISR, Cron, Storage. Explicitamente não cobre Next.js, nem o adaptador de deploy próprio de qualquer outro framework.
 
-> **Nota:** Vercel (esta stack) cobre apenas a **superfície da plataforma de deployment agnóstica de framework**: configuração do `vercel.json` (rewrites, redirects, headers, regions), Serverless Functions no runtime Node.js / Fluid Compute, primitivas de cache ISR, Cron Jobs, Vercel Storage (Blob nativo; Postgres/KV via Marketplace — Neon/Upstash), Analytics/Speed Insights, e o workflow de variáveis de ambiente/Preview Deployment. Esta **não** é uma stack Next.js — o Next.js em si está fora de escopo e não é uma tecnologia claude-craft suportada (não existe namespace `/nextjs:*`). Padrões de roteamento, renderização ou data-fetching específicos de framework pertencem à stack própria de cada framework (`/react:*`, `/vuejs:*`, `/angular:*`) — consulte o `tooling.md` dessa stack para saber como ela se integra ao build output da Vercel. Além disso, o Edge Runtime (`export const runtime = 'edge'`) **não é recomendado pela Vercel**, que prefere o Fluid Compute no runtime Node.js; esta stack documenta o Edge Runtime apenas para ajudar a identificar e migrar código legado, não como um padrão recomendado para código novo.
+> **Nota:** Vercel (esta stack) cobre apenas a **superfície da plataforma de deployment agnóstica de framework**: configuração do `vercel.json` (rewrites, redirects, headers, regions), Serverless Functions no runtime Node.js / Fluid Compute, primitivas de cache ISR, Cron Jobs, Vercel Storage (Blob nativo; Postgres/KV via Marketplace — Neon/Upstash), Analytics/Speed Insights, e o workflow de variáveis de ambiente/Preview Deployment. Esta **não** é uma stack Next.js — o Next.js em si está fora de escopo e não é uma tecnologia bear-craft suportada (não existe namespace `/nextjs:*`). Padrões de roteamento, renderização ou data-fetching específicos de framework pertencem à stack própria de cada framework (`/react:*`, `/vuejs:*`, `/angular:*`) — consulte o `tooling.md` dessa stack para saber como ela se integra ao build output da Vercel. Além disso, o Edge Runtime (`export const runtime = 'edge'`) **não é recomendado pela Vercel**, que prefere o Fluid Compute no runtime Node.js; esta stack documenta o Edge Runtime apenas para ajudar a identificar e migrar código legado, não como um padrão recomendado para código novo.
 
 ### Estrutura do Projeto
 ```

@@ -116,7 +116,7 @@ Tu es un **Migration Specialist Senior** avec 12+ ans d'expérience en migration
 - Legacy rewrite
 - Passage à New Architecture (React Native, Flutter Impeller)
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@database-architect` — design du schéma cible
 - `@devops-engineer` — infra, blue-green, canary

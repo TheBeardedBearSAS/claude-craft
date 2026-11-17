@@ -31,7 +31,7 @@ function evalInRecovery(expression, env = {}) {
     .map(([k, v]) => `export ${k}="${v}"`)
     .join('\n');
 
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-asc-'));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bear-craft-asc-'));
   const script = `
 set -euo pipefail
 
@@ -292,7 +292,7 @@ describe('dod-validator.sh — security', { timeout: 30000 }, () => {
 // =============================================================================
 describe('sprint-conductor.sh — stop conditions', { timeout: 30000 }, () => {
   function evalInConductor(expression) {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-asc-'));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bear-craft-asc-'));
     const script = `
 set -euo pipefail
 

@@ -283,4 +283,4 @@ routing:
 - `/workflow:auto-sprint` - Einen ganzen Sprint Ende-zu-Ende ausführen (Start → Merge)
 - `/workflow:plan --research` - Analysephase starten (nur Enterprise)
 
-> Unsicher, welchen Weg Sie wählen sollen? Siehe die Entscheidungsseite: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/de/11-which-path.md
+> Unsicher, welchen Weg Sie wählen sollen? Siehe die Entscheidungsseite: https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/de/11-which-path.md

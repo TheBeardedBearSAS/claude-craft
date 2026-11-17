@@ -14,7 +14,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Claude Craft, please report it responsibly.
+If you discover a security vulnerability in Bear Craft, please report it responsibly.
 
 **Email:** security@the-bearded-bear.com
 
@@ -46,7 +46,7 @@ If you discover a security vulnerability in Claude Craft, please report it respo
 
 ## Security Best Practices
 
-When using Claude Craft:
+When using Bear Craft:
 
 - Keep Claude Code at or above the security minimum (2.1.325+; 2.1.326 recommended).
 - Review agent permissions in `.claude/settings.json` before granting access.
@@ -55,7 +55,7 @@ When using Claude Craft:
 
 ### Known CVE Fixes (Claude Code)
 
-Claude Code v2.1.325+ (claude-craft security minimum) includes critical security fixes:
+Claude Code v2.1.325+ (bear-craft security minimum) includes critical security fixes:
 
 | CVE | Severity | Fixed In | Description |
 |-----|----------|----------|-------------|
@@ -86,7 +86,7 @@ Claude Code v2.1.325+ (claude-craft security minimum) includes critical security
 
 ## Software Supply Chain Security
 
-Claude Craft follows modern supply chain security practices to ensure the integrity and provenance of published packages.
+Bear Craft follows modern supply chain security practices to ensure the integrity and provenance of published packages.
 
 ### npm Provenance (SLSA Build Level 1 — npm provenance via `--provenance` flag)
 
@@ -103,7 +103,7 @@ Starting with version 8.1.0, all npm releases ship **npm provenance attestations
 npm audit signatures
 
 # View provenance for a specific version
-npm view @the-bearded-bear/claude-craft@latest dist.attestations
+npm view @the-bearded-bear/bear-craft@latest dist.attestations
 ```
 
 > **Scope note (audit 2026-05-18 QW-SLSA)** : the previous wording in this section
@@ -118,13 +118,13 @@ Every release includes a **CycloneDX SBOM** (JSON format) for full dependency tr
 
 - **Format**: CycloneDX 1.6+ (JSON)
 - **Generation**: Automated via GitHub Actions using `CycloneDX/gh-node-module-generatebom`
-- **Availability**: Attached to each GitHub Release as `claude-craft-sbom.json`
+- **Availability**: Attached to each GitHub Release as `bear-craft-sbom.json`
 - **Retention**: 90 days as GitHub Actions artifact
 
 **How to verify SBOM:**
 
-1. Go to the [Releases page](https://github.com/TheBeardedBearSAS/claude-craft/releases)
-2. Download `claude-craft-sbom.json` from the release assets
+1. Go to the [Releases page](https://github.com/TheBeardedBearSAS/bear-craft/releases)
+2. Download `bear-craft-sbom.json` from the release assets
 3. Validate using a CycloneDX-compatible tool:
 
 ```bash
@@ -132,7 +132,7 @@ Every release includes a **CycloneDX SBOM** (JSON format) for full dependency tr
 npm install -g @cyclonedx/cyclonedx-cli
 
 # Validate SBOM
-cyclonedx validate --input-file claude-craft-sbom.json
+cyclonedx validate --input-file bear-craft-sbom.json
 ```
 
 **SBOM contents:**
@@ -154,16 +154,16 @@ All npm packages published since version 8.1.0 are signed using **Sigstore keyle
 **How to verify signatures:**
 
 ```bash
-# Verify all installed dependencies including claude-craft
+# Verify all installed dependencies including bear-craft
 npm audit signatures
 
 # Check specific package integrity
-npm view @the-bearded-bear/claude-craft@latest dist.integrity
+npm view @the-bearded-bear/bear-craft@latest dist.integrity
 ```
 
 ### Compliance Standards
 
-Claude Craft supply chain practices align with:
+Bear Craft supply chain practices align with:
 
 - **SLSA Framework**: npm provenance ships SLSA Build Level 1 attestations for the published tarball (via `npm publish --provenance`). Full SLSA L3 via `slsa-github-generator` is **not** integrated yet.
 - **NIS2 Directive**: Software supply chain security requirements (EU)

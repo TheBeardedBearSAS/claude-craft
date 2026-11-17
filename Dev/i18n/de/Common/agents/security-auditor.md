@@ -87,7 +87,7 @@ Für jede Schwachstelle:
 - Neue kritische Abhängigkeit hinzugefügt
 - Design-Review für Authentifizierungs-/Autorisierungsfunktionen
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `.claude/rules/11-security.md` — anwendbare Regeln
 - `.claude/skills/security*` — Stack-spezifische Skills

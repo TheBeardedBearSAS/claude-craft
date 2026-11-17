@@ -1,12 +1,12 @@
-# Primeiros Passos com o Claude-Craft
+# Primeiros Passos com o Bear-Craft
 
-Bem-vindo ao Claude-Craft! Este guia vai ajudá-lo a entender o que é o Claude-Craft e a colocar seu primeiro projeto em funcionamento em apenas 5 minutos.
+Bem-vindo ao Bear-Craft! Este guia vai ajudá-lo a entender o que é o Bear-Craft e a colocar seu primeiro projeto em funcionamento em apenas 5 minutos.
 
 ---
 
-## O que é o Claude-Craft?
+## O que é o Bear-Craft?
 
-O Claude-Craft é um framework completo para desenvolvimento assistido por IA com o Claude Code. Ele fornece:
+O Bear-Craft é um framework completo para desenvolvimento assistido por IA com o Claude Code. Ele fornece:
 
 - **125 Comandos Slash** - Ações rápidas em 15 namespaces para geração de código, análise e verificações de qualidade
 - **70 Agentes de IA (31 especializados + 39 de infraestrutura sob demanda)** - Assistentes especializados com níveis de esforço otimizados e memória persistente
@@ -87,9 +87,9 @@ Todo o conteúdo está disponível em 5 idiomas:
 ### Método 1: Makefile (Recomendado)
 
 ```bash
-# Clonar o Claude-Craft
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+# Clonar o Bear-Craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # Instalar para um projeto Symfony (em francês)
 make install-symfony TARGET=~/my-project RULES_LANG=fr
@@ -101,8 +101,8 @@ make install-flutter TARGET=~/my-app RULES_LANG=en
 ### Método 2: Script Direto
 
 ```bash
-# Navegar até o Claude-Craft
-cd claude-craft
+# Navegar até o Bear-Craft
+cd bear-craft
 
 # Executar o script de instalação
 ./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
@@ -135,10 +135,10 @@ cd ~/my-api
 git init
 ```
 
-### Passo 2: Instalar as Regras do Claude-Craft
+### Passo 2: Instalar as Regras do Bear-Craft
 
 ```bash
-# A partir do diretório claude-craft
+# A partir do diretório bear-craft
 make install-symfony TARGET=~/my-api RULES_LANG=fr
 ```
 
@@ -197,7 +197,7 @@ Agora você pode usar todos os comandos e agentes instalados!
 
 ---
 
-## Como o Claude Craft está estruturado?
+## Como o Bear Craft está estruturado?
 
 ### Regras (`rules/`)
 
@@ -263,11 +263,11 @@ Portões de qualidade para diferentes cenários:
 
 ---
 
-## Quais são os conceitos-chave do Claude Craft?
+## Quais são os conceitos-chave do Bear Craft?
 
 ### 1. Fluxo de Trabalho TDD
 
-O Claude-Craft impõe o Desenvolvimento Orientado a Testes (TDD):
+O Bear-Craft impõe o Desenvolvimento Orientado a Testes (TDD):
 
 ```
 1. Analisar requisitos
@@ -305,7 +305,7 @@ Cada feature deve passar pelos portões de qualidade:
 
 ## Otimizações Automáticas (v8.7)
 
-O Claude-Craft agora inclui padrões otimizados prontos para uso:
+O Bear-Craft agora inclui padrões otimizados prontos para uso:
 
 **Instalado automaticamente:**
 - ✓ `.claudeignore` para reduzir ruído de contexto

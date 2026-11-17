@@ -1,6 +1,6 @@
 # Community Playbook
 
-Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, engagement, modération, croissance.
+Guide opérationnel pour la gestion de la communauté Bear Craft : Discord, engagement, modération, croissance.
 
 **Objectifs phase 4 :** 1000+ membres Discord, 100+ contributeurs actifs, NPS >50, temps de réponse <24h.
 
@@ -32,7 +32,7 @@ Guide opérationnel pour la gestion de la communauté Claude Craft : Discord, en
 |-------|-------------|------|
 | `#announcements` | Releases, news officielles | Read-only (Staff) |
 | `#help` | Questions générales, débutants | Public |
-| `#showcase` | Projets utilisant Claude Craft | Public |
+| `#showcase` | Projets utilisant Bear Craft | Public |
 | `#contrib` | Discussions contributeurs, PRs | Public |
 | `#jobs` | Offres d'emploi (1/semaine max) | Modéré |
 | `#off-topic` | Discussions hors-sujet | Public |
@@ -87,11 +87,11 @@ welcome_dm:
       options: ["Symfony", "React", "Flutter", "Python", "PHP", "Laravel", "Angular", "Vue.js", "C#", "React Native", "Go", "Rust", "Svelte", "Autre"]
     - question: "Quel est ton niveau ?"
       options: ["Débutant", "Intermédiaire", "Avancé", "Expert"]
-    - question: "Pourquoi rejoins-tu Claude Craft ?"
+    - question: "Pourquoi rejoins-tu Bear Craft ?"
       options: ["Apprendre", "Contribuer", "Utiliser dans projets", "Recruter", "Networking"]
     - question: "Timezone ?"
       options: ["Europe", "Americas", "Asia", "Other"]
-    - question: "Comment as-tu découvert Claude Craft ?"
+    - question: "Comment as-tu découvert Bear Craft ?"
       options: ["GitHub", "Reddit", "Twitter/X", "Blog", "Bouche-à-oreille", "Autre"]
 
 stats_schedule: "0 9 * * 1"  # Lundi 9h UTC
@@ -125,7 +125,7 @@ auto_mod:
 **Config :**
 ```yaml
 github:
-  repo: TheBeardedCTO/Tools/claude-craft
+  repo: TheBeardedBearSAS/bear-craft
   events:
     - release.published → #announcements
     - pull_request.merged → #contrib
@@ -175,8 +175,8 @@ Chaque mois est dédié à une stack différente (cycle 13 mois). Challenges heb
 |--------|--------|
 | Participation challenge | Badge Discord du mois |
 | Top 3 contributeurs mois | Mention AUTHORS.md + sticker pack |
-| Top 1 contributeur mois | T-shirt Claude Craft + recommandation LinkedIn |
-| ≥25 PR sur l'année | Hoodie Claude Craft + invitation retreat annuel |
+| Top 1 contributeur mois | T-shirt Bear Craft + recommandation LinkedIn |
+| ≥25 PR sur l'année | Hoodie Bear Craft + invitation retreat annuel |
 
 ---
 
@@ -221,9 +221,9 @@ Bot détecte >3 liens dans un message → suppression automatique + DM warning.
 ### Message welcome DM
 
 ```
-Bienvenue sur le serveur Discord de Claude Craft ! 👋
+Bienvenue sur le serveur Discord de Bear Craft ! 👋
 
-Claude Craft est un framework multi-stack pour développement assisté par IA avec Claude Code.
+Bear Craft est un framework multi-stack pour développement assisté par IA avec Claude Code.
 
 📌 Étapes recommandées :
 1. Lis les règles dans #announcements
@@ -232,9 +232,9 @@ Claude Craft est un framework multi-stack pour développement assisté par IA av
 4. Pose tes questions ou partage tes projets !
 
 💡 Ressources :
-- Documentation : https://claude-craft.dev
-- Guide démarrage : https://claude-craft.dev/docs/QUICKSTART
-- Contribuer : https://claude-craft.dev/docs/CONTRIBUTING
+- Documentation : https://bear-craft.dev
+- Guide démarrage : https://bear-craft.dev/docs/QUICKSTART
+- Contribuer : https://bear-craft.dev/docs/CONTRIBUTING
 
 🎯 Objectif : Aide-nous à atteindre 1000 membres actifs et 100 contributeurs !
 
@@ -290,16 +290,16 @@ Voir section Onboarding ci-dessus.
 ### Announce release
 
 ```
-📢 **Claude Craft v{VERSION} is out!**
+📢 **Bear Craft v{VERSION} is out!**
 
 {EMOJI} **Highlights:**
 - {FEATURE_1}
 - {FEATURE_2}
 - {FEATURE_3}
 
-📖 Full changelog: https://github.com/TheBeardedCTO/Tools/claude-craft/releases/tag/v{VERSION}
+📖 Full changelog: https://github.com/TheBeardedBearSAS/bear-craft/releases/tag/v{VERSION}
 
-⬆️ Update: `npm update @the-bearded-bear/claude-craft`
+⬆️ Update: `npm update @the-bearded-bear/bear-craft`
 
 Questions? #help | Feedback? #contrib
 
@@ -360,4 +360,4 @@ See you there! 🚀
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

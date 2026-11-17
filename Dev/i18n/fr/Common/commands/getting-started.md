@@ -1,12 +1,12 @@
 ---
-description: Visite guidée interactive de 10 minutes pour les nouveaux utilisateurs Claude Craft
+description: Visite guidée interactive de 10 minutes pour les nouveaux utilisateurs Bear Craft
 argument-hint: (aucun argument)
 allowed-tools: Read, Glob, Bash, Grep
 ---
 
-# /getting-started - Vos 10 Premières Minutes avec Claude Craft
+# /getting-started - Vos 10 Premières Minutes avec Bear Craft
 
-Bienvenue ! Ce guide vous aide à découvrir la valeur de Claude Craft en moins de 10 minutes.
+Bienvenue ! Ce guide vous aide à découvrir la valeur de Bear Craft en moins de 10 minutes.
 
 220 commandes peuvent sembler intimidantes — trouvons les 3 qui comptent le plus pour VOTRE projet, maintenant.
 
@@ -35,7 +35,7 @@ Analyse de votre projet pour identifier la stack technologique...
 ```
 ✓ Stack Détectée : [Nom de la Technologie]
 
-Votre projet utilise [Technologie]. Claude Craft dispose de commandes et agents spécialisés pour cette stack.
+Votre projet utilise [Technologie]. Bear Craft dispose de commandes et agents spécialisés pour cette stack.
 ```
 
 ## Étape 2 : Proposer 3 Actions à Fort Impact (1 minute)
@@ -133,7 +133,7 @@ Cette commande va :
 - [Quels insights vous allez obtenir]
 - [Comment elle aide à améliorer la qualité / sécurité / architecture du code]
 
-C'est votre première valeur de Claude Craft — voyons ce que nous trouvons.
+C'est votre première valeur de Bear Craft — voyons ce que nous trouvons.
 ```
 
 ### Pendant Exécution
@@ -177,7 +177,7 @@ B. Corriger une trouvaille
    → Je vous guiderai à travers le TDD (Développement Piloté par les Tests)
 
 C. Rejoindre la communauté
-   → Questions ? Rejoignez notre Discord : https://discord.gg/claude-craft
+   → Questions ? Rejoignez notre Discord : https://discord.gg/bear-craft
    → Voir directives communauté : @COMMUNITY.md
 
 📚 Ressources :
@@ -185,7 +185,7 @@ C. Rejoindre la communauté
 - Toutes les 220 commandes : /help
 - Guides spécifiques à votre technologie : @.claude/references/[votre-tech]/
 
-✓ Vous avez terminé vos 10 premières minutes avec Claude Craft !
+✓ Vous avez terminé vos 10 premières minutes avec Bear Craft !
 
 Tapez /workflow:init quand vous êtes prêt à démarrer une fonctionnalité avec le workflow BMAD complet.
 ```
@@ -200,7 +200,7 @@ Analyse du projet pour marqueurs technologiques...
 
 ✓ Stack Détectée : React
 
-Votre projet utilise React 19.x. Claude Craft dispose de plus de 15 commandes spécialisées pour le développement React.
+Votre projet utilise React 19.x. Bear Craft dispose de plus de 15 commandes spécialisées pour le développement React.
 ```
 
 **Sortie Étape 2 :**
@@ -232,7 +232,7 @@ Cette commande va :
 - Vérifier configuration ESLint et violations
 - Vérifier règles React Hooks et patterns de composants
 
-C'est votre première valeur de Claude Craft — voyons ce que nous trouvons.
+C'est votre première valeur de Bear Craft — voyons ce que nous trouvons.
 ```
 
 **[La commande s'exécute]**
@@ -268,7 +268,7 @@ B. Corriger une trouvaille
    → Je vous guiderai à travers le TDD (Développement Piloté par les Tests)
 
 C. Rejoindre la communauté
-   → Questions ? Rejoignez notre Discord : https://discord.gg/claude-craft
+   → Questions ? Rejoignez notre Discord : https://discord.gg/bear-craft
    → Voir directives communauté : @COMMUNITY.md
 
 📚 Ressources :
@@ -276,7 +276,7 @@ C. Rejoindre la communauté
 - Toutes les 220 commandes : /help
 - Guides spécifiques React : @.claude/references/react/
 
-✓ Vous avez terminé vos 10 premières minutes avec Claude Craft !
+✓ Vous avez terminé vos 10 premières minutes avec Bear Craft !
 
 Tapez /workflow:init quand vous êtes prêt à démarrer une fonctionnalité avec le workflow BMAD complet.
 ```
@@ -337,11 +337,11 @@ Suivre standards d'accessibilité P1-06 :
 ## Critères de Succès
 
 L'utilisateur devrait :
-- ✓ Comprendre ce que fait Claude Craft (en 2 minutes)
+- ✓ Comprendre ce que fait Bear Craft (en 2 minutes)
 - ✓ Obtenir de la valeur de leur première commande (en 5 minutes)
 - ✓ Savoir quoi faire ensuite (chemins clairs A/B/C)
 - ✓ Se sentir confiant pour explorer davantage
 
 Time to First Value (TTFV) : **< 10 minutes total**
 
-> Vous hésitez sur le chemin à suivre ? Consultez la page de décision : https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/fr/11-which-path.md
+> Vous hésitez sur le chemin à suivre ? Consultez la page de décision : https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/fr/11-which-path.md

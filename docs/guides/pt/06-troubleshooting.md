@@ -1,6 +1,6 @@
 # Guia de Solução de Problemas
 
-Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craft.
+Este guia cobre os problemas mais comuns e suas soluções ao usar o Bear-Craft.
 
 ---
 
@@ -55,9 +55,9 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 **Soluções:**
 
-1. **Verificar o caminho do Claude-Craft**
+1. **Verificar o caminho do Bear-Craft**
    ```bash
-   # Certifique-se de estar executando do diretório claude-craft
+   # Certifique-se de estar executando do diretório bear-craft
    pwd
    ls -la Dev/scripts/
    ```
@@ -650,7 +650,7 @@ Se estiver usando servidores MCP com hooks, certifique-se de que o Claude Code s
 Se encontrar bugs:
 
 1. Coletar informações:
-   - Versão do Claude-Craft
+   - Versão do Bear-Craft
    - Sistema operacional
    - Passos para reproduzir
    - Mensagens de erro
@@ -666,7 +666,7 @@ Se encontrar bugs:
 
 Ambiente:
 - SO: [seu SO]
-- Versão do Claude-Craft: [versão]
+- Versão do Bear-Craft: [versão]
 - Tecnologia: [symfony/flutter/etc.]
 
 O que tentei:

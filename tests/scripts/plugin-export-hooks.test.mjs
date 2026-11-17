@@ -8,7 +8,7 @@ import path from 'path';
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const SCRIPT = path.join(PROJECT_ROOT, 'Tools/PluginExport/export-plugin.sh');
 const OUT = path.join(PROJECT_ROOT, '.test-tmp', 'plugin-export');
-const PLUGIN = path.join(OUT, 'claude-craft-common');
+const PLUGIN = path.join(OUT, 'bear-craft-common');
 
 let hooksJson;
 beforeAll(() => {

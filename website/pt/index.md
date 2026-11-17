@@ -1,8 +1,8 @@
 ---
 title: Documentation
-description: "Documentação do Claude Craft: guias, referência e boas práticas para desenvolvimento assistido por IA com Claude Code."
+description: "Documentação do Bear Craft: guias, referência e boas práticas para desenvolvimento assistido por IA com Claude Code."
 head:
   - - meta
     - http-equiv: refresh
-      content: "0;url=/claude-craft/pt/getting-started/quickstart"
+      content: "0;url=/bear-craft/pt/getting-started/quickstart"
 ---

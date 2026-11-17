@@ -1,6 +1,6 @@
-# Claude Craft Community
+# Bear Craft Community
 
-Welcome to the Claude Craft community! We're building the most comprehensive AI-assisted development framework for Claude Code, and we'd love for you to be part of it.
+Welcome to the Bear Craft community! We're building the most comprehensive AI-assisted development framework for Claude Code, and we'd love for you to be part of it.
 
 ---
 
@@ -9,18 +9,18 @@ Welcome to the Claude Craft community! We're building the most comprehensive AI-
 ### Discord (Real-time Chat) *(planifié Q3 2026)*
 Join our Discord server for real-time discussions, help, and collaboration.
 
-**Link**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft) *(URL non encore active — serveur en cours de création)*
+**Link**: [https://discord.gg/bear-craft](https://discord.gg/bear-craft) *(URL non encore active — serveur en cours de création)*
 
 - Get help with installation and setup
 - Share your projects and experiences
 - Discuss features and improvements
-- Connect with other Claude Craft users
+- Connect with other Bear Craft users
 - Participate in community events
 
 ### GitHub Discussions (Async Conversations)
 For longer-form discussions, feature requests, and Q&A.
 
-**Link**: [GitHub Discussions](https://github.com/TheBeardedBearSAS/claude-craft/discussions)
+**Link**: [GitHub Discussions](https://github.com/TheBeardedBearSAS/bear-craft/discussions)
 
 - Ask questions and get detailed answers
 - Share best practices and tips
@@ -31,7 +31,7 @@ For longer-form discussions, feature requests, and Q&A.
 ### Twitter/X (Updates & Announcements) *(planifié Q3 2026)*
 Follow us for the latest updates, releases, and community highlights.
 
-**Handle**: [@claudecraft](https://twitter.com/claudecraft) *(compte non encore créé — planifié Q3 2026)*
+**Handle**: [@bearcraft](https://twitter.com/bearcraft) *(compte non encore créé — planifié Q3 2026)*
 
 ### Newsletter (Monthly Updates) *(planifié Q3 2026)*
 Subscribe to receive monthly updates, tutorials, and community highlights.
@@ -72,7 +72,7 @@ We welcome contributions from everyone! Whether you're fixing a typo, adding a t
 
 Looking to make your first contribution? Start here:
 
-1. **Browse good-first-issue labels**: [Good First Issues](https://github.com/TheBeardedBearSAS/claude-craft/labels/good-first-issue)
+1. **Browse good-first-issue labels**: [Good First Issues](https://github.com/TheBeardedBearSAS/bear-craft/labels/good-first-issue)
 2. **Fix documentation typos**: Improve our docs in any of our 5 languages (EN, FR, ES, DE, PT)
 3. **Add missing translations**: Help translate docs to your language
 4. **Write tests**: Improve test coverage for any module
@@ -107,17 +107,17 @@ All contributors are listed in our [README](../README.md) with their contributio
 Every release includes credits for contributors in the [CHANGELOG](../CHANGELOG.md).
 
 ### GitHub Contributors Graph
-View all contributors on our [GitHub Contributors page](https://github.com/TheBeardedBearSAS/claude-craft/graphs/contributors).
+View all contributors on our [GitHub Contributors page](https://github.com/TheBeardedBearSAS/bear-craft/graphs/contributors).
 
 ---
 
 ## Community Projects
 
-Share your projects built with Claude Craft!
+Share your projects built with Bear Craft!
 
-- Post in [#showcase on Discord](https://discord.gg/claude-craft)
-- Create a [Show and Tell discussion](https://github.com/TheBeardedBearSAS/claude-craft/discussions/categories/show-and-tell)
-- Tag us on Twitter [@claudecraft](https://twitter.com/claudecraft)
+- Post in [#showcase on Discord](https://discord.gg/bear-craft)
+- Create a [Show and Tell discussion](https://github.com/TheBeardedBearSAS/bear-craft/discussions/categories/show-and-tell)
+- Tag us on Twitter [@bearcraft](https://twitter.com/bearcraft)
 
 ---
 
@@ -131,7 +131,7 @@ Share your projects built with Claude Craft!
 - German (DE) *(in progress)*
 - Portuguese (PT) *(in progress)*
 
-Want to help translate? Check our [translation issues](https://github.com/TheBeardedBearSAS/claude-craft/labels/i18n).
+Want to help translate? Check our [translation issues](https://github.com/TheBeardedBearSAS/bear-craft/labels/i18n).
 
 ---
 
@@ -140,8 +140,8 @@ Want to help translate? Check our [translation issues](https://github.com/TheBea
 ### Before Asking
 
 1. Check the [documentation](../docs/)
-2. Search [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues)
-3. Search [GitHub Discussions](https://github.com/TheBeardedBearSAS/claude-craft/discussions)
+2. Search [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues)
+3. Search [GitHub Discussions](https://github.com/TheBeardedBearSAS/bear-craft/discussions)
 4. Check [FAQ](./FAQ.md)
 
 ### How to Ask Good Questions
@@ -156,17 +156,17 @@ Want to help translate? Check our [translation issues](https://github.com/TheBea
 
 ## Stay Connected
 
-- **Discord**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft) *(planifié Q3 2026)*
-- **GitHub**: [https://github.com/TheBeardedBearSAS/claude-craft](https://github.com/TheBeardedBearSAS/claude-craft)
-- **Twitter**: [@claudecraft](https://twitter.com/claudecraft) *(planifié Q3 2026)*
+- **Discord**: [https://discord.gg/bear-craft](https://discord.gg/bear-craft) *(planifié Q3 2026)*
+- **GitHub**: [https://github.com/TheBeardedBearSAS/bear-craft](https://github.com/TheBeardedBearSAS/bear-craft)
+- **Twitter**: [@bearcraft](https://twitter.com/bearcraft) *(planifié Q3 2026)*
 - **Website**: *Coming soon*
 
 ---
 
-**Thank you for being part of the Claude Craft community!** 🎉
+**Thank you for being part of the Bear Craft community!** 🎉
 
 ---
 
 **Version**: 1.0.0  
 **Last Updated**: 2026-04-15  
-**Author**: The Bearded CTO
+**Author**: The Bearded Bear

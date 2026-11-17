@@ -1,4 +1,4 @@
-# Claude Code Compatibility — Claude Craft v9.4.0
+# Claude Code Compatibility — Bear Craft v9.4.0
 
 **Minimum Version:** 2.1.325 (elevated from 2.1.97 — see [security advisories 2026](#security-advisories-2026--why-the-minimum-is-21325))
 **Recommended Version:** 2.1.326 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`, `CLAUDE_CODE_SUBAGENT_EFFORT`, `permissions.blockWritesOutsideWorkingDirectories`, `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID`, `permissions.denyInsteadOfPrompting`, Fable 5.2, correctifs permissions/OAuth MCP 2.1.321)
@@ -60,7 +60,7 @@
 | **Linux** (Ubuntu 20.04+, Debian 11+, Fedora 36+) | Supported | Recommended for CI/CD |
 | **macOS** (12 Monterey+) | Supported | Native ARM64 + x86_64 |
 | **Windows** | WSL only | WSL2 + Ubuntu recommended. Native Windows support is experimental and incomplete. PowerShell tool ([env-vars](https://code.claude.com/docs/en/env-vars)): enabled automatically on Windows without Git Bash (`CLAUDE_CODE_USE_POWERSHELL_TOOL=0` to disable); on by default with Git Bash for claude.ai and Console accounts (`=1` to enable it on Bedrock, Google Cloud Agent Platform and Foundry, `=0` to turn it off); opt-in with `=1` on Linux, macOS and WSL. |
-| **Windows ARM64** | WSL only | Native win32-arm64 binary exists (v2.1.41+) but Claude Craft scripts require POSIX shell. |
+| **Windows ARM64** | WSL only | Native win32-arm64 binary exists (v2.1.41+) but Bear Craft scripts require POSIX shell. |
 
 > **Note WSL:** Toutes les commandes shell du framework supposent un environnement POSIX (bash/zsh). Sur Windows natif sans WSL, les scripts `.sh` ne s'exécutent pas correctement.
 
@@ -92,11 +92,11 @@ Source : [GitHub Security Advisories — anthropics/claude-code](https://github.
 | GHSA-gfvf-j8jh-jxxw | CVE-2026-103012 | Low | 2026-09-29 | Managed settings non appliqués quand une clé API stockée est préférée à la connexion entreprise | 2.1.260 |
 | GHSA-v234-4jrq-mgg6 | — | High | 2026-09-25 | Claude Desktop (macOS) : fichier malveillant d'un dossier Cowork → commandes sur l'hôte. **Hors périmètre CLI** (corrigé Desktop 1.15962.0) | — |
 
-**Relèvement 2.1.260 → 2.1.321 (audit d'alignement 2026-11-10) :** la 2.1.321 corrige 4 failles sans GHSA publié à ce jour : une commande Bash en lecture seule pouvait s'exécuter hors sandbox sans prompt ; les permissions Bash évaluaient une écriture depuis le mauvais dossier ; les règles deny et les fichiers protégés ne s'appliquaient pas à `cp`/`mv` vers un dossier ; l'OAuth MCP pouvait envoyer un refresh token à un autre hôte après redirection. Claude Craft distribue des règles deny et des hooks Bash : ces contournements les touchent directement. Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md).
+**Relèvement 2.1.260 → 2.1.321 (audit d'alignement 2026-11-10) :** la 2.1.321 corrige 4 failles sans GHSA publié à ce jour : une commande Bash en lecture seule pouvait s'exécuter hors sandbox sans prompt ; les permissions Bash évaluaient une écriture depuis le mauvais dossier ; les règles deny et les fichiers protégés ne s'appliquaient pas à `cp`/`mv` vers un dossier ; l'OAuth MCP pouvait envoyer un refresh token à un autre hôte après redirection. Bear Craft distribue des règles deny et des hooks Bash : ces contournements les touchent directement. Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md).
 
 **Relèvement 2.1.321 → 2.1.325 (audit d'alignement 2026-11-16) :** les 2.1.323 et 2.1.325 corrigent, toujours sans GHSA publié, des contournements de même nature : règles deny/ask Bash manquées via `sudo`/`env` et autres wrappers, `sandbox.excludedCommands` laissant passer une commande qu'il ne nomme pas, Write/Edit pouvant écrire sur un chemin couvert par un deny `Read`, sandbox désactivable en cours de session (2.1.323) ; règle allow Bash pouvant lancer un autre programme que celui qu'elle nomme, commandes composées exécutées sans prompt, sandbox ne protégeant pas les settings/hooks d'un worktree ni son dossier git partagé, décodage zstd (2.1.325). Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md).
 
-**Pertinence Claude Craft :** le framework distribue des plugins, hooks et agents. CVE-2026-86063 (pin SHA plugins) et CVE-2026-103435 (symlink TOCTOU) touchent directement ce modèle de distribution ; 2.1.260 couvre en plus l'application des managed settings en entreprise.
+**Pertinence Bear Craft :** le framework distribue des plugins, hooks et agents. CVE-2026-86063 (pin SHA plugins) et CVE-2026-103435 (symlink TOCTOU) touchent directement ce modèle de distribution ; 2.1.260 couvre en plus l'application des managed settings en entreprise.
 
 **Correctifs permissions postérieurs (non CVE, corrigés au plus tard en 2.1.296, donc inclus dans la version recommandée) :** contournement Bash masquant une partie de la commande (2.1.223), `$PSDefaultParameterValues` PowerShell (2.1.232), chemins NT `\??\` rejetés (2.1.234), `CLAUDE_CODE_DISABLE_ATTACHMENTS` et activation de Claude in Chrome ignorés dans les settings projet (2.1.290), lectures de chemins UNC réseau soumises au prompt même après approbation PreToolUse/auto mode (2.1.292).
 
@@ -166,7 +166,7 @@ Le fix initial (v2.1.51) était incomplet : les versions v2.1.52–v2.1.96 prés
 
 ## Feature Adoption Status
 
-Statut d'adoption des principales features Claude Code 2.1.x dans Claude Craft :
+Statut d'adoption des principales features Claude Code 2.1.x dans Bear Craft :
 
 | Feature | Version CC | Status | Notes |
 |---------|-----------|--------|-------|
@@ -189,14 +189,14 @@ Statut d'adoption des principales features Claude Code 2.1.x dans Claude Craft :
 | `/reload-skills` + `reloadSkills:true` | 2.1.157+ | **Not Adopted** | Distinct de `/reload-plugins` ; documenter (rule 12, templates hooks) |
 | Hook `MessageDisplay` | 2.1.157+ | **Documented** (officiel) | Filtrage/transformation output assistant (cas RTK-style) — voir https://code.claude.com/docs/en/hooks |
 | Trigger `ultracode` (ex-`workflow`) | 2.1.160+ | **Action** | ⚠️ BREAKING — renommage du déclencheur Dynamic Workflows |
-| `requiredMinimum/MaximumVersion` | 2.1.163+ | **Documented** | Enforcement de version via managed settings — ex. `"requiredMinimumVersion": "2.1.325"` aligne l'équipe sur le plancher sécurité Claude Craft |
+| `requiredMinimum/MaximumVersion` | 2.1.163+ | **Documented** | Enforcement de version via managed settings — ex. `"requiredMinimumVersion": "2.1.325"` aligne l'équipe sur le plancher sécurité Bear Craft |
 | Hooks `onFailure: "block"` | 2.1.295+ | **Adopted** (2026-11-17) | Posé sur les 3 gardes de sécurité (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) du profil `default`, des exemples et de `.claude/settings.json` : script manquant, crash ou timeout ⇒ appel bloqué. Le risque « `jq` absent » ne tient plus (repli `node`, et les gardes bloquent déjà en exit 2 sans parseur). La réinstallation complète `onFailure` sur les gardes déjà installées sans écraser une valeur posée. `pre-commit-check` et les hooks informatifs restent fail-open |
 | `effort` sur l'outil Agent | 2.1.292+ | **Not Adopted** | Effort par appel de sous-agent ; le frontmatter `effort:` des agents reste la voie principale |
 | `autoCompactWindow` (frontmatter sous-agent) | 2.1.296+ | **Not Adopted** | Fenêtre d'auto-compaction par agent — à évaluer pour `ralph-conductor` (sessions longues) |
 | **`fallbackModel`** | 2.1.166+ | **Adopted** | Jusqu'à 3 modèles de repli — `settings.local.json.example` + rule 12 |
 
 **Légende :**
-- **Adopted** : Intégré et documenté dans Claude Craft
+- **Adopted** : Intégré et documenté dans Bear Craft
 - **Partially Adopted** : Mécanisme présent mais pas pleinement documenté
 - **Not Documented / Not Adopted** : Disponible côté CC, pas encore repris ici
 - **Action** : Changement (souvent breaking) nécessitant une mise à jour du contenu
@@ -207,11 +207,11 @@ Statut d'adoption des principales features Claude Code 2.1.x dans Claude Craft :
 
 ## Features 2.1.105–2.1.117 Available
 
-Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les utilisateurs de Claude Craft :
+Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les utilisateurs de Bear Craft :
 
 ### 2.1.105 — Commandes et skills avancés
 
-| Feature | Commande / Config | Usage Claude Craft |
+| Feature | Commande / Config | Usage Bear Craft |
 |---------|------------------|-------------------|
 | `/btw` | `/btw <question>` | Questions rapides sans changer le contexte (syntaxe, lookups) |
 | `/hooks` | `/hooks` | Gérer et déboguer les hooks interactivement |
@@ -224,7 +224,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.108 — Prompt caching et session
 
-| Feature | Config / Commande | Usage Claude Craft |
+| Feature | Config / Commande | Usage Bear Craft |
 |---------|------------------|-------------------|
 | `ENABLE_PROMPT_CACHING_1H` | Variable d'env | Cache prompt 1 heure — réduction coût token |
 | `FORCE_PROMPT_CACHING_5M` | Variable d'env | Force cache 5 min — sessions courtes |
@@ -233,7 +233,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.110 — Push Notifications et sécurité
 
-| Feature | Description | Usage Claude Craft |
+| Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
 | Push Notifications Tool | Notifications système natives | Alertes fin de tâche longue (ralph-run) |
 | `/tui` command | Terminal UI configurée | Interface TUI optionnelle |
@@ -241,7 +241,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.111 — Opus 4.7 et `xhigh` effort
 
-| Feature | Description | Usage Claude Craft |
+| Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
 | Opus 4.7 (`claude-opus-4-7`) | Nouveau flagship | Agents architecture, sécurité |
 | `xhigh` effort level | Nouveau palier au-dessus de `high` | Agents complexes (ralph-conductor) |
@@ -251,7 +251,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.113 — Native CLI et sécurité renforcée
 
-| Feature | Description | Usage Claude Craft |
+| Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
 | Native CLI binary | Binaire natif (remplace JS bundle) | Démarrage plus rapide |
 | `/btw`, `/hooks`, `/reload-plugins`, `/proactive` | Nouvelles commandes | Voir 2.1.105 (backport release) |
@@ -260,7 +260,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.117 — Forked Subagents et optimisations
 
-| Feature | Description | Usage Claude Craft |
+| Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
 | Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | **Activé** via `/common:setup-rtk` (audit 2026-05-18 QW-06) |
 | `/resume` 67% faster | Sessions > 40 MB | Reprise sessions longues |
@@ -270,7 +270,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ### 2.1.118 — Env vars complémentaires (avril 2026)
 
-| Variable / Feature | Description | Usage Claude Craft |
+| Variable / Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
 | `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/common:setup-rtk` |
 | `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 5.5 (cost saving) | Recommandé via `/common:setup-rtk` |
@@ -288,11 +288,11 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 ## Features 2.1.119 → 2.1.145 (May 2026)
 
-Features available in Claude Code 2.1.119–2.1.145 and their adoption status in Claude Craft v8.7.1.
+Features available in Claude Code 2.1.119–2.1.145 and their adoption status in Bear Craft v8.7.1.
 
 ### 2.1.119 (April 23, 2026) — Settings persistence & hooks enrichis
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `/config` settings persist | Theme, editor mode, verbose → `~/.claude/settings.json` avec override precedence | **Documented** |
 | `prUrlTemplate` setting | URL custom pour code-review | **Not exploited** |
@@ -304,7 +304,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.120 (April 28, 2026) — ultrareview CI & skills effort
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `claude ultrareview [target]` | Sous-commande non-interactive pour CI/scripts (`--json`) | **Documented** in COMPATIBILITY.md — not in `/team:*` commands |
 | `${CLAUDE_EFFORT}` dans skills | Skills peuvent référencer le niveau d'effort courant | **Not exploited** — opportunities in adaptive skills |
@@ -313,7 +313,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.121 (April 28, 2026) — MCP `alwaysLoad` & PostToolUse enrichi
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `alwaysLoad` MCP server config | Servers non-différés (chargement immédiat) | **Not documented** |
 | PostToolUse replace tool output | Hooks peuvent remplacer l'output de **tous** les outils | **Adopté** (v8.19.1) — `Dev/i18n/base/Common/hooks/templates/examples/output-filter.json` tronque réellement les outputs >50KB via `hookSpecificOutput.updatedToolOutput` |
@@ -322,7 +322,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.126 (May 1, 2026) — OTEL skill tracking & project purge
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `claude.skill_activated` OTEL event | Event avec `invocation_trigger` attribute | **NOT EXPLOITED** — P1 : `@observability-engineer` devrait le documenter |
 | `claude project purge [path]` → **`claude purge`** (2.1.288) | Supprime tout l'état Claude Code d'un projet ; l'ancien nom fonctionne encore avec un avertissement | **Documented** |
@@ -330,7 +330,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.129 (May 6, 2026) — skillOverrides & OTEL metrics
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `skillOverrides` setting | `off` \| `user-invocable-only` \| `name-only` — contrôle visibilité skills dans les sessions Claude Code. `off` = tous les skills visibles (défaut). `user-invocable-only` = seuls les skills avec `invocable: user` sont proposés à l'utilisateur. `name-only` = affiche uniquement le nom sans description. Configurer dans `settings.json` : `{"skillOverrides": "user-invocable-only"}` | **DOCUMENTED HERE** — Voir aussi `rules/12-context-management.md` (P1 ouvert) |
 | `--plugin-url <url>` | Installer plugin depuis URL directe | **N/A** (user CLI) |
@@ -339,7 +339,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.133 (May 7, 2026) — parentSettingsBehavior & hooks effort
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `parentSettingsBehavior` | Admin key : `'first-wins'` \| `'merge'` pour hiérarchie settings | **NOT DOCUMENTED** — P2 |
 | Hooks `effort.level` JSON + `$CLAUDE_EFFORT` | Hooks reçoivent le niveau d'effort courant | **NOT EXPLOITED** — P2 : permet des hooks adaptatifs selon la complexité |
@@ -348,7 +348,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.139 (May 11, 2026) — /goal & Agent View
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | **`/goal` command** | Définir condition de completion — Claude travaille jusqu'à ce qu'elle soit atteinte | **NOT INTEGRATED** — P1 : intégrer dans `ralph-run.md` comme alternative native aux DoD validators |
 | **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:delivery` |
@@ -358,7 +358,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.141 (May 13, 2026) — terminalSequence & ANTHROPIC_WORKSPACE_ID
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `terminalSequence` field | Champ dans hook JSON output pour notifications desktop | **NOT DOCUMENTED** — P2 |
 | `ANTHROPIC_WORKSPACE_ID` | Workload identity federation | **Not documented** |
@@ -367,7 +367,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.143 (May 15, 2026) — worktree.bgIsolation & plugin deps
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `worktree.bgIsolation: "none"` | Sessions background éditent directement le working copy (sans worktree auto) | **NOT DOCUMENTED** — P2 : mentionner dans `parallel-worktrees` skill |
 | Plugin dependency enforcement | `claude plugin disable` refuse si dépendances existent | **N/A** |
@@ -377,7 +377,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.145 (May 19, 2026) — JSON agents & OTEL spans
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `claude agents --json` | Lister sessions actives comme JSON | **NOT DOCUMENTED** — P1 : utile pour `/team:*` automation |
 | Agent + parent agent IDs dans spans OTEL | Traçabilité multi-agents | **NOT EXPLOITED** — P2 : `@observability-engineer` |
@@ -386,27 +386,27 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.147 (May 22, 2026) — /code-review rename & background sessions
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `/code-review` (rename de `/simplify`) | `/code-review --fix` applique les corrections au working tree ; `/code-review ultra` lance une revue cloud multi-agents | **Documented** — alias `/ultrareview` déprécié, voir README |
 | Sessions background pinned | Les sessions en arrière-plan restent épinglées dans l'UI | **N/A** (user feature) |
 
 ### 2.1.149 (May 25, 2026) — /usage
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `/usage` | Affiche la consommation de tokens/coût de la session courante (attribution par composant depuis 2.1.149) | **Documenté** — `rules/12` (Suivi des tokens) + `docs/CLI-REFERENCE.md` |
 
 ### 2.1.152 (May 27, 2026) — disallowed-tools frontmatter & /code-review --fix
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | `disallowed-tools` (kebab-case) frontmatter | Variante kebab-case annoncée dans le changelog, **absente de la documentation officielle** (audit 2026-10-13) — utiliser exclusivement `disallowedTools` (camelCase, documenté) | **Non documenté officiellement** |
 | `/code-review --fix` | Applique automatiquement les findings de la revue | **N/A** (user CLI) |
 
 ### 2.1.154 (May 28, 2026) — Opus 4.8 & Dynamic Workflows ⭐
 
-| Feature | Description | Adoption Claude Craft |
+| Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | **Claude Opus 4.8** (`claude-opus-4-8`) | Nouveau modèle flagship, même prix qu'Opus 4.7, **défaut effort `high`** + `/effort xhigh` pour les tâches les plus dures. Disponible API/Bedrock/Vertex/Foundry | **Adopté en 2.1.154** (remplacé depuis par Opus 5.5) — modèle cible pour agents `effort: xhigh`/`max` (security-auditor, migration-specialist, database-architect, ralph-conductor) |
 | **Dynamic Workflows** | Demander à Claude de créer un workflow qui orchestre **des dizaines à des centaines d'agents** en arrière-plan (cap 1000 subagents). Visible via `/workflows` | **Adopté** (v8.19.1) — skill [`dynamic-workflows`](../skills/dynamic-workflows/SKILL.md) : 3 paliers d'orchestration, patterns (fan-out, vérification adversariale, pipeline, loop-until-dry), monitoring `/workflows` |
@@ -422,7 +422,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 ### 2.1.157 → 2.1.168 (June 2026)
 
-| Version | Feature | Description | Adoption Claude Craft |
+| Version | Feature | Description | Adoption Bear Craft |
 |---------|---------|-------------|----------------------|
 | **2.1.157** | Auto-load plugins `.claude/skills/` | Les plugins déposés dans `.claude/skills/` sont chargés automatiquement (sans marketplace) ; `claude plugin init <name>` scaffolde un plugin | **Partially Adopted** — le framework installe déjà dans `.claude/skills/` ; documenter l'auto-load dans CLI-REFERENCE |
 | **2.1.157** | `/reload-skills` + `SessionStart reloadSkills:true` | Re-scan des skills sans redémarrage ; un hook SessionStart peut rendre disponibles les skills qu'il installe dans la même session | **Not Adopted** — distinct de `/reload-plugins` ; documenter dans rule 12 + templates hooks |
@@ -432,9 +432,9 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | **2.1.160** | Confirmation écriture shell startup | Prompt de confirmation avant d'écrire dans les fichiers d'init shell (`.bashrc`, etc.) | **Sécurité** — cohérent avec les hooks PreToolUse du framework |
 | **2.1.163** | `requiredMinimumVersion` / `requiredMaximumVersion` | Managed settings d'enforcement de version (déploiements enterprise/équipe) | **Not Documented** — alternative au minimum manuel ; mentionner en Version Requirements |
 | **2.1.166** | **`fallbackModel`** | Configurer jusqu'à **3 modèles de repli** essayés dans l'ordre quand le primaire est surchargé/indisponible ; `--fallback-model` s'applique aussi aux sessions interactives ; retry une fois sur le fallback en cas d'erreur non-retryable inattendue | **Adopted** — voir `settings.local.json.example` + rule 12 (repli `opus → sonnet → haiku` recommandé pour les agents critiques) |
-| **2.1.168** | Stable recommandée | Durcissement sécurité des messages cross-session (les messages relayés via `SendMessage` ne portent plus l'autorité utilisateur), retries améliorés, filtrage agents | **Recommended** — version cible Claude Craft v8.9.x |
+| **2.1.168** | Stable recommandée | Durcissement sécurité des messages cross-session (les messages relayés via `SendMessage` ne portent plus l'autorité utilisateur), retries améliorés, filtrage agents | **Recommended** — version cible Bear Craft v8.9.x |
 
-> **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Claude Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
+> **⚠️ Migration `workflow` → `ultracode` (2.1.160) :** le déclencheur des Dynamic Workflows a été renommé. Bear Craft mentionne `/effort ultracode` (palier effort) — cohérent. Tout contenu invitant à « lancer un workflow » par le mot-clé `workflow` doit être mis à jour vers `ultracode`.
 
 > **Note `fallbackModel` :** réglage de fiabilité ET de coût. Pour les 4 agents `opus` (security-auditor, database-architect, migration-specialist, ralph-conductor), un repli `["claude-sonnet-5-5", "claude-haiku-5-5"]` évite les interruptions en cas de surcharge Opus sans dégrader le travail courant. Voir `rules/12-context-management.md`.
 
@@ -444,7 +444,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) (lu le 2026-10-13, complété le 2026-11-01 pour 2.1.297–2.1.316 , le 2026-11-03 pour 2.1.317 le 2026-11-09 pour 2.1.318–2.1.319 le 2026-11-10 pour 2.1.320–2.1.322 et le 2026-11-17 pour 2.1.323–2.1.326 ; pas d'entrée 2.1.320 ni 2.1.324 publiée).
 
-| Version | Feature | Description | Adoption Claude Craft |
+| Version | Feature | Description | Adoption Bear Craft |
 |---------|---------|-------------|----------------------|
 | 2.1.196 | MCP auto-approuvé par repo | `claude mcp list/get` ne lancent plus les serveurs `.mcp.json` qu'un dépôt s'auto-approuve via un `.claude/settings.json` commité | **Sécurité** — cohérent avec la règle 11 (vetting MCP) |
 | 2.1.197 | Sonnet 5 par défaut | Fenêtre 1M | Remplacé par Sonnet 5.5 (2.1.284) |
@@ -471,7 +471,7 @@ Source : [CHANGELOG officiel](https://raw.githubusercontent.com/anthropics/claud
 | 2.1.321 | Fable 5.2 (`claude-fable-5-2`) par défaut ; `claude remote-control --settings <file>` ; `CLAUDE_CODE_PLUGIN_DIR_WATCH=0` ; 4 correctifs de sécurité : commande Bash en lecture seule exécutée hors sandbox sans prompt, écriture évaluée depuis le mauvais dossier, règles deny et fichiers protégés contournés par `cp`/`mv` vers un dossier, refresh token OAuth MCP envoyé à un autre hôte après redirection | **Breaking** : appels d'outils des mods sans prompt de permission ; `AskUserQuestion` en `-p`/SDK refuse une réponse portant `afkTimeoutMs` ; nom de marketplace managé (`extraKnownMarketplaces`) non ré-ajoutable depuis une autre source ; upstreams gateway Bedrock/Vertex/Foundry ignorent `ANTHROPIC_*_BASE_URL` ; `policy_mode: layered` cumule les serveurs MCP managés | **Documented** — version de base de la recommandation (correctifs sécurité) |
 | 2.1.322 | Mode rapide sur Vertex | — | **N/A** |
 | 2.1.323 | `engines["claude-code"]` dans `plugin.json` ; `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES`, `CLAUDE_CODE_RESUME_HINT_COMMAND` ; correctifs permissions : deny/ask Bash manqués via `sudo`/`env`, `sandbox.excludedCommands` trop permissif, Write/Edit sur un chemin couvert par un deny `Read`, sandbox désactivable en cours de session | Un plugin hors de sa plage de versions déclarée n'est plus installé, mis à jour ni chargé | **Adopted** — `.claude-plugin/plugin.json` déclare `"engines": {"claude-code": ">=2.1.325"}` (= `claudeCode.minimum`, contrôlé par `npm run lint:versions`). Syntaxe absente de la doc : vérifiée avec `claude plugin validate` 2.1.326 (plage semver attendue, valeur invalide ignorée au chargement) |
-| 2.1.325 | **MINIMUM REQUIS** — correctifs sécurité : décodage zstd, règle allow Bash lançant un autre programme, commandes composées sans prompt, sandbox ne protégeant pas les settings/hooks d'un worktree ni son dossier git partagé ; le Bash sandboxé suit désormais le flux de permissions normal | Rupture : `sandbox.autoAllowBashIfSandboxed: true` rétablit l'exécution sans prompt | **Adopted** — plancher relevé à l'audit 2026-11-16 ; aucun réglage `sandbox` distribué par Claude Craft |
+| 2.1.325 | **MINIMUM REQUIS** — correctifs sécurité : décodage zstd, règle allow Bash lançant un autre programme, commandes composées sans prompt, sandbox ne protégeant pas les settings/hooks d'un worktree ni son dossier git partagé ; le Bash sandboxé suit désormais le flux de permissions normal | Rupture : `sandbox.autoAllowBashIfSandboxed: true` rétablit l'exécution sans prompt | **Adopted** — plancher relevé à l'audit 2026-11-16 ; aucun réglage `sandbox` distribué par Bear Craft |
 | 2.1.326 | Avertissement au démarrage pour une entrée `--allowedTools`/`--disallowedTools`/`--tools` incomplète ; `OTEL_RESOURCE_INCLUDE_HOST` ; `cp` n'est plus refusé quand seule sa source est couverte par un deny `Edit` ; settings imbriqués au-delà de 64 niveaux ignorés avec avertissement | — | **N/A** — version RECOMMANDÉE |
 
 ---
@@ -519,7 +519,7 @@ Avant de mettre à jour, vérifiez chaque point :
 #### Node.js
 
 - [ ] Vérifier la version Node : `node --version` → doit être >= 20.0.0
-- [ ] Recommandé : migrer vers Node.js 22 LTS (cible CI Claude Craft depuis v8.2.1)
+- [ ] Recommandé : migrer vers Node.js 22 LTS (cible CI Bear Craft depuis v8.2.1)
 
 ### Commandes de mise à jour
 
@@ -530,8 +530,8 @@ npm install -g @anthropic-ai/claude-code@latest
 # Vérifier la version
 claude --version
 
-# Mettre à jour Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=<votre-tech> --lang=<votre-lang>
+# Mettre à jour Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=<votre-tech> --lang=<votre-lang>
 
 # Vérifier que les plugins se chargent
 /reload-plugins
@@ -544,9 +544,9 @@ npx @the-bearded-bear/claude-craft install . --tech=<votre-tech> --lang=<votre-l
 
 ## Version History Summary
 
-Récapitulatif des versions clés et leurs apports pour les utilisateurs de Claude Craft :
+Récapitulatif des versions clés et leurs apports pour les utilisateurs de Bear Craft :
 
-| Version | Date | Impact Claude Craft |
+| Version | Date | Impact Bear Craft |
 |---------|------|---------------------|
 | 2.1.20 | 2025-11 | Background agent permissions — base |
 | 2.1.32 | 2026-01 | Agent Teams (expérimental), Opus 4.6, Auto Memory |
@@ -623,7 +623,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 
 **Fichier source :** `.claude/COMPATIBILITY.md` — version de référence du projet
 **Ce fichier :** Template révisé pour le marketplace Anthropic (audit 2026-05-06)
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear
 
 ---
 
@@ -645,7 +645,7 @@ Récapitulatif des versions clés et leurs apports pour les utilisateurs de Clau
 | **Stop** | ✅ | ⚠️ | ? | ✅ | ❌ |
 
 **Notes :**
-- **CLI** : surface principale — tous les hooks sont pleinement supportés (v2.1.325+ minimum Claude Craft).
+- **CLI** : surface principale — tous les hooks sont pleinement supportés (v2.1.325+ minimum Bear Craft).
 - **VS Code Extension** : les hooks `SessionEnd`, `UserPromptSubmit` et `Stop` sont partiellement supportés selon la version de l'extension ; comportement identique à la CLI depuis les versions récentes.
 - **JetBrains** : plugin Claude Code en beta — support des hooks à confirmer sur la documentation officielle.
 - **Desktop App** : support identique à la CLI pour les hooks core ; hooks expérimentaux peuvent varier.

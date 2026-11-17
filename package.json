@@ -1,10 +1,11 @@
 {
-  "name": "@the-bearded-bear/claude-craft",
+  "name": "@the-bearded-bear/bear-craft",
   "version": "9.4.0",
   "description": "A comprehensive framework for AI-assisted development with Claude Code. Install standardized rules, agents, and commands for your projects.",
   "type": "module",
   "main": "cli/index.js",
   "bin": {
+    "bear-craft": "./cli/index.js",
     "claude-craft": "./cli/index.js"
   },
   "publishConfig": {
@@ -53,16 +54,16 @@
     "react",
     "python"
   ],
-  "author": "TheBeardedCTO",
+  "author": "The Bearded Bear",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheBeardedBearSAS/claude-craft.git"
+    "url": "git+https://github.com/TheBeardedBearSAS/bear-craft.git"
   },
   "bugs": {
-    "url": "https://github.com/TheBeardedBearSAS/claude-craft/issues"
+    "url": "https://github.com/TheBeardedBearSAS/bear-craft/issues"
   },
-  "homepage": "https://github.com/TheBeardedBearSAS/claude-craft#readme",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft#readme",
   "engines": {
     "node": ">=22.0.0"
   },

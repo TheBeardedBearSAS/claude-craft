@@ -1,8 +1,8 @@
 /**
- * Team configuration sync — install Claude-Craft from a remote JSON URL.
+ * Team configuration sync — install Bear-Craft from a remote JSON URL.
  *
  * Allows a team to share an installation profile via a URL (Gist, internal endpoint…),
- * so a new dev just runs `claude-craft install --from=https://org.example/cc.json`.
+ * so a new dev just runs `bear-craft install --from=https://org.example/cc.json`.
  *
  * Expected JSON schema (all fields optional except `version`):
  *   {
@@ -149,7 +149,7 @@ export function validateConfig(cfg) {
 /**
  * Fetch a remote config JSON and run the installation with it.
  * @param {string} url - Remote URL pointing to a JSON config
- * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {Object} ctx - Context object
  * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
  * @param {Function} [fetchFn=globalThis.fetch] - Injectable fetch (for testing)

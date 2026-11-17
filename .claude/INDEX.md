@@ -1,4 +1,4 @@
-# Claude-Craft Rules Index
+# Bear-Craft Rules Index
 
 ## Stack Overview (2026)
 

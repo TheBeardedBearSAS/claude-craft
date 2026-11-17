@@ -1,5 +1,5 @@
 /**
- * CLI `check` command — verify claude-craft installation in a project directory.
+ * CLI `check` command — verify bear-craft installation in a project directory.
  * @module cli/lib/check
  */
 
@@ -18,7 +18,7 @@ function runCheck(targetPath) {
   const claudeDir = path.join(targetPath, '.claude');
   let warnings = 0;
 
-  console.log(`\n${c.bold}Claude Craft Installation Check${c.reset}`);
+  console.log(`\n${c.bold}Bear Craft Installation Check${c.reset}`);
   console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
 
   // 1. .claude/ directory
@@ -26,8 +26,8 @@ function runCheck(targetPath) {
     console.log(`  ${success('.claude/ directory exists')}`);
   } else {
     console.log(`  ${error('.claude/ directory not found')}`);
-    console.log(`\n${error('No claude-craft installation detected.')}`);
-    console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
+    console.log(`\n${error('No bear-craft installation detected.')}`);
+    console.log(`Run: npx @the-bearded-bear/bear-craft install ${targetPath}\n`);
     process.exitCode = 1;
     return;
   }

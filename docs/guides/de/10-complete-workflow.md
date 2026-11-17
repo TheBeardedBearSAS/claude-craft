@@ -1,10 +1,10 @@
 # Vollständiges Workflow-Tutorial: Von der Idee zur Produktion
 
-> **Für wen ist das?** Für jemanden, der **noch nie** Claude Code oder Claude Craft verwendet hat. Wir starten bei null, bauen ein echtes Feature von Anfang bis Ende und erklären jeden Begriff bei seiner ersten Verwendung.
+> **Für wen ist das?** Für jemanden, der **noch nie** Claude Code oder Bear Craft verwendet hat. Wir starten bei null, bauen ein echtes Feature von Anfang bis Ende und erklären jeden Begriff bei seiner ersten Verwendung.
 >
 > **Was wir bauen:** *TaskFlow* — ein kleines SaaS zur Aufgabenverfolgung im Team mit einer REST-API (Python / FastAPI) und einem React-Web-Client. Einfach genug, um es in einer Sitzung nachzuvollziehen, real genug, um den gesamten Workflow zu durchlaufen.
 >
-> **Claude Craft v8.19.2** · Geschätzte Lese- und Übungszeit: 60–90 Minuten.
+> **Bear Craft v8.19.2** · Geschätzte Lese- und Übungszeit: 60–90 Minuten.
 
 ---
 
@@ -12,7 +12,7 @@
 
 ### Was du tun wirst
 
-Du wirst TaskFlow von einer Einzeiler-Idee bis hin zu einem geprüften, getesteten ersten Sprint führen — mit dem BMAD-Workflow von Claude Craft. Der Pfad fließt immer in eine Richtung, und **jeder Pfeil ist durch ein Quality Gate geschützt** (eine blockierende Prüfung):
+Du wirst TaskFlow von einer Einzeiler-Idee bis hin zu einem geprüften, getesteten ersten Sprint führen — mit dem BMAD-Workflow von Bear Craft. Der Pfad fließt immer in eine Richtung, und **jeder Pfeil ist durch ein Quality Gate geschützt** (eine blockierende Prüfung):
 
 ```
  IDEE
@@ -45,10 +45,10 @@ Du wirst TaskFlow von einer Einzeiler-Idee bis hin zu einem geprüften, getestet
 Lies dies einmal durch. Du wirst darauf zurückkommen.
 
 - **Claude Code** — die CLI, in der du Claude in deinem Terminal (oder deiner IDE) ansprichst. Du tippst Nachrichten und *Slash-Commands*; Claude liest/schreibt Dateien, führt Befehle aus und antwortet.
-- **Slash-Command** — eine gebündelte Anweisung, die mit `/` beginnt. Beispiel: `/workflow:init`. Claude Craft liefert 125 davon in 15 Namespaces.
+- **Slash-Command** — eine gebündelte Anweisung, die mit `/` beginnt. Beispiel: `/workflow:init`. Bear Craft liefert 125 davon in 15 Namespaces.
 - **Agent** — eine spezialisierte Claude-Persona, die du mit `@` aufrufst. Beispiel: `@tdd-coach`, `@symfony-reviewer`. Jeder verfügt über fokussiertes Fachwissen.
-- **Claude Craft** — das installierte Framework: Regeln, Befehle, Agenten, Skills und die **BMAD**-Projektmanagement-Schicht.
-- **BMAD** — die leichtgewichtige SCRUM-ähnliche Methode von Claude Craft (Backlog → Sprint → Review). Der Zustand wird in **Dateien** gespeichert, nicht im Gespräch — deshalb ist das spätere Löschen des Chats sicher.
+- **Bear Craft** — das installierte Framework: Regeln, Befehle, Agenten, Skills und die **BMAD**-Projektmanagement-Schicht.
+- **BMAD** — die leichtgewichtige SCRUM-ähnliche Methode von Bear Craft (Backlog → Sprint → Review). Der Zustand wird in **Dateien** gespeichert, nicht im Gespräch — deshalb ist das spätere Löschen des Chats sicher.
 
 ### Mini-Glossar
 
@@ -78,7 +78,7 @@ Es gibt **zwei verschiedene Dinge, die „Modus" heißen**. Verwechsle sie nicht
 | **Normal** | ⚡ | Claude handelt, fragt aber vor riskanten Aktionen nach Erlaubnis. **Standard für dieses Tutorial.** |
 | **Auto-accept** | 🤖 | Claude führt aus, ohne zu fragen. Mächtig, aber erst wenn du dem Ablauf vertraust. |
 
-**(b) Der „Plan-Modus", den manche Befehle selbst aktivieren.** Mehrere Claude-Craft-Befehle (`/workflow:design`, `/workflow:plan`…) treten absichtlich in einen Planungsschritt ein und warten auf dein „Los", bevor sie Dateien schreiben — unabhängig davon, welcher Shift-Tab-Modus aktiv ist.
+**(b) Der „Plan-Modus", den manche Befehle selbst aktivieren.** Mehrere Bear-Craft-Befehle (`/workflow:design`, `/workflow:plan`…) treten absichtlich in einen Planungsschritt ein und warten auf dein „Los", bevor sie Dateien schreiben — unabhängig davon, welcher Shift-Tab-Modus aktiv ist.
 
 > **Einfache Regel für Einsteiger:** Bleibe im **Normal-Modus (⚡)**, lass Befehle ihren eigenen Planungsschritt auslösen und bestätige die Pläne. Verwende Auto-accept und `--auto`-Flags erst, wenn der Ablauf vertraut ist.
 
@@ -91,7 +91,7 @@ Im gesamten Tutorial zeigt jeder Befehl den erwarteten Modus:
 
 ## 2. Installation prüfen
 
-**Modus: Schreibgeschützt.** Öffne Claude Code in deinem Projektordner und bestätige, dass Claude Craft vorhanden ist.
+**Modus: Schreibgeschützt.** Öffne Claude Code in deinem Projektordner und bestätige, dass Bear Craft vorhanden ist.
 
 ```bash
 # Im Terminal, innerhalb des Projekts
@@ -104,10 +104,10 @@ Dann, innerhalb von Claude Code:
 /workflow:status
 ```
 
-Wenn du einen Workflow-Statusbericht siehst (auch „kein Workflow vorhanden"), ist Claude Craft installiert. Wenn der Befehl unbekannt ist, (re)installiere:
+Wenn du einen Workflow-Statusbericht siehst (auch „kein Workflow vorhanden"), ist Bear Craft installiert. Wenn der Befehl unbekannt ist, (re)installiere:
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --tech=python --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=python --lang=en
 ```
 
 > **Über die Projektmanagement-Schicht.** Die unten verwendeten Befehle `/gate:*` und `/project:*` stammen aus der Option **Project Management commands**, die standardmäßig bei der Installation enthalten ist (der Installer fragt *„Include Project Management commands? (Y/n)"* → Yes). Wenn diese Befehle fehlen, führe den Installer erneut aus und akzeptiere diese Option.
@@ -181,7 +181,7 @@ Dieses Gate prüft den Backlog gegen **INVEST (6/6)** und PRD-Abdeckung (**≥ 8
 /workflow:design
 ```
 
-Claude (als Architekt) erstellt eine **Tech Spec**: Architekturentscheidungen, Datenmodell, API-Vertrag und zu verwendende Bibliotheken — verankert in den Claude-Craft-Referenzen deines Stacks (Clean Architecture, FastAPI-Muster usw.).
+Claude (als Architekt) erstellt eine **Tech Spec**: Architekturentscheidungen, Datenmodell, API-Vertrag und zu verwendende Bibliotheken — verankert in den Bear-Craft-Referenzen deines Stacks (Clean Architecture, FastAPI-Muster usw.).
 
 ### B.2 Tech Spec validieren
 
@@ -283,7 +283,7 @@ backlog → ready-for-dev → in-progress → review → done   (any → blocked
 
 Begleitansichten: `/project:report burndown` (Sprint-Burndown), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
 
-Das Board ist auch ein Verwaltungswerkzeug: Im selben Kanban (`npx @the-bearded-bear/claude-craft kanban`) lassen sich Stories erstellen und bearbeiten, das Backlog in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Die Befehle `/workflow:*` und `/project:*` bleiben gültig und schreiben dieselbe Datei, `.bmad/sprint-status.yaml`. Siehe die [CLI-Referenz](../../i18n/de/CLI-REFERENCE.md#kanban-befehl).
+Das Board ist auch ein Verwaltungswerkzeug: Im selben Kanban (`npx @the-bearded-bear/bear-craft kanban`) lassen sich Stories erstellen und bearbeiten, das Backlog in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Die Befehle `/workflow:*` und `/project:*` bleiben gültig und schreiben dieselbe Datei, `.bmad/sprint-status.yaml`. Siehe die [CLI-Referenz](../../i18n/de/CLI-REFERENCE.md#kanban-befehl).
 
 ### D.2 Warum eine Karte sich weigern kann, sich zu bewegen
 

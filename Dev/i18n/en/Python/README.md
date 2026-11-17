@@ -361,7 +361,7 @@ To improve these rules:
 
 ## License
 
-These rules are intended for internal use by TheBeardedCTO Tools.
+These rules are intended for internal use by The Bearded Bear.
 
 ---
 

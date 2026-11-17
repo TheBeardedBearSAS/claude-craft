@@ -1,11 +1,11 @@
 ---
-description: "Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context)"
+description: "Bootstrap the Bear-Craft structure for a new project, or analyze the codebase and configure the project context (--context)"
 argument-hint: "[--context [--auto|--full]]"
 ---
 
-# /init - Bootstrap Claude-Craft Structure
+# /init - Bootstrap Bear-Craft Structure
 
-Initialise la structure Claude-Craft pour un nouveau projet.
+Initialise la structure Bear-Craft pour un nouveau projet.
 
 **$ARGUMENTS**
 
@@ -13,7 +13,7 @@ Initialise la structure Claude-Craft pour un nouveau projet.
 
 | Mode / option | Ce que cela fait | Remplace |
 |---------------|------------------|----------|
-| `/common:init` | Amorce la structure Claude-Craft (technologie, `.claude/`, `project-context.md`) | — |
+| `/common:init` | Amorce la structure Bear-Craft (technologie, `.claude/`, `project-context.md`) | — |
 | `/common:init --context` | Analyse la codebase et configure `.claude/rules/00-project-context.md` de façon interactive | `/common:init --context` |
 | `/common:init --context --auto` | Détection maximale, questions ignorées quand un défaut raisonnable existe | `/common:init --context --auto` |
 | `/common:init --context --full` | Questionnaire complet (objectifs, dette technique, glossaire) | `/common:init --context --full` |
@@ -56,7 +56,7 @@ Demander les informations du projet:
 #### C# / .NET
 
 ```markdown
-# Claude-Craft - {{PROJECT_NAME}}
+# Bear-Craft - {{PROJECT_NAME}}
 
 **Stack**: .NET 10 LTS, C# 14, Clean Architecture, CQRS, MediatR, EF Core, xUnit
 
@@ -85,7 +85,7 @@ Always use Docker for commands to abstract from local environment.
 #### Symfony / PHP
 
 ```markdown
-# Claude-Craft - {{PROJECT_NAME}}
+# Bear-Craft - {{PROJECT_NAME}}
 
 **Stack**: PHP 8.5, Symfony 8.1, Clean Architecture, DDD, Doctrine ORM
 
@@ -112,7 +112,7 @@ Always use Docker for commands to abstract from local environment.
 #### Flutter / Dart
 
 ```markdown
-# Claude-Craft - {{PROJECT_NAME}}
+# Bear-Craft - {{PROJECT_NAME}}
 
 **Stack**: Flutter 3.47+, Dart 3.13+, Clean Architecture, Riverpod/BLoC
 

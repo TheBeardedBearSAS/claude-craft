@@ -380,7 +380,7 @@ mcpServers:
 ---
 ```
 
-**Claude Craft use cases:**
+**Bear Craft use cases:**
 
 | Agent | Recommended MCP | Purpose |
 |-------|----------------|---------|
@@ -407,7 +407,7 @@ isolation: "worktree"
 ---
 ```
 
-**Claude Craft use cases:**
+**Bear Craft use cases:**
 
 | Agent | Why isolation helps |
 |-------|---------------------|
@@ -837,7 +837,7 @@ Helps with:
 @docker-architect Review our microservices container strategy
 ```
 
-> **Note:** Docker agents (5), Coolify agents (4), and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/claude-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
+> **Note:** Docker agents (5), Coolify agents (4), and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/bear-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
 
 ---
 

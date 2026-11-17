@@ -48,7 +48,7 @@ function runScript(scriptPath, args, cwd) {
 
 /**
  * Run the interactive installation wizard with 5-step user prompts.
- * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {Object} ctx - Context object
  * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
  * @param {string} ctx.VERSION - Current package version
@@ -58,7 +58,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
   cli.createReadline();
   printBanner(VERSION);
 
-  console.log(`${c.bold}Welcome to Claude-Craft Interactive Installer${c.reset}\n`);
+  console.log(`${c.bold}Welcome to Bear-Craft Interactive Installer${c.reset}\n`);
 
   try {
     // Step 1: Target path
@@ -183,7 +183,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
 /**
  * Zero-prompt automatic installation. Auto-detects stack and locale, applies sensible defaults,
  * then runs the installation immediately. Designed to bring TTFV under 10 minutes for new users.
- * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {Object} ctx - Context object
  * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
  * @param {string} ctx.VERSION - Current package version
@@ -191,7 +191,7 @@ export async function interactiveInstall(cli, { CLI_ROOT, VERSION }) {
  */
 export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
   printBanner(VERSION);
-  console.log(`${c.bold}Claude-Craft Auto Installer${c.reset} ${c.dim}(--auto mode)${c.reset}\n`);
+  console.log(`${c.bold}Bear-Craft Auto Installer${c.reset} ${c.dim}(--auto mode)${c.reset}\n`);
 
   // Target path: already resolved in cli.config.targetPath (defaults to cwd)
   try {
@@ -239,14 +239,14 @@ export async function autoInstall(cli, { CLI_ROOT, VERSION }) {
 /**
  * Execute the installation scripts based on the current configuration.
  * Installs common rules, technology-specific rules, infrastructure, and project commands.
- * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {Object} ctx - Context object
  * @param {string} ctx.CLI_ROOT - Absolute path to the CLI package root
  * @returns {Promise<void>}
  * @throws {Error} If any installation script fails
  */
 export async function runInstallation(cli, { CLI_ROOT }) {
-  console.log(`\n${c.bold}Installing Claude-Craft...${c.reset}\n`);
+  console.log(`\n${c.bold}Installing Bear-Craft...${c.reset}\n`);
 
   // Auto-include base-layer techs (e.g. php is pulled in by symfony/laravel — audit DA-PM-03).
   // Computed into a local list so the user's selection (cli.config.technologies) stays untouched.

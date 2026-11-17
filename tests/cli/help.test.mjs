@@ -84,6 +84,6 @@ describe('printHelp', () => {
     printHelp();
     const output = logSpy.mock.calls[0][0];
     expect(output).toContain('Examples:');
-    expect(output).toContain('npx @the-bearded-bear/claude-craft');
+    expect(output).toContain('npx @the-bearded-bear/bear-craft');
   });
 });

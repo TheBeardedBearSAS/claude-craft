@@ -16,7 +16,7 @@ DEFAULT_STACK="Symfony 7+, PHP 8.3+, Doctrine ORM, API Platform, Messenger"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

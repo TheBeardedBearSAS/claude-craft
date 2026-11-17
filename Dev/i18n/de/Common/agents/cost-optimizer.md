@@ -97,7 +97,7 @@ Priorisieren: hohe Einsparung × geringer Aufwand × niedriges Risiko.
 - Senkung der Anthropic/OpenAI-Rechnung
 - Architekturüberprüfung unter Kostengesichtspunkten
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — Infrastruktur
 - `@performance-auditor` — Abwägung Leistung vs. Kosten

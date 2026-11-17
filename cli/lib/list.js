@@ -1,5 +1,5 @@
 /**
- * CLI `list` command — detailed listing of installed claude-craft components.
+ * CLI `list` command — detailed listing of installed bear-craft components.
  * @module cli/lib/list
  */
 
@@ -16,12 +16,12 @@ import { detectProject } from './detect-project.js';
 function runList(targetPath) {
   const claudeDir = path.join(targetPath, '.claude');
 
-  console.log(`\n${c.bold}Claude Craft Installation — Detailed Listing${c.reset}`);
+  console.log(`\n${c.bold}Bear Craft Installation — Detailed Listing${c.reset}`);
   console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
 
   if (!fs.existsSync(claudeDir)) {
-    console.log(`${c.red}No claude-craft installation detected.${c.reset}`);
-    console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
+    console.log(`${c.red}No bear-craft installation detected.${c.reset}`);
+    console.log(`Run: npx @the-bearded-bear/bear-craft install ${targetPath}\n`);
     process.exitCode = 1;
     return;
   }

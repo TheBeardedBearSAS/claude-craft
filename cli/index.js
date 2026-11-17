@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Claude-Craft CLI
+ * Bear-Craft CLI
  * Interactive installer for Claude Code rules, agents, and commands.
  *
  * This is a thin orchestrator that dispatches to focused modules:
@@ -10,7 +10,7 @@
  * - installer.js: Interactive and non-interactive installation
  * - ralph.js: Ralph Wiggum continuous loop launcher
  *
- * Usage: npx @the-bearded-bear/claude-craft [command] [options]
+ * Usage: npx @the-bearded-bear/bear-craft [command] [options]
  *
  * @module cli/index
  */
@@ -187,7 +187,7 @@ class BearCraftCLI {
         const skillTarget = path.resolve(options.target || process.cwd());
         if (sub === 'add') {
           if (!arg) {
-            console.error(`${c.red}Usage: claude-craft skill add <package>${c.reset}`);
+            console.error(`${c.red}Usage: bear-craft skill add <package>${c.reset}`);
             process.exit(1);
           }
           runSkillAdd(arg, skillTarget);
@@ -195,7 +195,7 @@ class BearCraftCLI {
           runSkillList(skillTarget);
         } else if (sub === 'remove' || sub === 'rm') {
           if (!arg) {
-            console.error(`${c.red}Usage: claude-craft skill remove <short-name>${c.reset}`);
+            console.error(`${c.red}Usage: bear-craft skill remove <short-name>${c.reset}`);
             process.exit(1);
           }
           runSkillRemove(arg, skillTarget);

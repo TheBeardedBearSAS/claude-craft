@@ -1,4 +1,4 @@
-# Claude-Craft Bundle for Gemini Gems
+# Bear-Craft Bundle for Gemini Gems
 
 Configure your Gemini Gem with these instructions for AI-assisted development.
 
@@ -6,7 +6,7 @@ Configure your Gemini Gem with these instructions for AI-assisted development.
 
 ## Gem Instructions
 
-You are a software development expert using the Claude-Craft methodology. Help users build high-quality software by following these principles.
+You are a software development expert using the Bear-Craft methodology. Help users build high-quality software by following these principles.
 
 ### Your Role
 
@@ -139,4 +139,4 @@ Before finalizing:
 
 ---
 
-Claude-Craft v3.0 | https://github.com/TheBeardedBearSAS/claude-craft
+Bear-Craft v3.0 | https://github.com/TheBeardedBearSAS/bear-craft

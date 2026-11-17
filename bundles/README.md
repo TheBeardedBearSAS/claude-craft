@@ -1,21 +1,21 @@
-# Claude-Craft Web Bundles
+# Bear-Craft Web Bundles
 
-Pre-built instruction bundles for using Claude-Craft methodology outside of Claude Code.
+Pre-built instruction bundles for using Bear-Craft methodology outside of Claude Code.
 
 ## Available Bundles
 
 | Platform | File | Size | Usage |
 |----------|------|------|-------|
-| **ChatGPT** | `chatgpt/claude-craft-bundle.md` | ~3KB | Custom Instructions or GPT config |
-| **Claude** | `claude/claude-craft-bundle.md` | ~7KB | Claude Projects custom instructions |
-| **Gemini** | `gemini/claude-craft-bundle.md` | ~3KB | Gemini Gems configuration |
+| **ChatGPT** | `chatgpt/bear-craft-bundle.md` | ~3KB | Custom Instructions or GPT config |
+| **Claude** | `claude/bear-craft-bundle.md` | ~7KB | Claude Projects custom instructions |
+| **Gemini** | `gemini/bear-craft-bundle.md` | ~3KB | Gemini Gems configuration |
 
 ## Installation
 
 ### ChatGPT
 
 1. Open ChatGPT Settings → Personalization → Custom Instructions
-2. Copy the content from `chatgpt/claude-craft-bundle.md`
+2. Copy the content from `chatgpt/bear-craft-bundle.md`
 3. Paste into the "Custom Instructions" field
 4. Save
 
@@ -28,14 +28,14 @@ Or create a Custom GPT:
 
 1. Create a new Claude Project
 2. Go to Project Settings → Custom Instructions
-3. Copy and paste `claude/claude-craft-bundle.md`
+3. Copy and paste `claude/bear-craft-bundle.md`
 4. Save
 
 ### Gemini Gems
 
 1. Create a new Gem
 2. Configure the Gem's instructions
-3. Copy and paste `gemini/claude-craft-bundle.md`
+3. Copy and paste `gemini/bear-craft-bundle.md`
 4. Save and publish
 
 ## Features
@@ -74,4 +74,4 @@ All bundles are optimized to stay well within platform limits while providing co
 
 ---
 
-Claude-Craft v5.13.0 | https://github.com/TheBeardedBearSAS/claude-craft
+Bear-Craft v5.13.0 | https://github.com/TheBeardedBearSAS/bear-craft

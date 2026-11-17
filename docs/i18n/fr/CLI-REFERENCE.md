@@ -1,22 +1,22 @@
 # Référence CLI
 
-Référence complète de l'interface en ligne de commande Claude Craft.
+Référence complète de l'interface en ligne de commande Bear Craft.
 
 ---
 
 ## Installation NPX
 
-La méthode recommandée pour installer Claude Craft est via NPX :
+La méthode recommandée pour installer Bear Craft est via NPX :
 
 ```bash
-npx @the-bearded-bear/claude-craft [commande] [options]
+npx @the-bearded-bear/bear-craft [commande] [options]
 ```
 
 ### Commandes Disponibles
 
 | Commande | Description |
 |----------|-------------|
-| `install` | Installer Claude Craft dans un projet |
+| `install` | Installer Bear Craft dans un projet |
 | `flatten` | Générer un contexte aplati du codebase |
 | (aucune commande) | Assistant d'installation interactif |
 
@@ -27,7 +27,7 @@ npx @the-bearded-bear/claude-craft [commande] [options]
 Exécutez sans arguments pour l'assistant interactif :
 
 ```bash
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 ```
 
 L'assistant vous guidera à travers :
@@ -43,7 +43,7 @@ L'assistant vous guidera à travers :
 ### Usage de Base
 
 ```bash
-npx @the-bearded-bear/claude-craft install <répertoire-cible> [options]
+npx @the-bearded-bear/bear-craft install <répertoire-cible> [options]
 ```
 
 ### Options
@@ -88,20 +88,20 @@ npx @the-bearded-bear/claude-craft install <répertoire-cible> [options]
 
 ```bash
 # Installer les règles Symfony en français
-npx @the-bearded-bear/claude-craft install ~/mon-projet --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install ~/mon-projet --tech=symfony --lang=fr
 
 # Installer plusieurs technologies
-npx @the-bearded-bear/claude-craft install . --tech=react
-npx @the-bearded-bear/claude-craft install . --tech=python
+npx @the-bearded-bear/bear-craft install . --tech=react
+npx @the-bearded-bear/bear-craft install . --tech=python
 
 # Forcer la réinstallation avec sauvegarde
-npx @the-bearded-bear/claude-craft install ~/app --tech=flutter --force --backup
+npx @the-bearded-bear/bear-craft install ~/app --tech=flutter --force --backup
 
 # Dry run pour prévisualiser les changements
-npx @the-bearded-bear/claude-craft install . --tech=angular --dry-run
+npx @the-bearded-bear/bear-craft install . --tech=angular --dry-run
 
 # Installer toutes les technologies
-npx @the-bearded-bear/claude-craft install ~/projet --tech=all --lang=fr
+npx @the-bearded-bear/bear-craft install ~/projet --tech=all --lang=fr
 ```
 
 ---
@@ -113,7 +113,7 @@ Génère un résumé aplati de votre codebase pour les assistants IA.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft flatten [options]
+npx @the-bearded-bear/bear-craft flatten [options]
 ```
 
 ### Options
@@ -128,16 +128,16 @@ npx @the-bearded-bear/claude-craft flatten [options]
 
 ```bash
 # Générer le codebase aplati
-npx @the-bearded-bear/claude-craft flatten
+npx @the-bearded-bear/bear-craft flatten
 
 # Fichier de sortie personnalisé
-npx @the-bearded-bear/claude-craft flatten --output=CONTEXT.md
+npx @the-bearded-bear/bear-craft flatten --output=CONTEXT.md
 
 # Limiter le nombre de tokens (active la fragmentation pour les grands projets)
-npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
+npx @the-bearded-bear/bear-craft flatten --max-tokens=50000
 
 # Exclure des répertoires additionnels
-npx @the-bearded-bear/claude-craft flatten --exclude="*.test.ts,*.spec.ts"
+npx @the-bearded-bear/bear-craft flatten --exclude="*.test.ts,*.spec.ts"
 ```
 
 ### Sortie
@@ -293,7 +293,7 @@ Exécute Claude en boucle continue jusqu'à l'achèvement de la tâche.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft ralph "description de la tâche"
+npx @the-bearded-bear/bear-craft ralph "description de la tâche"
 ```
 
 ### Options
@@ -308,13 +308,13 @@ npx @the-bearded-bear/claude-craft ralph "description de la tâche"
 
 ```bash
 # Tâche de base
-npx @the-bearded-bear/claude-craft ralph "Implémenter l'authentification utilisateur"
+npx @the-bearded-bear/bear-craft ralph "Implémenter l'authentification utilisateur"
 
 # Avec toutes les vérifications DoD
-npx @the-bearded-bear/claude-craft ralph --full "Corriger le bug de connexion"
+npx @the-bearded-bear/bear-craft ralph --full "Corriger le bug de connexion"
 
 # Limite d'itérations personnalisée
-npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactorer le module de paiement"
+npx @the-bearded-bear/bear-craft ralph --max-iterations=20 "Refactorer le module de paiement"
 ```
 
 ---
@@ -326,7 +326,7 @@ Lance une interface web locale pour visualiser et gérer le backlog et les sprin
 ### Utilisation
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban [chemin] [options]
+npx @the-bearded-bear/bear-craft kanban [chemin] [options]
 ```
 
 Le `chemin` est par défaut le répertoire courant. La cible doit contenir un sous-dossier `project-management/` (généré par `/workflow:plan` ou `/workflow:start`).
@@ -339,7 +339,7 @@ Le `chemin` est par défaut le répertoire courant. La cible doit contenir un so
 | `--open` | Ouvre automatiquement le navigateur |
 | `--readonly` | Désactive toute écriture : le serveur répond 403 `readonly` à chaque PATCH, PUT, POST et DELETE, et le tableau n'offre aucun contrôle de déplacement |
 | `--no-watch` | Désactive le watcher de fichiers (pas de rechargement lors des modifications externes) |
-| `--user=<nom>` | Auteur inscrit dans l'`history` des modifications faites depuis le tableau (`kanban:<nom>`). Par défaut : `CLAUDE_CRAFT_USER`, puis `git config user.name`, puis l'utilisateur du système, puis `kanban` |
+| `--user=<nom>` | Auteur inscrit dans l'`history` des modifications faites depuis le tableau (`kanban:<nom>`). Par défaut : `BEAR_CRAFT_USER`, puis `git config user.name`, puis l'utilisateur du système, puis `kanban` |
 
 ### Vues
 
@@ -458,10 +458,10 @@ Les raccourcis sont facultatifs : toutes les actions restent accessibles avec `T
 
 ```bash
 # Lance sur le projet courant et ouvre le navigateur
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 
 # Mode lecture seule
-npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
+npx @the-bearded-bear/bear-craft kanban --readonly --port=4040
 ```
 
 ---
@@ -497,9 +497,9 @@ projects:
 
 | Variable | Description | Défaut |
 |----------|-------------|--------|
-| `CLAUDE_CRAFT_LANG` | Langue par défaut | `en` |
-| `CLAUDE_CRAFT_TARGET` | Répertoire cible par défaut | `.` |
-| `CLAUDE_CRAFT_CONFIG` | Chemin du fichier de config | `claude-projects.yaml` |
+| `BEAR_CRAFT_LANG` | Langue par défaut | `en` |
+| `BEAR_CRAFT_TARGET` | Répertoire cible par défaut | `.` |
+| `BEAR_CRAFT_CONFIG` | Chemin du fichier de config | `claude-projects.yaml` |
 
 ---
 
@@ -538,7 +538,7 @@ make fix-permissions
 ### Mauvaise version de yq
 
 ```bash
-# Claude Craft nécessite yq v4 (version de Mike Farah)
+# Bear Craft nécessite yq v4 (version de Mike Farah)
 yq --version
 # Doit afficher : yq (https://github.com/mikefarah/yq/) version v4.x.x
 ```

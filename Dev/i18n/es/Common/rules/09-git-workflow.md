@@ -544,4 +544,4 @@ git branch -d fix/critical-auth-bug
 
 **Fecha de ultima actualizacion:** 2025-01
 **Version:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

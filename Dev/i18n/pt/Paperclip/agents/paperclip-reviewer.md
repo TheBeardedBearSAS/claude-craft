@@ -178,4 +178,4 @@ Seja especifico: todo achado nomeia um arquivo + linha, e todo fix e acionavel e
 
 ## Nao-Objetivos
 
-Eu nao reescrevo codigo. Eu nao toco configuracao. Eu nao proponho features produto. Eu sinalizo desvios do contrato Paperclip e das regras claude-craft em `rules/02…12`.
+Eu nao reescrevo codigo. Eu nao toco configuracao. Eu nao proponho features produto. Eu sinalizo desvios do contrato Paperclip e das regras bear-craft em `rules/02…12`.

@@ -200,7 +200,7 @@ jobs:
         run: |
           vale sync
           mkdir -p styles/config/vocabularies
-          cp -r config/vocabularies/claude-craft styles/config/vocabularies/
+          cp -r config/vocabularies/bear-craft styles/config/vocabularies/
           npm run vale:check
 
   bats:
@@ -312,7 +312,7 @@ jobs:
           EXPECTED="${{ needs.validate.outputs.version }}"
           PUBLISHED_VERSION=""
           for i in $(seq 1 60); do
-            PUBLISHED_VERSION=$(npm view "@the-bearded-bear/claude-craft@${NPM_TAG}" version 2>/dev/null || echo "")
+            PUBLISHED_VERSION=$(npm view "@the-bearded-bear/bear-craft@${NPM_TAG}" version 2>/dev/null || echo "")
             if [[ "${PUBLISHED_VERSION}" == "${EXPECTED}" ]]; then
               echo "✓ Propagated: ${PUBLISHED_VERSION} (tag ${NPM_TAG}) after ~$(( (i - 1) * 15 ))s"
               break
@@ -333,7 +333,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         run: |
           NPM_TAG="${{ steps.npm_tag.outputs.tag }}"
-          npx --yes --prefer-online "@the-bearded-bear/claude-craft@${NPM_TAG}" --version
+          npx --yes --prefer-online "@the-bearded-bear/bear-craft@${NPM_TAG}" --version
 
   release:
     name: Create GitHub Release

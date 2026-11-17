@@ -4,9 +4,9 @@ description: Search commands, skills and agents by keyword
 tags: [search, discover, find, help]
 ---
 
-# Search Claude Craft
+# Search Bear Craft
 
-Search commands, skills and agents by keyword across the entire Claude Craft framework.
+Search commands, skills and agents by keyword across the entire Bear Craft framework.
 
 ## Usage
 
@@ -109,5 +109,5 @@ When a user invokes `/common:search <keyword>`:
 ---
 
 **Version:** 1.0.0  
-**Author:** The Bearded CTO  
+**Author:** The Bearded Bear  
 **Date:** 2026-04-17

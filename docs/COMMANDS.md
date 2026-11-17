@@ -1,6 +1,6 @@
 # Commands Reference
 
-> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 197 command files (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `claude-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
+> **This is the narrated, namespace-grouped reference (active commands only; the commands removed in 9.0 are listed in [MIGRATION-v9.md](MIGRATION-v9.md)).** For the complete auto-generated table of all 197 command files (core + infra, with source links), see [COMMANDS-FULL-REFERENCE.md](COMMANDS-FULL-REFERENCE.md). For the `bear-craft` NPX CLI (a different tool — `install`, `init`, `check`…), see [CLI-REFERENCE.md](CLI-REFERENCE.md).
 
 Claude Code commands are slash commands that automate workflows and provide structured assistance.
 
@@ -35,7 +35,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 ## Command Namespaces
 
-> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/team:sprint` → `/team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Claude Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/team:sprint` → `/team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Bear Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -153,9 +153,9 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 
 | Command | Description |
 |---------|-------------|
-| `/common:add-technology` | Add a new technology to claude-craft (maintainer-only: available in a clone of the claude-craft repository, not installed in projects since 8.24.0) |
+| `/common:add-technology` | Add a new technology to bear-craft (maintainer-only: available in a clone of the bear-craft repository, not installed in projects since 8.24.0) |
 
-Add a complete technology stack to claude-craft with best practices:
+Add a complete technology stack to bear-craft with best practices:
 
 ```bash
 /common:add-technology "nextjs"

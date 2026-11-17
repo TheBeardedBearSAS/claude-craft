@@ -18,7 +18,7 @@ const SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'awesome-claude-code-submit.mj
 const CSV = [
   'id,display_name,primary_link',
   '1,Some Other Tool,https://github.com/someone/other',
-  '2,Claude Craft,https://github.com/TheBeardedBearSAS/claude-craft',
+  '2,Bear Craft,https://github.com/TheBeardedBearSAS/bear-craft',
 ].join('\n');
 
 /** @param {string[]} failing sous-chaînes d'URL qui doivent répondre 404 */
@@ -62,7 +62,7 @@ describe('awesome-claude-code-submit', () => {
   it('détecte un doublon quand le catalogue répond', async () => {
     globalThis.fetch = makeFetchMock();
 
-    const res = await findDuplicate('Claude Craft', 'https://github.com/TheBeardedBearSAS/claude-craft');
+    const res = await findDuplicate('Bear Craft', 'https://github.com/TheBeardedBearSAS/bear-craft');
 
     expect(res.status).toBe('duplicate');
   });
@@ -70,7 +70,7 @@ describe('awesome-claude-code-submit', () => {
   it('bascule sur le nom de repli quand le nom courant a disparu', async () => {
     globalThis.fetch = makeFetchMock(['THE_RESOURCES_TABLE_NEW.csv']);
 
-    const res = await findDuplicate('Claude Craft', 'https://github.com/TheBeardedBearSAS/claude-craft');
+    const res = await findDuplicate('Bear Craft', 'https://github.com/TheBeardedBearSAS/bear-craft');
 
     expect(res.status).toBe('duplicate');
   });
@@ -87,7 +87,7 @@ describe('awesome-claude-code-submit', () => {
     // Dégradation explicite : on ne prétend pas qu'il n'y a pas de doublon.
     globalThis.fetch = makeFetchMock(['THE_RESOURCES_TABLE']);
 
-    const res = await findDuplicate('Claude Craft', 'https://github.com/TheBeardedBearSAS/claude-craft');
+    const res = await findDuplicate('Bear Craft', 'https://github.com/TheBeardedBearSAS/bear-craft');
 
     expect(res.status).toBe('unknown');
   });

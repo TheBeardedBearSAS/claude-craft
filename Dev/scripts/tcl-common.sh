@@ -17,7 +17,7 @@ fi
 # ============================================================================
 
 # Read version from package.json
-get_claude_craft_version() {
+get_bear_craft_version() {
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"
     node -p "require('${script_dir}/../../package.json').version" 2>/dev/null || echo "0.0.0"
 }
@@ -250,7 +250,7 @@ generate_index_md() {
     fi
 
     cat > "$dest_file" << EOF
-# Claude-Craft Rules Index - ${tech_display_name}
+# Bear-Craft Rules Index - ${tech_display_name}
 
 > Condensed reference for ${tech_stack}
 
@@ -324,7 +324,7 @@ generate_context_yaml() {
     fi
 
     cat > "$dest_file" << EOF
-# Claude-Craft Context Configuration
+# Bear-Craft Context Configuration
 # Auto-suggest skills based on file patterns (no auto-loading)
 
 file_contexts:

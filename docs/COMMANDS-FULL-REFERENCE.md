@@ -67,14 +67,14 @@
 
 | Command | Description |
 |---------|-------------|
-| [`/common:add-technology`](../.claude/commands/common/add-technology.md) | Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web |
+| [`/common:add-technology`](../.claude/commands/common/add-technology.md) | Ajouter une nouvelle technologie à bear-craft avec les best practices de Context7 et recherche web |
 | [`/common:aliases`](../.claude/commands/common/aliases.md) | CLI aliases for frequently used commands |
 | [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
 | [`/common:audit-claude-alignment`](../.claude/commands/common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
 | [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) : pré-collecte déterministe des registres officiels, agents uniquement sur les stacks en écart |
 | [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |
-| [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
-| [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
+| [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Bear Craft users |
+| [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Bear-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
 | [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
 | [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
 | [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
@@ -342,7 +342,7 @@
 | [`/uiux:audit`](../.claude/commands/uiux/audit.md) | Audit Complet UI/UX/Accessibilité |
 | [`/uiux:component-spec`](../.claude/commands/uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
 | [`/uiux:design-tokens`](../.claude/commands/uiux/design-tokens.md) | Définition Design Tokens |
-| [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
+| [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Bear Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
 | [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
 
 ## `/vercel:*`

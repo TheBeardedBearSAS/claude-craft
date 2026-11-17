@@ -1,6 +1,6 @@
-# Migration Guide — Claude Craft v7 → v8
+# Migration Guide — Bear Craft v7 → v8
 
-> **Breaking release :** v8.0.0 aligne strictement Claude Craft sur la **spécification officielle Anthropic Agent Skills** ([agent-skills-spec.md](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md)).
+> **Breaking release :** v8.0.0 aligne strictement Bear Craft sur la **spécification officielle Anthropic Agent Skills** ([agent-skills-spec.md](https://github.com/anthropics/skills/blob/main/spec/agent-skills-spec.md)).
 >
 > Cette migration est nécessaire pour garantir l'interopérabilité avec le marketplace Anthropic et le `superpowers-marketplace`.
 
@@ -90,7 +90,7 @@ bash Dev/scripts/validate-skills-spec.sh .claude/skills || exit 1
 **CI GitHub Actions :**
 
 ```yaml
-- name: Validate Claude Craft skills spec
+- name: Validate Bear Craft skills spec
   run: bash Dev/scripts/validate-skills-spec.sh
 ```
 
@@ -113,19 +113,19 @@ v8.0.0 inclut également toutes les nouveautés des 5 phases v7.31 → v7.35 :
 ### Option A — Installation fraîche (recommandé)
 
 ```bash
-npx @the-bearded-bear/claude-craft@8 install . --tech=<votre-stack> --lang=<langue>
+npx @the-bearded-bear/bear-craft@8 install . --tech=<votre-stack> --lang=<langue>
 ```
 
 ### Option B — Upgrade d'un projet existant
 
 1. Mettre à jour la dépendance
    ```bash
-   npm install -g @the-bearded-bear/claude-craft@8
+   npm install -g @the-bearded-bear/bear-craft@8
    ```
 
 2. Re-installer les rules/skills (garde vos customisations)
    ```bash
-   claude-craft install . --tech=<votre-stack> --merge
+   bear-craft install . --tech=<votre-stack> --merge
    ```
 
 3. Vérifier la conformité
@@ -140,7 +140,7 @@ npx @the-bearded-bear/claude-craft@8 install . --tech=<votre-stack> --lang=<lang
 
 5. Committer les changements
    ```bash
-   git add -A && git commit -m "chore: migrate to Claude Craft v8 (spec-compliant skills)"
+   git add -A && git commit -m "chore: migrate to Bear Craft v8 (spec-compliant skills)"
    ```
 
 ---

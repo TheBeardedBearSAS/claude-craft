@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Export Claude Craft to Cursor and Windsurf IDEs
+# Export Bear Craft to Cursor and Windsurf IDEs
 # Combines CLAUDE.md + condensed rules + INDEX.md into single-file configs
 # Usage: ./scripts/export-multi-ide.sh
 
@@ -15,7 +15,7 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Claude Craft Multi-IDE Export ===${NC}"
+echo -e "${BLUE}=== Bear Craft Multi-IDE Export ===${NC}"
 echo ""
 
 # Create bundles directories
@@ -28,8 +28,8 @@ echo -e "${GREEN}Exporting to Cursor (.cursorrules)...${NC}"
 CURSOR_OUTPUT="$BUNDLES_DIR/cursor/.cursorrules"
 
 cat > "$CURSOR_OUTPUT" << 'EOF'
-# Claude Craft — AI-First TDD Framework for Cursor IDE
-# Generated from https://github.com/TheBeardedBearSAS/claude-craft
+# Bear Craft — AI-First TDD Framework for Cursor IDE
+# Generated from https://github.com/TheBeardedBearSAS/bear-craft
 # Version: 8.0.1 | Last updated: 2026-04-17
 
 ---
@@ -84,7 +84,7 @@ cat >> "$CURSOR_OUTPUT" << 'EOF'
 
 ## Full Documentation
 
-For complete documentation, visit: https://claude-craft.dev
+For complete documentation, visit: https://bear-craft.dev
 
 For full rules and references:
 - SOLID: .claude/rules/04-solid-principles.md
@@ -94,9 +94,9 @@ For full rules and references:
 - Git Workflow: .claude/rules/09-git-workflow.md
 - Context Management: .claude/rules/12-context-management.md
 
-**Attribution:** The Bearded CTO / Claude Craft
+**Attribution:** The Bearded Bear / Bear Craft
 **License:** MIT
-**Repository:** https://github.com/TheBeardedBearSAS/claude-craft
+**Repository:** https://github.com/TheBeardedBearSAS/bear-craft
 EOF
 
 echo -e "  ${YELLOW}→${NC} Created: $CURSOR_OUTPUT"
@@ -110,7 +110,7 @@ WINDSURF_OUTPUT="$BUNDLES_DIR/windsurf/.windsurfrules"
 cp "$CURSOR_OUTPUT" "$WINDSURF_OUTPUT"
 
 # Update header for Windsurf
-sed -i '1s/.*/# Claude Craft — AI-First TDD Framework for Windsurf IDE/' "$WINDSURF_OUTPUT"
+sed -i '1s/.*/# Bear Craft — AI-First TDD Framework for Windsurf IDE/' "$WINDSURF_OUTPUT"
 
 echo -e "  ${YELLOW}→${NC} Created: $WINDSURF_OUTPUT"
 
@@ -126,4 +126,4 @@ echo "  Cursor:   Copy bundles/cursor/.cursorrules to your project root"
 echo "  Windsurf: Copy bundles/windsurf/.windsurfrules to your project root"
 echo ""
 echo -e "${BLUE}Note:${NC} These bundles are self-contained but condensed."
-echo "      For full features, use Claude Craft with Claude Code."
+echo "      For full features, use Bear Craft with Claude Code."

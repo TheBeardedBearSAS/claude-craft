@@ -1,12 +1,12 @@
 ---
 name: kiss-dry-yagni
 description: Simplicity principles — KISS, DRY, YAGNI for maintainable code with minimal complexity
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [simplicity, refactoring, yagni, clean-code, kiss, dry, cognitive-complexity]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # KISS, DRY, YAGNI — Simplicity Principles
@@ -102,5 +102,5 @@ For LLM-generated/assisted code, apply **3 Karpathy principles**:
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

@@ -15,7 +15,7 @@ test('shell: one h1 and one main, the navigation is not inside an aside', async 
 for (const view of VIEWS) {
   test(`shell: #/${view.name} sets a per-view document title`, async ({ page }) => {
     await openView(page, view.name);
-    await expect(page).toHaveTitle(/ · claude-craft kanban$/);
+    await expect(page).toHaveTitle(/ · bear-craft kanban$/);
     const h1 = (await page.locator('h1').innerText()).trim();
     expect(await page.title()).toContain(h1);
   });

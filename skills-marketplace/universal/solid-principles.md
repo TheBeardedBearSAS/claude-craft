@@ -1,12 +1,12 @@
 ---
 name: solid-principles
 description: SOLID principles for clean object-oriented design — SRP, OCP, LSP, ISP, DIP
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [solid, oop, clean-code, architecture, srp, ocp, lsp, isp, dip]
 category: design
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # SOLID Principles — Clean OO Design
@@ -116,5 +116,5 @@ Presentation → Application → Domain ← Infrastructure
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

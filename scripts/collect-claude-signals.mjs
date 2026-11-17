@@ -75,7 +75,7 @@ const WATCHED_PAGES = {
  */
 const LENSES = ['cli-release', 'models-pricing', 'prompt-context', 'cc-features', 'security-cve', 'community'];
 
-const UA = { 'User-Agent': 'claude-craft-alignment/1.0' };
+const UA = { 'User-Agent': 'bear-craft-alignment/1.0' };
 
 /**
  * Empreinte stable d'un contenu textuel, insensible à la mise en forme.

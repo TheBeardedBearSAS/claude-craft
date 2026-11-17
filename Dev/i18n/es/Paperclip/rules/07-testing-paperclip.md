@@ -195,4 +195,4 @@ Sin fix sin test de regresión.
 
 ---
 
-**Última actualización:** 2026-04 | **Versión:** 1.0.0 | **Autor:** The Bearded CTO
+**Última actualización:** 2026-04 | **Versión:** 1.0.0 | **Autor:** The Bearded Bear

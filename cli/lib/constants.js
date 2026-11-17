@@ -1,5 +1,5 @@
 /**
- * Shared constants for the Claude-Craft CLI.
+ * Shared constants for the Bear-Craft CLI.
  * @module cli/lib/constants
  */
 

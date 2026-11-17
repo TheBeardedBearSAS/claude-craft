@@ -1,6 +1,6 @@
 # Symfony API Example
 
-A complete REST API built with Symfony 8.1, API Platform, and PostgreSQL, demonstrating Claude Craft best practices.
+A complete REST API built with Symfony 8.1, API Platform, and PostgreSQL, demonstrating Bear Craft best practices.
 
 ---
 
@@ -12,7 +12,7 @@ This example demonstrates:
 - **API Platform** - REST/GraphQL API generation
 - **Doctrine ORM** - Entity mapping and repositories
 - **TDD Workflow** - Test-first development
-- **BMAD** - Project management with Claude Craft
+- **BMAD** - Project management with Bear Craft
 
 ---
 
@@ -33,7 +33,7 @@ This example demonstrates:
 
 ```
 symfony-api/
-├── .claude/                    # Claude Craft configuration
+├── .claude/                    # Bear Craft configuration
 │   ├── CLAUDE.md
 │   ├── INDEX.md
 │   ├── references/symfony/
@@ -84,8 +84,8 @@ symfony-api/
 cp -r docs/examples/symfony-api ~/my-api
 cd ~/my-api
 
-# Install Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+# Install Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 
 # Start Docker
 docker compose up -d

@@ -99,7 +99,7 @@ Before any query: what decision will be made with this result?
 - Anomaly investigation (conversion drop, error spike)
 - Selecting the right BI tool
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@database-architect` — schema design
 - `@performance-auditor` — system metrics

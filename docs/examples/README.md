@@ -1,6 +1,6 @@
-# Claude Craft Examples
+# Bear Craft Examples
 
-Complete working examples demonstrating Claude Craft capabilities.
+Complete working examples demonstrating Bear Craft capabilities.
 
 ---
 
@@ -24,10 +24,10 @@ cp -r docs/examples/symfony-api ~/my-new-api
 cd ~/my-new-api
 ```
 
-### 2. Install Claude Craft
+### 2. Install Bear Craft
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 ```
 
 ### 3. Follow the Walkthrough
@@ -44,7 +44,7 @@ Each example contains:
 example/
 ├── README.md           # Overview and features
 ├── WALKTHROUGH.md      # Step-by-step guide
-├── .claude/            # Claude Craft configuration
+├── .claude/            # Bear Craft configuration
 │   ├── CLAUDE.md
 │   ├── INDEX.md
 │   └── ...
@@ -156,7 +156,7 @@ To add a new example:
 1. Create directory in `docs/examples/`
 2. Include README.md and WALKTHROUGH.md
 3. Add working source code
-4. Include Claude Craft configuration
+4. Include Bear Craft configuration
 5. Document all steps clearly
 
 ---

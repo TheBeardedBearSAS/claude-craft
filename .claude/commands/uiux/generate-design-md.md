@@ -1,5 +1,5 @@
 ---
-description: "Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS)."
+description: "Génère un DESIGN.md à la racine du projet à partir du template Bear Craft + analyse des sources UI existantes (Tailwind, tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 

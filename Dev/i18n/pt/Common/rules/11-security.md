@@ -712,4 +712,4 @@ Antes de instalar um servidor MCP de terceiros:
 
 **Ultima atualizacao:** 2026-06
 **Versao:** 1.2.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

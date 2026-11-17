@@ -64,7 +64,7 @@ El proceso siguiente se describe con las primitivas de Agent Teams. Con `--engin
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` disponible
 
-> ℹ️ Estos scripts se instalan automáticamente con claude-craft (`make install-agentteams` o mediante el instalador). Si faltan, el comando continúa en **modo degradado**: estimación de coste manual y `--ralph-mode` no disponible (no bloqueante).
+> ℹ️ Estos scripts se instalan automáticamente con bear-craft (`make install-agentteams` o mediante el instalador). Si faltan, el comando continúa en **modo degradado**: estimación de coste manual y `--ralph-mode` no disponible (no bloqueante).
 
 ## Proteccion Fast Mode (Confirmacion Bloqueante)
 

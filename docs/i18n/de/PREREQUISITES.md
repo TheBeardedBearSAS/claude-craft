@@ -1,6 +1,6 @@
 # Voraussetzungen
 
-Vollständige Anleitung zu allen erforderlichen Abhängigkeiten für Claude Craft.
+Vollständige Anleitung zu allen erforderlichen Abhängigkeiten für Bear Craft.
 
 ---
 

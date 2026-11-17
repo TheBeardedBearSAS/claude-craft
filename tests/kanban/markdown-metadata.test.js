@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { deriveStoryData, deriveEpicData } from '../../cli/kanban/server/services/markdown-metadata.js';
 
-// Backlogs generated from the claude-craft templates (Project/i18n/<lang>/templates)
+// Backlogs generated from the bear-craft templates (Project/i18n/<lang>/templates)
 // carry their metadata as a "## Metadata" bullet list, not YAML frontmatter.
 
 const FR_STORY = `# US-002 : Détecter les nouveaux tickets

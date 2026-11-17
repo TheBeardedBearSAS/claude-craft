@@ -100,7 +100,7 @@ When auto mode blocks a call, it lands in `/permissions` → **Recently denied**
 
 ---
 
-## Rollout for a Claude Craft project
+## Rollout for a Bear Craft project
 
 1. Start with defaults on (`"$defaults"` only) and observe what gets blocked.
 2. Add your **source-control org** and **key internal services** to `environment` — resolves the most common false positive (pushing to your own repos).

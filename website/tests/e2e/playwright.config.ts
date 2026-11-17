@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 30_000,
   retries: 1,
   use: {
-    baseURL: 'http://localhost:4173/claude-craft/',
+    baseURL: 'http://localhost:4173/bear-craft/',
     headless: true,
     // In CI/Docker, use the system Chromium (CHROME_PATH) so no Playwright browser
     // download is needed; falls back to Playwright's bundled Chromium locally.

@@ -60,7 +60,7 @@ Der folgende Ablauf ist mit den Agent-Teams-Primitiven beschrieben. Mit `--engin
 - `Tools/AgentTeams/lib/result-aggregator.sh` verfügbar
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` verfügbar
 
-> ℹ️ Diese Skripte werden automatisch von claude-craft installiert (`make install-agentteams` oder über den Installer). Fehlen sie, läuft der Befehl im **eingeschränkten Modus** weiter: manuelle Kostenschätzung und `--ralph-mode` nicht verfügbar (nicht blockierend).
+> ℹ️ Diese Skripte werden automatisch von bear-craft installiert (`make install-agentteams` oder über den Installer). Fehlen sie, läuft der Befehl im **eingeschränkten Modus** weiter: manuelle Kostenschätzung und `--ralph-mode` nicht verfügbar (nicht blockierend).
 
 ## Plan-Modus
 

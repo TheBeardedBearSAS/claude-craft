@@ -742,4 +742,4 @@ Utiliser les hooks Claude Code pour bloquer les patterns dangereux:
 
 **Date de derniere mise a jour:** 2026-06
 **Version:** 1.3.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

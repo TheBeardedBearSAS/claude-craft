@@ -1,6 +1,6 @@
 # FAQ - Foire Aux Questions
 
-Questions et réponses courantes sur Claude Craft.
+Questions et réponses courantes sur Bear Craft.
 
 ---
 
@@ -15,17 +15,17 @@ Questions et réponses courantes sur Claude Craft.
 
 Voir [Prérequis](PREREQUISITES.md) pour les détails complets.
 
-### Comment installer Claude Craft ?
+### Comment installer Bear Craft ?
 
 **Méthode la plus rapide (NPX) :**
 ```bash
-npx @the-bearded-bear/claude-craft install ~/mon-projet --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install ~/mon-projet --tech=symfony --lang=fr
 ```
 
 **Alternative (Makefile) :**
 ```bash
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 make install-symfony TARGET=~/mon-projet RULES_LANG=fr
 ```
 
@@ -174,7 +174,7 @@ description: Expert en X. À utiliser quand Y.
 
 ### Qu'est-ce que BMAD ?
 
-BMAD v6 est le framework de gestion de projet de Claude Craft avec :
+BMAD v6 est le framework de gestion de projet de Bear Craft avec :
 - Rôles intégrés aux commandes workflow et sprint (pm, ba, architect, po, sm, dev, qa, qa-recette, ux, bmad-master)
 - Routage de stories basé sur le statut
 - 5 quality gates
@@ -218,7 +218,7 @@ Ralph Wiggum est une boucle d'agent IA continue qui exécute Claude de manière 
 ```bash
 /common:ralph-run "Implémenter l'authentification utilisateur"
 # ou
-npx @the-bearded-bear/claude-craft ralph "Corriger le bug de connexion"
+npx @the-bearded-bear/bear-craft ralph "Corriger le bug de connexion"
 ```
 
 ### Quels validateurs DoD sont disponibles ?
@@ -336,7 +336,7 @@ Voir [Guide de Dépannage](TROUBLESHOOTING.md) pour plus de solutions.
 
 ## Intégration
 
-### Claude Craft fonctionne-t-il avec d'autres outils IA ?
+### Bear Craft fonctionne-t-il avec d'autres outils IA ?
 
 Oui ! Utilisez les bundles web :
 - `bundles/chatgpt/` - Pour ChatGPT
@@ -345,7 +345,7 @@ Oui ! Utilisez les bundles web :
 
 ### Puis-je utiliser des serveurs MCP ?
 
-Oui, Claude Craft inclut des templates MCP :
+Oui, Bear Craft inclut des templates MCP :
 ```bash
 # Copier les templates MCP
 cp .claude/mcp/* ~/.claude/mcp/
@@ -461,11 +461,11 @@ Utilisez la commande :
 /common:add-technology "nextjs"
 ```
 
-Cela génère tous les fichiers pour 5 langues. Commande réservée aux mainteneurs : lancez-la depuis un clone du dépôt claude-craft (elle n’est plus installée dans les projets depuis la 8.24.0).
+Cela génère tous les fichiers pour 5 langues. Commande réservée aux mainteneurs : lancez-la depuis un clone du dépôt bear-craft (elle n’est plus installée dans les projets depuis la 8.24.0).
 
 ### Comment signaler un bug ?
 
-[Ouvrir une issue sur GitHub](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+[Ouvrir une issue sur GitHub](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ### Puis-je contribuer aux traductions ?
 
@@ -477,4 +477,4 @@ Oui ! Les traductions sont dans `Dev/i18n/{lang}/`. Les PRs sont les bienvenues 
 
 - Consultez [Dépannage](TROUBLESHOOTING.md)
 - Lisez la [Documentation Complète](../COMMANDS-FULL-REFERENCE.md)
-- [Ouvrez une issue GitHub](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- [Ouvrez une issue GitHub](https://github.com/TheBeardedBearSAS/bear-craft/issues)

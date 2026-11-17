@@ -5,7 +5,7 @@
 // an already-split index is a no-op. Locale-agnostic (operates on markdown structure).
 //
 // Usage: node split-commands.mjs <path/to/commands.md> <baseUrlPath>
-//   e.g. node split-commands.mjs website/en/reference/commands.md /claude-craft/en/reference/commands
+//   e.g. node split-commands.mjs website/en/reference/commands.md /bear-craft/en/reference/commands
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, join, basename } from 'node:path';

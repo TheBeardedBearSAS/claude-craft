@@ -42,22 +42,22 @@ Ralph Wiggum is a methodology and tool for running Claude in a continuous loop u
 
 ```bash
 # Basic usage
-npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 
 # With auto-detection (v2.0)
-npx @the-bearded-bear/claude-craft ralph --auto-detect "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph --auto-detect "Implement user authentication"
 
 # Interactive configuration (v2.0)
-npx @the-bearded-bear/claude-craft ralph --interactive "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --interactive "Fix the login bug"
 
 # Generate config only (v2.0)
-npx @the-bearded-bear/claude-craft ralph --init "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --init "Fix the login bug"
 
 # With configuration
-npx @the-bearded-bear/claude-craft ralph --config=ralph.yml "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --config=ralph.yml "Fix the login bug"
 
 # Resume session
-npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
+npx @the-bearded-bear/bear-craft ralph --continue=ralph-1704067200-a1b2
 ```
 
 ### Via Command in Claude Code

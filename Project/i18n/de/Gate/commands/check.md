@@ -302,7 +302,7 @@ Aggregierter Bericht der Dokument-Gates (Argument: `[--detailed]`, das die Valid
 3. **Zusammenfassen** in der Übersicht und anschließend **priorisierte Aktionen empfehlen**, basierend auf den Fehlschlägen.
 
 ```
-BMAD Quality Gates Report   Project: claude-craft   Sprint: sprint-3 - User Management
+BMAD Quality Gates Report   Project: bear-craft   Sprint: sprint-3 - User Management
 | Gate | Threshold | Score | Status |
 | PRD | 80% | 90% | ✅ PASS |
 | Tech Spec | 90% | 92% | ✅ PASS |

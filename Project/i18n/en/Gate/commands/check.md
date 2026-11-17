@@ -302,7 +302,7 @@ Aggregated report of the document gates (argument: `[--detailed]`, which include
 3. **Aggregate** into the summary, then **recommend** prioritized actions based on the failures.
 
 ```
-BMAD Quality Gates Report   Project: claude-craft   Sprint: sprint-3 - User Management
+BMAD Quality Gates Report   Project: bear-craft   Sprint: sprint-3 - User Management
 | Gate | Threshold | Score | Status |
 | PRD | 80% | 90% | ✅ PASS |
 | Tech Spec | 90% | 92% | ✅ PASS |

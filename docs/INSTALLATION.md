@@ -1,6 +1,6 @@
 # Installation Guide
 
-This guide covers all methods to install Claude Craft rules in your projects.
+This guide covers all methods to install Bear Craft rules in your projects.
 
 ## Prerequisites
 
@@ -26,8 +26,8 @@ The Makefile provides the simplest way to install rules.
 #### Basic Usage
 
 ```bash
-# Navigate to the claude-craft directory
-cd claude-craft
+# Navigate to the bear-craft directory
+cd bear-craft
 
 # Install a single technology (default: English)
 make install-symfony TARGET=~/my-project

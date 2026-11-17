@@ -1,6 +1,6 @@
 # Welcher Weg? Ihren Workflow in 30 Sekunden wählen
 
-> **Für wen?** Für alle, die gleich mit Claude Craft starten und sich fragen: „Welche Befehle führe ich in welcher Reihenfolge aus?“. Beantworten Sie zwei Fragen und folgen Sie einem Weg.
+> **Für wen?** Für alle, die gleich mit Bear Craft starten und sich fragen: „Welche Befehle führe ich in welcher Reihenfolge aus?“. Beantworten Sie zwei Fragen und folgen Sie einem Weg.
 >
 > **Faustregel:** eine Situation = ein Weg = eine kurze Befehlsfolge. Die übrigen 100+ Befehle brauchen Sie für den Einstieg nie.
 
@@ -98,7 +98,7 @@ Details finden Sie im [Leitfaden zur Fehlerbehebung](04-bug-fixing.md).
 
 ## 5. Autonomer Sprint: ein Befehl, vom Start bis zum Merge
 
-Ist die Arbeit bereits geplant, lassen Sie Claude Craft den gesamten Sprint steuern:
+Ist die Arbeit bereits geplant, lassen Sie Bear Craft den gesamten Sprint steuern:
 
 ```
 /workflow:auto-sprint N

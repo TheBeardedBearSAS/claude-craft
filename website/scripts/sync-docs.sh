@@ -58,53 +58,53 @@ copy_doc() {
 guide_meta_description() {
   local locale="$1" base="$2"
   case "${locale}:${base}" in
-    fr:01-getting-started) echo "Premiers pas avec Claude Craft : installation, configuration initiale et lancement de votre premier projet avec Claude Code." ;;
-    fr:02-project-creation) echo "Créez un nouveau projet avec Claude Craft : structure, technologies supportées et bonnes pratiques dès le démarrage." ;;
-    fr:03-feature-development) echo "Développez une nouvelle fonctionnalité avec Claude Craft : workflow TDD, agents spécialisés et commandes dédiées." ;;
-    fr:04-bug-fixing) echo "Corrigez un bug efficacement avec Claude Craft : méthodologie de débogage, tests de non-régression et outils dédiés." ;;
-    fr:05-tools-reference) echo "Référence complète des outils Claude Craft : commandes, agents et skills disponibles pour votre workflow quotidien." ;;
-    fr:06-troubleshooting) echo "Dépannage Claude Craft : solutions aux problèmes courants d'installation, de configuration et d'utilisation." ;;
-    fr:07-backlog-management) echo "Gérez votre backlog avec Claude Craft : priorisation des tâches, sprints et suivi de la progression du projet." ;;
-    fr:08-setup-new-project) echo "Configurez Claude Craft sur un nouveau projet : installation, choix des technologies et premiers réglages." ;;
-    fr:09-setup-existing-project) echo "Intégrez Claude Craft à un projet existant : migration progressive, configuration et bonnes pratiques d'adoption." ;;
-    fr:10-complete-workflow) echo "Le workflow complet Claude Craft de bout en bout : planification, conception, implémentation et revue de sprint." ;;
-    fr:11-which-path) echo "Quel chemin choisir avec Claude Craft : greenfield, brownfield, correction de bug ou sprint autonome, avec la séquence de commandes de chacun." ;;
+    fr:01-getting-started) echo "Premiers pas avec Bear Craft : installation, configuration initiale et lancement de votre premier projet avec Claude Code." ;;
+    fr:02-project-creation) echo "Créez un nouveau projet avec Bear Craft : structure, technologies supportées et bonnes pratiques dès le démarrage." ;;
+    fr:03-feature-development) echo "Développez une nouvelle fonctionnalité avec Bear Craft : workflow TDD, agents spécialisés et commandes dédiées." ;;
+    fr:04-bug-fixing) echo "Corrigez un bug efficacement avec Bear Craft : méthodologie de débogage, tests de non-régression et outils dédiés." ;;
+    fr:05-tools-reference) echo "Référence complète des outils Bear Craft : commandes, agents et skills disponibles pour votre workflow quotidien." ;;
+    fr:06-troubleshooting) echo "Dépannage Bear Craft : solutions aux problèmes courants d'installation, de configuration et d'utilisation." ;;
+    fr:07-backlog-management) echo "Gérez votre backlog avec Bear Craft : priorisation des tâches, sprints et suivi de la progression du projet." ;;
+    fr:08-setup-new-project) echo "Configurez Bear Craft sur un nouveau projet : installation, choix des technologies et premiers réglages." ;;
+    fr:09-setup-existing-project) echo "Intégrez Bear Craft à un projet existant : migration progressive, configuration et bonnes pratiques d'adoption." ;;
+    fr:10-complete-workflow) echo "Le workflow complet Bear Craft de bout en bout : planification, conception, implémentation et revue de sprint." ;;
+    fr:11-which-path) echo "Quel chemin choisir avec Bear Craft : greenfield, brownfield, correction de bug ou sprint autonome, avec la séquence de commandes de chacun." ;;
 
-    es:01-getting-started) echo "Primeros pasos con Claude Craft: instalación, configuración inicial y puesta en marcha de tu primer proyecto con Claude Code." ;;
-    es:02-project-creation) echo "Crea un nuevo proyecto con Claude Craft: estructura, tecnologías compatibles y buenas prácticas desde el inicio." ;;
-    es:03-feature-development) echo "Desarrolla una nueva funcionalidad con Claude Craft: flujo TDD, agentes especializados y comandos dedicados." ;;
-    es:04-bug-fixing) echo "Corrige errores de forma eficaz con Claude Craft: metodología de depuración, pruebas de regresión y herramientas dedicadas." ;;
-    es:05-tools-reference) echo "Referencia completa de herramientas de Claude Craft: comandos, agentes y skills disponibles para tu flujo de trabajo diario." ;;
-    es:06-troubleshooting) echo "Solución de problemas de Claude Craft: respuestas a incidencias comunes de instalación, configuración y uso." ;;
-    es:07-backlog-management) echo "Gestiona tu backlog con Claude Craft: priorización de tareas, sprints y seguimiento del progreso del proyecto." ;;
-    es:08-setup-new-project) echo "Configura Claude Craft en un proyecto nuevo: instalación, elección de tecnologías y primeros ajustes." ;;
-    es:09-setup-existing-project) echo "Integra Claude Craft en un proyecto existente: migración progresiva, configuración y buenas prácticas de adopción." ;;
-    es:10-complete-workflow) echo "El flujo de trabajo completo de Claude Craft de principio a fin: planificación, diseño, implementación y revisión del sprint." ;;
-    es:11-which-path) echo "Qué camino elegir con Claude Craft: greenfield, brownfield, corrección de bugs o sprint autónomo, con la secuencia de comandos de cada uno." ;;
+    es:01-getting-started) echo "Primeros pasos con Bear Craft: instalación, configuración inicial y puesta en marcha de tu primer proyecto con Claude Code." ;;
+    es:02-project-creation) echo "Crea un nuevo proyecto con Bear Craft: estructura, tecnologías compatibles y buenas prácticas desde el inicio." ;;
+    es:03-feature-development) echo "Desarrolla una nueva funcionalidad con Bear Craft: flujo TDD, agentes especializados y comandos dedicados." ;;
+    es:04-bug-fixing) echo "Corrige errores de forma eficaz con Bear Craft: metodología de depuración, pruebas de regresión y herramientas dedicadas." ;;
+    es:05-tools-reference) echo "Referencia completa de herramientas de Bear Craft: comandos, agentes y skills disponibles para tu flujo de trabajo diario." ;;
+    es:06-troubleshooting) echo "Solución de problemas de Bear Craft: respuestas a incidencias comunes de instalación, configuración y uso." ;;
+    es:07-backlog-management) echo "Gestiona tu backlog con Bear Craft: priorización de tareas, sprints y seguimiento del progreso del proyecto." ;;
+    es:08-setup-new-project) echo "Configura Bear Craft en un proyecto nuevo: instalación, elección de tecnologías y primeros ajustes." ;;
+    es:09-setup-existing-project) echo "Integra Bear Craft en un proyecto existente: migración progresiva, configuración y buenas prácticas de adopción." ;;
+    es:10-complete-workflow) echo "El flujo de trabajo completo de Bear Craft de principio a fin: planificación, diseño, implementación y revisión del sprint." ;;
+    es:11-which-path) echo "Qué camino elegir con Bear Craft: greenfield, brownfield, corrección de bugs o sprint autónomo, con la secuencia de comandos de cada uno." ;;
 
-    de:01-getting-started) echo "Erste Schritte mit Claude Craft: Installation, Erstkonfiguration und Start Ihres ersten Projekts mit Claude Code." ;;
-    de:02-project-creation) echo "Erstellen Sie ein neues Projekt mit Claude Craft: Struktur, unterstützte Technologien und Best Practices von Anfang an." ;;
-    de:03-feature-development) echo "Entwickeln Sie ein neues Feature mit Claude Craft: TDD-Workflow, spezialisierte Agenten und passende Befehle." ;;
-    de:04-bug-fixing) echo "Beheben Sie Bugs effizient mit Claude Craft: Debugging-Methodik, Regressionstests und passende Tools." ;;
-    de:05-tools-reference) echo "Vollständige Tools-Referenz für Claude Craft: verfügbare Befehle, Agenten und Skills für Ihren täglichen Workflow." ;;
-    de:06-troubleshooting) echo "Fehlerbehebung für Claude Craft: Lösungen für häufige Probleme bei Installation, Konfiguration und Nutzung." ;;
-    de:07-backlog-management) echo "Verwalten Sie Ihr Backlog mit Claude Craft: Aufgabenpriorisierung, Sprints und Fortschrittsverfolgung." ;;
-    de:08-setup-new-project) echo "Richten Sie Claude Craft in einem neuen Projekt ein: Installation, Technologieauswahl und erste Einstellungen." ;;
-    de:09-setup-existing-project) echo "Integrieren Sie Claude Craft in ein bestehendes Projekt: schrittweise Migration, Konfiguration und Best Practices." ;;
-    de:10-complete-workflow) echo "Der komplette Claude-Craft-Workflow von Anfang bis Ende: Planung, Design, Umsetzung und Sprint-Review." ;;
-    de:11-which-path) echo "Welcher Weg mit Claude Craft: Greenfield, Brownfield, Bugfix oder autonomer Sprint, jeweils mit der passenden Befehlsfolge." ;;
+    de:01-getting-started) echo "Erste Schritte mit Bear Craft: Installation, Erstkonfiguration und Start Ihres ersten Projekts mit Claude Code." ;;
+    de:02-project-creation) echo "Erstellen Sie ein neues Projekt mit Bear Craft: Struktur, unterstützte Technologien und Best Practices von Anfang an." ;;
+    de:03-feature-development) echo "Entwickeln Sie ein neues Feature mit Bear Craft: TDD-Workflow, spezialisierte Agenten und passende Befehle." ;;
+    de:04-bug-fixing) echo "Beheben Sie Bugs effizient mit Bear Craft: Debugging-Methodik, Regressionstests und passende Tools." ;;
+    de:05-tools-reference) echo "Vollständige Tools-Referenz für Bear Craft: verfügbare Befehle, Agenten und Skills für Ihren täglichen Workflow." ;;
+    de:06-troubleshooting) echo "Fehlerbehebung für Bear Craft: Lösungen für häufige Probleme bei Installation, Konfiguration und Nutzung." ;;
+    de:07-backlog-management) echo "Verwalten Sie Ihr Backlog mit Bear Craft: Aufgabenpriorisierung, Sprints und Fortschrittsverfolgung." ;;
+    de:08-setup-new-project) echo "Richten Sie Bear Craft in einem neuen Projekt ein: Installation, Technologieauswahl und erste Einstellungen." ;;
+    de:09-setup-existing-project) echo "Integrieren Sie Bear Craft in ein bestehendes Projekt: schrittweise Migration, Konfiguration und Best Practices." ;;
+    de:10-complete-workflow) echo "Der komplette Bear-Craft-Workflow von Anfang bis Ende: Planung, Design, Umsetzung und Sprint-Review." ;;
+    de:11-which-path) echo "Welcher Weg mit Bear Craft: Greenfield, Brownfield, Bugfix oder autonomer Sprint, jeweils mit der passenden Befehlsfolge." ;;
 
-    pt:01-getting-started) echo "Primeiros passos com o Claude Craft: instalação, configuração inicial e início do seu primeiro projeto com Claude Code." ;;
-    pt:02-project-creation) echo "Crie um novo projeto com o Claude Craft: estrutura, tecnologias suportadas e boas práticas desde o início." ;;
-    pt:03-feature-development) echo "Desenvolva uma nova funcionalidade com o Claude Craft: fluxo TDD, agentes especializados e comandos dedicados." ;;
-    pt:04-bug-fixing) echo "Corrija bugs com eficiência usando o Claude Craft: metodologia de depuração, testes de regressão e ferramentas dedicadas." ;;
-    pt:05-tools-reference) echo "Referência completa das ferramentas do Claude Craft: comandos, agentes e skills disponíveis para o seu fluxo de trabalho diário." ;;
-    pt:06-troubleshooting) echo "Solução de problemas do Claude Craft: respostas para problemas comuns de instalação, configuração e uso." ;;
-    pt:07-backlog-management) echo "Gerencie seu backlog com o Claude Craft: priorização de tarefas, sprints e acompanhamento do progresso do projeto." ;;
-    pt:08-setup-new-project) echo "Configure o Claude Craft em um novo projeto: instalação, escolha de tecnologias e primeiros ajustes." ;;
-    pt:09-setup-existing-project) echo "Integre o Claude Craft a um projeto existente: migração progressiva, configuração e boas práticas de adoção." ;;
-    pt:10-complete-workflow) echo "O fluxo de trabalho completo do Claude Craft de ponta a ponta: planejamento, design, implementação e revisão do sprint." ;;
-    pt:11-which-path) echo "Qual caminho seguir com o Claude Craft: greenfield, brownfield, correção de bugs ou sprint autônomo, com a sequência de comandos de cada um." ;;
+    pt:01-getting-started) echo "Primeiros passos com o Bear Craft: instalação, configuração inicial e início do seu primeiro projeto com Claude Code." ;;
+    pt:02-project-creation) echo "Crie um novo projeto com o Bear Craft: estrutura, tecnologias suportadas e boas práticas desde o início." ;;
+    pt:03-feature-development) echo "Desenvolva uma nova funcionalidade com o Bear Craft: fluxo TDD, agentes especializados e comandos dedicados." ;;
+    pt:04-bug-fixing) echo "Corrija bugs com eficiência usando o Bear Craft: metodologia de depuração, testes de regressão e ferramentas dedicadas." ;;
+    pt:05-tools-reference) echo "Referência completa das ferramentas do Bear Craft: comandos, agentes e skills disponíveis para o seu fluxo de trabalho diário." ;;
+    pt:06-troubleshooting) echo "Solução de problemas do Bear Craft: respostas para problemas comuns de instalação, configuração e uso." ;;
+    pt:07-backlog-management) echo "Gerencie seu backlog com o Bear Craft: priorização de tarefas, sprints e acompanhamento do progresso do projeto." ;;
+    pt:08-setup-new-project) echo "Configure o Bear Craft em um novo projeto: instalação, escolha de tecnologias e primeiros ajustes." ;;
+    pt:09-setup-existing-project) echo "Integre o Bear Craft a um projeto existente: migração progressiva, configuração e boas práticas de adoção." ;;
+    pt:10-complete-workflow) echo "O fluxo de trabalho completo do Bear Craft de ponta a ponta: planejamento, design, implementação e revisão do sprint." ;;
+    pt:11-which-path) echo "Qual caminho seguir com o Bear Craft: greenfield, brownfield, correção de bugs ou sprint autônomo, com a sequência de comandos de cada um." ;;
 
     *) echo "" ;;
   esac
@@ -188,10 +188,10 @@ echo "=== Syncing docs to VitePress ==="
 # --- English docs (main) ---
 echo "  Syncing English docs..."
 
-copy_doc "$DOCS_DIR/QUICKSTART.md"              "$WEBSITE_DIR/en/getting-started/quickstart.md" "Quick Start" "Get started with Claude Craft in 5 minutes"
-copy_doc "$DOCS_DIR/PREREQUISITES.md"            "$WEBSITE_DIR/en/getting-started/prerequisites.md" "Prerequisites" "Required dependencies for Claude Craft"
-copy_doc "$DOCS_DIR/INSTALLATION.md"             "$WEBSITE_DIR/en/getting-started/installation.md" "Installation" "Install Claude Craft in your project"
-copy_doc "$DOCS_DIR/CONFIGURATION.md"            "$WEBSITE_DIR/en/getting-started/configuration.md" "Configuration" "Configure Claude Craft for your project"
+copy_doc "$DOCS_DIR/QUICKSTART.md"              "$WEBSITE_DIR/en/getting-started/quickstart.md" "Quick Start" "Get started with Bear Craft in 5 minutes"
+copy_doc "$DOCS_DIR/PREREQUISITES.md"            "$WEBSITE_DIR/en/getting-started/prerequisites.md" "Prerequisites" "Required dependencies for Bear Craft"
+copy_doc "$DOCS_DIR/INSTALLATION.md"             "$WEBSITE_DIR/en/getting-started/installation.md" "Installation" "Install Bear Craft in your project"
+copy_doc "$DOCS_DIR/CONFIGURATION.md"            "$WEBSITE_DIR/en/getting-started/configuration.md" "Configuration" "Configure Bear Craft for your project"
 
 copy_doc "$DOCS_DIR/CLI-REFERENCE.md"            "$WEBSITE_DIR/en/reference/cli.md" "CLI Reference" "Full CLI documentation"
 copy_doc "$DOCS_DIR/COMMANDS.md"                 "$WEBSITE_DIR/en/reference/commands.md" "Commands" "All slash commands"
@@ -224,8 +224,8 @@ copy_doc "$DOCS_DIR/MIGRATION-v7.md"             "$WEBSITE_DIR/en/migration/v7.m
 
 copy_doc "$PROJECT_ROOT/CHANGELOG.md"            "$WEBSITE_DIR/en/changelog.md" "Changelog" "Release history"
 copy_doc "$PROJECT_ROOT/CONTRIBUTING.md"         "$WEBSITE_DIR/en/contributing.md" "Contributing" "How to contribute"
-copy_doc "$DOCS_DIR/ABOUT.md"                    "$WEBSITE_DIR/en/about.md" "About" "Claude Craft is maintained by The Bearded CTO and published under the MIT license by The Bearded Bear SAS. Learn who's behind the project and how to reach out."
-copy_doc "$DOCS_DIR/COMPARE-SUPERCLAUDE.md"      "$WEBSITE_DIR/en/compare/claude-craft-vs-superclaude.md"
+copy_doc "$DOCS_DIR/ABOUT.md"                    "$WEBSITE_DIR/en/about.md" "About" "Bear Craft is maintained by The Bearded Bear and published under the MIT license by The Bearded Bear SAS. Learn who's behind the project and how to reach out."
+copy_doc "$DOCS_DIR/COMPARE-SUPERCLAUDE.md"      "$WEBSITE_DIR/en/compare/bear-craft-vs-superclaude.md"
 
 # English guides
 echo "  Syncing English guides..."
@@ -240,12 +240,12 @@ rewrite_links_in_dir "en" "$WEBSITE_DIR/en"
 
 # --- French ---
 echo "  Syncing French docs..."
-[[ -f "$DOCS_DIR/i18n/fr/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/fr/QUICKSTART.md"      "$WEBSITE_DIR/fr/getting-started/quickstart.md" "Démarrage Rapide" "Installez Claude Craft et lancez votre premier workflow avec Claude Code en 5 minutes : commandes, agents et bonnes pratiques prêts à l'emploi."
-[[ -f "$DOCS_DIR/i18n/fr/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/PREREQUISITES.md"    "$WEBSITE_DIR/fr/getting-started/prerequisites.md" "Prérequis" "Découvrez les prérequis et dépendances nécessaires pour installer Claude Craft dans votre projet avant de démarrer."
-[[ -f "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md"    "$WEBSITE_DIR/fr/reference/cli.md" "Référence CLI" "Documentation complète de la CLI Claude Craft : commandes, options et exemples d'utilisation pour votre terminal."
-[[ -f "$DOCS_DIR/i18n/fr/FAQ.md" ]]              && copy_doc "$DOCS_DIR/i18n/fr/FAQ.md"              "$WEBSITE_DIR/fr/faq.md" "FAQ" "Réponses aux questions fréquentes sur Claude Craft : installation, configuration, agents, commandes et bonnes pratiques."
-[[ -f "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md" ]]  && copy_doc "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md"  "$WEBSITE_DIR/fr/troubleshooting.md" "Dépannage" "Solutions aux problèmes courants rencontrés avec Claude Craft : installation, configuration et utilisation au quotidien."
-[[ -f "$DOCS_DIR/i18n/fr/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/fr/ABOUT.md"            "$WEBSITE_DIR/fr/about.md" "À propos" "Claude Craft est maintenu par The Bearded CTO et publié sous licence MIT par The Bearded Bear SAS. Découvrez qui est derrière le projet et comment nous contacter."
+[[ -f "$DOCS_DIR/i18n/fr/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/fr/QUICKSTART.md"      "$WEBSITE_DIR/fr/getting-started/quickstart.md" "Démarrage Rapide" "Installez Bear Craft et lancez votre premier workflow avec Claude Code en 5 minutes : commandes, agents et bonnes pratiques prêts à l'emploi."
+[[ -f "$DOCS_DIR/i18n/fr/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/PREREQUISITES.md"    "$WEBSITE_DIR/fr/getting-started/prerequisites.md" "Prérequis" "Découvrez les prérequis et dépendances nécessaires pour installer Bear Craft dans votre projet avant de démarrer."
+[[ -f "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md" ]]    && copy_doc "$DOCS_DIR/i18n/fr/CLI-REFERENCE.md"    "$WEBSITE_DIR/fr/reference/cli.md" "Référence CLI" "Documentation complète de la CLI Bear Craft : commandes, options et exemples d'utilisation pour votre terminal."
+[[ -f "$DOCS_DIR/i18n/fr/FAQ.md" ]]              && copy_doc "$DOCS_DIR/i18n/fr/FAQ.md"              "$WEBSITE_DIR/fr/faq.md" "FAQ" "Réponses aux questions fréquentes sur Bear Craft : installation, configuration, agents, commandes et bonnes pratiques."
+[[ -f "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md" ]]  && copy_doc "$DOCS_DIR/i18n/fr/TROUBLESHOOTING.md"  "$WEBSITE_DIR/fr/troubleshooting.md" "Dépannage" "Solutions aux problèmes courants rencontrés avec Bear Craft : installation, configuration et utilisation au quotidien."
+[[ -f "$DOCS_DIR/i18n/fr/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/fr/ABOUT.md"            "$WEBSITE_DIR/fr/about.md" "À propos" "Bear Craft est maintenu par The Bearded Bear et publié sous licence MIT par The Bearded Bear SAS. Découvrez qui est derrière le projet et comment nous contacter."
 
 for guide in "$DOCS_DIR/guides/fr/"*.md; do
   fname=$(basename "$guide")
@@ -257,9 +257,9 @@ rewrite_links_in_dir "fr" "$WEBSITE_DIR/fr"
 
 # --- Spanish ---
 echo "  Syncing Spanish docs..."
-[[ -f "$DOCS_DIR/i18n/es/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/es/QUICKSTART.md"      "$WEBSITE_DIR/es/getting-started/quickstart.md" "Inicio Rápido" "Instala Claude Craft y pon en marcha tu primer flujo de trabajo con Claude Code en 5 minutos: comandos, agentes y buenas prácticas listos para usar."
-[[ -f "$DOCS_DIR/i18n/es/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/es/PREREQUISITES.md"    "$WEBSITE_DIR/es/getting-started/prerequisites.md" "Requisitos" "Descubre los requisitos y las dependencias necesarias para instalar Claude Craft en tu proyecto antes de empezar."
-[[ -f "$DOCS_DIR/i18n/es/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/es/ABOUT.md"            "$WEBSITE_DIR/es/about.md" "Acerca de" "Claude Craft está mantenido por The Bearded CTO y publicado bajo licencia MIT por The Bearded Bear SAS. Descubre quién está detrás del proyecto y cómo contactarnos."
+[[ -f "$DOCS_DIR/i18n/es/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/es/QUICKSTART.md"      "$WEBSITE_DIR/es/getting-started/quickstart.md" "Inicio Rápido" "Instala Bear Craft y pon en marcha tu primer flujo de trabajo con Claude Code en 5 minutos: comandos, agentes y buenas prácticas listos para usar."
+[[ -f "$DOCS_DIR/i18n/es/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/es/PREREQUISITES.md"    "$WEBSITE_DIR/es/getting-started/prerequisites.md" "Requisitos" "Descubre los requisitos y las dependencias necesarias para instalar Bear Craft en tu proyecto antes de empezar."
+[[ -f "$DOCS_DIR/i18n/es/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/es/ABOUT.md"            "$WEBSITE_DIR/es/about.md" "Acerca de" "Bear Craft está mantenido por The Bearded Bear y publicado bajo licencia MIT por The Bearded Bear SAS. Descubre quién está detrás del proyecto y cómo contactarnos."
 
 for guide in "$DOCS_DIR/guides/es/"*.md; do
   fname=$(basename "$guide")
@@ -271,9 +271,9 @@ rewrite_links_in_dir "es" "$WEBSITE_DIR/es"
 
 # --- German ---
 echo "  Syncing German docs..."
-[[ -f "$DOCS_DIR/i18n/de/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/de/QUICKSTART.md"      "$WEBSITE_DIR/de/getting-started/quickstart.md" "Schnellstart" "Installieren Sie Claude Craft und starten Sie Ihren ersten Workflow mit Claude Code in 5 Minuten: einsatzbereite Befehle, Agenten und Best Practices."
-[[ -f "$DOCS_DIR/i18n/de/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/de/PREREQUISITES.md"    "$WEBSITE_DIR/de/getting-started/prerequisites.md" "Voraussetzungen" "Erfahren Sie, welche Voraussetzungen und Abhängigkeiten für die Installation von Claude Craft in Ihrem Projekt erforderlich sind."
-[[ -f "$DOCS_DIR/i18n/de/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/de/ABOUT.md"            "$WEBSITE_DIR/de/about.md" "Über uns" "Claude Craft wird von The Bearded CTO gepflegt und unter der MIT-Lizenz von The Bearded Bear SAS veröffentlicht. Erfahren Sie, wer dahintersteckt und wie Sie Kontakt aufnehmen."
+[[ -f "$DOCS_DIR/i18n/de/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/de/QUICKSTART.md"      "$WEBSITE_DIR/de/getting-started/quickstart.md" "Schnellstart" "Installieren Sie Bear Craft und starten Sie Ihren ersten Workflow mit Claude Code in 5 Minuten: einsatzbereite Befehle, Agenten und Best Practices."
+[[ -f "$DOCS_DIR/i18n/de/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/de/PREREQUISITES.md"    "$WEBSITE_DIR/de/getting-started/prerequisites.md" "Voraussetzungen" "Erfahren Sie, welche Voraussetzungen und Abhängigkeiten für die Installation von Bear Craft in Ihrem Projekt erforderlich sind."
+[[ -f "$DOCS_DIR/i18n/de/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/de/ABOUT.md"            "$WEBSITE_DIR/de/about.md" "Über uns" "Bear Craft wird von The Bearded Bear gepflegt und unter der MIT-Lizenz von The Bearded Bear SAS veröffentlicht. Erfahren Sie, wer dahintersteckt und wie Sie Kontakt aufnehmen."
 
 for guide in "$DOCS_DIR/guides/de/"*.md; do
   fname=$(basename "$guide")
@@ -285,9 +285,9 @@ rewrite_links_in_dir "de" "$WEBSITE_DIR/de"
 
 # --- Portuguese ---
 echo "  Syncing Portuguese docs..."
-[[ -f "$DOCS_DIR/i18n/pt/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/pt/QUICKSTART.md"      "$WEBSITE_DIR/pt/getting-started/quickstart.md" "Início Rápido" "Instale o Claude Craft e comece seu primeiro workflow com o Claude Code em 5 minutos: comandos, agentes e boas práticas prontos para usar."
-[[ -f "$DOCS_DIR/i18n/pt/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/pt/PREREQUISITES.md"    "$WEBSITE_DIR/pt/getting-started/prerequisites.md" "Pré-requisitos" "Conheça os pré-requisitos e as dependências necessárias para instalar o Claude Craft no seu projeto antes de começar."
-[[ -f "$DOCS_DIR/i18n/pt/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/pt/ABOUT.md"            "$WEBSITE_DIR/pt/about.md" "Sobre" "O Claude Craft é mantido por The Bearded CTO e publicado sob a licença MIT pela The Bearded Bear SAS. Descubra quem está por trás do projeto e como entrar em contato."
+[[ -f "$DOCS_DIR/i18n/pt/QUICKSTART.md" ]]      && copy_doc "$DOCS_DIR/i18n/pt/QUICKSTART.md"      "$WEBSITE_DIR/pt/getting-started/quickstart.md" "Início Rápido" "Instale o Bear Craft e comece seu primeiro workflow com o Claude Code em 5 minutos: comandos, agentes e boas práticas prontos para usar."
+[[ -f "$DOCS_DIR/i18n/pt/PREREQUISITES.md" ]]    && copy_doc "$DOCS_DIR/i18n/pt/PREREQUISITES.md"    "$WEBSITE_DIR/pt/getting-started/prerequisites.md" "Pré-requisitos" "Conheça os pré-requisitos e as dependências necessárias para instalar o Bear Craft no seu projeto antes de começar."
+[[ -f "$DOCS_DIR/i18n/pt/ABOUT.md" ]]            && copy_doc "$DOCS_DIR/i18n/pt/ABOUT.md"            "$WEBSITE_DIR/pt/about.md" "Sobre" "O Bear Craft é mantido por The Bearded Bear e publicado sob a licença MIT pela The Bearded Bear SAS. Descubra quem está por trás do projeto e como entrar em contato."
 
 for guide in "$DOCS_DIR/guides/pt/"*.md; do
   fname=$(basename "$guide")

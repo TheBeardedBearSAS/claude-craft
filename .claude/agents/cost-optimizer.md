@@ -97,7 +97,7 @@ Prioriser : économie élevée × effort faible × risque faible.
 - Réduction facture Anthropic/OpenAI
 - Review architecture sous angle coût
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@devops-engineer` — infrastructure
 - `@performance-auditor` — performance vs coût trade-off

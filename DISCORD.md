@@ -1,12 +1,12 @@
-# Discord Server Rules - Claude Craft
+# Discord Server Rules - Bear Craft
 
-Welcome to the Claude Craft Discord server! This document outlines the rules and guidelines for our community.
+Welcome to the Bear Craft Discord server! This document outlines the rules and guidelines for our community.
 
 ---
 
 ## Introduction
 
-The Claude Craft Discord server is a place for users, contributors, and enthusiasts to discuss the framework, get help, share projects, and collaborate. We are committed to providing a welcoming, inclusive, and harassment-free environment for everyone.
+The Bear Craft Discord server is a place for users, contributors, and enthusiasts to discuss the framework, get help, share projects, and collaborate. We are committed to providing a welcoming, inclusive, and harassment-free environment for everyone.
 
 These rules are based on the [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) and apply to all community spaces, including Discord, GitHub, and other platforms.
 
@@ -82,7 +82,7 @@ Promoting your own projects, services, or products without permission is not all
 - **Do**: Share relevant tools/libraries in context of helping someone.
 - **Don't**: Post promotional content, referral links, or advertisements.
 
-**Exception**: The #showcase channel is for sharing projects built with Claude Craft.
+**Exception**: The #showcase channel is for sharing projects built with Bear Craft.
 
 ---
 
@@ -99,9 +99,9 @@ Promoting your own projects, services, or products without permission is not all
 
 | Channel | Purpose |
 |---------|---------|
-| **#general** | General discussions about Claude Craft |
+| **#general** | General discussions about Bear Craft |
 | **#random** | Off-topic, casual conversations |
-| **#showcase** | Share your projects built with Claude Craft |
+| **#showcase** | Share your projects built with Bear Craft |
 
 ### 🆘 Support
 
@@ -131,7 +131,7 @@ Promoting your own projects, services, or products without permission is not all
 ## Roles
 
 ### @maintainer
-Core maintainers of the Claude Craft project. Can be pinged for critical issues only.
+Core maintainers of the Bear Craft project. Can be pinged for critical issues only.
 
 ### @contributor
 Active contributors who have had PRs merged.
@@ -160,7 +160,7 @@ We take violations of these rules seriously.
 
 If you believe a moderation action was unjust, you may appeal by:
 - DMing a moderator (politely)
-- Emailing moderation@claudecraft.dev *(placeholder)*
+- Emailing moderation@bearcraft.dev *(placeholder)*
 
 Appeals will be reviewed by the moderation team within 7 days.
 
@@ -174,7 +174,7 @@ If you witness or experience a violation of these rules, please report it.
 
 1. **Use Discord's built-in report feature** (right-click message → Report)
 2. **DM a moderator** with details (who, what, when, where)
-3. **Email**: moderation@claudecraft.dev *(placeholder)*
+3. **Email**: moderation@bearcraft.dev *(placeholder)*
 
 **All reports are confidential** and will be reviewed promptly.
 
@@ -211,13 +211,13 @@ These rules may be updated from time to time. Significant changes will be announ
 
 ## Contact
 
-- **Discord**: [https://discord.gg/claude-craft](https://discord.gg/claude-craft)
-- **GitHub**: [https://github.com/TheBeardedBearSAS/claude-craft](https://github.com/TheBeardedBearSAS/claude-craft)
-- **Email**: moderation@claudecraft.dev *(placeholder)*
+- **Discord**: [https://discord.gg/bear-craft](https://discord.gg/bear-craft)
+- **GitHub**: [https://github.com/TheBeardedBearSAS/bear-craft](https://github.com/TheBeardedBearSAS/bear-craft)
+- **Email**: moderation@bearcraft.dev *(placeholder)*
 
 ---
 
-**Thank you for being part of the Claude Craft community!** 🎉
+**Thank you for being part of the Bear Craft community!** 🎉
 
 We're glad you're here. Let's build something amazing together.
 
@@ -225,4 +225,4 @@ We're glad you're here. Let's build something amazing together.
 
 **Version**: 1.0.0  
 **Based on**: Contributor Covenant 2.1  
-**Author**: The Bearded CTO
+**Author**: The Bearded Bear

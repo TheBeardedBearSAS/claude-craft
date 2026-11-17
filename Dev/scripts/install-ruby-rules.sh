@@ -16,7 +16,7 @@ DEFAULT_STACK="Ruby 4.0, Rails 8.1, Hotwire, Solid Queue, RSpec or Minitest, Rub
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

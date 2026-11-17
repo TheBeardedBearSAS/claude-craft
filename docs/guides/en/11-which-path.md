@@ -1,6 +1,6 @@
 # Which Path? Choose Your Workflow in 30 Seconds
 
-> **Who is this for?** Anyone about to start work with Claude Craft who wonders "which commands do I run, and in what order?". Answer two questions, follow one path.
+> **Who is this for?** Anyone about to start work with Bear Craft who wonders "which commands do I run, and in what order?". Answer two questions, follow one path.
 >
 > **Rule of thumb:** one situation = one path = one short command sequence. You never need the other 100+ commands to get started.
 
@@ -97,7 +97,7 @@ See the [Bug Fixing guide](04-bug-fixing.md) for details.
 
 ## 5. Autonomous sprint: one command, start to merge
 
-When the work is already planned, let Claude Craft drive the whole sprint:
+When the work is already planned, let Bear Craft drive the whole sprint:
 
 ```
 /workflow:auto-sprint N

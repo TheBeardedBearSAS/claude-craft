@@ -13,8 +13,8 @@ export default {
   // ---- app : shell, titre, recherche, bannières, page introuvable ----
   'app.skipLink': 'Skip to main content',
   'app.sidebar.label': 'Sidebar',
-  'app.titleTemplate': '{view} — {sprint} · claude-craft kanban',
-  'app.titleNoSprint': '{view} · claude-craft kanban',
+  'app.titleTemplate': '{view} — {sprint} · bear-craft kanban',
+  'app.titleNoSprint': '{view} · bear-craft kanban',
   'app.title.board': 'Board',
   'app.title.backlog': 'Backlog',
   'app.title.sprints': 'Sprints',

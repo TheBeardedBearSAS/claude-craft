@@ -1,6 +1,6 @@
-# Claude Craft Shell Completions
+# Bear Craft Shell Completions
 
-Auto-completion support for Claude Craft CLI commands across Bash, Zsh, and Fish shells.
+Auto-completion support for Bear Craft CLI commands across Bash, Zsh, and Fish shells.
 
 ## Installation
 
@@ -9,13 +9,13 @@ Auto-completion support for Claude Craft CLI commands across Bash, Zsh, and Fish
 Add to your `~/.bashrc`:
 
 ```bash
-source /path/to/claude-craft/completions/claude-craft.bash
+source /path/to/bear-craft/completions/bear-craft.bash
 ```
 
 Or install globally:
 
 ```bash
-sudo cp completions/claude-craft.bash /etc/bash_completion.d/
+sudo cp completions/bear-craft.bash /etc/bash_completion.d/
 ```
 
 ### Zsh
@@ -25,7 +25,7 @@ Copy to your Zsh completions directory:
 ```bash
 # For user-specific installation
 mkdir -p ~/.zsh/completions
-cp completions/_claude-craft ~/.zsh/completions/
+cp completions/_bear-craft ~/.zsh/completions/
 
 # Add to ~/.zshrc if not already present
 fpath=(~/.zsh/completions $fpath)
@@ -35,7 +35,7 @@ autoload -Uz compinit && compinit
 Or install globally:
 
 ```bash
-sudo cp completions/_claude-craft /usr/local/share/zsh/site-functions/
+sudo cp completions/_bear-craft /usr/local/share/zsh/site-functions/
 ```
 
 ### Fish
@@ -44,7 +44,7 @@ Copy to Fish completions directory:
 
 ```bash
 mkdir -p ~/.config/fish/completions
-cp completions/claude-craft.fish ~/.config/fish/completions/
+cp completions/bear-craft.fish ~/.config/fish/completions/
 ```
 
 ## Usage
@@ -54,17 +54,17 @@ After installation, you'll have auto-completion for:
 ### Namespaces
 
 ```bash
-claude-craft <TAB>
+bear-craft <TAB>
 # Shows: angular common csharp flutter laravel php python qa react...
 ```
 
 ### Commands per Namespace
 
 ```bash
-claude-craft symfony <TAB>
+bear-craft symfony <TAB>
 # Shows: api-endpoint check generate-command...
 
-claude-craft react <TAB>
+bear-craft react <TAB>
 # Shows: accessibility-check bundle-analyze check...
 ```
 
@@ -72,13 +72,13 @@ claude-craft react <TAB>
 
 ```bash
 # Type:
-claude-craft sy<TAB>
+bear-craft sy<TAB>
 
 # Autocompletes to:
-claude-craft symfony
+bear-craft symfony
 
 # Then type:
-claude-craft symfony ch<TAB>
+bear-craft symfony ch<TAB>
 
 # Shows:
 check
@@ -128,7 +128,7 @@ autoload -Uz compinit && compinit
 ```bash
 # Fish automatically loads completions from ~/.config/fish/completions/
 # If not working, check file permissions:
-chmod +r ~/.config/fish/completions/claude-craft.fish
+chmod +r ~/.config/fish/completions/bear-craft.fish
 
 # Restart fish
 exec fish
@@ -136,7 +136,7 @@ exec fish
 
 ## Updating Completions
 
-When new commands are added to Claude Craft:
+When new commands are added to Bear Craft:
 
 1. Update the completion files with new commands
 2. Reload your shell configuration
@@ -146,17 +146,17 @@ When new commands are added to Claude Craft:
 
 To add a new command to completions:
 
-1. Edit `claude-craft.bash`, `_claude-craft`, and `claude-craft.fish`
+1. Edit `bear-craft.bash`, `_bear-craft`, and `bear-craft.fish`
 2. Add the command to the appropriate namespace array
 3. Test in each shell
 4. Submit a PR
 
 ## License
 
-Same as Claude Craft main project.
+Same as Bear Craft main project.
 
 ---
 
 **Version:** 1.0.0  
-**Author:** The Bearded CTO  
+**Author:** The Bearded Bear  
 **Date:** 2026-04-17

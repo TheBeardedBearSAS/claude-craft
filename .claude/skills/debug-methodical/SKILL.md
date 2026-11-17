@@ -106,7 +106,7 @@ Skill inspiré de [obra/superpowers](https://github.com/obra/superpowers). **Obj
 - Identifier la dépendance (temps, ordre, ressource partagée)
 - Ne JAMAIS marquer un test `@Flaky` sans ticket de correction
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - **`/qa:tdd`** — bug fix en mode TDD (test qui échoue d'abord)
 - **`/qa:fix`** — correction automatisée des bugs QA

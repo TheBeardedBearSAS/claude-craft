@@ -16,7 +16,7 @@ DEFAULT_STACK="Flutter 3+, Dart 3+, Riverpod, GoRouter, Freezed, Dio"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

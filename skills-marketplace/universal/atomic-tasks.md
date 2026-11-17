@@ -1,12 +1,12 @@
 ---
 name: atomic-tasks
 description: GSD pattern — split work into atomic tasks with fresh subagent contexts to fight context rot
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [workflow, productivity, context-management, gsd, atomic, subagent]
 category: workflow
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Atomic Tasks — GSD Pattern (Get Shit Done)
@@ -115,5 +115,5 @@ Before moving to next task, **explicitly verify** objective is met:
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

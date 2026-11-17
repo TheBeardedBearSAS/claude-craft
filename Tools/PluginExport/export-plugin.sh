@@ -2,9 +2,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 #
-# export-plugin.sh - Export claude-craft as a Claude Code plugin
+# export-plugin.sh - Export bear-craft as a Claude Code plugin
 #
-# This script packages claude-craft components into the official Claude Code
+# This script packages bear-craft components into the official Claude Code
 # plugin format for distribution via marketplace or direct installation.
 #
 # Usage:
@@ -13,7 +13,7 @@ IFS=$'\n\t'
 # Options:
 #   --tech=TECH      Technology to export (common, symfony, flutter, python, react, reactnative, project, infra)
 #   --lang=LANG      Language (en, fr, es, de, pt) - default: en
-#   --name=NAME      Plugin name (default: claude-craft-<tech>)
+#   --name=NAME      Plugin name (default: bear-craft-<tech>)
 #   --version=VER    Plugin version (default: 3.0.0)
 #   --all            Export all technologies as separate plugins
 #   -h, --help       Show this help
@@ -27,7 +27,7 @@ set -e
 
 # Script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLAUDE_CRAFT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
+BEAR_CRAFT_ROOT="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
 # Defaults
 TECH=""
@@ -117,10 +117,10 @@ create_manifest() {
   "description": "$description",
   "version": "$VERSION",
   "author": {
-    "name": "Claude-Craft",
-    "url": "https://github.com/your-org/claude-craft"
+    "name": "Bear-Craft",
+    "url": "https://github.com/your-org/bear-craft"
   },
-  "repository": "https://github.com/your-org/claude-craft",
+  "repository": "https://github.com/your-org/bear-craft",
   "license": "MIT"
 }
 EOF
@@ -131,7 +131,7 @@ EOF
 export_tech() {
     local tech="$1"
     local output="$2"
-    local name="${PLUGIN_NAME:-claude-craft-$tech}"
+    local name="${PLUGIN_NAME:-bear-craft-$tech}"
     local plugin_dir="$output/$name"
 
     log_info "Exporting $tech to $plugin_dir..."
@@ -140,19 +140,19 @@ export_tech() {
     local src_base=""
     case "$tech" in
         common)
-            src_base="$CLAUDE_CRAFT_ROOT/Dev/i18n/$LANG/Common"
+            src_base="$BEAR_CRAFT_ROOT/Dev/i18n/$LANG/Common"
             ;;
         symfony|flutter|python|react|reactnative)
             # Capitalize first letter
             local tech_cap="$(echo "${tech:0:1}" | tr '[:lower:]' '[:upper:]')${tech:1}"
             [[ "$tech" == "reactnative" ]] && tech_cap="ReactNative"
-            src_base="$CLAUDE_CRAFT_ROOT/Dev/i18n/$LANG/$tech_cap"
+            src_base="$BEAR_CRAFT_ROOT/Dev/i18n/$LANG/$tech_cap"
             ;;
         project)
-            src_base="$CLAUDE_CRAFT_ROOT/Project/i18n/$LANG"
+            src_base="$BEAR_CRAFT_ROOT/Project/i18n/$LANG"
             ;;
         infra)
-            src_base="$CLAUDE_CRAFT_ROOT/Infra/i18n/$LANG"
+            src_base="$BEAR_CRAFT_ROOT/Infra/i18n/$LANG"
             ;;
         *)
             log_error "Unknown technology: $tech"
@@ -209,7 +209,7 @@ export_tech() {
 
     # Copy hooks (for common only): scripts + lib from the single source (base/), and a
     # hooks.json derived from the default profile fragment with plugin-relative paths.
-    local hooks_base="$CLAUDE_CRAFT_ROOT/Dev/i18n/base/Common/hooks"
+    local hooks_base="$BEAR_CRAFT_ROOT/Dev/i18n/base/Common/hooks"
     if [[ "$tech" == "common" ]] && [[ -d "$hooks_base/scripts" ]]; then
         mkdir -p "$plugin_dir/hooks/scripts"
         cp -r "$hooks_base/scripts/." "$plugin_dir/hooks/scripts/"
@@ -265,7 +265,7 @@ EOF
 # Main
 main() {
     echo "========================================"
-    echo "  Claude-Craft Plugin Export"
+    echo "  Bear-Craft Plugin Export"
     echo "========================================"
     echo ""
 

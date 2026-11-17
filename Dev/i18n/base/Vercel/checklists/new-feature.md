@@ -6,7 +6,7 @@
 
 - [ ] **Requirements clear** - expected behavior and acceptance criteria defined
 - [ ] **Project shape identified** - static+rewrites / Serverless Functions / ISR-enabled / Cron+Scheduled (see `02-architecture-vercel.md`)
-- [ ] **Ownership checked** - if a claude-craft framework stack already owns routing/caching for this concern, defer to it rather than adding a competing `vercel.json` entry (see the decision tree in `02-architecture-vercel.md`)
+- [ ] **Ownership checked** - if a bear-craft framework stack already owns routing/caching for this concern, defer to it rather than adding a competing `vercel.json` entry (see the decision tree in `02-architecture-vercel.md`)
 
 ## Runtime Decision
 

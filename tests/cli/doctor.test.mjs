@@ -36,7 +36,7 @@ describe('runDoctor', () => {
   let consoleSpy;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-doctor-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-doctor-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     process.exitCode = undefined;
   });

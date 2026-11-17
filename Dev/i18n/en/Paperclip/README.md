@@ -1,9 +1,9 @@
-# Paperclip — Claude-Craft Integration
+# Paperclip — Bear-Craft Integration
 
 > **Paperclip**: open-source orchestration for zero-human companies.
 > Docs: https://docs.paperclip.ing/ · Repo: https://github.com/paperclipai/paperclip · License: MIT
 
-This directory contains the Claude-Craft rules, commands, skills, and templates for working with Paperclip — both as a **contributor** to a Paperclip codebase and as an **operator** using Paperclip with Claude Code as an adapter.
+This directory contains the Bear-Craft rules, commands, skills, and templates for working with Paperclip — both as a **contributor** to a Paperclip codebase and as an **operator** using Paperclip with Claude Code as an adapter.
 
 ## Stack
 
@@ -46,7 +46,7 @@ Paperclip/
 
 ## Install
 
-### Via Makefile (from a claude-craft checkout)
+### Via Makefile (from a bear-craft checkout)
 
 ```bash
 make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
@@ -76,4 +76,4 @@ make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
 
 - Paperclip docs: https://docs.paperclip.ing/
 - Paperclip repo: https://github.com/paperclipai/paperclip
-- Claude-Craft: https://github.com/TheBeardedBearSAS/claude-craft
+- Bear-Craft: https://github.com/TheBeardedBearSAS/bear-craft

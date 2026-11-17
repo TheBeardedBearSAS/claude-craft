@@ -1,6 +1,6 @@
 # Leitfaden zur Fehlerbehebung
 
-Dieser Leitfaden beschreibt den systematischen Ansatz zur Fehlerbehebung mit Claude-Craft – von der Diagnose bis zur Validierung.
+Dieser Leitfaden beschreibt den systematischen Ansatz zur Fehlerbehebung mit Bear-Craft – von der Diagnose bis zur Validierung.
 
 ---
 

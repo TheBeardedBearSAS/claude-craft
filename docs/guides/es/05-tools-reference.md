@@ -1,6 +1,6 @@
 # Guía de Referencia de Herramientas
 
-Esta guía cubre las herramientas utilitarias incluidas con Claude-Craft para gestionar perfiles, visualización de estado, configuración de proyectos, y los comandos y funcionalidades de Claude Code (v8.7).
+Esta guía cubre las herramientas utilitarias incluidas con Bear-Craft para gestionar perfiles, visualización de estado, configuración de proyectos, y los comandos y funcionalidades de Claude Code (v8.7).
 
 ---
 
@@ -182,7 +182,7 @@ Disponible para planes Team con aprobación de administrador.
 
 ## Plantillas de Hook
 
-Claude-Craft proporciona plantillas de hook listas para usar en `.claude/templates/hooks/`:
+Bear-Craft proporciona plantillas de hook listas para usar en `.claude/templates/hooks/`:
 
 | Plantilla | Propósito |
 |-----------|-----------|
@@ -518,7 +518,7 @@ rm /tmp/.ccusage_*
 
 ## Gestor ProjectConfig
 
-Gestiona las configuraciones de proyecto de Claude-Craft mediante YAML.
+Gestiona las configuraciones de proyecto de Bear-Craft mediante YAML.
 
 ### Propósito
 

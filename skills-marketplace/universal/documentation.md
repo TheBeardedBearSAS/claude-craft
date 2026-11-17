@@ -1,12 +1,12 @@
 ---
 name: documentation
 description: Documentation as Code — README, ADR, CHANGELOG, OpenAPI 3.2 best practices
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [documentation, adr, openapi, changelog, readme, markdown]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Documentation — Documentation as Code
@@ -153,5 +153,5 @@ Universal documentation principles for any project.
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

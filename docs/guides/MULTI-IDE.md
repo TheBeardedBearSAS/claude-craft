@@ -1,12 +1,12 @@
 # Multi-IDE Export Guide
 
-Export Claude Craft to **Cursor** and **Windsurf** IDEs with a single command.
+Export Bear Craft to **Cursor** and **Windsurf** IDEs with a single command.
 
 ---
 
 ## Overview
 
-Claude Craft is built for **Claude Code**, but its principles work in any AI-powered IDE. This guide shows how to export a condensed, single-file version compatible with:
+Bear Craft is built for **Claude Code**, but its principles work in any AI-powered IDE. This guide shows how to export a condensed, single-file version compatible with:
 
 - **Cursor IDE** (`.cursorrules`)
 - **Windsurf IDE** (`.windsurfrules`)
@@ -39,7 +39,7 @@ The export script combines:
    - Security (OWASP 2025)
    - Git Workflow (Conventional Commits)
 
-Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
+Total size: **~200-250 lines** (vs. full Bear Craft 10,000+ lines)
 
 ---
 
@@ -59,7 +59,7 @@ Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
 
 3. Restart Cursor or reload the window.
 
-4. Cursor's AI will now follow Claude Craft principles.
+4. Cursor's AI will now follow Bear Craft principles.
 
 ### Windsurf IDE
 
@@ -75,13 +75,13 @@ Total size: **~200-250 lines** (vs. full Claude Craft 10,000+ lines)
 
 3. Restart Windsurf or reload the window.
 
-4. Windsurf's AI will now follow Claude Craft principles.
+4. Windsurf's AI will now follow Bear Craft principles.
 
 ---
 
 ## Skill Portability Matrix
 
-Not all Claude Craft skill features are supported on every surface. This matrix shows what works where:
+Not all Bear Craft skill features are supported on every surface. This matrix shows what works where:
 
 | Skill type | Claude Code | Codex CLI | Gemini CLI | VS Code Ext | Cursor / Windsurf |
 |------------|:-----------:|:---------:|:----------:|:-----------:|:-----------------:|
@@ -98,7 +98,7 @@ Not all Claude Craft skill features are supported on every surface. This matrix 
 
 **Légende :** ✅ = fully supported | ⚠️ = partial / manual adaptation needed | ❌ = not supported
 
-**Recommendation:** For full features, use Claude Craft with **Claude Code**.
+**Recommendation:** For full features, use Bear Craft with **Claude Code**.
 
 ---
 
@@ -189,7 +189,7 @@ If you have existing `.cursorrules` or `.windsurfrules`:
 
 ## Updating
 
-When Claude Craft updates:
+When Bear Craft updates:
 
 ```bash
 # Pull latest
@@ -206,10 +206,10 @@ cp bundles/cursor/.cursorrules /path/to/your/project/
 
 ## Attribution
 
-Exported files include attribution to **The Bearded CTO / Claude Craft**.
+Exported files include attribution to **The Bearded Bear / Bear Craft**.
 
 **License:** MIT  
-**Repository:** https://github.com/TheBeardedBearSAS/claude-craft
+**Repository:** https://github.com/TheBeardedBearSAS/bear-craft
 
 ---
 

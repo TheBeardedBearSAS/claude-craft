@@ -20,8 +20,8 @@ if command -v rtk &>/dev/null; then
 else
   echo "RTK ist NICHT installiert"
   echo ""
-  echo "Installationsoptionen (das curl|bash-Muster ist durch Claude Craft Hooks BLOCKIERT):"
-  echo "  1. (Empfohlen) make install-rtk    # aus dem claude-craft Root"
+  echo "Installationsoptionen (das curl|bash-Muster ist durch Bear Craft Hooks BLOCKIERT):"
+  echo "  1. (Empfohlen) make install-rtk    # aus dem bear-craft Root"
   echo "  2. cargo install rtk-cli            # wenn Rust Toolchain vorhanden"
   echo "  3. Release-Binary manuell herunterladen: https://github.com/rtk-ai/rtk/releases"
 fi

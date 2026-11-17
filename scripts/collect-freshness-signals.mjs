@@ -31,7 +31,7 @@ const DEFAULT_SOURCES = path.join(PROJECT_ROOT, 'config', 'freshness-sources.yam
 const DEFAULT_AUDIT_DIR = path.join(PROJECT_ROOT, 'docs', 'audit');
 const DEFAULT_OUT_DIR = path.join(DEFAULT_AUDIT_DIR, 'freshness');
 
-const UA = { 'User-Agent': 'claude-craft-freshness/1.0' };
+const UA = { 'User-Agent': 'bear-craft-freshness/1.0' };
 const GH = { ...UA, Accept: 'application/vnd.github+json' };
 const FLUTTER_RELEASES = 'https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json';
 
@@ -201,7 +201,7 @@ export async function collectFreshness(opts = {}) {
   const result = {
     generated_at: now.toISOString(),
     date,
-    claude_craft_version: pkg.version,
+    bear_craft_version: pkg.version,
     previous_report: previousReport(opts.auditDir ?? DEFAULT_AUDIT_DIR),
     entries,
     families: Object.fromEntries(families.map((f) => [f, sources.families[f]])),

@@ -811,7 +811,7 @@ Templates disponibles en `.claude/templates/hooks/`: `output-filter.json`, `pre-
 
 ## Herramientas de terceros del ecosistema (tokens y contexto)
 
-Además de RTK y los hooks nativos, el ecosistema de Claude Code ofrece herramientas que cubren ángulos no tratados de forma nativa. Ninguna se incluye en Claude Craft: se documentan y se recomiendan.
+Además de RTK y los hooks nativos, el ecosistema de Claude Code ofrece herramientas que cubren ángulos no tratados de forma nativa. Ninguna se incluye en Bear Craft: se documentan y se recomiendan.
 
 | Herramienta | Licencia | Ángulo | Rec |
 |-------------|----------|--------|-----|
@@ -839,4 +839,4 @@ Además de RTK y los hooks nativos, el ecosistema de Claude Code ofrece herramie
 
 **Ultima actualizacion:** 2026-04
 **Version:** 1.2.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

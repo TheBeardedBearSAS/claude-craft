@@ -2,7 +2,7 @@
 
 **Version:** 5.8.0
 
-Complete guide for migrating Claude Craft projects from version 3.x to 4.x.
+Complete guide for migrating Bear Craft projects from version 3.x to 4.x.
 
 ---
 
@@ -42,9 +42,9 @@ Before migrating:
    git add -A && git commit -m "Pre-migration snapshot"
    ```
 
-3. **Update Claude Craft**
+3. **Update Bear Craft**
    ```bash
-   cd ~/claude-craft
+   cd ~/bear-craft
    git pull origin main
    ```
 
@@ -56,10 +56,10 @@ Before migrating:
 
 ```bash
 # Preview
-npx @the-bearded-bear/claude-craft migrate ~/my-project --dry-run
+npx @the-bearded-bear/bear-craft migrate ~/my-project --dry-run
 
 # Migrate
-npx @the-bearded-bear/claude-craft migrate ~/my-project
+npx @the-bearded-bear/bear-craft migrate ~/my-project
 ```
 
 ---
@@ -126,7 +126,7 @@ npx @the-bearded-bear/claude-craft migrate ~/my-project
 **After (v4.x):** Minimal config with references
 
 ```markdown
-# Claude-Craft - Multi-Technology Framework
+# Bear-Craft - Multi-Technology Framework
 
 **Version:** 5.7.0
 
@@ -395,7 +395,7 @@ cp .claude.backup/rules/00-project-context.md .claude/rules/
 ## Getting Help
 
 - Check [Troubleshooting Guide](TROUBLESHOOTING.md)
-- [Open GitHub Issue](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- [Open GitHub Issue](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ---
 

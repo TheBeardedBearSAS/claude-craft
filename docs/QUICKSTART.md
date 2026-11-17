@@ -4,9 +4,9 @@ This guide takes you from zero to a working audit of your project. Every step in
 
 ---
 
-## First 10 Minutes with Claude Craft
+## First 10 Minutes with Bear Craft
 
-**New to Claude Craft?** Follow Steps 1-2 below to install, then run the personalized guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Bear Craft?** Follow Steps 1-2 below to install, then run the personalized guided tour that shows you the 3 most valuable commands for YOUR project.
 
 After installation (Step 1), open Claude Code in your project and run:
 
@@ -26,7 +26,7 @@ This interactive wizard will:
 After completing the wizard, you can either:
 - Continue with the full installation steps below for team setup
 - Jump to [What's Next](#whats-next) to explore workflows and agents
-- Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/claude-craft/discussions) to ask questions (Discord community planned for Q3 2026)
+- Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/bear-craft/discussions) to ask questions (Discord community planned for Q3 2026)
 
 > See `.claude/commands/common/getting-started.md` for the full wizard reference.
 
@@ -46,13 +46,13 @@ Missing something? See [Prerequisites Guide](PREREQUISITES.md) for installation 
 
 ---
 
-## Step 1: Install Claude Craft (2 minutes)
+## Step 1: Install Bear Craft (2 minutes)
 
 Navigate to your existing project (or create one) and install:
 
 ```bash
 cd ~/my-project
-npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 ```
 
 Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`, `vuejs`, `reactnative`, `csharp`, `laravel`, `php`, `paperclip`.
@@ -60,7 +60,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **What you should see:**
 
 ```
-  Claude Craft v8.19.2 - AI Development Framework
+  Bear Craft v8.19.2 - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed
@@ -72,7 +72,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **Checkpoint:** Verify the installation:
 
 ```bash
-npx @the-bearded-bear/claude-craft check .
+npx @the-bearded-bear/bear-craft check .
 ```
 
 This shows installed commands, agents, skills, and references. You should see your technology listed alongside common rules.
@@ -103,7 +103,7 @@ A typical output includes:
 - Performance hotspots
 - Code quality metrics (duplication, complexity)
 
-**Checkpoint:** You see a summary with scores and actionable findings. If the command is not recognized, verify installation with `npx @the-bearded-bear/claude-craft check .`
+**Checkpoint:** You see a summary with scores and actionable findings. If the command is not recognized, verify installation with `npx @the-bearded-bear/bear-craft check .`
 
 ---
 
@@ -172,9 +172,9 @@ You can also ask the TDD coach agent directly:
 
 ```
 INSTALLATION
-  npx @the-bearded-bear/claude-craft install . --tech=X --lang=en
-  npx @the-bearded-bear/claude-craft check .
-  npx @the-bearded-bear/claude-craft doctor .
+  npx @the-bearded-bear/bear-craft install . --tech=X --lang=en
+  npx @the-bearded-bear/bear-craft check .
+  npx @the-bearded-bear/bear-craft doctor .
 
 COMMON COMMANDS
   /team:audit                Full project audit

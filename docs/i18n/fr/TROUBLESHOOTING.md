@@ -1,6 +1,6 @@
 # Guide de Dépannage
 
-Solutions aux problèmes courants avec Claude Craft.
+Solutions aux problèmes courants avec Bear Craft.
 
 ---
 
@@ -28,7 +28,7 @@ sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd6
 sudo chmod +x /usr/local/bin/yq
 ```
 
-**Note :** Il existe plusieurs outils nommés "yq". Claude Craft nécessite la version de Mike Farah (v4+), pas la version Python.
+**Note :** Il existe plusieurs outils nommés "yq". Bear Craft nécessite la version de Mike Farah (v4+), pas la version Python.
 
 ---
 
@@ -450,9 +450,9 @@ docker compose logs -f
 
 Si vous ne trouvez pas de solution :
 
-1. Cherchez dans les issues existantes : https://github.com/TheBeardedBearSAS/claude-craft/issues
+1. Cherchez dans les issues existantes : https://github.com/TheBeardedBearSAS/bear-craft/issues
 2. Créez une nouvelle issue avec :
-   - Version de Claude Craft
+   - Version de Bear Craft
    - OS et version
    - Étapes pour reproduire
    - Messages d'erreur

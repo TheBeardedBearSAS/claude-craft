@@ -113,7 +113,7 @@ Ce n'est qu'**après** qu'on rentre dans le TDD (Red/Green/Refactor).
 | Ignorer les trade-offs | ADR court obligatoire |
 | Architecture en vase clos | Review par un pair ou subagent `@tech-lead` |
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - **`/workflow:design`** — utilise ce skill par défaut
 - **Agent `@tech-lead`** — peut produire l'output Architect

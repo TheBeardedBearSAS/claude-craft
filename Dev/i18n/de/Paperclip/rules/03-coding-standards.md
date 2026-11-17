@@ -170,4 +170,4 @@ Plugin-/Adapter-Config lebt **innerhalb** des Plugin- oder Adapter-Packages, nic
 
 ---
 
-**Letzte Aktualisierung:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded CTO
+**Letzte Aktualisierung:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded Bear

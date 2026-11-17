@@ -16,7 +16,7 @@ DEFAULT_STACK="PHP 8.5, Composer, PSR Standards, Pest 4, PHPUnit 12"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

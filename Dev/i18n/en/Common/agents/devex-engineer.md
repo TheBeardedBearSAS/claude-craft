@@ -250,7 +250,7 @@ spec:
 - Documentation restructuring
 - DevEx / DORA metrics
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — CI/CD, IDP infrastructure
 - `.claude/skills/tooling/SKILL.md` — CLI patterns, scripting

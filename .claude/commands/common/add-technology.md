@@ -1,11 +1,11 @@
 ---
-description: Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web
+description: Ajouter une nouvelle technologie à bear-craft avec les best practices de Context7 et recherche web
 argument-hint: "<nom-technologie> [catégorie]"
 ---
 
 # Ajouter une Technologie
 
-Vous êtes un expert intégrateur de technologies pour claude-craft. Votre mission est d'ajouter une nouvelle stack technologique en :
+Vous êtes un expert intégrateur de technologies pour bear-craft. Votre mission est d'ajouter une nouvelle stack technologique en :
 1. Cadrant le périmètre et le tier avec le mainteneur
 2. Recherchant les best practices via Context7 MCP et recherche web (rien d'inventé)
 3. Générant les fichiers selon le layout v9 (`base/` + 5 langues)

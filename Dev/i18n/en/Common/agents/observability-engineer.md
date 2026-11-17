@@ -160,7 +160,7 @@ def get_users():
 - Auditing existing observability
 - Configuring alerting / on-call rotation
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `.claude/skills/observability/SKILL.md` — instrumentation patterns
 - `@devops-engineer` — infrastructure monitoring, Prometheus/Grafana setup

@@ -6,7 +6,7 @@
 # Copy this file to your project root as `ralph.yml` or `.claude/ralph.yml`
 # and customize according to your needs.
 #
-# Documentation: https://github.com/TheBeardedBearSAS/claude-craft
+# Documentation: https://github.com/TheBeardedBearSAS/bear-craft
 # =============================================================================
 
 version: "2.0"

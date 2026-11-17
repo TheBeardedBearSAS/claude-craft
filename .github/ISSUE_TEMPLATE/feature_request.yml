@@ -40,7 +40,7 @@ body:
     id: scope
     attributes:
       label: Scope
-      description: Quelle partie de Claude Craft ?
+      description: Quelle partie de Bear Craft ?
       options:
         - Framework BMAD (workflow, sprint, gate)
         - Agents (technical reviewers, ralph, tdd-coach…)

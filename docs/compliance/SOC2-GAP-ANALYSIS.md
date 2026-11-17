@@ -1,8 +1,8 @@
-# SOC 2 Type I Gap Analysis — Claude Craft
+# SOC 2 Type I Gap Analysis — Bear Craft
 
 **Version:** 1.0.0  
 **Date:** 2026-04-17  
-**Scope:** Claude Craft SaaS platform (Enterprise tier)  
+**Scope:** Bear Craft SaaS platform (Enterprise tier)  
 **Target Certification:** SOC 2 Type I (Security, Availability, Confidentiality)
 
 ---
@@ -18,7 +18,7 @@
 | **Estimated Effort** | — | 3 person-months |
 | **Investment** | — | €75,000 (staffing + tools + audit) |
 
-**Readiness Assessment:** Claude Craft has **foundational security practices** (2FA, encryption, monitoring) but lacks **formal policies and documentation** required for SOC 2. With focused remediation, **Type I audit-ready in 3 months**.
+**Readiness Assessment:** Bear Craft has **foundational security practices** (2FA, encryption, monitoring) but lacks **formal policies and documentation** required for SOC 2. With focused remediation, **Type I audit-ready in 3 months**.
 
 ---
 
@@ -31,7 +31,7 @@
 
 ### Out of Scope
 - **NPM Package (MIT):** Community/open-source tier (not covered by SOC 2)
-- **Customer-Generated Code:** Code produced by Claude Craft agents (customer responsibility)
+- **Customer-Generated Code:** Code produced by Bear Craft agents (customer responsibility)
 
 ---
 
@@ -243,6 +243,6 @@
 
 ---
 
-**Prepared by:** The Bearded CTO — Security Team  
+**Prepared by:** The Bearded Bear — Security Team  
 **Reviewed by:** `@security-auditor`, Legal counsel  
 **Next Review:** 2026-05-17 (monthly during remediation)

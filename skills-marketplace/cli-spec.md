@@ -1,27 +1,27 @@
-# CLI Spec — `claude-craft skill`
+# CLI Spec — `bear-craft skill`
 
 > **Status** : DRAFT P3-23. À implémenter dans `cli/src/commands/skill.ts`.
 
 ## Commandes
 
-### `claude-craft skill search <query>`
+### `bear-craft skill search <query>`
 
 Recherche dans l'index marketplace (téléchargé + caché 1h).
 
 ```bash
-claude-craft skill search symfony testing
+bear-craft skill search symfony testing
 # →
 # NAME                          VERSION  STACK     AUTHOR
 # symfony:check-testing-advanced 1.2.0    symfony   @alice
 # symfony:mutation-testing-pest  1.0.1    symfony   @bob
 ```
 
-### `claude-craft skill install <name>[@version]`
+### `bear-craft skill install <name>[@version]`
 
 Télécharge SKILL.md + installe dans `.claude/skills/<name>/SKILL.md` du projet.
 
 ```bash
-claude-craft skill install symfony:check-testing-advanced
+bear-craft skill install symfony:check-testing-advanced
 # → télécharge depuis raw.githubusercontent.com
 # → valide frontmatter (YAML + champs obligatoires)
 # → écrit dans .claude/skills/<name>/SKILL.md
@@ -33,23 +33,23 @@ Flags :
 - `--force` : écrase si existe
 - `--dry-run` : affiche sans écrire
 
-### `claude-craft skill list`
+### `bear-craft skill list`
 
 Liste les skills installées (projet + global).
 
-### `claude-craft skill remove <name>`
+### `bear-craft skill remove <name>`
 
 Désinstalle.
 
-### `claude-craft skill update [<name>]`
+### `bear-craft skill update [<name>]`
 
 MAJ une skill ou toutes.
 
 ## Index source
 
-`https://skills.claude-craft.dev/index.json` (CDN Cloudflare, TTL 1h).
+`https://skills.bear-craft.dev/index.json` (CDN Cloudflare, TTL 1h).
 
-Fallback : `https://raw.githubusercontent.com/the-bearded-cto/skills-marketplace/main/index.json`.
+Fallback : `https://raw.githubusercontent.com/TheBeardedBearSAS/skills-marketplace/main/index.json`.
 
 ## Validation skill installée
 
@@ -72,4 +72,4 @@ Avant écriture :
 
 - Pas d'exécution automatique de scripts tiers
 - Review humaine recommandée avant `install` (CLI affiche resumé frontmatter + prompt confirmation sauf `--yes`)
-- Rapport vulnérabilités skills via `security@claude-craft.dev`
+- Rapport vulnérabilités skills via `security@bear-craft.dev`

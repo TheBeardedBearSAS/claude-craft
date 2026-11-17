@@ -1,12 +1,12 @@
 # Guia de Gestão do Backlog
 
-Fluxo de trabalho completo para criar e gerenciar um backlog SCRUM com o Claude-Craft.
+Fluxo de trabalho completo para criar e gerenciar um backlog SCRUM com o Bear-Craft.
 
 ---
 
 ## Visão Geral
 
-O Claude-Craft fornece um conjunto completo de comandos para gerenciar seu product backlog seguindo a metodologia SCRUM:
+O Bear-Craft fornece um conjunto completo de comandos para gerenciar seu product backlog seguindo a metodologia SCRUM:
 
 - **Um único comando `/project:backlog`** (`add`, `list`, `edit`, `move`, mais `next story` e `move story --auto` para o roteamento de histórias) junto com `/workflow:plan --only=backlog`, `/workflow:start` e `/workflow:status --board`; os antigos comandos por entidade (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) e o namespace de sprint foram removidos na 9.0 (ver MIGRATION-v9)
 - **5 templates** para estrutura consistente
@@ -224,7 +224,7 @@ Isso gera `scrum-validation-report.md` com:
 Exibe o quadro Kanban com as colunas:
 - To Do | In Progress | In Review | Done | Blocked
 
-> Também é possível gerenciar o backlog pela interface web Kanban (`npx @the-bearded-bear/claude-craft kanban`): criar, editar e excluir histórias, planejá-las em um sprint, e criar, iniciar e encerrar sprints. Ela complementa os comandos `/workflow:*` e `/project:*`, que continuam válidos e escrevem o mesmo arquivo (`.bmad/sprint-status.yaml`).
+> Também é possível gerenciar o backlog pela interface web Kanban (`npx @the-bearded-bear/bear-craft kanban`): criar, editar e excluir histórias, planejá-las em um sprint, e criar, iniciar e encerrar sprints. Ela complementa os comandos `/workflow:*` e `/project:*`, que continuam válidos e escrevem o mesmo arquivo (`.bmad/sprint-status.yaml`).
 
 ### Passo 4: Decompor em Tarefas
 
@@ -280,7 +280,7 @@ Exibe:
 
 ## Templates
 
-O Claude-Craft fornece 5 templates para estrutura consistente do backlog:
+O Bear-Craft fornece 5 templates para estrutura consistente do backlog:
 
 | Template | Finalidade |
 |----------|-----------|

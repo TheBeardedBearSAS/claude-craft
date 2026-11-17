@@ -1,6 +1,6 @@
-# Claude-Craft User Guides
+# Bear-Craft User Guides
 
-Complete documentation for using Claude-Craft, from project creation to feature development and bug fixing.
+Complete documentation for using Bear-Craft, from project creation to feature development and bug fixing.
 
 ---
 
@@ -19,7 +19,7 @@ Complete documentation for using Claude-Craft, from project creation to feature 
 ## Guide Overview
 
 ### 1. Getting Started
-Quick overview of Claude-Craft, prerequisites, and your first project in 5 minutes.
+Quick overview of Bear-Craft, prerequisites, and your first project in 5 minutes.
 
 ### 2. Project Creation
 Complete workflow for setting up a new project: technology selection, installation methods (Makefile, YAML), and post-installation configuration.
@@ -40,10 +40,10 @@ Common issues and solutions for installation, agents, commands, and configuratio
 Complete SCRUM backlog workflow: generating backlog from specs, managing EPICs/User Stories/Tasks, and 15 project management commands.
 
 ### 8. Setup New Project
-Step-by-step tutorial for installing Claude-Craft on a brand new project. Covers prerequisites, both installation methods (NPX and Makefile), verification, configuration, and first launch.
+Step-by-step tutorial for installing Bear-Craft on a brand new project. Covers prerequisites, both installation methods (NPX and Makefile), verification, configuration, and first launch.
 
 ### 9. Setup Existing Project
-Comprehensive guide for adding Claude-Craft to a project with existing code. Includes backup procedures, conflict resolution, codebase exploration, first AI-assisted modification, and team onboarding.
+Comprehensive guide for adding Bear-Craft to a project with existing code. Includes backup procedures, conflict resolution, codebase exploration, first AI-assisted modification, and team onboarding.
 
 ### 10. Complete Workflow (flagship tutorial)
 The narrated end-to-end walkthrough: from a one-sentence idea to a reviewed, tested first sprint. Builds a real example app (*TaskFlow*) through the full BMAD cycle — backlog, gates, sprint planning, TDD implementation, Kanban tracking, and sprint closure — with execution-mode and `/clear` guidance for total beginners. Includes a multi-stack (web + mobile) appendix.

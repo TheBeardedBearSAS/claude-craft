@@ -1,6 +1,6 @@
 # Leitfaden zur Feature-Entwicklung
 
-Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neuer Features mit Claude-Craft, von der ersten Analyse bis zum abschließenden Review.
+Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neuer Features mit Bear-Craft, von der ersten Analyse bis zum abschließenden Review.
 
 ---
 
@@ -20,7 +20,7 @@ Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neu
 
 ## TDD-Workflow – Überblick
 
-Claude-Craft setzt einen testgetriebenen Entwicklungs-Workflow durch:
+Bear-Craft setzt einen testgetriebenen Entwicklungs-Workflow durch:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐

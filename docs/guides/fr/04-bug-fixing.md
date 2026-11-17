@@ -1,6 +1,6 @@
 # Guide de Correction de Bugs
 
-Ce guide couvre l'approche systématique pour corriger les bugs avec Claude-Craft, du diagnostic à la validation.
+Ce guide couvre l'approche systématique pour corriger les bugs avec Bear-Craft, du diagnostic à la validation.
 
 ---
 

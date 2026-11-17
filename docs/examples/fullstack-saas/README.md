@@ -1,6 +1,6 @@
 # Fullstack SaaS Example
 
-A complete SaaS application with Symfony backend and Flutter mobile app, demonstrating multi-technology coordination with Claude Craft.
+A complete SaaS application with Symfony backend and Flutter mobile app, demonstrating multi-technology coordination with Bear Craft.
 
 ---
 
@@ -49,7 +49,7 @@ This example demonstrates:
 
 ```
 fullstack-saas/
-├── .claude/                    # Root Claude Craft config
+├── .claude/                    # Root Bear Craft config
 ├── .bmad/                      # BMAD configuration
 │   ├── config.yaml
 │   └── backlog/
@@ -100,12 +100,12 @@ cd ~/my-saas
 # Start all services
 docker compose up -d
 
-# Install Claude Craft for each project
+# Install Bear Craft for each project
 cd backend
-npx @the-bearded-bear/claude-craft install . --tech=symfony
+npx @the-bearded-bear/bear-craft install . --tech=symfony
 
 cd ../mobile
-npx @the-bearded-bear/claude-craft install . --tech=flutter
+npx @the-bearded-bear/bear-craft install . --tech=flutter
 ```
 
 ### 2. Run Tests

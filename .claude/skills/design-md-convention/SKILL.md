@@ -73,7 +73,7 @@ Primary button: background #3B82F6
 
 `DESIGN.md` est **dans le repo**, reviewé en PR au même titre que le code.
 
-## Intégration avec agents Claude Craft
+## Intégration avec agents Bear Craft
 
 Les agents suivants lisent `DESIGN.md` par défaut :
 

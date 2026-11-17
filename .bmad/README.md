@@ -2,7 +2,7 @@
 
 ## Overview
 
-BMAD v6 is a project management enhancement framework for claude-craft that provides:
+BMAD v6 is a project management enhancement framework for bear-craft that provides:
 
 - **10 Agent-as-Code** definitions following BMAD methodology
 - **Status-based routing** with automated state machine
@@ -229,4 +229,4 @@ sudo chmod +x /usr/local/bin/yq
 
 ## License
 
-Part of claude-craft - MIT License
+Part of bear-craft - MIT License

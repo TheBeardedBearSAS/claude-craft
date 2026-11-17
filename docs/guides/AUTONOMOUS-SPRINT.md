@@ -6,7 +6,7 @@ Guide complet pour utiliser le mode Autonomous Sprint : user story → code + te
 
 ## Concept
 
-**Autonomous Sprint** permet à Claude Craft d'implémenter une user story **end-to-end** en autonomie, avec des checkpoints humains aux **quality gates** BMAD v6.
+**Autonomous Sprint** permet à Bear Craft d'implémenter une user story **end-to-end** en autonomie, avec des checkpoints humains aux **quality gates** BMAD v6.
 
 **Workflow** :
 ```
@@ -427,7 +427,7 @@ Implements user authentication via email/password.
 
 ---
 
-Generated with Claude Craft Autonomous Sprint Mode
+Generated with Bear Craft Autonomous Sprint Mode
 ```
 
 ---
@@ -493,7 +493,7 @@ Generated with Claude Craft Autonomous Sprint Mode
 /workflow:auto-sprint 5
 
 # Ou via CLI
-npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
+npx @the-bearded-bear/bear-craft autonomous-sprint --story=US-001
 ```
 
 ### Options avancées
@@ -662,5 +662,5 @@ git reset --hard HEAD~1
 
 **Date de création** : 2026-04-17  
 **Version** : 1.0.0  
-**Auteur** : The Bearded CTO  
+**Auteur** : The Bearded Bear  
 **Status** : Beta (OPP-02)

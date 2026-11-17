@@ -33,8 +33,8 @@ describe('runUpdate', () => {
   let consoleSpy;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-update-'));
-    cliRoot = mkdtempSync(join(tmpdir(), 'claude-craft-cli-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-update-'));
+    cliRoot = mkdtempSync(join(tmpdir(), 'bear-craft-cli-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     process.exitCode = undefined;
     spawnSync.mockClear();
@@ -51,7 +51,7 @@ describe('runUpdate', () => {
   it('reports no installation when .claude/ is missing', () => {
     runUpdate(tempDir, {}, cliRoot);
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('No claude-craft installation detected');
+    expect(output).toContain('No bear-craft installation detected');
     expect(process.exitCode).toBe(1);
   });
 

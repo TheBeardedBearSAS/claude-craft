@@ -408,7 +408,7 @@ MIT
 
 ## 👥 Autores
 
-- **Criador**: TheBeardedCTO
+- **Criador**: The Bearded Bear
 - **Contribuidores**: Ver CONTRIBUTORS.md
 
 ---

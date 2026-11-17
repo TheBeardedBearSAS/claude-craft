@@ -1,6 +1,6 @@
-# Schnellstart - Claude Craft in 5 Minuten
+# Schnellstart - Bear Craft in 5 Minuten
 
-Starten Sie mit Claude Craft in nur 5 Minuten!
+Starten Sie mit Bear Craft in nur 5 Minuten!
 
 ---
 
@@ -34,18 +34,18 @@ Der schnellste Weg zum Start:
 
 ```bash
 # Interaktiver Assistent
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 
 # Oder direkt in ein Projekt installieren
-npx @the-bearded-bear/claude-craft install ~/mein-projekt --tech=symfony --lang=de
+npx @the-bearded-bear/bear-craft install ~/mein-projekt --tech=symfony --lang=de
 ```
 
 ### Methode 2: Clone + Makefile
 
 ```bash
 # 1. Repository klonen
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # 2. In Ihr Projekt installieren (wählen Sie Ihre Technologie)
 make install-symfony TARGET=~/mein-projekt RULES_LANG=de
@@ -59,14 +59,14 @@ make install-symfony TARGET=~/mein-projekt RULES_LANG=de
 # 1. Neues Projektverzeichnis erstellen
 mkdir ~/meine-erste-app && cd ~/meine-erste-app && git init
 
-# 2. Claude Craft Regeln installieren (Beispiel: Symfony + Deutsch)
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=de
+# 2. Bear Craft Regeln installieren (Beispiel: Symfony + Deutsch)
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=de
 
 # 3. Claude Code starten
 claude
 ```
 
-Das war's! Sie haben jetzt Zugriff auf alle Claude Craft Funktionen.
+Das war's! Sie haben jetzt Zugriff auf alle Bear Craft Funktionen.
 
 ---
 
@@ -136,4 +136,4 @@ In Claude Code, probieren Sie diese Befehle:
 
 - **FAQ**: Häufige Fragen → [FAQ.md](../FAQ.md)
 - **Fehlerbehebung**: Häufige Fehler → [TROUBLESHOOTING.md](../TROUBLESHOOTING.md)
-- **GitHub Issues**: [Bug melden](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- **GitHub Issues**: [Bug melden](https://github.com/TheBeardedBearSAS/bear-craft/issues)

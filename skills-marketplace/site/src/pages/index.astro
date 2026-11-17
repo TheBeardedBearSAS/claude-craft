@@ -4,7 +4,7 @@ import indexData from '../../../index.json.template';
 
 const skills = indexData.skills ?? [];
 ---
-<Base title="Claude Craft Skills Marketplace">
+<Base title="Bear Craft Skills Marketplace">
   <section>
     <h2>Skills catalogue</h2>
     <p>{skills.length} skills disponibles.</p>
@@ -18,7 +18,7 @@ const skills = indexData.skills ?? [];
             <span>Author: {skill.author.name}</span> |
             <span>License: {skill.license}</span>
           </p>
-          <code>claude-craft skill install {skill.name}</code>
+          <code>bear-craft skill install {skill.name}</code>
         </li>
       ))}
     </ul>

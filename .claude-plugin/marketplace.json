@@ -1,17 +1,17 @@
 {
   "$schema": "https://claude.ai/schemas/marketplace.json",
-  "name": "claude-craft",
+  "name": "bear-craft",
   "owner": {
-    "name": "The Bearded CTO",
+    "name": "The Bearded Bear",
     "email": "flavien.metivier@gmail.com",
     "url": "https://the-bearded-bear.com"
   },
   "metadata": {
-    "description": "Claude Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization)."
+    "description": "Bear Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization)."
   },
   "plugins": [
     {
-      "name": "claude-craft",
+      "name": "bear-craft",
       "source": "./",
       "description": "Multi-stack framework: 31 specialized agents (+39 infra on-demand), 125 commands across 15 namespaces, BMAD v6 sprint workflow, browser QA automation, and token optimization (RTK). 5 languages.",
       "version": "9.4.0",

@@ -12,8 +12,8 @@
 | **Secteur** | ex. FinTech / E-commerce / SaaS B2B / Agence |
 | **Taille équipe dev** | ex. 12 développeurs |
 | **Stack principale** | ex. Symfony 8 + React 19 + PostgreSQL |
-| **Date début Claude Craft** | YYYY-MM |
-| **Version Claude Craft** | ex. v8.1.0 (jour du déploiement) |
+| **Date début Bear Craft** | YYYY-MM |
+| **Version Bear Craft** | ex. v8.1.0 (jour du déploiement) |
 
 ## Contexte initial
 
@@ -25,7 +25,7 @@ Quel problème l'équipe cherchait à résoudre ?
 
 ## Implémentation
 
-Quelles parties de Claude Craft ont été adoptées ?
+Quelles parties de Bear Craft ont été adoptées ?
 
 - [ ] Framework BMAD v6 (tracks Quick / Standard / Enterprise)
 - [ ] Agents techniques (lister : `@symfony-reviewer`, `@tdd-coach`, etc.)
@@ -74,7 +74,7 @@ Quelles parties de Claude Craft ont été adoptées ?
 
 ## Recommandations
 
-Pour une équipe qui envisage Claude Craft :
+Pour une équipe qui envisage Bear Craft :
 
 - Pré-requis techniques.
 - Investissement temps onboarding réaliste.
@@ -88,4 +88,4 @@ Pour une équipe qui envisage Claude Craft :
 
 ---
 
-_Publié sous licence CC BY 4.0. Merci de citer Claude Craft et le nom du projet dans toute réutilisation._
+_Publié sous licence CC BY 4.0. Merci de citer Bear Craft et le nom du projet dans toute réutilisation._

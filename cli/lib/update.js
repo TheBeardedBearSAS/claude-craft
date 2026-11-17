@@ -58,13 +58,13 @@ function runUpdate(targetPath, options, cliRoot) {
 
   const claudeDir = path.join(safeTarget, '.claude');
 
-  console.log(`\n${c.bold}Claude Craft Update${c.reset}`);
+  console.log(`\n${c.bold}Bear Craft Update${c.reset}`);
   console.log(`${c.dim}Directory: ${safeTarget}${c.reset}\n`);
 
   // Verify existing installation
   if (!fs.existsSync(claudeDir)) {
-    console.log(`${c.red}No claude-craft installation detected.${c.reset}`);
-    console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
+    console.log(`${c.red}No bear-craft installation detected.${c.reset}`);
+    console.log(`Run: npx @the-bearded-bear/bear-craft install ${targetPath}\n`);
     process.exitCode = 1;
     return;
   }

@@ -1,6 +1,6 @@
 # Learning Paths
 
-Progressive learning paths to master Claude-Craft. Start with Beginner and progress at your own pace.
+Progressive learning paths to master Bear-Craft. Start with Beginner and progress at your own pace.
 
 ---
 
@@ -27,8 +27,8 @@ claude --version  # >= 2.1.325
 ### Step 1: Installation (10 min)
 
 ```bash
-# Install claude-craft for your stack
-npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
+# Install bear-craft for your stack
+npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 
 # Or with Makefile
 make install-react TARGET=. RULES_LANG=en
@@ -67,7 +67,7 @@ Select your workflow track:
 After initialising the workflow, open the local Kanban board to visualise your project:
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 ```
 
 The board opens at `http://127.0.0.1:3737`. If your project uses the BMAD v6 workflow (`.bmad/sprint-status.yaml`), stories appear automatically with a 🔒 icon (read-only). Use the board during stand-ups and sprint reviews.
@@ -350,7 +350,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 
 ### Beginner
 
-- [ ] Installed claude-craft
+- [ ] Installed bear-craft
 - [ ] Configured project context
 - [ ] Initialized workflow
 - [ ] Run pre-commit check before every commit
@@ -409,7 +409,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 After completing all paths:
 
 1. **Contribute:** Submit PRs to improve templates, skills, or documentation
-2. **Add Technology:** From a clone of the claude-craft repository, use `/common:add-technology` to add your stack
+2. **Add Technology:** From a clone of the bear-craft repository, use `/common:add-technology` to add your stack
 3. **Train Team:** Onboard team members using this learning path
 4. **Customize:** Create custom skills, agents, and workflows
 5. **Optimize:** Fine-tune Ralph DoD, agent team sizes, and quality gates

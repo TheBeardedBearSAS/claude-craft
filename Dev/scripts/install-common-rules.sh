@@ -42,7 +42,7 @@ I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
 # Source TCL common functions
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # Shared UI (colors + logging)
 # shellcheck source=lib/shell-ui.sh

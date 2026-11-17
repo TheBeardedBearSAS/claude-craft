@@ -594,6 +594,6 @@ Sicherheit von Anfang an, nicht nachträglich.
 
 **Version**: 1.0.0
 **Erstellt am**: 2025-12-03
-**Autor**: TheBeardedCTO
+**Autor**: The Bearded Bear
 
 **Remember**: Diese Regeln sind Leitfäden zur Erstellung von Qualitätscode. Passen Sie sie an Ihren spezifischen Kontext an.

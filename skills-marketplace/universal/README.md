@@ -1,4 +1,4 @@
-# Claude Craft Skills — Universal Collection (Marketplace Ready)
+# Bear Craft Skills — Universal Collection (Marketplace Ready)
 
 This directory contains **10 universal skills** ready for submission to the Anthropic Skills Marketplace.
 
@@ -29,7 +29,7 @@ Each skill file includes:
 - ✅ Marketplace-ready frontmatter (name, description, author, version, tags)
 - ✅ Actionable summary (< 50 lines)
 - ✅ Integration notes for Claude Code
-- ✅ Attribution "by The Bearded CTO / Claude Craft"
+- ✅ Attribution "by The Bearded Bear / Bear Craft"
 
 ---
 
@@ -37,7 +37,7 @@ Each skill file includes:
 
 ### In Claude Code
 
-These skills are already integrated in Claude Craft. To use:
+These skills are already integrated in Bear Craft. To use:
 
 ```bash
 # Load a skill
@@ -49,7 +49,7 @@ These skills are already integrated in Claude Craft. To use:
 
 ### Standalone Installation
 
-To use these skills outside Claude Craft:
+To use these skills outside Bear Craft:
 
 ```bash
 # Copy to your Claude Code skills directory
@@ -60,11 +60,11 @@ cp skills-marketplace/universal/architect.md ~/.claude/skills/architect/SKILL.md
 
 ## Attribution
 
-All skills developed by **The Bearded CTO** as part of **Claude Craft** — the AI-first TDD methodology framework.
+All skills developed by **The Bearded Bear** as part of **Bear Craft** — the AI-first TDD methodology framework.
 
-- **Author:** The Bearded CTO
+- **Author:** The Bearded Bear
 - **License:** MIT
-- **Repository:** https://github.com/TheBeardedBearSAS/claude-craft
+- **Repository:** https://github.com/TheBeardedBearSAS/bear-craft
 - **Version:** 8.3.2
 - **Marketplace Status:** Ready for submission (2026-Q2)
 

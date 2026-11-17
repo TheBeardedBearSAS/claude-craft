@@ -87,7 +87,7 @@ Pour chaque vulnérabilité :
 - Nouvelle dépendance critique ajoutée
 - Design review feature authentification/autorisation
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `.claude/rules/11-security.md` — règles applicables
 - `.claude/skills/security*` — skills par stack

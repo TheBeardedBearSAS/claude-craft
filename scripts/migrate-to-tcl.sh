@@ -4,12 +4,12 @@ IFS=$'\n\t'
 #
 # migrate-to-tcl.sh - Migration to Tiered Context Loading (TCL)
 #
-# This script migrates existing claude-craft projects to the new TCL structure
+# This script migrates existing bear-craft projects to the new TCL structure
 # that dramatically reduces token consumption (~95% reduction).
 #
 # Usage: ./scripts/migrate-to-tcl.sh [project_directory]
 #
-# Author: The Bearded CTO
+# Author: The Bearded Bear
 # Script Version: 1.0.0 (TCL migration script version, independent of package version)
 
 set -e
@@ -45,7 +45,7 @@ BACKUP_SUFFIX=".backup.$(date +%Y%m%d_%H%M%S)"
 
 echo ""
 echo "╔════════════════════════════════════════════════════════════════╗"
-echo "║     Claude-Craft: Migration to Tiered Context Loading (TCL)   ║"
+echo "║     Bear-Craft: Migration to Tiered Context Loading (TCL)   ║"
 echo "║                                                                ║"
 echo "║  This migration will reduce token consumption by ~95%         ║"
 echo "╚════════════════════════════════════════════════════════════════╝"
@@ -54,7 +54,7 @@ echo ""
 # Check if .claude directory exists
 if [[ ! -d "$CLAUDE_DIR" ]]; then
     log_error "No .claude directory found in $PROJECT_DIR"
-    log_info "This script is for migrating existing claude-craft projects."
+    log_info "This script is for migrating existing bear-craft projects."
     exit 1
 fi
 
@@ -115,7 +115,7 @@ fi
 # Step 4: Create minimal CLAUDE.md
 log_info "Creating minimal CLAUDE.md..."
 cat > "$CLAUDE_DIR/CLAUDE.md" << 'EOF'
-# Claude-Craft - C#/.NET Project
+# Bear-Craft - C#/.NET Project
 
 **Stack**: .NET 9, C# 13, Clean Architecture, CQRS, MediatR, EF Core, xUnit
 
@@ -145,7 +145,7 @@ log_success "Minimal CLAUDE.md created"
 # Step 5: Create INDEX.md with summaries
 log_info "Creating INDEX.md with condensed summaries..."
 cat > "$CLAUDE_DIR/INDEX.md" << 'EOF'
-# Claude-Craft Rules Index
+# Bear-Craft Rules Index
 
 ## Project Context
 
@@ -265,7 +265,7 @@ log_success "INDEX.md created"
 if [[ ! -f "$CLAUDE_DIR/context.yaml" ]]; then
     log_info "Creating context.yaml..."
     cat > "$CLAUDE_DIR/context.yaml" << 'EOF'
-# Claude-Craft Context Configuration
+# Bear-Craft Context Configuration
 version: "1.0"
 
 file_contexts:

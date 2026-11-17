@@ -1,4 +1,4 @@
-# Source unique de vérité des versions — Claude Craft
+# Source unique de vérité des versions — Bear Craft
 # ----------------------------------------------------
 # Ce fichier est la référence canonique des versions de toutes les technologies
 # supportées + l'infra + Claude Code. Il est vérifié en CI par
@@ -187,6 +187,9 @@ denylist:
   - 'v9.2.0 - Claude Code'
   - 'v9.2.1 - Claude Code'
   - 'v9.3.0 - Claude Code'
+  # Renommage claude-craft → bear-craft (10.0.0) et marque The Bearded Bear
+  - '@the-bearded-bear/claude-craft'
+  - 'The Bearded CTO'
   # Versions périmées — audit fraîcheur 2026-10-13
   - '19.2 + Compiler'
   - '3.44 / Dart 3.12'

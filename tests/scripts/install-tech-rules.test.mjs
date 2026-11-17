@@ -140,7 +140,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
   });
 
   // Régression : un dossier cible inexistant faisait retomber l'install sur $(pwd),
-  // écrivant les règles dans le répertoire courant (ex. le dépôt claude-craft lui-même).
+  // écrivant les règles dans le répertoire courant (ex. le dépôt bear-craft lui-même).
   it('refuses a non-existent target directory instead of installing into the cwd', () => {
     const cwd = makeTmpDir();
     const missing = path.join(cwd, 'does-not-exist');

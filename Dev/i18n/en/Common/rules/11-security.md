@@ -714,4 +714,4 @@ Use Claude Code hooks to block dangerous patterns.
 
 **Last updated:** 2026-06
 **Version:** 1.2.0
-**Author:** The Bearded CTO
+**Author:** The Bearded Bear

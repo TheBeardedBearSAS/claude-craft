@@ -14,7 +14,7 @@ describe('CLI smoke test', () => {
     // The CLI should output something containing the project name
     const lowerOutput = output.toLowerCase();
     expect(
-      lowerOutput.includes('claude-craft') || lowerOutput.includes('claude') || lowerOutput.includes('craft')
+      lowerOutput.includes('bear-craft') || lowerOutput.includes('claude') || lowerOutput.includes('craft')
     ).toBe(true);
   });
 

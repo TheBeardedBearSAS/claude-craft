@@ -178,4 +178,4 @@ Rester spécifique : chaque résultat nomme un fichier + ligne, et chaque correc
 
 ## Non-objectifs
 
-Je ne réécris pas de code. Je ne touche pas la configuration. Je ne propose pas de fonctionnalités produit. Je signale les écarts par rapport au contrat Paperclip et aux règles claude-craft dans `rules/02…12`.
+Je ne réécris pas de code. Je ne touche pas la configuration. Je ne propose pas de fonctionnalités produit. Je signale les écarts par rapport au contrat Paperclip et aux règles bear-craft dans `rules/02…12`.

@@ -282,4 +282,4 @@ routing:
 - `/workflow:auto-sprint` - Executar um sprint inteiro de ponta a ponta (início → merge)
 - `/workflow:plan --research` - Iniciar fase de analise (somente Enterprise)
 
-> Não sabe qual caminho seguir? Veja a página de decisão: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/pt/11-which-path.md
+> Não sabe qual caminho seguir? Veja a página de decisão: https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/pt/11-which-path.md

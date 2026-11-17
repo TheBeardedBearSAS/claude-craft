@@ -238,7 +238,7 @@ exit 0
 
 ## Installing the distributed hooks
 
-claude-craft ships tested hook scripts (single source: `Dev/i18n/base/Common/hooks/scripts/`, shared helpers in `lib/hook-io.sh`). The installer copies them into the project's `.claude/hooks/` and merges the matching fragment into `.claude/settings.json` without removing or rewriting any hook of yours:
+bear-craft ships tested hook scripts (single source: `Dev/i18n/base/Common/hooks/scripts/`, shared helpers in `lib/hook-io.sh`). The installer copies them into the project's `.claude/hooks/` and merges the matching fragment into `.claude/settings.json` without removing or rewriting any hook of yours:
 
 ```bash
 bash Dev/scripts/install-common-rules.sh --hooks=default|full|none[,memory] <project>

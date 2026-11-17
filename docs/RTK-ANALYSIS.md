@@ -1,6 +1,6 @@
 # Analyse Approfondie : RTK (Rust Token Killer)
 
-**Analyse réalisée sous Claude Craft 7.28.0** | **Date:** 2026-04-14 | _RTK analysé : v0.22.1 (voir ci-dessous)_
+**Analyse réalisée sous Bear Craft 7.28.0** | **Date:** 2026-04-14 | _RTK analysé : v0.22.1 (voir ci-dessous)_
 
 > **Repo:** github.com/rtk-ai/rtk | **Site:** rtk-ai.app
 > **Auteur:** Patrick Szymkowiak (@gloupish) | **Licence:** MIT
@@ -158,11 +158,11 @@ Tracking SQLite local (metriques de savings)
 
 ---
 
-## 8. Pertinence pour claude-craft
+## 8. Pertinence pour bear-craft
 
 ### Complementarite directe
 
-| claude-craft | RTK | Synergie |
+| bear-craft | RTK | Synergie |
 |-------------|-----|---------|
 | Gere le workflow dev IA | Optimise les couts tokens | **Complementaires** |
 | 16 stacks technos | 30+ commandes proxy | RTK couvre les memes stacks |
@@ -194,7 +194,7 @@ Tracking SQLite local (metriques de savings)
 | Critere | Score | Commentaire |
 |---------|-------|-------------|
 | **Innovation** | 9/10 | Premier outil dans la categorie "token optimizer" |
-| **Pertinence** | 9/10 | Directement complementaire a Claude Code / claude-craft |
+| **Pertinence** | 9/10 | Directement complementaire a Claude Code / bear-craft |
 | **Qualite technique** | 7/10 | Architecture solide, fichiers parfois trop gros |
 | **Securite** | 8/10 | Zero telemetrie, scan automatise, review multi-couche |
 | **Maturite** | 5/10 | Beta precoce, 28 jours, releases quotidiennes |
@@ -206,15 +206,15 @@ Tracking SQLite local (metriques de savings)
 
 ## 10. Recommandation
 
-**A surveiller de pres.** RTK adresse un vrai besoin (optimisation tokens LLM) avec une approche technique elegante. La complementarite avec claude-craft est evidente.
+**A surveiller de pres.** RTK adresse un vrai besoin (optimisation tokens LLM) avec une approche technique elegante. La complementarite avec bear-craft est evidente.
 
 ### Plan d'action
 
 | Horizon | Action |
 |---------|--------|
-| **Court terme** | Tester RTK manuellement avec claude-craft pour valider les savings reels |
+| **Court terme** | Tester RTK manuellement avec bear-craft pour valider les savings reels |
 | **Moyen terme** | Si RTK atteint v1.0 avec stabilite prouvee, envisager une mention dans la doc ou un guide d'integration |
-| **Long terme** | Potentielle integration optionnelle dans le workflow claude-craft (ajout de hooks RTK via `/common:init --context`) |
+| **Long terme** | Potentielle integration optionnelle dans le workflow bear-craft (ajout de hooks RTK via `/common:init --context`) |
 
 ### Risques a monitorer
 
@@ -227,7 +227,7 @@ Tracking SQLite local (metriques de savings)
 
 ## 11. Installation
 
-RTK is integrated into claude-craft as an optional tool.
+RTK is integrated into bear-craft as an optional tool.
 
 ### Quick Install
 
@@ -236,7 +236,7 @@ RTK is integrated into claude-craft as an optional tool.
 make install-rtk RULES_LANG=fr
 
 # Via CLI (interactive — answer 'y' to RTK question)
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 
 # Via Claude Code command
 /common:setup-rtk

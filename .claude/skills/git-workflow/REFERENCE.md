@@ -260,4 +260,4 @@ Toujours partir de `main` à jour : `git checkout main && git pull origin main`
 
 **Date de dernière mise à jour:** 2026-04
 **Version:** 1.1.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

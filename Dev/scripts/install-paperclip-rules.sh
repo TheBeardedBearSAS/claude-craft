@@ -20,7 +20,7 @@ DEFAULT_STACK="Node.js 24.11+, TypeScript 5+, React 18+, Vitest, pnpm 9.15+, Pos
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings (source in Paperclip/rules/  ->  destination in references/paperclip/) ---
 TECH_RULE_MAPPINGS=(

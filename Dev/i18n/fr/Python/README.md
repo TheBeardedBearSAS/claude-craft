@@ -361,7 +361,7 @@ Pour améliorer ces règles:
 
 ## Licence
 
-Ces règles sont destinées à un usage interne pour TheBeardedCTO Tools.
+Ces règles sont destinées à un usage interne pour The Bearded Bear.
 
 ---
 

@@ -97,7 +97,7 @@ Prioritize: high savings × low effort × low risk.
 - Reducing Anthropic/OpenAI bill
 - Architecture review from a cost perspective
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — infrastructure
 - `@performance-auditor` — performance vs cost trade-off

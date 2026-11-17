@@ -1,10 +1,10 @@
-# Claude-Craft Plugin Export
+# Bear-Craft Plugin Export
 
-Export claude-craft components as official Claude Code plugins for distribution.
+Export bear-craft components as official Claude Code plugins for distribution.
 
 ## Overview
 
-This tool packages claude-craft rules, commands, agents, and skills into the official Claude Code plugin format. Plugins can be:
+This tool packages bear-craft rules, commands, agents, and skills into the official Claude Code plugin format. Plugins can be:
 
 - Shared with team members
 - Published to plugin marketplaces
@@ -32,14 +32,14 @@ This tool packages claude-craft rules, commands, agents, and skills into the off
 ```
 
 This creates separate plugins for each technology:
-- `claude-craft-common`
-- `claude-craft-symfony`
-- `claude-craft-flutter`
-- `claude-craft-python`
-- `claude-craft-react`
-- `claude-craft-reactnative`
-- `claude-craft-project`
-- `claude-craft-infra`
+- `bear-craft-common`
+- `bear-craft-symfony`
+- `bear-craft-flutter`
+- `bear-craft-python`
+- `bear-craft-react`
+- `bear-craft-reactnative`
+- `bear-craft-project`
+- `bear-craft-infra`
 
 ## Options
 
@@ -47,7 +47,7 @@ This creates separate plugins for each technology:
 |--------|-------------|---------|
 | `--tech=TECH` | Technology to export | Required |
 | `--lang=LANG` | Language (en, fr, es, de, pt) | en |
-| `--name=NAME` | Plugin name | claude-craft-<tech> |
+| `--name=NAME` | Plugin name | bear-craft-<tech> |
 | `--version=VER` | Plugin version | 3.0.0 |
 | `--all` | Export all technologies | false |
 
@@ -56,7 +56,7 @@ This creates separate plugins for each technology:
 Generated plugins follow Claude Code plugin format:
 
 ```
-claude-craft-symfony/
+bear-craft-symfony/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── commands/                 # Slash commands
@@ -72,12 +72,12 @@ claude-craft-symfony/
 Test locally before distribution:
 
 ```bash
-claude --plugin-dir ./plugins/claude-craft-symfony
+claude --plugin-dir ./plugins/bear-craft-symfony
 ```
 
 Commands will be namespaced automatically:
-- `/claude-craft-symfony:entity`
-- `/claude-craft-symfony:fix-bug`
+- `/bear-craft-symfony:entity`
+- `/bear-craft-symfony:fix-bug`
 
 ## Distribution
 

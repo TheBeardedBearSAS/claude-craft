@@ -417,4 +417,4 @@ class ConcreteRepository         // Infrastructure
 
 **Data da ultima atualizacao:** 2025-01
 **Versao:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

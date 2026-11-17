@@ -302,7 +302,7 @@ Rapport agrégé des portes documentaires (argument : `[--detailed]`, qui inclut
 3. **Agréger** dans la synthèse, puis **recommander** des actions priorisées à partir des échecs.
 
 ```
-BMAD Quality Gates Report   Project: claude-craft   Sprint: sprint-3 - User Management
+BMAD Quality Gates Report   Project: bear-craft   Sprint: sprint-3 - User Management
 | Gate | Threshold | Score | Status |
 | PRD | 80% | 90% | ✅ PASS |
 | Tech Spec | 90% | 92% | ✅ PASS |

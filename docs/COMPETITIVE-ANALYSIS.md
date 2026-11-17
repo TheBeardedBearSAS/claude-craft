@@ -1,6 +1,6 @@
-# Analyse Concurrentielle Claude-Craft
+# Analyse Concurrentielle Bear-Craft
 
-> **Document stratégique (mainteneurs).** Cette analyse expose le positionnement marché, les forces, **les faiblesses internes** et la roadmap — elle n'est pas destinée à l'onboarding utilisateur. Pour une comparaison honnête orientée utilisateur (« quel outil choisir ? »), voir [`comparison-claude-craft-vs-superclaude.md`](comparison-claude-craft-vs-superclaude.md).
+> **Document stratégique (mainteneurs).** Cette analyse expose le positionnement marché, les forces, **les faiblesses internes** et la roadmap — elle n'est pas destinée à l'onboarding utilisateur. Pour une comparaison honnête orientée utilisateur (« quel outil choisir ? »), voir [`comparison-bear-craft-vs-superclaude.md`](comparison-bear-craft-vs-superclaude.md).
 
 **Version:** 8.16.1 | **Date:** 2026-06-24 | **Mise à jour précédente :** 2026-06-12
 
@@ -10,7 +10,7 @@
 
 | Concurrent | Type | ★ (relevé 2026-06-24) | Multi-harness | Sprint/PM | QA Auto |
 |-----------|------|--------|-----------|-----------|---------|
-| **claude-craft** | Framework integré | ~97 | Non (Claude Code) | BMAD v6 | Recette |
+| **bear-craft** | Framework integré | ~97 | Non (Claude Code) | BMAD v6 | Recette |
 | **obra/superpowers v5.0** | Multi-harness framework | ~177k+ | **Oui** (Claude, Cursor, Gemini, Codex, Copilot) | Non | Non |
 | **GSD** | Orchestrateurs séquentiels | ~61k+ | Non | Non | Non |
 | **gstack** | Rôles nommés (YC-backed) | ~71k+ | Non | Non | Non |
@@ -34,25 +34,25 @@
 
 ### GSD — Get Shit Done (~61k ★ au 2026-06-24)
 
-Apparu entre avril et juin 2026 avec une croissance de ~35k à 61k+ étoiles en 2 mois. **Architecture orchestrateurs séquentiels** : chaque phase de workflow dispose de son propre orchestrateur qui s'exécute en dessous de 50% de la fenêtre de contexte. L'état est écrit sur disque en Markdown entre les phases (persistance native sans base de données). 138 contributeurs actifs. Présent dans tous les comparatifs communautaires 2026 (Pulumi, TechTimes, Augment Code). Claude Craft n'est mentionné dans aucun de ces comparatifs.
+Apparu entre avril et juin 2026 avec une croissance de ~35k à 61k+ étoiles en 2 mois. **Architecture orchestrateurs séquentiels** : chaque phase de workflow dispose de son propre orchestrateur qui s'exécute en dessous de 50% de la fenêtre de contexte. L'état est écrit sur disque en Markdown entre les phases (persistance native sans base de données). 138 contributeurs actifs. Présent dans tous les comparatifs communautaires 2026 (Pulumi, TechTimes, Augment Code). Bear Craft n'est mentionné dans aucun de ces comparatifs.
 
-**Position vs Claude Craft :** GSD résout élégamment le context-window problem sur les longs workflows. Claude Craft offre ce que GSD n'a pas : BMAD v6, 11 stacks tech-specifics, QA Recette, i18n. Les deux sont complémentaires — un utilisateur GSD qui veut la profondeur tech et le lifecycle sprint peut combiner avec Claude Craft.
+**Position vs Bear Craft :** GSD résout élégamment le context-window problem sur les longs workflows. Bear Craft offre ce que GSD n'a pas : BMAD v6, 11 stacks tech-specifics, QA Recette, i18n. Les deux sont complémentaires — un utilisateur GSD qui veut la profondeur tech et le lifecycle sprint peut combiner avec Bear Craft.
 
 ### gstack (~71k ★ au 2026-06-24)
 
 Créé par Garry Tan (CEO Y Combinator) — signal de crédibilité institutionnelle fort. **23+ rôles nommés** comme slash commands : CEO, CSO, Engineering Manager, Designer, QA, etc. Assure la cohérence décisionnelle via la perspective de rôle. Backing YC facilite l'adoption enterprise.
 
-**Position vs Claude Craft :** gstack est générique (pas de stack-awareness), sans sprint management, sans QA Recette, sans i18n. Claude Craft offre 11 stacks tech-specifics et des reviewers avec scoring quantitatif — complémentaires en équipe : gstack pour la gouvernance décisionnelle, Claude Craft pour l'exécution technique.
+**Position vs Bear Craft :** gstack est générique (pas de stack-awareness), sans sprint management, sans QA Recette, sans i18n. Bear Craft offre 11 stacks tech-specifics et des reviewers avec scoring quantitatif — complémentaires en équipe : gstack pour la gouvernance décisionnelle, Bear Craft pour l'exécution technique.
 
 ### Hermes Agent — NousResearch (~180k ★ en 4 mois)
 
 Croissance la plus rapide de l'écosystème. Vecteur de différenciation inédit : **auto-apprentissage de skills**. Toutes les 15 appels outils réussis, Hermes analyse les patterns et génère automatiquement un skill persistant dans `~/.hermes/skills/`. GUI desktop app + intégration Claude Code native. LLM-agnostique (modèles NousResearch ouverts).
 
-**Position vs Claude Craft :** Hermes se spécialise automatiquement sur votre codebase ; les skills Claude Craft sont distribués statiquement par npm. Claude Craft offre ce que Hermes n'a pas : BMAD v6, QA Recette, i18n, lifecycle sprint, hooks enforcement. À surveiller pour `DIFF-12 (skill self-learning via Ralph)` dans la roadmap.
+**Position vs Bear Craft :** Hermes se spécialise automatiquement sur votre codebase ; les skills Bear Craft sont distribués statiquement par npm. Bear Craft offre ce que Hermes n'a pas : BMAD v6, QA Recette, i18n, lifecycle sprint, hooks enforcement. À surveiller pour `DIFF-12 (skill self-learning via Ralph)` dans la roadmap.
 
 ### obra/superpowers v5.0 (~177k+ ★) — repositionnement stratégique
 
-**Changement majeur depuis l'analyse 2026-02 :** Superpowers est passé de "runtime MCP Claude-only" à **framework multi-harness** supportant nativement Cursor, Gemini CLI, GitHub Copilot CLI, Codex et OpenCode depuis v5.0. Ce repositionnement chevauche directement `DIFF-02` de la roadmap Claude Craft (bundles multi-harness). Superpowers a également ajouté Deep Research autonome depuis v4.2.
+**Changement majeur depuis l'analyse 2026-02 :** Superpowers est passé de "runtime MCP Claude-only" à **framework multi-harness** supportant nativement Cursor, Gemini CLI, GitHub Copilot CLI, Codex et OpenCode depuis v5.0. Ce repositionnement chevauche directement `DIFF-02` de la roadmap Bear Craft (bundles multi-harness). Superpowers a également ajouté Deep Research autonome depuis v4.2.
 
 **Ce que Superpowers v5.0 n'a pas :** BMAD v6, tech-stack awareness (11 stacks), QA Recette, i18n 5 langues, Kanban local. Ces différenciateurs restent valides malgré le repositionnement multi-harness.
 
@@ -62,11 +62,11 @@ Orchestration **multi-modèle** : route les sous-agents vers Claude, Gemini CLI 
 
 ### Ruflo (~59k ★)
 
-Mémoire persistante inter-sessions via indexation vectorielle. Claude Craft gère la mémoire via `/memory` (natif Claude Code v2.1.59+) et les hooks `PostCompact` — pas de vectorDB. Ruflo est positionné comme **moteur complémentaire** documenté dans `docs/ECOSYSTEM.md`. Voir `DIFF-04` dans la roadmap.
+Mémoire persistante inter-sessions via indexation vectorielle. Bear Craft gère la mémoire via `/memory` (natif Claude Code v2.1.59+) et les hooks `PostCompact` — pas de vectorDB. Ruflo est positionné comme **moteur complémentaire** documenté dans `docs/ECOSYSTEM.md`. Voir `DIFF-04` dans la roadmap.
 
 ### GitHub Spec Kit (~80k ★)
 
-Workflow spec-first : génère des issues GitHub, des ADR et du code à partir d'une spécification OpenAPI. Claude Craft couvre cela via `@api-designer` + tech-spec BMAD, mais sans l'intégration GitHub Issues native.
+Workflow spec-first : génère des issues GitHub, des ADR et du code à partir d'une spécification OpenAPI. Bear Craft couvre cela via `@api-designer` + tech-spec BMAD, mais sans l'intégration GitHub Issues native.
 
 ### OpenSpec (~12k ★)
 
@@ -76,7 +76,7 @@ Génération d'agents à partir d'une spec OpenAPI. Niche : équipes API-first. 
 
 ## Marketplace Anthropic (claude-plugins-official)
 
-> **État au 2026-06-12 :** Claude Craft **absent** du marketplace officiel. obra/superpowers y est depuis janvier 2026.
+> **État au 2026-06-12 :** Bear Craft **absent** du marketplace officiel. obra/superpowers y est depuis janvier 2026.
 
 Le marketplace officiel Anthropic permet une distribution via `/plugin install <name>`. Pour soumettre :
 - Vérifier la conformité de `.claude-plugin/plugin.json` au schéma Anthropic.
@@ -121,11 +121,11 @@ Execution continue avec circuit breaker adaptatif, monitoring de sante (detectio
 
 ### F7 : Distribution CLI mature
 
-`npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en` - Installation propre avec subcommandes (list, doctor, update, check, flatten). Tests a 94% de couverture sur le CLI.
+`npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en` - Installation propre avec subcommandes (list, doctor, update, check, flatten). Tests a 94% de couverture sur le CLI.
 
 ### F8 : Hooks = enforcement (pas seulement des suggestions)
 
-> **Note honnête sur le "strict mode" :** Claude Craft distribue des règles dans `CLAUDE.md` — que Claude *peut* ignorer si le contexte le pousse autrement. C'est une réalité de tout framework de prompts. Ce qui distingue Claude Craft des frameworks purement suggéstifs (SuperClaude, BMAD-METHOD) : les **hooks Claude Code** (v2.1.47+) sont du code exécuté *avant/après* chaque outil, indépendamment du contexte LLM. Les hooks de Claude Craft bloquent réellement les commits non signés, les secrets en clair, et les appels réseau non autorisés.
+> **Note honnête sur le "strict mode" :** Bear Craft distribue des règles dans `CLAUDE.md` — que Claude *peut* ignorer si le contexte le pousse autrement. C'est une réalité de tout framework de prompts. Ce qui distingue Bear Craft des frameworks purement suggéstifs (SuperClaude, BMAD-METHOD) : les **hooks Claude Code** (v2.1.47+) sont du code exécuté *avant/après* chaque outil, indépendamment du contexte LLM. Les hooks de Bear Craft bloquent réellement les commits non signés, les secrets en clair, et les appels réseau non autorisés.
 
 **Ce qui est enforcement (hooks) :** exit code 2 bloque l'exécution (pre-commit, security-block, CSRF-check). **Ce qui est suggestion (CLAUDE.md) :** conventions de code, style, architecture. Voir `.claude/templates/hooks/` pour les templates prêts à l'emploi.
 
@@ -154,7 +154,7 @@ Les 10 reviewer agents partagent le meme template YAML, le meme scoring en 5 cat
 
 ### W5 : Lock-in total sur Claude Code
 
-Zero support Cursor, Windsurf, Copilot, Aider. Si Anthropic change les conventions de Claude Code ou si un autre outil domine, claude-craft est inutilisable. Cursor Directory supporte 4+ IDEs.
+Zero support Cursor, Windsurf, Copilot, Aider. Si Anthropic change les conventions de Claude Code ou si un autre outil domine, bear-craft est inutilisable. Cursor Directory supporte 4+ IDEs.
 
 ### W6 : Barriere d'adoption elevee
 
@@ -223,9 +223,9 @@ OPPORTUNITES                        | MENACES
 
 Le fichier `.claude-plugin/marketplace.json` existe déjà. obra/superpowers est sur le marketplace depuis janvier 2026. Chaque jour d'absence = distribution manquée. Objectif : soumission en 2 semaines, label `Anthropic Verified`.
 
-### A2 : Publier un comparatif "Claude Craft vs GSD vs gstack vs SuperClaude"
+### A2 : Publier un comparatif "Bear Craft vs GSD vs gstack vs SuperClaude"
 
-Claude Craft est absent de tous les comparatifs 2026 (Pulumi, TechTimes, DEV Community, Augment Code). Un article technique positionné sur l'angle "seul framework avec QA Recette browser-based + BMAD v6 + 11 stacks + 5 langues" suffit à entrer dans la conversation. Délai cible : 1 mois.
+Bear Craft est absent de tous les comparatifs 2026 (Pulumi, TechTimes, DEV Community, Augment Code). Un article technique positionné sur l'angle "seul framework avec QA Recette browser-based + BMAD v6 + 11 stacks + 5 langues" suffit à entrer dans la conversation. Délai cible : 1 mois.
 
 ### A3 : Mettre à jour COMPETITIVE-ANALYSIS.md mensuellement
 
@@ -256,7 +256,7 @@ Le differenciateur le plus fort. Le packager comme module installable independam
 
 ### R4 : Publier les skills sur le Skills Hub
 
-Packager les skills populaires (solid-principles, testing, security, git-workflow) comme plugins Claude Code independants avec attribution "Part of Claude-Craft". Canal de distribution viral : l'utilisateur installe 1 skill, decouvre le framework complet.
+Packager les skills populaires (solid-principles, testing, security, git-workflow) comme plugins Claude Code independants avec attribution "Part of Bear-Craft". Canal de distribution viral : l'utilisateur installe 1 skill, decouvre le framework complet.
 
 ### R5 : Respecter ses propres regles (credibilite)
 
@@ -299,7 +299,7 @@ Ajouter de l'orchestration programmatique. Un vrai moteur d'etat pour les workfl
 
 ---
 
-## FONCTIONNALITES CONCURRENTES ABSENTES DE CLAUDE CRAFT
+## FONCTIONNALITES CONCURRENTES ABSENTES DE BEAR CRAFT
 
 | Fonctionnalité | Concurrent | Statut roadmap |
 |----------------|-----------|----------------|

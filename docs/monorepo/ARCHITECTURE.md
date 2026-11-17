@@ -1,8 +1,8 @@
-# Architecture Monorepo — Claude Craft
+# Architecture Monorepo — Bear Craft
 
 ## Vue d'ensemble
 
-Claude Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optimiser les audits, détections et workflows dans les codebases multi-projets. Support de tous les outils majeurs : Nx, Turborepo, pnpm workspaces, npm/yarn workspaces, Lerna, Rush, Bazel.
+Bear Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optimiser les audits, détections et workflows dans les codebases multi-projets. Support de tous les outils majeurs : Nx, Turborepo, pnpm workspaces, npm/yarn workspaces, Lerna, Rush, Bazel.
 
 ---
 
@@ -21,7 +21,7 @@ Claude Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optim
 
 ## Détection automatique
 
-Claude Craft détecte automatiquement le type de monorepo au démarrage en analysant les fichiers de configuration racine.
+Bear Craft détecte automatiquement le type de monorepo au démarrage en analysant les fichiers de configuration racine.
 
 ### Fichiers marqueurs
 
@@ -383,7 +383,7 @@ Cacher les résultats d'audit par workspace pour éviter de ré-auditer si aucun
 ### Structure cache
 
 ```
-.claude-craft/
+.bear-craft/
   cache/
     monorepo/
       <workspace-hash>/
@@ -421,7 +421,7 @@ function computeWorkspaceHash(workspace: Workspace): string {
 ```typescript
 function getCachedAudit(workspace: Workspace): AuditResult | null {
   const hash = computeWorkspaceHash(workspace);
-  const cachePath = join('.claude-craft', 'cache', 'monorepo', hash, 'audit.json');
+  const cachePath = join('.bear-craft', 'cache', 'monorepo', hash, 'audit.json');
 
   if (existsSync(cachePath)) {
     const metadata = JSON.parse(readFileSync(join(dirname(cachePath), 'metadata.json'), 'utf-8'));
@@ -437,7 +437,7 @@ function getCachedAudit(workspace: Workspace): AuditResult | null {
 
 function setCachedAudit(workspace: Workspace, result: AuditResult): void {
   const hash = computeWorkspaceHash(workspace);
-  const cachePath = join('.claude-craft', 'cache', 'monorepo', hash);
+  const cachePath = join('.bear-craft', 'cache', 'monorepo', hash);
   mkdirSync(cachePath, { recursive: true });
 
   writeFileSync(join(cachePath, 'audit.json'), JSON.stringify(result, null, 2));
@@ -513,7 +513,7 @@ async function readWorkspaceFiles(workspace: Workspace): Promise<string[]> {
 
 ### Monorepo multi-stack
 
-Claude Craft supporte les monorepos mélangeant plusieurs stacks (Symfony + React + Python).
+Bear Craft supporte les monorepos mélangeant plusieurs stacks (Symfony + React + Python).
 
 **Exemple :**
 
@@ -573,9 +573,9 @@ async function auditWorkspace(workspace: Workspace): Promise<AuditResult> {
 #### Projet existant
 
 ```bash
-# Claude Craft détecte automatiquement le monorepo
+# Bear Craft détecte automatiquement le monorepo
 cd my-monorepo
-claude-craft --help
+bear-craft --help
 
 # Output :
 # Monorepo detected: Nx (12 workspaces)
@@ -589,13 +589,13 @@ claude-craft --help
 #### Nouveau projet
 
 ```bash
-# Créer un monorepo Nx avec Claude Craft
+# Créer un monorepo Nx avec Bear Craft
 npx create-nx-workspace@latest my-monorepo --preset=empty
 cd my-monorepo
-npx @the-bearded-bear/claude-craft install . --tech=react,symfony --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react,symfony --lang=en
 
 # Output :
-# Installing Claude Craft in monorepo mode (Nx)...
+# Installing Bear Craft in monorepo mode (Nx)...
 # Detected workspaces: 0 (empty workspace)
 # Creating .claude/ structure...
 # Done! Run `/team:audit --monorepo` to start.
@@ -641,7 +641,7 @@ npx @the-bearded-bear/claude-craft install . --tech=react,symfony --lang=en
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Claude Craft Audit — Monorepo (Nx, 12 workspaces)              │
+│ Bear Craft Audit — Monorepo (Nx, 12 workspaces)              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  Summary:                                                       │
@@ -692,7 +692,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
+      - run: npm install -g @the-bearded-bear/bear-craft
       - run: /team:audit --monorepo --output=audit.html
       - uses: actions/upload-artifact@v4
         with:
@@ -719,7 +719,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
+      - run: npm install -g @the-bearded-bear/bear-craft
       - run: |
           /team:audit \
             --monorepo \
@@ -749,8 +749,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Claude Craft
-          command: npm install -g @the-bearded-bear/claude-craft
+          name: Install Bear Craft
+          command: npm install -g @the-bearded-bear/bear-craft
       - run:
           name: Audit affected workspaces
           command: |
@@ -780,7 +780,7 @@ workflows:
 audit:monorepo:
   image: node:20
   script:
-    - npm install -g @the-bearded-bear/claude-craft
+    - npm install -g @the-bearded-bear/bear-craft
     - |
       /team:audit \
         --monorepo \
@@ -832,7 +832,7 @@ audit:monorepo:
 ┌────────────────────────────────────────────────────────────────┐
 │                   Cache Manager                                │
 │  - For each workspace: compute hash                            │
-│  - Check .claude-craft/cache/monorepo/<hash>/audit.json        │
+│  - Check .bear-craft/cache/monorepo/<hash>/audit.json        │
 │  - Return: cached results (if valid) or null                   │
 └───────────────────┬────────────────────────────────────────────┘
                     │
@@ -867,4 +867,4 @@ audit:monorepo:
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

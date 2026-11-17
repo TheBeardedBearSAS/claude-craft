@@ -1,9 +1,9 @@
 # QA Recette — Automated Acceptance Testing
 
-> **Status:** Integrated in Claude Craft | **Version:** 1.0.36+
+> **Status:** Integrated in Bear Craft | **Version:** 1.0.36+
 > **Future:** Planned extraction to standalone product (see [ARCHITECTURE.md](ARCHITECTURE.md) and [RFC.md](RFC.md))
 
-QA Recette is an automated acceptance testing tool integrated into Claude Craft that leverages Chrome automation to run reproducible tests for user stories and sprints.
+QA Recette is an automated acceptance testing tool integrated into Bear Craft that leverages Chrome automation to run reproducible tests for user stories and sprints.
 
 **Golden Rule:** A fixed bug should NEVER reappear.
 
@@ -57,9 +57,9 @@ QA Recette provides automated acceptance testing capabilities through:
 
 ### Installation
 
-1. **Install Claude Craft**
+1. **Install Bear Craft**
    ```bash
-   npx @the-bearded-bear/claude-craft install . --tech=<your-tech> --lang=en
+   npx @the-bearded-bear/bear-craft install . --tech=<your-tech> --lang=en
    ```
 
 2. **Install Chrome Extension**
@@ -310,7 +310,7 @@ For detailed architectural information about QA Recette, see:
 
 ### Current Architecture
 
-QA Recette is currently integrated into Claude Craft:
+QA Recette is currently integrated into Bear Craft:
 
 ```
 Claude Code CLI
@@ -327,7 +327,7 @@ Test Execution + Screenshot Capture
 ### Future Standalone Architecture
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone tool — **fully open-source MIT**:
-- **SDK MIT** (`@claude-craft/qa-recette-sdk`)
+- **SDK MIT** (`@bear-craft/qa-recette-sdk`)
 - **Chrome extension MIT**
 - **Self-hostable backend optional** (sync + dashboards)
 
@@ -358,17 +358,17 @@ For complete command documentation, see:
 
 ## Contributing
 
-QA Recette is part of Claude Craft. To contribute:
+QA Recette is part of Bear Craft. To contribute:
 
 1. See [CONTRIBUTING.md](../../CONTRIBUTING.md)
-2. Open issues on [GitHub](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+2. Open issues on [GitHub](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 3. Join discussions about the future standalone product in [RFC.md](RFC.md)
 
 ---
 
 ## License
 
-Part of Claude Craft — **MIT License** (see root LICENSE).
+Part of Bear Craft — **MIT License** (see root LICENSE).
 
 A future standalone tool would remain **fully MIT**:
 - **SDK** — MIT License
@@ -379,4 +379,4 @@ A future standalone tool would remain **fully MIT**:
 
 **Last Updated:** 2026-04-17
 **Version:** 1.0.36+
-**Maintainer:** The Bearded CTO
+**Maintainer:** The Bearded Bear

@@ -51,13 +51,13 @@ Annotated `vercel.json` skeleton covering every platform-level section: `rewrite
 
 ### `rewrites`
 
-Serves a different path/origin without changing the browser URL. Used for SPA fallback routing (Shape 1) or proxying to an external origin. Does not apply to framework-owned routes — if a claude-craft framework stack (React Router, Angular Router, ...) already owns client-side routing, this section is usually unnecessary; only add a rewrite for a concern the framework's own router cannot express (e.g. proxying `/api/legacy/*` to an external host).
+Serves a different path/origin without changing the browser URL. Used for SPA fallback routing (Shape 1) or proxying to an external origin. Does not apply to framework-owned routes — if a bear-craft framework stack (React Router, Angular Router, ...) already owns client-side routing, this section is usually unnecessary; only add a rewrite for a concern the framework's own router cannot express (e.g. proxying `/api/legacy/*` to an external host).
 
 ### `headers` — Security Baseline (rule 11)
 
 The example above is the **minimum baseline** for a project with no framework-level header configuration. Every value must be reviewed against the actual project:
 - `Content-Security-Policy` is the one directive that cannot be copied blindly — it must reflect the real script/style/connect sources of the project. The example (`'self'` only) is a starting point, not a universal default.
-- If a claude-craft framework stack already sets equivalent headers (e.g. via its own middleware or hosting adapter), do not duplicate them here — pick one owner per header to avoid silently conflicting values.
+- If a bear-craft framework stack already sets equivalent headers (e.g. via its own middleware or hosting adapter), do not duplicate them here — pick one owner per header to avoid silently conflicting values.
 
 ### `functions`
 
@@ -81,4 +81,4 @@ Pins Serverless Function execution to specific region(s), typically to co-locate
 | `api/**/*.ts` present, no `api/cron/` | add `functions` |
 | `api/cron/**/*.ts` present | add `crons` (and `functions` if the cron handler needs non-default memory/duration) |
 | Project has a documented region/latency requirement | add `regions` |
-| A claude-craft framework stack's own config already sets a header/rewrite | omit the duplicate key here, defer to that stack |
+| A bear-craft framework stack's own config already sets a header/rewrite | omit the duplicate key here, defer to that stack |

@@ -154,4 +154,4 @@ Verificado con las notas de versión oficiales de GitHub (paperclipai/paperclip)
 
 ---
 
-**Última actualización:** 2026-04 | **Versión:** 2.0.0 | **Autor:** The Bearded CTO
+**Última actualización:** 2026-04 | **Versión:** 2.0.0 | **Autor:** The Bearded Bear

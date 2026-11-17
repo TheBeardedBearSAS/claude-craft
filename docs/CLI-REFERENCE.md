@@ -1,26 +1,26 @@
 # CLI Reference
 
-Complete reference for the Claude Craft command-line interface.
+Complete reference for the Bear Craft command-line interface.
 
 ---
 
 ## NPX Installation
 
-The recommended way to install Claude Craft is via NPX:
+The recommended way to install Bear Craft is via NPX:
 
 ```bash
-npx @the-bearded-bear/claude-craft [command] [options]
+npx @the-bearded-bear/bear-craft [command] [options]
 ```
 
 ### Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `install` | Install Claude Craft to a project |
+| `install` | Install Bear Craft to a project |
 | `init` | Initialize workflow (shows instructions) |
 | `flatten` | Generate flattened codebase context |
 | `ralph` | Run Ralph Wiggum continuous loop |
-| `check` | Verify claude-craft installation structure |
+| `check` | Verify bear-craft installation structure |
 | `list` | Detailed component inventory |
 | `doctor` | Environment diagnostics & health check |
 | `update` | Refresh existing installation |
@@ -34,7 +34,7 @@ npx @the-bearded-bear/claude-craft [command] [options]
 Run without arguments for the interactive wizard:
 
 ```bash
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 ```
 
 The wizard will guide you through:
@@ -50,7 +50,7 @@ The wizard will guide you through:
 ### Basic Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft install <target-directory> [options]
+npx @the-bearded-bear/bear-craft install <target-directory> [options]
 ```
 
 ### Options
@@ -96,32 +96,32 @@ npx @the-bearded-bear/claude-craft install <target-directory> [options]
 
 ```bash
 # Install Symfony rules in French
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=fr
 
 # Install multiple technologies
-npx @the-bearded-bear/claude-craft install . --tech=react
-npx @the-bearded-bear/claude-craft install . --tech=python
+npx @the-bearded-bear/bear-craft install . --tech=react
+npx @the-bearded-bear/bear-craft install . --tech=python
 
 # Force reinstall with backup
-npx @the-bearded-bear/claude-craft install ~/app --tech=flutter --force --backup
+npx @the-bearded-bear/bear-craft install ~/app --tech=flutter --force --backup
 
 # Dry run to preview changes
-npx @the-bearded-bear/claude-craft install . --tech=angular --dry-run
+npx @the-bearded-bear/bear-craft install . --tech=angular --dry-run
 
 # Install all technologies
-npx @the-bearded-bear/claude-craft install ~/project --tech=all --lang=en
+npx @the-bearded-bear/bear-craft install ~/project --tech=all --lang=en
 ```
 
 ---
 
 ## Check Command
 
-Verify the structure of a claude-craft installation.
+Verify the structure of a bear-craft installation.
 
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft check [target-directory]
+npx @the-bearded-bear/bear-craft check [target-directory]
 ```
 
 ### Description
@@ -132,22 +132,22 @@ Scans the `.claude/` directory and reports a summary of installed components: co
 
 ```bash
 # Check current directory
-npx @the-bearded-bear/claude-craft check
+npx @the-bearded-bear/bear-craft check
 
 # Check a specific project
-npx @the-bearded-bear/claude-craft check ~/my-project
+npx @the-bearded-bear/bear-craft check ~/my-project
 ```
 
 ---
 
 ## List Command
 
-Display a detailed inventory of all installed claude-craft components.
+Display a detailed inventory of all installed bear-craft components.
 
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft list [target-directory]
+npx @the-bearded-bear/bear-craft list [target-directory]
 ```
 
 ### Description
@@ -158,10 +158,10 @@ Lists every installed component grouped by category (commands, agents, skills, r
 
 ```bash
 # List components in current directory
-npx @the-bearded-bear/claude-craft list
+npx @the-bearded-bear/bear-craft list
 
 # List components in a project
-npx @the-bearded-bear/claude-craft list ~/my-project
+npx @the-bearded-bear/bear-craft list ~/my-project
 ```
 
 ---
@@ -173,7 +173,7 @@ Run environment diagnostics and installation health checks.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft doctor [target-directory]
+npx @the-bearded-bear/bear-craft doctor [target-directory]
 ```
 
 ### Description
@@ -195,22 +195,22 @@ Checks the development environment for required and recommended tools:
 
 ```bash
 # Check current project
-npx @the-bearded-bear/claude-craft doctor
+npx @the-bearded-bear/bear-craft doctor
 
 # Check a specific project
-npx @the-bearded-bear/claude-craft doctor ~/my-project
+npx @the-bearded-bear/bear-craft doctor ~/my-project
 ```
 
 ---
 
 ## Update Command
 
-Refresh an existing claude-craft installation by re-running install scripts.
+Refresh an existing bear-craft installation by re-running install scripts.
 
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft update [target-directory] [options]
+npx @the-bearded-bear/bear-craft update [target-directory] [options]
 ```
 
 ### Options
@@ -228,13 +228,13 @@ Re-runs install scripts with `--force` to refresh all files. Common rules are al
 
 ```bash
 # Update all detected technologies
-npx @the-bearded-bear/claude-craft update ~/my-project
+npx @the-bearded-bear/bear-craft update ~/my-project
 
 # Update only React rules in French
-npx @the-bearded-bear/claude-craft update ~/my-project --tech=react --lang=fr
+npx @the-bearded-bear/bear-craft update ~/my-project --tech=react --lang=fr
 
 # Update current directory
-npx @the-bearded-bear/claude-craft update .
+npx @the-bearded-bear/bear-craft update .
 ```
 
 ---
@@ -246,7 +246,7 @@ Generate a flattened summary of your codebase for AI assistants.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft flatten [options]
+npx @the-bearded-bear/bear-craft flatten [options]
 ```
 
 ### Options
@@ -261,16 +261,16 @@ npx @the-bearded-bear/claude-craft flatten [options]
 
 ```bash
 # Generate flattened codebase
-npx @the-bearded-bear/claude-craft flatten
+npx @the-bearded-bear/bear-craft flatten
 
 # Custom output file
-npx @the-bearded-bear/claude-craft flatten --output=CONTEXT.md
+npx @the-bearded-bear/bear-craft flatten --output=CONTEXT.md
 
 # Limit token count (enables sharding for large codebases)
-npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
+npx @the-bearded-bear/bear-craft flatten --max-tokens=50000
 
 # Exclude additional directories
-npx @the-bearded-bear/claude-craft flatten --exclude="*.test.ts,*.spec.ts"
+npx @the-bearded-bear/bear-craft flatten --exclude="*.test.ts,*.spec.ts"
 ```
 
 ### Output
@@ -427,7 +427,7 @@ Run Claude in a continuous loop until task completion.
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft ralph "task description" [options]
+npx @the-bearded-bear/bear-craft ralph "task description" [options]
 ```
 
 ### Options
@@ -442,13 +442,13 @@ npx @the-bearded-bear/claude-craft ralph "task description" [options]
 
 ```bash
 # Basic task
-npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 
 # With full DoD checks
-npx @the-bearded-bear/claude-craft ralph --full "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --full "Fix the login bug"
 
 # Custom iteration limit
-npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refactor the payment module"
+npx @the-bearded-bear/bear-craft ralph --max-iterations=20 "Refactor the payment module"
 ```
 
 ---
@@ -460,7 +460,7 @@ Launch a local web UI to view and manage the BMAD v6 backlog and sprints as a Sc
 ### Usage
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban [path] [options]
+npx @the-bearded-bear/bear-craft kanban [path] [options]
 ```
 
 `path` defaults to the current working directory. The target must contain a `project-management/` subdirectory (generated by `/workflow:plan` or `/workflow:start`).
@@ -473,7 +473,7 @@ npx @the-bearded-bear/claude-craft kanban [path] [options]
 | `--open` | Open the default browser automatically |
 | `--readonly` | Disable all writes: the server answers 403 `readonly` to every PATCH, PUT, POST and DELETE, and the board offers no move control |
 | `--no-watch` | Disable the file watcher (no live reload on external edits) |
-| `--user=<name>` | Author recorded in the `history` of changes made from the board (`kanban:<name>`). Default: `CLAUDE_CRAFT_USER`, then `git config user.name`, then the OS user, then `kanban` |
+| `--user=<name>` | Author recorded in the `history` of changes made from the board (`kanban:<name>`). Default: `BEAR_CRAFT_USER`, then `git config user.name`, then the OS user, then `kanban` |
 
 ### Views
 
@@ -593,13 +593,13 @@ The shortcuts are optional: every action is reachable with `Tab` and the native 
 
 ```bash
 # Launch on the current project, open browser
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 
 # Read-only mode for a demo or code review
-npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
+npx @the-bearded-bear/bear-craft kanban --readonly --port=4040
 
 # Against another project
-npx @the-bearded-bear/claude-craft kanban ~/work/my-project
+npx @the-bearded-bear/bear-craft kanban ~/work/my-project
 ```
 
 ---
@@ -702,7 +702,7 @@ Re-scan all Claude Code skills without restarting the session (v2.1.157+).
 Force a re-scan of all installed skills (`.claude/skills/`) without restarting Claude Code. Distinct from `/reload-plugins` which reloads code intelligence plugins. Useful after:
 - Adding a new skill to `.claude/skills/`
 - Modifying an existing skill file
-- Installing Claude Craft updates that include new skills
+- Installing Bear Craft updates that include new skills
 
 > **SessionStart hook:** A `SessionStart` hook can return `reloadSkills: true` to make newly-installed skills available in the same session without user intervention.
 
@@ -986,9 +986,9 @@ projects:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_CRAFT_LANG` | Default language | `en` |
-| `CLAUDE_CRAFT_TARGET` | Default target directory | `.` |
-| `CLAUDE_CRAFT_CONFIG` | Config file path | `claude-projects.yaml` |
+| `BEAR_CRAFT_LANG` | Default language | `en` |
+| `BEAR_CRAFT_TARGET` | Default target directory | `.` |
+| `BEAR_CRAFT_CONFIG` | Config file path | `claude-projects.yaml` |
 | `CLAUDE_CODE_FORK_SUBAGENT` | Fork each subagent in isolated context (v2.1.117+); on by default in `-p`, the SDK, desktop and VS Code since 2.1.302, `0` to turn it off | _unset_ (on in `-p`/SDK since 2.1.302) |
 | `ENABLE_PROMPT_CACHING_1H` | Use 1-hour prompt cache tier (v2.1.108+) | _unset_ |
 | `FORCE_PROMPT_CACHING_5M` | Force 5-minute cache tier (v2.1.108+) | _unset_ |
@@ -1031,7 +1031,7 @@ make fix-permissions
 ### Wrong yq version
 
 ```bash
-# Claude Craft requires yq v4 (Mike Farah's version)
+# Bear Craft requires yq v4 (Mike Farah's version)
 yq --version
 # Should show: yq (https://github.com/mikefarah/yq/) version v4.x.x
 ```

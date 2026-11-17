@@ -1,12 +1,12 @@
-# Eine neue Locale zu Claude Craft hinzufügen
+# Eine neue Locale zu Bear Craft hinzufügen
 
-Diese Anleitung erklärt, wie Sie eine neue Sprache zum i18n-System von Claude Craft hinzufügen. Claude Craft unterstützt derzeit 5 Sprachen (`en`, `fr`, `es`, `de`, `pt`) und ist so konzipiert, dass das Hinzufügen neuer Sprachen unkompliziert ist.
+Diese Anleitung erklärt, wie Sie eine neue Sprache zum i18n-System von Bear Craft hinzufügen. Bear Craft unterstützt derzeit 5 Sprachen (`en`, `fr`, `es`, `de`, `pt`) und ist so konzipiert, dass das Hinzufügen neuer Sprachen unkompliziert ist.
 
 ---
 
 ## Voraussetzungen
 
-- Node.js 20+ mit Zugriff auf das Claude Craft Repository
+- Node.js 20+ mit Zugriff auf das Bear Craft Repository
 - Vertrautheit mit der Projektstruktur (siehe `docs/guides/de/01-getting-started.md`)
 - Ein Übersetzungsansatz: menschliche Übersetzer, ein Agent (`@research-assistant`) oder eine Kombination
 
@@ -39,7 +39,7 @@ LANGS=("en" "fr" "es" "de" "pt" "it")   # Beispiel: Italienisch hinzufügen
 
 ## Schritt 2 — Die Verzeichnisstruktur erstellen
 
-Der i18n-Inhalt von Claude Craft lebt in drei Bäumen. Erstellen Sie passende Verzeichnisse für Ihre neue Locale:
+Der i18n-Inhalt von Bear Craft lebt in drei Bäumen. Erstellen Sie passende Verzeichnisse für Ihre neue Locale:
 
 ```bash
 # Dev-Regeln und -Referenzen

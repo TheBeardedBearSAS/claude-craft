@@ -302,7 +302,7 @@ Informe agregado de los gates documentales (argumento: `[--detailed]`, que inclu
 3. **Agregar** en el resumen y después **recomendar** acciones priorizadas a partir de los fallos.
 
 ```
-BMAD Quality Gates Report   Project: claude-craft   Sprint: sprint-3 - User Management
+BMAD Quality Gates Report   Project: bear-craft   Sprint: sprint-3 - User Management
 | Gate | Threshold | Score | Status |
 | PRD | 80% | 90% | ✅ PASS |
 | Tech Spec | 90% | 92% | ✅ PASS |

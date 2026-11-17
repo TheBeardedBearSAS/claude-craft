@@ -1,13 +1,13 @@
-# Claude Craft Plugin System — Architecture v1.0 DRAFT
+# Bear Craft Plugin System — Architecture v1.0 DRAFT
 
 > **Status** : DRAFT P3-29. RFC communautaire requis avant v1.0.0 stable.
 > **Source audit** : `audit/04-FEATURES.md` §FEAT-017 (écosystème tiers, lock-in positif).
-> **Objectif** : permettre à la communauté d'étendre Claude Craft sans toucher au core.
+> **Objectif** : permettre à la communauté d'étendre Bear Craft sans toucher au core.
 
 ## Hypothèses explicites (Karpathy §1)
 
 1. **Runtime** : Node.js 20+ (alignement cli/), chargement des plugins au boot CLI.
-2. **Distribution** : NPM packages `claude-craft-plugin-<name>` + installation via `claude-craft plugin install <name>`.
+2. **Distribution** : NPM packages `bear-craft-plugin-<name>` + installation via `bear-craft plugin install <name>`.
 3. **Trust model** : opt-in explicite à l'installation, permissions déclarées dans `plugin.json`, sandbox limitant accès FS/réseau.
 4. **Semver plugin API** : v1.x stable pour 2 ans minimum, v2.x = breaking accepté.
 5. **Scope v1** : hooks de lifecycle (avant/après commandes, audit, release). Pas de UI custom, pas d'agents custom (phase 4).
@@ -15,8 +15,8 @@
 ## Structure plugin
 
 ```
-claude-craft-plugin-notify-slack/
-├── package.json              # NPM, dépend de claude-craft-plugin-api
+bear-craft-plugin-notify-slack/
+├── package.json              # NPM, dépend de bear-craft-plugin-api
 ├── plugin.json               # Manifest (voir ci-dessous)
 ├── src/
 │   ├── index.ts              # Export handler
@@ -32,8 +32,8 @@ claude-craft-plugin-notify-slack/
 
 ```json
 {
-  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
-  "name": "claude-craft-plugin-notify-slack",
+  "$schema": "https://bear-craft.dev/schema/plugin-v1.json",
+  "name": "bear-craft-plugin-notify-slack",
   "version": "1.0.0",
   "displayName": "Slack Notifications",
   "description": "Send notifications to Slack on audit completion and release events",
@@ -78,7 +78,7 @@ claude-craft-plugin-notify-slack/
 Handler :
 ```typescript
 // src/hooks/afterAudit.ts
-import type { AfterAuditContext, AfterAuditHandler } from 'claude-craft-plugin-api';
+import type { AfterAuditContext, AfterAuditHandler } from 'bear-craft-plugin-api';
 
 export const afterAudit: AfterAuditHandler = async (ctx: AfterAuditContext) => {
   const { reports, metrics, config } = ctx;
@@ -112,27 +112,27 @@ export const afterAudit: AfterAuditHandler = async (ctx: AfterAuditContext) => {
 
 ```bash
 # Installer
-claude-craft plugin install notify-slack
+bear-craft plugin install notify-slack
 
 # Configurer
-claude-craft plugin config notify-slack
+bear-craft plugin config notify-slack
 # → prompt interactif basé sur config.schema.json
 
 # Lister
-claude-craft plugin list
+bear-craft plugin list
 
 # Désactiver temporairement
-claude-craft plugin disable notify-slack
+bear-craft plugin disable notify-slack
 
 # Désinstaller
-claude-craft plugin remove notify-slack
+bear-craft plugin remove notify-slack
 ```
 
 ## Registry
 
-v1.0 : NPM registry standard. Convention nom `claude-craft-plugin-<name>`.
+v1.0 : NPM registry standard. Convention nom `bear-craft-plugin-<name>`.
 
-v1.1 : registre curated sur `plugins.claude-craft.dev` (index généré CI depuis NPM search).
+v1.1 : registre curated sur `plugins.bear-craft.dev` (index généré CI depuis NPM search).
 
 ## Compatibilité
 
@@ -148,14 +148,14 @@ Avant publication NPM stable :
 2. Review `@tech-lead` + `@security-auditor` (sandboxing)
 3. Dogfooding 3 plugins internes (cf. `examples/plugins/`)
 4. Comment period 30 jours
-5. Publication starter template `npx create-claude-craft-plugin`
+5. Publication starter template `npx create-bear-craft-plugin`
 
 ## DoD P3-29
 
-- [ ] API plugin v1.0.0 publiée (`claude-craft-plugin-api` NPM)
+- [ ] API plugin v1.0.0 publiée (`bear-craft-plugin-api` NPM)
 - [ ] CLI supporte install/list/remove/config
 - [ ] 3 plugins examples dans `examples/plugins/`
-- [ ] Starter template `create-claude-craft-plugin` publié
+- [ ] Starter template `create-bear-craft-plugin` publié
 - [ ] Documentation `docs/plugins/` complète (architecture, tutoriel, best practices)
 - [ ] Sandboxing niveau 1 implémenté
 - [ ] RFC publié, ≥ 5 commentaires, closed "accepted"

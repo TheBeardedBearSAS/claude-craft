@@ -125,4 +125,4 @@ adapters (built-in) ─► @paperclipai/adapter-utils (opcional)
 
 ---
 
-**Última atualização:** 2026-04 | **Versão:** 2.0.0 | **Autor:** The Bearded CTO
+**Última atualização:** 2026-04 | **Versão:** 2.0.0 | **Autor:** The Bearded Bear

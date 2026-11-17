@@ -1,6 +1,6 @@
 # Prerrequisitos
 
-Guía completa de todas las dependencias requeridas para Claude Craft.
+Guía completa de todas las dependencias requeridas para Bear Craft.
 
 ---
 

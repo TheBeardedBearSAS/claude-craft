@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING — claude-craft is now bear-craft.** Claude Code reserves the `claude-` prefix for Anthropic's own plugins (`claude plugin validate` rejected the plugin name), and the new name matches the publisher, The Bearded Bear. New npm package `@the-bearded-bear/bear-craft`, `bear-craft` command, Claude Code plugin and marketplace `bear-craft`, repository `TheBeardedBearSAS/bear-craft`, site `thebeardedbearsas.github.io/bear-craft/`. Shell completions, bundles, Vale vocabulary and the comparison page are renamed; docs and templates in 5 languages use the new name. Guide: [MIGRATION-v10](docs/MIGRATION-v10.md).
+- **Publisher name**: "The Bearded Bear" replaces "The Bearded CTO" in author, maintainer and footer lines; `LICENSE` copyright holder is The Bearded Bear SAS. Stale `github.com/the-bearded-cto/…` and `TheBeardedCTO/Tools/…` links point to `TheBeardedBearSAS`.
+- **CLI banner** spells BEAR CRAFT, with the frame realigned (the CRAFT glyphs and the version line were off by a few columns).
+
+### Deprecated
+
+- **Kept for 10.x, removed in 11.0:** the `claude-craft` command (prints a notice on stderr), the `CLAUDE_CRAFT_USER` fallback for `BEAR_CRAFT_USER`, the `claude-craft-skill-*` prefix (new skills use `bear-craft-skill-*`), the `ClaudeCraftCLI` export (now `BearCraftCLI`), the `~/.local/lib/claude-craft/` shell-lib path, and the `claude_craft_lang` site preference key.
+
 ## [9.4.0] - 2026-11-17
 
 > **Last 9.x release.** Claude Craft becomes **bear-craft** in 10.0.0: new npm package `@the-bearded-bear/bear-craft`, `bear-craft` command (the `claude-craft` command stays as an alias throughout 10.x). Claude Code reserves the `claude-` prefix for Anthropic's own plugins, so `claude plugin validate` rejects the current plugin name. A migration guide ships with 10.0.0.

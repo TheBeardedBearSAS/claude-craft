@@ -1,12 +1,12 @@
 # Guía de Gestión del Backlog
 
-Flujo de trabajo completo para crear y gestionar un backlog SCRUM con Claude-Craft.
+Flujo de trabajo completo para crear y gestionar un backlog SCRUM con Bear-Craft.
 
 ---
 
 ## Visión General
 
-Claude-Craft proporciona un conjunto completo de comandos para gestionar tu product backlog siguiendo la metodología SCRUM:
+Bear-Craft proporciona un conjunto completo de comandos para gestionar tu product backlog siguiendo la metodología SCRUM:
 
 - **Un único comando `/project:backlog`** (`add`, `list`, `edit`, `move`, más `next story` y `move story --auto` para el enrutamiento de historias) junto con `/workflow:plan --only=backlog`, `/workflow:start` y `/workflow:status --board`; los antiguos comandos por entidad (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) y el namespace de sprint se eliminaron en 9.0 (ver MIGRATION-v9)
 - **5 plantillas** para estructura consistente
@@ -224,7 +224,7 @@ Esto genera `scrum-validation-report.md` con:
 Muestra el tablero Kanban con columnas:
 - To Do | In Progress | In Review | Done | Blocked
 
-> También puedes gestionar el backlog desde la interfaz web Kanban (`npx @the-bearded-bear/claude-craft kanban`): crear, editar y eliminar historias, planificarlas en un sprint, y crear, iniciar y cerrar sprints. Complementa los comandos `/workflow:*` y `/project:*`, que siguen siendo válidos y escriben el mismo archivo (`.bmad/sprint-status.yaml`).
+> También puedes gestionar el backlog desde la interfaz web Kanban (`npx @the-bearded-bear/bear-craft kanban`): crear, editar y eliminar historias, planificarlas en un sprint, y crear, iniciar y cerrar sprints. Complementa los comandos `/workflow:*` y `/project:*`, que siguen siendo válidos y escriben el mismo archivo (`.bmad/sprint-status.yaml`).
 
 ### Paso 4: Descomponer en Tareas
 
@@ -280,7 +280,7 @@ Muestra:
 
 ## Plantillas
 
-Claude-Craft proporciona 5 plantillas para una estructura de backlog consistente:
+Bear-Craft proporciona 5 plantillas para una estructura de backlog consistente:
 
 | Plantilla | Propósito |
 |-----------|-----------|

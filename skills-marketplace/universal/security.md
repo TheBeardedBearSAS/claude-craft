@@ -1,12 +1,12 @@
 ---
 name: security
 description: Security guidelines and OWASP Top 10:2025 — authentication, encryption, supply chain security
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [security, owasp, auth, encryption, jwt, supply-chain, ssrf]
 category: security
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Security — OWASP Top 10:2025 Essentials
@@ -67,5 +67,5 @@ Before installing third-party MCP server:
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

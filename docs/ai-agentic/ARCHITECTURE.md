@@ -1,8 +1,8 @@
-# Architecture AI-Agentic — Claude Craft
+# Architecture AI-Agentic — Bear Craft
 
 ## Vue d'ensemble
 
-Claude Craft Phase 4 (P4-38) introduit des capacités AI-agentic avancées pour évaluer, tester et optimiser les systèmes basés sur LLM. Trois fonctionnalités principales :
+Bear Craft Phase 4 (P4-38) introduit des capacités AI-agentic avancées pour évaluer, tester et optimiser les systèmes basés sur LLM. Trois fonctionnalités principales :
 
 1. **`/eval-prompt`** — Évaluation comparative de prompts sur datasets
 2. **`/red-team`** — Tests de sécurité adversariaux automatisés
@@ -121,7 +121,7 @@ Trois formats générés :
 │                   Evaluation Runner                              │
 │  - For each prompt × provider × case                             │
 │  - Concurrency limit: 10 (p-limit)                               │
-│  - Cache results: SQLite (.claude-craft/cache/eval/<hash>.db)    │
+│  - Cache results: SQLite (.bear-craft/cache/eval/<hash>.db)    │
 │  - Retry policy: 3 attempts, exponential backoff                 │
 └───────────────────┬──────────────────────────────────────────────┘
                     │
@@ -176,7 +176,7 @@ Tester la résilience d'un système LLM contre des attaques adversariales (promp
 ### Usage
 
 ```bash
-# Red-team un agent Claude Craft
+# Red-team un agent Bear Craft
 /red-team \
   --agent=@customer-support \
   --attacks=prompt-injection,jailbreak,data-exfil \
@@ -186,7 +186,7 @@ Tester la résilience d'un système LLM contre des attaques adversariales (promp
 
 ### Mapping OWASP LLM Top 10 (2025)
 
-| OWASP ID | Menace | Attaques Claude Craft |
+| OWASP ID | Menace | Attaques Bear Craft |
 |----------|--------|------------------------|
 | **LLM01** | Prompt Injection | Direct injection, indirect injection (tool poisoning) |
 | **LLM02** | Insecure Output Handling | XSS via outputs, SQL injection via generated code |
@@ -378,7 +378,7 @@ L'agent `@security-auditor` existant est étendu avec capacité red-team :
 
 - Audit statique (secrets, vulnérabilités connues)
 - **Red-team LLM** (nouveau) :
-  * Exécute `/red-team` sur agents Claude Craft
+  * Exécute `/red-team` sur agents Bear Craft
   * Analyse résultats
   * Propose mitigations prioritisées
   * Génère tickets JIRA/GitHub Issues
@@ -702,7 +702,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
+      - run: npm install -g @the-bearded-bear/bear-craft
       - run: |
           /eval-prompt \
             --dataset=tests/datasets/support.jsonl \
@@ -737,7 +737,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
+      - run: npm install -g @the-bearded-bear/bear-craft
       - run: |
           /red-team \
             --agent=@customer-support \
@@ -782,4 +782,4 @@ jobs:
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

@@ -1,6 +1,6 @@
 # Makefile Reference
 
-Complete reference for all Makefile targets in Claude Craft.
+Complete reference for all Makefile targets in Bear Craft.
 
 ---
 

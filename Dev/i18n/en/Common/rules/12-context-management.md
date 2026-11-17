@@ -777,7 +777,7 @@ For the 5 `opus` agents (security-auditor, database-architect, migration-special
 
 **Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
 
-**Skills with `context: fork`:** every Claude Craft skill over 60 lines uses it (checked by the framework's internal conformance audit).
+**Skills with `context: fork`:** every Bear Craft skill over 60 lines uses it (checked by the framework's internal conformance audit).
 
 ---
 
@@ -817,7 +817,7 @@ Templates available in `.claude/templates/hooks/`: `output-filter.json`, `pre-co
 
 ## Third-Party Ecosystem Tools (tokens & context)
 
-Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover angles not handled natively. None are bundled into Claude Craft — they are documented and recommended.
+Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover angles not handled natively. None are bundled into Bear Craft — they are documented and recommended.
 
 | Tool | License | Angle | Rec |
 |------|---------|-------|-----|
@@ -845,4 +845,4 @@ Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover a
 
 **Last updated:** 2026-06
 **Version:** 1.3.0
-**Author:** The Bearded CTO
+**Author:** The Bearded Bear

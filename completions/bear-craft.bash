@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Claude Craft - Bash Completion
-# Installation: source completions/claude-craft.bash
+# Bear Craft - Bash Completion
+# Installation: source completions/bear-craft.bash
 
-_claude_craft_completions() {
+_bear_craft_completions() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local prev="${COMP_WORDS[COMP_CWORD-1]}"
 
@@ -86,4 +86,4 @@ _claude_craft_completions() {
     fi
 }
 
-complete -F _claude_craft_completions claude-craft
+complete -F _bear_craft_completions bear-craft claude-craft

@@ -1,6 +1,6 @@
 # Agent Teams Guide
 
-Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordination for parallelizing audit, sprint, and security review workflows in claude-craft. This guide covers setup, usage, cost analysis, and known limitations.
+Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordination for parallelizing audit, sprint, and security review workflows in bear-craft. This guide covers setup, usage, cost analysis, and known limitations.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ ship the Team namespace together with these scripts).
 To install or refresh them manually:
 
 ```bash
-# From the claude-craft repo (or npm package), targeting your project:
+# From the bear-craft repo (or npm package), targeting your project:
 make install-agentteams TARGET=/path/to/your/project
 
 # Or directly:
@@ -159,7 +159,7 @@ This applies globally to all sub-agent spawns within the session.
 
 ## Team Templates
 
-Claude-craft provides 4 team templates for common parallel workflows.
+Bear-craft provides 4 team templates for common parallel workflows.
 
 ### team-audit: Full Audit Team
 
@@ -440,7 +440,7 @@ Agent Teams is a **Research Preview** feature (v2.1.32+). This means:
 
 | Limitation | Impact | Mitigation |
 |-----------|--------|------------|
-| API may change without notice | Templates may break on update | Abstraction layer isolates claude-craft from API changes |
+| API may change without notice | Templates may break on update | Abstraction layer isolates bear-craft from API changes |
 | Maximum ~4 agents recommended | Large teams have quadratic coordination cost | Cap teams at 1 leader + 3 workers |
 | No force-kill for agents | Stuck agent blocks pipeline | Timeout watchdog with graceful degradation |
 | Cooperative shutdown only | Teammates can reject shutdown requests | Design workflows that complete naturally |
@@ -565,7 +565,7 @@ Teams larger than 4 agents experience quadratic coordination cost (Section 3.2).
 
 ### Why an Abstraction Layer
 
-The Agent Teams API is a Research Preview. An abstraction layer (`ralph-teams-adapter.sh`) isolates claude-craft from API changes, allowing the framework to switch between Agent Teams and bash subprocesses without modifying templates or workflows.
+The Agent Teams API is a Research Preview. An abstraction layer (`ralph-teams-adapter.sh`) isolates bear-craft from API changes, allowing the framework to switch between Agent Teams and bash subprocesses without modifying templates or workflows.
 
 ## Cost Tools Reference
 

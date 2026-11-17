@@ -1,4 +1,4 @@
-# ShellCheck configuration for Claude-Craft
+# ShellCheck configuration for Bear-Craft
 # https://www.shellcheck.net/wiki/
 
 # SC1091: Not following sourced files (dynamic paths resolved at runtime)

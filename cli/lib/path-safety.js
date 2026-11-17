@@ -13,7 +13,7 @@
 import path from 'path';
 
 /**
- * System directories Claude Craft must never write into. Refusing these
+ * System directories Bear Craft must never write into. Refusing these
  * targets prevents both accidental nukes (typo `--target=/`) and malicious
  * exploitation of an `--target` value supplied by an untrusted caller.
  */

@@ -1,6 +1,6 @@
-# Configurando Claude-Craft em um Novo Projeto
+# Configurando Bear-Craft em um Novo Projeto
 
-Este tutorial passo a passo irá guiá-lo através da instalação do Claude-Craft em um projeto completamente novo. No final, você terá um ambiente de desenvolvimento totalmente configurado com assistência de IA.
+Este tutorial passo a passo irá guiá-lo através da instalação do Bear-Craft em um projeto completamente novo. No final, você terá um ambiente de desenvolvimento totalmente configurado com assistência de IA.
 
 **Tempo necessário:** ~10 minutos
 
@@ -12,7 +12,7 @@ Este tutorial passo a passo irá guiá-lo através da instalação do Claude-Cra
 2. [Criar o Diretório do Seu Projeto](#2-criar-o-diretório-do-seu-projeto)
 3. [Inicializar o Repositório Git](#3-inicializar-o-repositório-git)
 4. [Escolher Sua Stack Tecnológica](#4-escolher-sua-stack-tecnológica)
-5. [Instalar o Claude-Craft](#5-instalar-o-claude-craft)
+5. [Instalar o Bear-Craft](#5-instalar-o-bear-craft)
    - [Método A: NPX (Sem Necessidade de Clone)](#método-a-npx-sem-necessidade-de-clone)
    - [Método B: Makefile (Mais Controle)](#método-b-makefile-mais-controle)
 6. [Verificar a Instalação](#6-verificar-a-instalação)
@@ -105,7 +105,7 @@ Saída esperada: `/home/seunome/meu-projeto` (ou `/Users/seunome/meu-projeto` no
 
 ## 3. Inicializar o Repositório Git
 
-Claude-Craft funciona melhor com projetos rastreados pelo Git:
+Bear-Craft funciona melhor com projetos rastreados pelo Git:
 
 ```bash
 # Inicializar repositório Git
@@ -127,7 +127,7 @@ Você deve ver um diretório `.git/` na saída.
 
 ## 4. Escolher Sua Stack Tecnológica
 
-Claude-Craft suporta múltiplas stacks tecnológicas. Escolha a que corresponde ao seu projeto:
+Bear-Craft suporta múltiplas stacks tecnológicas. Escolha a que corresponde ao seu projeto:
 
 | Stack | Ideal Para | Flag de Comando |
 |-------|------------|-----------------|
@@ -155,7 +155,7 @@ Claude-Craft suporta múltiplas stacks tecnológicas. Escolha a que corresponde 
 
 ---
 
-## 5. Instalar o Claude-Craft
+## 5. Instalar o Bear-Craft
 
 Você tem dois métodos de instalação. Escolha o que se adapta às suas necessidades:
 
@@ -163,21 +163,21 @@ Você tem dois métodos de instalação. Escolha o que se adapta às suas necess
 
 **Ideal para:** Configuração rápida, novos usuários, pipelines CI/CD
 
-Este método baixa e executa o Claude-Craft diretamente sem clonar o repositório.
+Este método baixa e executa o Bear-Craft diretamente sem clonar o repositório.
 
 ```bash
 # Substitua 'symfony' pela sua stack tech e 'pt' pelo seu idioma
-npx @the-bearded-bear/claude-craft install ~/meu-projeto --tech=symfony --lang=pt
+npx @the-bearded-bear/bear-craft install ~/meu-projeto --tech=symfony --lang=pt
 ```
 
 **Exemplo para um projeto Flutter em inglês:**
 ```bash
-npx @the-bearded-bear/claude-craft install ~/meu-projeto --tech=flutter --lang=en
+npx @the-bearded-bear/bear-craft install ~/meu-projeto --tech=flutter --lang=en
 ```
 
 Saída esperada:
 ```
-Installing Claude-Craft rules...
+Installing Bear-Craft rules...
   ✓ Common rules installed
   ✓ Symfony rules installed
   ✓ Agents installed
@@ -200,18 +200,18 @@ Installation complete! Run 'claude' in your project directory to start.
 
 **Ideal para:** Personalização, contribuidores do projeto, uso offline
 
-Este método requer clonar o repositório do Claude-Craft primeiro.
+Este método requer clonar o repositório do Bear-Craft primeiro.
 
-#### Passo B.1: Clonar o Claude-Craft
+#### Passo B.1: Clonar o Bear-Craft
 
 ```bash
 # Clonar para um local permanente
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git ~/claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git ~/bear-craft
 ```
 
 Saída esperada:
 ```
-Cloning into '/home/seunome/claude-craft'...
+Cloning into '/home/seunome/bear-craft'...
 remote: Enumerating objects: XXX, done.
 ...
 Resolving deltas: 100% (XXX/XXX), done.
@@ -220,8 +220,8 @@ Resolving deltas: 100% (XXX/XXX), done.
 #### Passo B.2: Executar a Instalação
 
 ```bash
-# Navegar para o diretório do Claude-Craft
-cd ~/claude-craft
+# Navegar para o diretório do Bear-Craft
+cd ~/bear-craft
 
 # Instalar regras no seu projeto
 # Substitua 'symfony' pela sua tech e 'pt' pelo seu idioma
@@ -478,7 +478,7 @@ Esperado: Claude deve executar uma verificação de qualidade pré-commit (pode 
 chmod 755 ~/meu-projeto
 
 # Solução 2: Executar com sudo (não recomendado para npm)
-sudo npx @the-bearded-bear/claude-craft install ...
+sudo npx @the-bearded-bear/bear-craft install ...
 ```
 
 **Problema:** `Command not found: npx`
@@ -513,21 +513,21 @@ mkdir -p ~/meu-projeto
 
 Se ainda estiver travado:
 1. Consulte o [Guia de Solução de Problemas](06-troubleshooting.md)
-2. Pesquise nos [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+2. Pesquise nos [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 3. Abra uma nova issue com sua mensagem de erro
 
 ---
 
 ## 11. Próximos Passos
 
-Parabéns! Seu ambiente Claude-Craft está pronto. Aqui está o que vem a seguir:
+Parabéns! Seu ambiente Bear-Craft está pronto. Aqui está o que vem a seguir:
 
 ### Próximos Passos Imediatos
 
 1. **Commite sua configuração:**
    ```bash
    git add .claude/
-   git commit -m "feat: add Claude-Craft configuration"
+   git commit -m "feat: add Bear-Craft configuration"
    ```
 
 2. **Comece a construir seu projeto** com assistência de IA

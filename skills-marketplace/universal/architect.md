@@ -1,12 +1,12 @@
 ---
 name: architect
 description: Architecture phase before TDD — define boundaries, contracts, and dependencies before writing any code
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [architecture, design, tdd, planning, boundaries, contracts, dependencies]
 category: design
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Architect — Architecture Before TDD
@@ -81,5 +81,5 @@ Only **after** this phase, enter TDD (Red/Green/Refactor).
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

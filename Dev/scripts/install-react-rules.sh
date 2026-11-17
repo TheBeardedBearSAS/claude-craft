@@ -16,7 +16,7 @@ DEFAULT_STACK="React 18+, TypeScript 5+, Vite, TailwindCSS, React Query, Zustand
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

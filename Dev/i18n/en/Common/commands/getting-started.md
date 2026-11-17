@@ -1,12 +1,12 @@
 ---
-description: Interactive 10-minute guided tour for new Claude Craft users
+description: Interactive 10-minute guided tour for new Bear Craft users
 argument-hint: (no arguments)
 allowed-tools: Read, Glob, Bash, Grep
 ---
 
-# /getting-started - Your First 10 Minutes with Claude Craft
+# /getting-started - Your First 10 Minutes with Bear Craft
 
-Welcome! This wizard helps you discover Claude Craft's value in under 10 minutes.
+Welcome! This wizard helps you discover Bear Craft's value in under 10 minutes.
 
 220 commands can feel overwhelming — let's find the 3 that matter most for YOUR project right now.
 
@@ -35,7 +35,7 @@ Scanning your project to identify the technology stack...
 ```
 ✓ Stack Detected: [Technology Name]
 
-Your project uses [Technology]. Claude Craft has specialized commands and agents for this stack.
+Your project uses [Technology]. Bear Craft has specialized commands and agents for this stack.
 ```
 
 ## Step 2: Propose 3 High-Impact Actions (1 minute)
@@ -133,7 +133,7 @@ This command will:
 - [What insights you'll gain]
 - [How it helps you improve code quality / security / architecture]
 
-This is your first value from Claude Craft — let's see what we find.
+This is your first value from Bear Craft — let's see what we find.
 ```
 
 ### During Execution
@@ -177,7 +177,7 @@ B. Fix a finding
    → I'll guide you through TDD (Test-Driven Development)
 
 C. Join the community
-   → Questions? Join our Discord: https://discord.gg/claude-craft
+   → Questions? Join our Discord: https://discord.gg/bear-craft
    → See community guidelines: @COMMUNITY.md
 
 📚 Resources:
@@ -185,7 +185,7 @@ C. Join the community
 - All 220 commands: /help
 - Technology-specific guides: @.claude/references/[your-tech]/
 
-✓ You've completed your first 10 minutes with Claude Craft!
+✓ You've completed your first 10 minutes with Bear Craft!
 
 Type /workflow:init when ready to start a feature with full BMAD workflow.
 ```
@@ -200,7 +200,7 @@ Scanning project for technology markers...
 
 ✓ Stack Detected: React
 
-Your project uses React 19.x. Claude Craft has 15+ specialized commands for React development.
+Your project uses React 19.x. Bear Craft has 15+ specialized commands for React development.
 ```
 
 **Step 2 Output:**
@@ -232,7 +232,7 @@ This command will:
 - Check ESLint configuration and violations
 - Verify React Hooks rules and component patterns
 
-This is your first value from Claude Craft — let's see what we find.
+This is your first value from Bear Craft — let's see what we find.
 ```
 
 **[Command executes]**
@@ -268,7 +268,7 @@ B. Fix a finding
    → I'll guide you through TDD (Test-Driven Development)
 
 C. Join the community
-   → Questions? Join our Discord: https://discord.gg/claude-craft
+   → Questions? Join our Discord: https://discord.gg/bear-craft
    → See community guidelines: @COMMUNITY.md
 
 📚 Resources:
@@ -276,7 +276,7 @@ C. Join the community
 - All 220 commands: /help
 - React-specific guides: @.claude/references/react/
 
-✓ You've completed your first 10 minutes with Claude Craft!
+✓ You've completed your first 10 minutes with Bear Craft!
 
 Type /workflow:init when ready to start a feature with full BMAD workflow.
 ```
@@ -337,11 +337,11 @@ Follow P1-06 accessibility standards:
 ## Success Criteria
 
 User should:
-- ✓ Understand what Claude Craft does (within 2 minutes)
+- ✓ Understand what Bear Craft does (within 2 minutes)
 - ✓ Get value from their first command (within 5 minutes)
 - ✓ Know what to do next (clear paths A/B/C)
 - ✓ Feel confident exploring further
 
 Time to First Value (TTFV): **< 10 minutes total**
 
-> Not sure which path to take? See the decision page: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/en/11-which-path.md
+> Not sure which path to take? See the decision page: https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/en/11-which-path.md

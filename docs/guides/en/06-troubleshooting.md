@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-This guide covers common issues and their solutions when using Claude-Craft.
+This guide covers common issues and their solutions when using Bear-Craft.
 
 ---
 
@@ -55,9 +55,9 @@ This guide covers common issues and their solutions when using Claude-Craft.
 
 **Solutions:**
 
-1. **Verify Claude-Craft path**
+1. **Verify Bear-Craft path**
    ```bash
-   # Check you're running from claude-craft directory
+   # Check you're running from bear-craft directory
    pwd
    ls -la Dev/scripts/
    ```
@@ -650,7 +650,7 @@ If using MCP servers with hooks, ensure Claude Code v2.1.325+ to avoid known CVE
 If you encounter bugs:
 
 1. Gather information:
-   - Claude-Craft version
+   - Bear-Craft version
    - Operating system
    - Steps to reproduce
    - Error messages
@@ -666,7 +666,7 @@ If you encounter bugs:
 
 Environment:
 - OS: [your OS]
-- Claude-Craft version: [version]
+- Bear-Craft version: [version]
 - Technology: [symfony/flutter/etc.]
 
 What I tried:

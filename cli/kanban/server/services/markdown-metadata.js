@@ -2,7 +2,7 @@ import { mapBmadPriority } from '../../shared/priority.js';
 import { parseDependencyRefs } from '../../shared/deps.js';
 
 /**
- * Fallback for backlogs written from the claude-craft templates
+ * Fallback for backlogs written from the bear-craft templates
  * (Project/i18n/<lang>/templates/{epic,user-story}.md) : no YAML frontmatter,
  * metadata as a "- **Label**: value" bullet list under "## Metadata"
  * (localized heading/labels). Derives the same fields the frontmatter schemas expect.

@@ -9,7 +9,7 @@ describe('detectProject', () => {
   let tempDir;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-test-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-test-'));
   });
 
   afterEach(() => {

@@ -1,5 +1,5 @@
 {
-  "description": "Block edits of sensitive files (.env, keys, credentials, kubeconfig...) via the tested script installed by claude-craft. .example/.sample/.template variants stay editable.",
+  "description": "Block edits of sensitive files (.env, keys, credentials, kubeconfig...) via the tested script installed by bear-craft. .example/.sample/.template variants stay editable.",
   "hooks": {
     "PreToolUse": [
       {

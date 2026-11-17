@@ -11,7 +11,7 @@ model: haiku
 
 # Ecosystem Tools
 
-Curated third-party Claude Code tools that complement Claude Craft's native token/context stack (RTK,
+Curated third-party Claude Code tools that complement Bear Craft's native token/context stack (RTK,
 `context: fork` skills, compaction hooks). None are bundled — they are documented with activation
 recipes and license caveats.
 

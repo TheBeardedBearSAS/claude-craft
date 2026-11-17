@@ -788,4 +788,4 @@ user.Id.Should().NotBeEmpty();
 
 **Last updated:** 2026-06
 **Version:** 2.1.0 (xUnit v3 note)
-**Author:** The Bearded CTO
+**Author:** The Bearded Bear

@@ -1,6 +1,6 @@
 # Scripts Reference
 
-Complete reference for all installation and utility scripts in Claude Craft.
+Complete reference for all installation and utility scripts in Bear Craft.
 
 ---
 
@@ -412,8 +412,8 @@ Scripts respect these environment variables:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_CRAFT_LANG` | Default language | `en` |
-| `CLAUDE_CRAFT_ROOT` | Claude Craft installation | `$(dirname $0)/..` |
+| `BEAR_CRAFT_LANG` | Default language | `en` |
+| `BEAR_CRAFT_ROOT` | Bear Craft installation | `$(dirname $0)/..` |
 | `VERBOSE` | Enable verbose output | `0` |
 | `DRY_RUN` | Enable dry run | `0` |
 

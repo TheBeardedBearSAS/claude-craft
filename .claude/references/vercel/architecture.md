@@ -1,6 +1,6 @@
 # Vercel Architecture Guidelines
 
-> Vercel is a **deployment platform**, not a framework. This document covers only the platform-level surface: `vercel.json`, Serverless Functions, ISR cache primitives, Cron Jobs, and the compute-model decision. Framework routing/rendering (Next.js, or any `/react:*`, `/vuejs:*`, `/angular:*` app) is out of scope — if a supported claude-craft framework stack is present in the project, defer to that stack's own `06-tooling.md` for its Vercel adapter, and do not duplicate config here.
+> Vercel is a **deployment platform**, not a framework. This document covers only the platform-level surface: `vercel.json`, Serverless Functions, ISR cache primitives, Cron Jobs, and the compute-model decision. Framework routing/rendering (Next.js, or any `/react:*`, `/vuejs:*`, `/angular:*` app) is out of scope — if a supported bear-craft framework stack is present in the project, defer to that stack's own `06-tooling.md` for its Vercel adapter, and do not duplicate config here.
 
 ## Architecture Pattern
 
@@ -159,7 +159,7 @@ Example combining several sections:
 ## Decision Tree — `vercel.json` vs. Framework Config
 
 ```
-Does the project use a supported claude-craft framework stack
+Does the project use a supported bear-craft framework stack
 (React, Vue.js, Angular, ...) with its own Vercel adapter?
 │
 ├─ YES → Does the concern involve routing, rendering, data-fetching,
@@ -221,7 +221,7 @@ Choosing a runtime for an api/** handler or middleware:
 - `vercel.json` expresses deployment/routing/compute concerns. Business logic, validation, and data access belong in the handler, not in rewrite rules or function config.
 
 ### 3. Defer to the Framework When One Owns the Route
-- If a claude-craft framework stack's adapter already manages a routing or caching concern, do not re-implement it via `vercel.json` — see the decision tree above.
+- If a bear-craft framework stack's adapter already manages a routing or caching concern, do not re-implement it via `vercel.json` — see the decision tree above.
 
 ### 4. Fluid Compute by Default
 - New Serverless Functions target the Node.js runtime. Edge Runtime is a recognized legacy pattern only, never a starting point.

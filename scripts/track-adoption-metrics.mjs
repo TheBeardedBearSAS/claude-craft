@@ -5,11 +5,11 @@ import { fileURLToPath } from 'node:url';
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const METRICS_DIR = path.join(PROJECT_ROOT, '.bmad', 'metrics');
-const NPM_URL = 'https://api.npmjs.org/downloads/point/last-week/@the-bearded-bear/claude-craft';
-const GITHUB_URL = 'https://api.github.com/repos/TheBeardedBearSAS/claude-craft';
+const NPM_URL = 'https://api.npmjs.org/downloads/point/last-week/@the-bearded-bear/bear-craft';
+const GITHUB_URL = 'https://api.github.com/repos/TheBeardedBearSAS/bear-craft';
 
 async function fetchNpm() {
-  const res = await fetch(NPM_URL, { headers: { 'User-Agent': 'claude-craft-metrics/1.0' } });
+  const res = await fetch(NPM_URL, { headers: { 'User-Agent': 'bear-craft-metrics/1.0' } });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   const data = await res.json();
   return {
@@ -21,7 +21,7 @@ async function fetchNpm() {
 
 async function fetchGitHub() {
   const headers = {
-    'User-Agent': 'claude-craft-metrics/1.0',
+    'User-Agent': 'bear-craft-metrics/1.0',
     Accept: 'application/vnd.github+json',
   };
   if (process.env.GITHUB_TOKEN) {
@@ -31,7 +31,7 @@ async function fetchGitHub() {
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   const data = await res.json();
   return {
-    repo: 'TheBeardedBearSAS/claude-craft',
+    repo: 'TheBeardedBearSAS/bear-craft',
     stars: data.stargazers_count,
     forks: data.forks_count,
     open_issues: data.open_issues_count,

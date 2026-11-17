@@ -236,4 +236,4 @@ Der Adapter-/Plugin-Autor **DARF NICHT** versuchen, diese lokal durchzusetzen. N
 
 ---
 
-**Zuletzt aktualisiert:** 2026-04 | **Version:** 2.0.0 | **Autor:** The Bearded CTO
+**Zuletzt aktualisiert:** 2026-04 | **Version:** 2.0.0 | **Autor:** The Bearded Bear

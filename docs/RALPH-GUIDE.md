@@ -1,6 +1,6 @@
 # Ralph Wiggum Guide
 
-Complete guide to using Ralph Wiggum, Claude Craft's continuous AI agent loop.
+Complete guide to using Ralph Wiggum, Bear Craft's continuous AI agent loop.
 
 ---
 
@@ -23,7 +23,7 @@ Ralph Wiggum is a continuous execution system that runs Claude iteratively until
 /common:ralph-run "Implement user authentication"
 
 # Or via CLI
-npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 ```
 
 ### With Full DoD Checks
@@ -418,7 +418,7 @@ echo "Task 1: Add validation" >> .ralph/queue.txt
 echo "Task 2: Add error handling" >> .ralph/queue.txt
 
 # Process queue
-npx @the-bearded-bear/claude-craft ralph --batch .ralph/queue.txt
+npx @the-bearded-bear/bear-craft ralph --batch .ralph/queue.txt
 ```
 
 ### Interactive Mode

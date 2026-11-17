@@ -1,6 +1,6 @@
 # Feature Development Guide
 
-This guide covers the complete workflow for developing new features using Claude-Craft, from initial analysis to final review.
+This guide covers the complete workflow for developing new features using Bear-Craft, from initial analysis to final review.
 
 ---
 
@@ -20,7 +20,7 @@ This guide covers the complete workflow for developing new features using Claude
 
 ## TDD Workflow Overview
 
-Claude-Craft enforces a Test-Driven Development workflow:
+Bear-Craft enforces a Test-Driven Development workflow:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐

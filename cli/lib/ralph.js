@@ -11,7 +11,7 @@ import { printBanner } from './banner.js';
 
 /**
  * Launch the Ralph Wiggum continuous AI agent loop.
- * @param {import('../index.js').ClaudeCraftCLI} cli - CLI instance
+ * @param {import('../index.js').BearCraftCLI} cli - CLI instance
  * @param {string[]} args - Positional arguments (prompt text after 'ralph' command)
  * @param {Object} options - CLI option flags
  * @param {string} [options.lang] - Language override
@@ -35,7 +35,7 @@ export async function runRalph(cli, args, options, { CLI_ROOT, VERSION }) {
   // Check if script exists
   if (!fs.existsSync(ralphScript)) {
     console.log(`${c.red}Error: Ralph script not found at ${ralphScript}${c.reset}`);
-    console.log(`${c.yellow}Make sure you have the full claude-craft installation.${c.reset}`);
+    console.log(`${c.yellow}Make sure you have the full bear-craft installation.${c.reset}`);
     process.exit(1);
   }
 

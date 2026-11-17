@@ -4,7 +4,7 @@ Detailed information about rules, patterns, and best practices for each supporte
 
 ## Maturity Tiers
 
-Claude Craft classifies its 12 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
+Bear Craft classifies its 12 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
 
 ### Tier Overview
 
@@ -627,4 +627,4 @@ See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit comma
 
 ## Internal Tooling Note: Svelte 5
 
-> **Note:** Svelte 5 is **not a supported project stack** in Claude Craft. However, the built-in **Kanban SPA** (`claude-craft kanban`) is itself implemented in Svelte 5. This is an internal implementation detail — Svelte is used for Claude Craft tooling, not as a recommendation for user projects. Community-maintained Svelte references are available at `.claude/references/svelte/CLAUDE.md` with a full disclaimer.
+> **Note:** Svelte 5 is **not a supported project stack** in Bear Craft. However, the built-in **Kanban SPA** (`bear-craft kanban`) is itself implemented in Svelte 5. This is an internal implementation detail — Svelte is used for Bear Craft tooling, not as a recommendation for user projects. Community-maintained Svelte references are available at `.claude/references/svelte/CLAUDE.md` with a full disclaimer.

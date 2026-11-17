@@ -8,7 +8,7 @@ describe('fs-utils', () => {
   let tempDir;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-fsutils-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-fsutils-'));
   });
 
   afterEach(() => {

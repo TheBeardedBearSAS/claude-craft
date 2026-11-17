@@ -1,6 +1,6 @@
 # Guide de Développement de Fonctionnalités
 
-Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalités avec Claude-Craft, de l'analyse initiale à la revue finale.
+Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalités avec Bear-Craft, de l'analyse initiale à la revue finale.
 
 ---
 
@@ -20,7 +20,7 @@ Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalit�
 
 ## Vue d'Ensemble du Workflow TDD
 
-Claude-Craft impose un workflow de Développement Piloté par les Tests :
+Bear-Craft impose un workflow de Développement Piloté par les Tests :
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐

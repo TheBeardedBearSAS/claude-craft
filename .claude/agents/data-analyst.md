@@ -99,7 +99,7 @@ Avant toute query : quelle décision sera prise avec ce résultat ?
 - Investigation anomalie (drop conversion, spike erreurs)
 - Sélection du bon outil BI
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@database-architect` — design de schéma
 - `@performance-auditor` — métriques système

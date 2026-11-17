@@ -1,4 +1,4 @@
-# Claude-Craft - Multi-Technology Framework
+# Bear-Craft - Multi-Technology Framework
 
 **Version:** 9.4.0 | **Languages:** en, fr, es, de, pt
 
@@ -154,8 +154,8 @@ Projects with UI should include a root `DESIGN.md` file (template: `.claude/temp
 ## Quick Start
 
 ```bash
-# Install Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+# Install Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 
 # Or with Makefile
 make install-symfony TARGET=. RULES_LANG=en

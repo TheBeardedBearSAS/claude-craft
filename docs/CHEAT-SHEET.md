@@ -1,4 +1,4 @@
-# Claude-Craft Cheat Sheet
+# Bear-Craft Cheat Sheet
 
 Quick reference for the most common commands. Keep this handy for daily development.
 
@@ -7,9 +7,9 @@ Quick reference for the most common commands. Keep this handy for daily developm
 ## Quick Start (5 Lines)
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --auto       # Zero-prompt auto-detection
+npx @the-bearded-bear/bear-craft install . --auto       # Zero-prompt auto-detection
 # or with an explicit stack:
-npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 /common:getting-started         # Interactive onboarding wizard (10 min) — run THIS FIRST
 /common:init                    # Set up the project's .claude/ structure
 /workflow:init                  # Initialize BMAD workflow
@@ -19,10 +19,10 @@ npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
 
 **Alternative install methods:**
 ```bash
-npx @the-bearded-bear/claude-craft install . --auto              # Auto-detect the stack
-npx @the-bearded-bear/claude-craft install . --from=URL          # Shared team config
-npx @the-bearded-bear/claude-craft skill add <name>              # Add a community skill
-npx @the-bearded-bear/claude-craft kanban --open                 # Open the Kanban board
+npx @the-bearded-bear/bear-craft install . --auto              # Auto-detect the stack
+npx @the-bearded-bear/bear-craft install . --from=URL          # Shared team config
+npx @the-bearded-bear/bear-craft skill add <name>              # Add a community skill
+npx @the-bearded-bear/bear-craft kanban --open                 # Open the Kanban board
 ```
 
 **Uninstall:**
@@ -31,7 +31,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 ```
 
 > **Note:** `/gate:*` and `/project:*` require `make install-project TARGET=.` (separate install).
-> `/common:getting-started` and `/common:init` require Claude Craft to be installed first.
+> `/common:getting-started` and `/common:init` require Bear Craft to be installed first.
 
 ---
 
@@ -96,7 +96,7 @@ rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml                       # Full removal
 /common:pack-repo                 # Pack codebase for AI
 /common:generate-changelog        # Generate CHANGELOG
 /common:architecture-decision     # Document ADR
-/common:add-technology "nextjs"   # Add new tech stack (claude-craft repo only)
+/common:add-technology "nextjs"   # Add new tech stack (bear-craft repo only)
 /common:init --context            # Analyze codebase, configure project context
 /common:aliases                   # Custom shortcuts and aliases
 ```
@@ -459,8 +459,8 @@ See `~/.claude/keybindings.json` for the full configuration.
 ## Kanban Board
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban --open   # Open in the browser
-npx @the-bearded-bear/claude-craft kanban          # Start the local server (port 3737; --port=<n> to change it)
+npx @the-bearded-bear/bear-craft kanban --open   # Open in the browser
+npx @the-bearded-bear/bear-craft kanban          # Start the local server (port 3737; --port=<n> to change it)
 ```
 
 The Kanban board reads `.bmad/sprint-status.yaml` and lets you move, create, edit and delete stories and plan, start and close sprints (`--readonly` disables all writes). No SaaS dependency.

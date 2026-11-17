@@ -1,12 +1,12 @@
 # BMAD v6 Practical Guide
 
-A step-by-step guide to using BMAD (Build, Measure, Analyze, Deliver) project management in Claude Craft.
+A step-by-step guide to using BMAD (Build, Measure, Analyze, Deliver) project management in Bear Craft.
 
 ---
 
 ## What is BMAD?
 
-BMAD v6 is Claude Craft's integrated project management framework that brings Agile methodology directly into your AI-assisted development workflow.
+BMAD v6 is Bear Craft's integrated project management framework that brings Agile methodology directly into your AI-assisted development workflow.
 
 ### Key Features
 
@@ -509,13 +509,13 @@ Process multiple stories automatically.
 
 ## Kanban Board
 
-Claude Craft ships a local Kanban board that visualises your BMAD v6 project without any SaaS dependency.
+Bear Craft ships a local Kanban board that visualises your BMAD v6 project without any SaaS dependency.
 
 ### Launch
 
 ```bash
 # From the project root (where .bmad/ or project-management/ lives)
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 ```
 
 The board opens at `http://127.0.0.1:3737` (default port) and binds to localhost only.
@@ -540,7 +540,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 ### Typical BMAD workflow with the board
 
 1. Run `/workflow:init` then `/workflow:start 1` to populate `.bmad/sprint-status.yaml`
-2. Launch `claude-craft kanban --open` to open the board
+2. Launch `bear-craft kanban --open` to open the board
 3. Monitor story progress in real time — the board live-reloads on every YAML change
 4. Use the board as a read-only dashboard during sprint ceremonies (stand-up, review)
 

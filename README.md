@@ -1,8 +1,8 @@
-# Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
+# Bear Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
 
 > **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-stack reviewers for tech leads adopting Claude Code with their team. **11 stacks, 5 languages, BMAD v6.**
 
-## Why teams pick Claude Craft
+## Why teams pick Bear Craft
 
 Four things Claude Code + an Anthropic cookbook **won't** give you — they're workflow and orchestration, not prompts:
 
@@ -15,16 +15,16 @@ Four things Claude Code + an Anthropic cookbook **won't** give you — they're w
 
 Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @python-reviewer…) that enforce SOLID/TDD/Clean Architecture so you don't re-type your conventions every sprint.
 
-> **Why not just Claude Code + a cookbook?** Claude already knows React, Symfony, and Flutter patterns — so Claude Craft's value isn't the prompts, it's the **workflow and orchestration around them**: a sprint lifecycle with gates, a continuous loop with a real DoD, browser-based regression capture, and per-task token routing. Those are the parts a per-stack cookbook doesn't cover.
+> **Why not just Claude Code + a cookbook?** Claude already knows React, Symfony, and Flutter patterns — so Bear Craft's value isn't the prompts, it's the **workflow and orchestration around them**: a sprint lifecycle with gates, a continuous loop with a real DoD, browser-based regression capture, and per-task token routing. Those are the parts a per-stack cookbook doesn't cover.
 
 
 
-[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
-[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/bear-craft)](https://www.npmjs.com/package/@the-bearded-bear/bear-craft)
+[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/bear-craft)](https://www.npmjs.com/package/@the-bearded-bear/bear-craft)
 [![Claude Code 2.1.325+](https://img.shields.io/badge/Claude%20Code-2.1.325%2B-blue)](https://code.claude.com)
-[![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
+[![CI](https://github.com/TheBeardedBearSAS/bear-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/bear-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fbear-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/bear-craft/main)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=coverage)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
@@ -36,7 +36,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Dernière version 9.x — sécurité Claude Code et hooks fail-closed (2026-11-17, v9.4.0) :**
 
-- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `claude-craft doctor` échoue sous le minimum, et le plugin déclare `engines["claude-code"]: ">=2.1.325"`.
+- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `bear-craft doctor` échoue sous le minimum, et le plugin déclare `engines["claude-code"]: ">=2.1.325"`.
 - **Hooks** : les trois gardes de sécurité bloquent l'appel d'outil si leur script manque, plante ou dépasse son timeout (`onFailure: "block"`) ; la réinstallation met à niveau les projets existants.
 - **Annonce** : Claude Craft devient **bear-craft** en 10.0.0 (paquet `@the-bearded-bear/bear-craft`, commande `bear-craft`, alias `claude-craft` conservé en 10.x). Détails : [CHANGELOG](CHANGELOG.md#940---2026-11-17).
 
@@ -44,7 +44,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Kanban en écriture et qualité mesurée (2026-11-16, v9.3.0) :**
 
-- **Kanban** (`claude-craft kanban`) : création, édition et suppression de stories, planification du backlog, création/démarrage/clôture de sprint avec report, limites WIP, vélocité ; écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé, détection de conflit) ; interface en 5 langues, accessibilité vérifiée par axe.
+- **Kanban** (`bear-craft kanban`) : création, édition et suppression de stories, planification du backlog, création/démarrage/clôture de sprint avec report, limites WIP, vélocité ; écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé, détection de conflit) ; interface en 5 langues, accessibilité vérifiée par axe.
 - **Qualité** : analyse SonarCloud en CI à chaque PR (0 issue, quality gate vert, couverture 95 %), score de mutation Stryker publié sur le dashboard ; badges dans ce README.
 - **Sécurité** : `npm ci --ignore-scripts` dans toute la CI, téléchargements HTTPS uniquement, permissions des workflows au plus juste, expressions régulières sans retour arrière super-linéaire, `hono` mis à jour (GHSA-4m76-xfj5-7975). Détails : [CHANGELOG](CHANGELOG.md#930---2026-11-16).
 
@@ -73,7 +73,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v9.0.0
 
-**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
+**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `bear-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
 
 **Un seul `/<tech>:check <axe>` par stack (v9.0.0) :** `/react:check architecture|code-quality|security|testing|all` remplace les 5 `check-*` de chaque stack (`all` = audit noté sur 100) ; `/team:sprint` devient `/team:delivery --phase=implementation`. Les anciens noms restent des stubs de redirection jusqu'en 10.0. Table : [MIGRATION-v9](docs/MIGRATION-v9.md).
 
@@ -177,7 +177,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Corrections de l'interface web Kanban (v8.13.1) :**
 
-- **Dashboard Kanban réparé** : 4 bugs corrigés en TDD sur le SPA Svelte 5 (`claude-craft kanban`) — vue Backlog vide (stories à `epic_id` inconnu désormais regroupées au lieu d'être perdues), raccourcis clavier inopérants (synchronisation focus + reducer pur), détails de carte inaccessibles (modale au clic/Entrée), et feedback visible (toast) au lieu d'un échec silencieux sur les cartes read-only `sprint-status.yaml`.
+- **Dashboard Kanban réparé** : 4 bugs corrigés en TDD sur le SPA Svelte 5 (`bear-craft kanban`) — vue Backlog vide (stories à `epic_id` inconnu désormais regroupées au lieu d'être perdues), raccourcis clavier inopérants (synchronisation focus + reducer pur), détails de carte inaccessibles (modale au clic/Entrée), et feedback visible (toast) au lieu d'un échec silencieux sur les cartes read-only `sprint-status.yaml`.
 
 **Fiabilité BMAD + distribution AgentTeams (v8.13.0) :**
 
@@ -197,7 +197,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Releases 8.8.x → 8.10.x :**
 
-- **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
+- **MIT-only strict (v8.8.0)** -- Bear Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
 - **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
@@ -209,19 +209,19 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ```bash
 # Install to your project (picks your tech stack interactively)
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 
 # Or install directly
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=react --lang=en
 
 # Zero-prompt install (auto-detects your stack + locale, target < 2 min)
-npx @the-bearded-bear/claude-craft install --auto
+npx @the-bearded-bear/bear-craft install --auto
 
 # Install from a team config URL (Gist or internal endpoint)
-npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+npx @the-bearded-bear/bear-craft install --from=https://org.example/cc-team.json
 
-# Add a community skill from npm (claude-craft-skill-* convention)
-npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+# Add a community skill from npm (bear-craft-skill-* convention)
+npx @the-bearded-bear/bear-craft skill add bear-craft-skill-foo
 
 # Open Claude Code and run your first audit
 claude
@@ -230,13 +230,13 @@ claude
 
 That's it. You get an architecture, security, and quality audit of your project in minutes.
 
-**New to Claude Craft?** Run `/common:getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Bear Craft?** Run `/common:getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
 
 > See [Quickstart](docs/QUICKSTART.md) for a step-by-step walkthrough with expected output at each stage.
 
-## Why Claude Craft?
+## Why Bear Craft?
 
-Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
+Claude Code is powerful on its own. Bear Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (72 total potentially installable)
@@ -291,7 +291,7 @@ See [Agents](docs/AGENTS.md) | [Commands](docs/COMMANDS.md) | [Skills](docs/SKIL
 
 ## Workflow Tracks
 
-Claude Craft adapts to your project complexity with three development tracks:
+Bear Craft adapts to your project complexity with three development tracks:
 
 | Track | Setup | Phases | Best For |
 |-------|-------|--------|----------|
@@ -333,14 +333,21 @@ See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namesp
 ### NPX (Recommended)
 
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
+```
+
+### Claude Code plugin
+
+```
+/plugin marketplace add TheBeardedBearSAS/bear-craft
+/plugin install bear-craft@bear-craft
 ```
 
 ### Clone + Makefile
 
 ```bash
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 make install-symfony TARGET=~/my-project RULES_LANG=en
 ```
 
@@ -365,16 +372,16 @@ make config-install PROJECT=my-monorepo
 
 See [Installation Guide](docs/INSTALLATION.md) | [Configuration](docs/CONFIGURATION.md)
 
-## Use Claude Craft Without Claude Code
+## Use Bear Craft Without Claude Code
 
-Claude Craft's principles and rules are available as pre-built bundles for other AI surfaces. No installation required — paste and go.
+Bear Craft's principles and rules are available as pre-built bundles for other AI surfaces. No installation required — paste and go.
 
 | Surface | Bundle | Doc |
 |---------|--------|-----|
-| ChatGPT / GPT-5 | `bundles/chatgpt/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Claude.ai (Web) / Claude Projects | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Gemini / Cursor / Windsurf | `bundles/gemini/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Codex CLI / other agents | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| ChatGPT / GPT-5 | `bundles/chatgpt/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Claude.ai (Web) / Claude Projects | `bundles/claude/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Gemini / Cursor / Windsurf | `bundles/gemini/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Codex CLI / other agents | `bundles/claude/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
 
 See [`bundles/README.md`](bundles/README.md) for platform-specific installation instructions and token budgets.
 
@@ -440,7 +447,7 @@ Step-by-step tutorials available in 5 languages:
 
 ## Project Governance & Sustainability
 
-Claude Craft is maintained by [The Bearded CTO](https://the-bearded-bear.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
+Bear Craft is maintained by [The Bearded Bear](https://the-bearded-bear.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
 
 | Item | Status |
 |------|--------|
@@ -448,10 +455,10 @@ Claude Craft is maintained by [The Bearded CTO](https://the-bearded-bear.com), a
 | **Maintenance commitment** | Active development since 2026-01. Targeting weekly minor releases, monthly minor versions. |
 | **Bus factor** | Currently 1 (solo maintainer). [Co-maintainer search open](CHARTER.md) — looking for one tech lead from the AFUP / Symfony / Flutter / React community. |
 | **Succession plan** | Documented in [CHARTER.md](CHARTER.md). MIT license guarantees indefinite community fork rights if maintainer disappears. |
-| **Roadmap visibility** | [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues) + [CHANGELOG.md](CHANGELOG.md) + recurring `audit/YYYY-MM-DD-*` reports |
+| **Roadmap visibility** | [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues) + [CHANGELOG.md](CHANGELOG.md) + recurring `audit/YYYY-MM-DD-*` reports |
 | **Decision process** | RFC via GitHub Discussions for breaking changes. ADRs in `docs/adr/` for architectural choices. |
 | **Security disclosure** | See [SECURITY.md](SECURITY.md). 90-day disclosure timeline, GPG-signed advisories. |
-| **License** | MIT (free, perpetual). Claude Craft is and remains 100% open-source — no commercial, enterprise, or proprietary tier. See [CHARTER.md](CHARTER.md). |
+| **License** | MIT (free, perpetual). Bear Craft is and remains 100% open-source — no commercial, enterprise, or proprietary tier. See [CHARTER.md](CHARTER.md). |
 
 ## Contributing
 

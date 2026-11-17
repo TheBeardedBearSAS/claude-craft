@@ -236,4 +236,4 @@ The adapter/plugin author **MUST NOT** try to enforce these locally. Never cache
 
 ---
 
-**Last updated:** 2026-04 | **Version:** 2.0.0 | **Author:** The Bearded CTO
+**Last updated:** 2026-04 | **Version:** 2.0.0 | **Author:** The Bearded Bear

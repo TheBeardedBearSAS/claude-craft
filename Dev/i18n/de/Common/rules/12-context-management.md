@@ -811,7 +811,7 @@ Templates verfügbar in `.claude/templates/hooks/`: `output-filter.json`, `pre-c
 
 ## Drittanbieter-Tools des Ökosystems (Tokens & Kontext)
 
-Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die nativ nicht abgedeckte Aspekte adressieren. Keines ist in Claude Craft eingebettet – sie werden dokumentiert und empfohlen.
+Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die nativ nicht abgedeckte Aspekte adressieren. Keines ist in Bear Craft eingebettet – sie werden dokumentiert und empfohlen.
 
 | Tool | Lizenz | Aspekt | Empf. |
 |------|--------|--------|-------|
@@ -839,4 +839,4 @@ Ergänzend zu RTK und nativen Hooks bietet das Claude-Code-Ökosystem Tools, die
 
 **Letzte Aktualisierung:** 2026-04
 **Version:** 1.2.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

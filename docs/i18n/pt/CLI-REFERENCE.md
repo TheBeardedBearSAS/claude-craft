@@ -1,22 +1,22 @@
 # Referência CLI
 
-Referência completa da interface de linha de comando Claude Craft.
+Referência completa da interface de linha de comando Bear Craft.
 
 ---
 
 ## Instalação NPX
 
-A forma recomendada de instalar Claude Craft é via NPX:
+A forma recomendada de instalar Bear Craft é via NPX:
 
 ```bash
-npx @the-bearded-bear/claude-craft [comando] [opções]
+npx @the-bearded-bear/bear-craft [comando] [opções]
 ```
 
 ### Comandos Disponíveis
 
 | Comando | Descrição |
 |---------|-----------|
-| `install` | Instalar Claude Craft em um projeto |
+| `install` | Instalar Bear Craft em um projeto |
 | `flatten` | Gerar um contexto achatado do codebase |
 | (nenhum comando) | Assistente de instalação interativo |
 
@@ -27,7 +27,7 @@ npx @the-bearded-bear/claude-craft [comando] [opções]
 Execute sem argumentos para o assistente interativo:
 
 ```bash
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 ```
 
 O assistente te guiará através de:
@@ -43,7 +43,7 @@ O assistente te guiará através de:
 ### Uso Básico
 
 ```bash
-npx @the-bearded-bear/claude-craft install <diretório-destino> [opções]
+npx @the-bearded-bear/bear-craft install <diretório-destino> [opções]
 ```
 
 ### Opções
@@ -88,20 +88,20 @@ npx @the-bearded-bear/claude-craft install <diretório-destino> [opções]
 
 ```bash
 # Instalar regras Symfony em português
-npx @the-bearded-bear/claude-craft install ~/meu-projeto --tech=symfony --lang=pt
+npx @the-bearded-bear/bear-craft install ~/meu-projeto --tech=symfony --lang=pt
 
 # Instalar múltiplas tecnologias
-npx @the-bearded-bear/claude-craft install . --tech=react
-npx @the-bearded-bear/claude-craft install . --tech=python
+npx @the-bearded-bear/bear-craft install . --tech=react
+npx @the-bearded-bear/bear-craft install . --tech=python
 
 # Forçar reinstalação com backup
-npx @the-bearded-bear/claude-craft install ~/app --tech=flutter --force --backup
+npx @the-bearded-bear/bear-craft install ~/app --tech=flutter --force --backup
 
 # Dry run para previsualizar mudanças
-npx @the-bearded-bear/claude-craft install . --tech=angular --dry-run
+npx @the-bearded-bear/bear-craft install . --tech=angular --dry-run
 
 # Instalar todas as tecnologias
-npx @the-bearded-bear/claude-craft install ~/projeto --tech=all --lang=pt
+npx @the-bearded-bear/bear-craft install ~/projeto --tech=all --lang=pt
 ```
 
 ---
@@ -113,7 +113,7 @@ Gera um resumo achatado do teu codebase para assistentes de IA.
 ### Uso
 
 ```bash
-npx @the-bearded-bear/claude-craft flatten [opções]
+npx @the-bearded-bear/bear-craft flatten [opções]
 ```
 
 ### Opções
@@ -128,16 +128,16 @@ npx @the-bearded-bear/claude-craft flatten [opções]
 
 ```bash
 # Gerar o codebase achatado
-npx @the-bearded-bear/claude-craft flatten
+npx @the-bearded-bear/bear-craft flatten
 
 # Arquivo de saída personalizado
-npx @the-bearded-bear/claude-craft flatten --output=CONTEXT.md
+npx @the-bearded-bear/bear-craft flatten --output=CONTEXT.md
 
 # Limitar o número de tokens (ativa a fragmentação para projetos grandes)
-npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
+npx @the-bearded-bear/bear-craft flatten --max-tokens=50000
 
 # Excluir diretórios adicionais
-npx @the-bearded-bear/claude-craft flatten --exclude="*.test.ts,*.spec.ts"
+npx @the-bearded-bear/bear-craft flatten --exclude="*.test.ts,*.spec.ts"
 ```
 
 ### Saída
@@ -293,7 +293,7 @@ Executa Claude em loop contínuo até o cumprimento da tarefa.
 ### Uso
 
 ```bash
-npx @the-bearded-bear/claude-craft ralph "descrição da tarefa"
+npx @the-bearded-bear/bear-craft ralph "descrição da tarefa"
 ```
 
 ### Opções
@@ -308,13 +308,13 @@ npx @the-bearded-bear/claude-craft ralph "descrição da tarefa"
 
 ```bash
 # Tarefa básica
-npx @the-bearded-bear/claude-craft ralph "Implementar a autenticação de utilizador"
+npx @the-bearded-bear/bear-craft ralph "Implementar a autenticação de utilizador"
 
 # Com todas as verificações DoD
-npx @the-bearded-bear/claude-craft ralph --full "Corrigir o bug de login"
+npx @the-bearded-bear/bear-craft ralph --full "Corrigir o bug de login"
 
 # Limite de iterações personalizado
-npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Refatorar o módulo de pagamento"
+npx @the-bearded-bear/bear-craft ralph --max-iterations=20 "Refatorar o módulo de pagamento"
 ```
 
 ---
@@ -326,7 +326,7 @@ Inicia uma interface web local para visualizar e gerenciar o backlog e os sprint
 ### Uso
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban [caminho] [opções]
+npx @the-bearded-bear/bear-craft kanban [caminho] [opções]
 ```
 
 O `caminho` é, por padrão, o diretório atual. O destino deve conter um subdiretório `project-management/` (gerado por `/workflow:plan` ou `/workflow:start`).
@@ -339,7 +339,7 @@ O `caminho` é, por padrão, o diretório atual. O destino deve conter um subdir
 | `--open` | Abre o navegador automaticamente |
 | `--readonly` | Desativa toda escrita: o servidor responde 403 `readonly` a cada PATCH, PUT, POST e DELETE, e o quadro não oferece nenhum controle de movimentação |
 | `--no-watch` | Desativa o watcher de arquivos (sem recarga em caso de alterações externas) |
-| `--user=<nome>` | Autor registrado no `history` das alterações feitas pelo quadro (`kanban:<nome>`). Padrão: `CLAUDE_CRAFT_USER`, depois `git config user.name`, depois o usuário do sistema e, por fim, `kanban` |
+| `--user=<nome>` | Autor registrado no `history` das alterações feitas pelo quadro (`kanban:<nome>`). Padrão: `BEAR_CRAFT_USER`, depois `git config user.name`, depois o usuário do sistema e, por fim, `kanban` |
 
 ### Visualizações
 
@@ -458,10 +458,10 @@ Os atalhos são opcionais: todas as ações continuam acessíveis com `Tab` e os
 
 ```bash
 # Iniciar no projeto atual e abrir o navegador
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 
 # Modo somente leitura
-npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
+npx @the-bearded-bear/bear-craft kanban --readonly --port=4040
 ```
 
 ---
@@ -497,9 +497,9 @@ projects:
 
 | Variável | Descrição | Padrão |
 |----------|-----------|--------|
-| `CLAUDE_CRAFT_LANG` | Idioma padrão | `en` |
-| `CLAUDE_CRAFT_TARGET` | Diretório destino padrão | `.` |
-| `CLAUDE_CRAFT_CONFIG` | Caminho do arquivo de config | `claude-projects.yaml` |
+| `BEAR_CRAFT_LANG` | Idioma padrão | `en` |
+| `BEAR_CRAFT_TARGET` | Diretório destino padrão | `.` |
+| `BEAR_CRAFT_CONFIG` | Caminho do arquivo de config | `claude-projects.yaml` |
 
 ---
 
@@ -538,7 +538,7 @@ make fix-permissions
 ### Má versão de yq
 
 ```bash
-# Claude Craft requer yq v4 (versão de Mike Farah)
+# Bear Craft requer yq v4 (versão de Mike Farah)
 yq --version
 # Deve mostrar: yq (https://github.com/mikefarah/yq/) version v4.x.x
 ```

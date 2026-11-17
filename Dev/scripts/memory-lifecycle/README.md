@@ -34,12 +34,12 @@ compactions  (id, session_id, compacted_at, preserved_context)
 
 ### 2. Installer
 
-Avec l'installeur de Claude Craft : les scripts sont copiés dans `.claude/hooks/memory-lifecycle/` et les hooks fusionnés dans `.claude/settings.json` (sans écraser les vôtres) :
+Avec l'installeur de Bear Craft : les scripts sont copiés dans `.claude/hooks/memory-lifecycle/` et les hooks fusionnés dans `.claude/settings.json` (sans écraser les vôtres) :
 
 ```bash
 bash Dev/scripts/install-common-rules.sh --hooks=default,memory /chemin/du/projet
 # ou --hooks=full,memory ; --hooks=none,memory pour l'add-on seul
-# via le CLI : npx @the-bearded-bear/claude-craft install . --hooks=default,memory
+# via le CLI : npx @the-bearded-bear/bear-craft install . --hooks=default,memory
 ```
 
 L'installeur avertit si `sqlite3` ou `jq` manquent. Le fragment de configuration est `Dev/i18n/base/Common/hooks/templates/hooks.memory.json`.

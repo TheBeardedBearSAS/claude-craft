@@ -594,6 +594,6 @@ Sécurité dès le début, pas après.
 
 **Version**: 1.0.0
 **Créé le**: 2025-12-03
-**Auteur**: TheBeardedCTO
+**Auteur**: The Bearded Bear
 
 **Remember**: Ces règles sont des guides pour produire du code de qualité. Adaptez-les à votre contexte spécifique.

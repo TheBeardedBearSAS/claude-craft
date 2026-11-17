@@ -1,10 +1,10 @@
-# ISO 27001:2022 Gap Analysis — Claude Craft
+# ISO 27001:2022 Gap Analysis — Bear Craft
 
 **DRAFT — Review Legal/CTO + cabinet audit obligatoire**
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Objectif :** Certification ISO 27001:2022 + SOC 2 Type II  
 **Budget audit externe :** €15-30K  
 
@@ -12,7 +12,7 @@
 
 ## Executive Summary
 
-Cette gap analysis identifie les écarts entre l'état actuel de Claude Craft et les exigences ISO 27001:2022 Annex A (93 contrôles). L'analyse prépare un audit de certification externe par cabinet accrédité COFRAC.
+Cette gap analysis identifie les écarts entre l'état actuel de Bear Craft et les exigences ISO 27001:2022 Annex A (93 contrôles). L'analyse prépare un audit de certification externe par cabinet accrédité COFRAC.
 
 **Statut global :**
 - **Conformité actuelle estimée :** 45% (contrôles basiques open-source présents)
@@ -57,7 +57,7 @@ Cette gap analysis identifie les écarts entre l'état actuel de Claude Craft et
 - **ISO/IEC 27001:2022** — ISMS requirements
 - **ISO/IEC 27002:2022** — Annex A controls (93 contrôles, 14 domaines)
 - **SOC 2 Type II** — Trust Services Criteria (Security, Availability, Confidentiality)
-- **RGPD** — compatibilité CNIL (données personnelles utilisateurs Claude Craft)
+- **RGPD** — compatibilité CNIL (données personnelles utilisateurs Bear Craft)
 
 ---
 
@@ -317,8 +317,8 @@ Cette gap analysis identifie les écarts entre l'état actuel de Claude Craft et
 |----|--------|-------------|--------|-------|------------|-------|--------|
 | **R01** | Perte accès compte GitHub organization (single point of failure) | 2 | 5 | **10** | Backup owners multiples (3 admins), MFA hardware keys, recovery codes vault | CTO | P1 |
 | **R02** | Compromission supply chain (npm package malveillant) | 3 | 5 | **15** | SBOM auto, Trivy scans, pinning versions, audit manual packages critiques | Dev | **P0** |
-| **R03** | Data breach données utilisateurs Claude Craft (emails, usage stats) | 2 | 5 | **10** | Chiffrement at rest, access control strict Posthog/Sentry, DPIA, notification CNIL <72h | CTO | **P0** |
-| **R04** | Indisponibilité service Anthropic API (impact releases Claude Craft) | 3 | 4 | **12** | Monitoring SLA Anthropic, fallback docs offline, communication proactive users | CTO | P1 |
+| **R03** | Data breach données utilisateurs Bear Craft (emails, usage stats) | 2 | 5 | **10** | Chiffrement at rest, access control strict Posthog/Sentry, DPIA, notification CNIL <72h | CTO | **P0** |
+| **R04** | Indisponibilité service Anthropic API (impact releases Bear Craft) | 3 | 4 | **12** | Monitoring SLA Anthropic, fallback docs offline, communication proactive users | CTO | P1 |
 | **R05** | Absence IRP → délai réponse incident inacceptable (>48h) | 4 | 4 | **16** | Rédiger IRP, CSIRT team, on-call rotation, exercices trimestriels | CTO | **P0** |
 | **R06** | Secrets hardcodés code (leak API keys GitHub public) | 2 | 4 | **8** | GitLeaks CI, pre-commit hooks, scan historique Git, rotation post-leak | Dev | P1 |
 | **R07** | Perte données absence backups (Posthog analytics historique) | 2 | 3 | **6** | Backup 3-2-1 Posthog, export mensuel, tests restoration | Dev | P1 |
@@ -386,7 +386,7 @@ Cette gap analysis identifie les écarts entre l'état actuel de Claude Craft et
 | **TÜV Rheinland France** | COFRAC ISO 27001, SOC 2 | Élevée (OVHcloud, Scaleway) | €20-25K | certification@tuv.com | Leader EU, process rigoureux |
 | **BSI Group France** | COFRAC ISO 27001, SOC 2, Cyber Essentials | Très élevée (Stripe EU, GitLab) | €25-30K | france@bsigroup.com | Standard britannique, reconnu international |
 | **Bureau Veritas Certification** | COFRAC ISO 27001, TISAX | Moyenne (industrie, moins SaaS) | €18-22K | cybersecurity@bureauveritas.com | Prix compétitif, expertise variable |
-| **DNV France (ex-DNV GL)** | COFRAC ISO 27001, SOC 2, ISO 42001 (AI) | Élevée (startups deep-tech) | €22-28K | certification.france@dnv.com | Spécialisation AI intéressante (Claude Craft use case) |
+| **DNV France (ex-DNV GL)** | COFRAC ISO 27001, SOC 2, ISO 42001 (AI) | Élevée (startups deep-tech) | €22-28K | certification.france@dnv.com | Spécialisation AI intéressante (Bear Craft use case) |
 | **LNE (Laboratoire National de Métrologie et d'Essais)** | COFRAC ISO 27001, ANSSI qualifié | Moyenne (secteur public) | €15-20K | cyber@lne.fr | Organisme public, moins cher, délais plus longs |
 
 **Recommandation :** **DNV France** (expertise AI/SaaS, budget acceptable, accréditations complètes) ou **TÜV Rheinland** (réputation solide, références OVH/Scaleway).
@@ -394,11 +394,11 @@ Cette gap analysis identifie les écarts entre l'état actuel de Claude Craft et
 ### Email Type Demande Devis
 
 ```
-Objet : Demande devis certification ISO 27001:2022 + SOC 2 Type II — Claude Craft (SaaS dev tools)
+Objet : Demande devis certification ISO 27001:2022 + SOC 2 Type II — Bear Craft (SaaS dev tools)
 
 Bonjour,
 
-Nous sommes The Bearded CTO, éditeur de Claude Craft (framework open-source AI-assisted development, 
+Nous sommes The Bearded Bear, éditeur de Bear Craft (framework open-source AI-assisted development, 
 ~5K utilisateurs, pivot SaaS en cours). Nous souhaitons obtenir les certifications ISO 27001:2022 
 et SOC 2 Type II pour adresser marchés enterprise/publics EU.
 
@@ -417,11 +417,11 @@ Demande :
 
 Budget indicatif : €15-30K (flexible selon scope).
 
-Disponible pour appel préliminaire (présentation Claude Craft, questions périmètre).
+Disponible pour appel préliminaire (présentation Bear Craft, questions périmètre).
 
 Cordialement,
 [CTO Name]
-The Bearded CTO
+The Bearded Bear
 cto@the-bearded-bear.com
 ```
 
@@ -494,7 +494,7 @@ cto@the-bearded-bear.com
 **Déroulé type (3-4 jours sur site ou remote) :**
 
 **Jour 1 :**
-- Présentation scope ISMS (périmètre Claude Craft, infrastructure, équipe)
+- Présentation scope ISMS (périmètre Bear Craft, infrastructure, équipe)
 - Revue Information Security Policy, Risk Treatment Plan
 - Revue organisation sécurité (rôles CISO/DPO, RACI matrix)
 

@@ -99,7 +99,7 @@ Vor jeder Abfrage: Welche Entscheidung wird mit diesem Ergebnis getroffen?
 - Anomalie-Untersuchung (Conversion-Einbruch, Fehler-Spike)
 - Auswahl des richtigen BI-Werkzeugs
 
-## Claude-Craft-Integration
+## Bear-Craft-Integration
 
 - `@database-architect` — Schema-Design
 - `@performance-auditor` — Systemmetriken

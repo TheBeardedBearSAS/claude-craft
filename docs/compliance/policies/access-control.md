@@ -4,7 +4,7 @@
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Référence :** ISO 27001:2022 A.9  
 **Owner :** CTO  
 **Revue :** Annuelle (avril)  
@@ -13,7 +13,7 @@
 
 ## 1. Objectif
 
-Cette Access Control Policy définit les principes et processus de gestion des accès aux systèmes, applications et données de Claude Craft, conformément au principe de **least privilege** et **need-to-know**.
+Cette Access Control Policy définit les principes et processus de gestion des accès aux systèmes, applications et données de Bear Craft, conformément au principe de **least privilege** et **need-to-know**.
 
 ---
 
@@ -273,7 +273,7 @@ Cette Access Control Policy définit les principes et processus de gestion des a
 
 ### 7.2 Contrôles PAM
 
-| Contrôle | Implémentation Claude Craft | Statut |
+| Contrôle | Implémentation Bear Craft | Statut |
 |----------|------------------------------|--------|
 | **MFA hardware keys** | YubiKey 5 obligatoire admin | ✅ Déployé |
 | **Dual approval** | Actions critiques (delete org, release prod) nécessitent 2 personnes | 🚧 À déployer M2 |

@@ -802,4 +802,4 @@ Templates disponibles dans `Dev/i18n/base/Common/hooks/templates/examples/`:
 
 **Date de derniere mise a jour:** 2026-04
 **Version:** 1.2.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

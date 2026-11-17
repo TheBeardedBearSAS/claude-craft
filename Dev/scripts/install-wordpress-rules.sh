@@ -16,7 +16,7 @@ DEFAULT_STACK="WordPress 7.1 (PHP 7.4+ minimum, 8.3+ recommended), plugins + blo
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(

@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# tools-ui.sh — Shared UI helpers for Claude Craft CLI tools
+# tools-ui.sh — Shared UI helpers for Bear Craft CLI tools
 # Source this file from any tool script for consistent colors and helpers.
 # NOTE: No set -euo pipefail here — this is a sourced library. The caller
 # decides its own shell strictness.

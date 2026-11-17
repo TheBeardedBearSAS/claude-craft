@@ -164,8 +164,8 @@ Merci à tous nos contributeurs ! 🎉
 
 | Niveau | Reward | Coût estimé | Logistique |
 |--------|--------|-------------|------------|
-| **≥5 PR** | T-shirt Claude Craft | 15€ | Printful dropshipping |
-| **≥25 PR** | Hoodie Claude Craft | 35€ | Printful dropshipping |
+| **≥5 PR** | T-shirt Bear Craft | 15€ | Printful dropshipping |
+| **≥25 PR** | Hoodie Bear Craft | 35€ | Printful dropshipping |
 | **Top 3 Month of Contributors** | Sticker pack | 5€ | StickerMule |
 | **Maintainer** | Invitation retreat annuel | Variable | Staff organise |
 
@@ -176,7 +176,7 @@ Merci à tous nos contributeurs ! 🎉
 Top Contributors (≥10 PR) peuvent demander recommandation LinkedIn par Maintainer. Template pré-approuvé :
 
 ```
-J'ai eu le plaisir de collaborer avec {NAME} sur le projet open-source Claude Craft. {NAME} a contribué {N} pull requests de qualité, démontrant une excellente maîtrise de {STACK} et une capacité à travailler en équipe distribuée.
+J'ai eu le plaisir de collaborer avec {NAME} sur le projet open-source Bear Craft. {NAME} a contribué {N} pull requests de qualité, démontrant une excellente maîtrise de {STACK} et une capacité à travailler en équipe distribuée.
 
 Je recommande vivement {NAME} pour tout rôle nécessitant {SKILLS}.
 ```
@@ -350,7 +350,7 @@ Texte complet : `docs/community/CODE_OF_CONDUCT.md`
 
 ### Escalation path
 
-1. **Incident signalé** : email conduct@claude-craft.dev ou DM Staff Discord
+1. **Incident signalé** : email conduct@bear-craft.dev ou DM Staff Discord
 2. **Review** (<48h) : Staff examine preuves
 3. **Décision** (≥2 Staff, unanimité si ban) : warning, mute, ban
 4. **Communication** : DM privé auteur + victime + log public anonymisé si ban
@@ -403,4 +403,4 @@ Texte complet : `docs/community/CODE_OF_CONDUCT.md`
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

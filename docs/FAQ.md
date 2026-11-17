@@ -1,6 +1,6 @@
 # FAQ - Frequently Asked Questions
 
-Common questions and answers about Claude Craft.
+Common questions and answers about Bear Craft.
 
 ---
 
@@ -24,31 +24,31 @@ Requirements depend on the install method:
 
 See [Prerequisites](PREREQUISITES.md) for complete details.
 
-### How do I install Claude Craft?
+### How do I install Bear Craft?
 
 **Quickest method (NPX, zero-prompt auto-detection):**
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --auto
+npx @the-bearded-bear/bear-craft install ~/my-project --auto
 ```
 
 **NPX with explicit stack:**
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
 ```
 
 **Team config sync (from shared URL):**
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --from=https://your-org/claude-craft-config.yaml
+npx @the-bearded-bear/bear-craft install ~/my-project --from=https://your-org/bear-craft-config.yaml
 ```
 
 **Alternative (Makefile):**
 ```bash
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 make install-symfony TARGET=~/my-project
 ```
 
-### How do I uninstall Claude Craft?
+### How do I uninstall Bear Craft?
 
 ```bash
 # Minimal removal
@@ -59,7 +59,7 @@ cp -r .claude/ .claude.backup/
 rm -rf .claude/ CLAUDE.md .bmad/ ralph.yml
 ```
 
-This removes all Claude Craft files. Your project code is untouched.
+This removes all Bear Craft files. Your project code is untouched.
 
 ### How do I reduce token consumption?
 
@@ -215,7 +215,7 @@ Ces commandes font partie de la couche **Project** qui nécessite une installati
 ```bash
 make install-project TARGET=.
 # ou
-npx @the-bearded-bear/claude-craft install . --include-project
+npx @the-bearded-bear/bear-craft install . --include-project
 ```
 
 Sans cette étape, les namespaces `/gate:` et `/project:` n'existent pas (le namespace sprint a été retiré en 9.0 : voir MIGRATION-v9). L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
@@ -270,7 +270,7 @@ description: Expert in X. Use when Y.
 
 ### What is BMAD?
 
-BMAD (Build, Measure, Analyze, Deliver) is Claude Craft's project management framework with:
+BMAD (Build, Measure, Analyze, Deliver) is Bear Craft's project management framework with:
 - 9 specialized agents (pm, ba, architect, po, sm, dev, qa, ux, bmad-master)
 - Status-based story routing
 - 5 quality gates
@@ -292,10 +292,10 @@ BMAD (Build, Measure, Analyze, Deliver) is Claude Craft's project management fra
 
 ```bash
 # Ouvrir dans le navigateur
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 
 # Démarrer le serveur local (port 3737 par défaut ; changer avec --port=4000, forme avec « = » obligatoire)
-npx @the-bearded-bear/claude-craft kanban
+npx @the-bearded-bear/bear-craft kanban
 ```
 
 Le Kanban lit `.bmad/sprint-status.yaml` et `project-management/`, et permet de gérer le backlog et les sprints : déplacer, créer, modifier et supprimer des stories, changer le statut des tâches, planifier, démarrer et clôturer un sprint, régler des limites WIP indicatives. Les changements sont écrits dans `.bmad/sprint-status.yaml` (statut, sprint, tâches, points, assignation) et dans `project-management/backlog/user-stories/US-*.md` (contenu) ; `--readonly` désactive toute écriture. Voir [CLI-REFERENCE.md](CLI-REFERENCE.md#kanban-command). Le tableau est vide si le fichier `sprint-status.yaml` n'existe pas (nécessite `make install-project TARGET=.` pour le cycle BMAD v6 complet).
@@ -330,7 +330,7 @@ Ralph Wiggum is a continuous AI agent loop that runs Claude iteratively until:
 ```bash
 /common:ralph-run "Implement user authentication"
 # or
-npx @the-bearded-bear/claude-craft ralph "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph "Fix the login bug"
 ```
 
 ### What DoD validators are available?
@@ -401,7 +401,7 @@ Fast Mode (v2.1.36+) delivers up to 2.5x faster output on supported Opus models 
 | Standard | $5/M | $25/M |
 | Fast | $30/M | $150/M |
 
-### When to use Fast Mode with Claude Craft?
+### When to use Fast Mode with Bear Craft?
 
 Use for interactive work (code review, debugging). For batch operations (team-sprint, team-audit), standard mode is more cost-effective.
 
@@ -555,7 +555,7 @@ See [Troubleshooting Guide](TROUBLESHOOTING.md) for more solutions.
 
 ## Integration
 
-### Does Claude Craft work with other AI tools?
+### Does Bear Craft work with other AI tools?
 
 Yes! Use the web bundles:
 - `bundles/chatgpt/` - For ChatGPT
@@ -564,7 +564,7 @@ Yes! Use the web bundles:
 
 ### Can I use MCP servers?
 
-Yes, Claude Craft includes MCP templates:
+Yes, Bear Craft includes MCP templates:
 ```bash
 # Copy MCP templates
 cp .claude/mcp/* ~/.claude/mcp/
@@ -639,11 +639,11 @@ Use the command:
 /common:add-technology "nextjs"
 ```
 
-This generates all files for 5 languages. The command is maintainer-only: run it from a clone of the claude-craft repository (it is not installed in projects since 8.24.0).
+This generates all files for 5 languages. The command is maintainer-only: run it from a clone of the bear-craft repository (it is not installed in projects since 8.24.0).
 
 ### How do I report a bug?
 
-[Open an issue on GitHub](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+[Open an issue on GitHub](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ### Can I contribute translations?
 
@@ -655,4 +655,4 @@ Yes! Translations are in `Dev/i18n/{lang}/`. PRs welcome!
 
 - Check [Troubleshooting](TROUBLESHOOTING.md)
 - Read [Full Documentation](COMMANDS-FULL-REFERENCE.md)
-- [Open a GitHub issue](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- [Open a GitHub issue](https://github.com/TheBeardedBearSAS/bear-craft/issues)

@@ -99,7 +99,7 @@ Avant de passer à la tâche suivante, **vérifier explicitement** que l'objecti
 | **Pas de clear entre tâches** | Pollution inter-tâches |
 | **Planification excessive** | 10 étapes pour changer 1 ligne = overhead |
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - **`/workflow:analyze`** — phase d'analyse BMAD doit produire des tâches atomiques
 - **`/common:ralph-run`** — Ralph doit itérer sur des tâches atomiques, une par boucle
