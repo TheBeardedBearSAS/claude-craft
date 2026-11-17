@@ -17,7 +17,7 @@ fi
 # ============================================================================
 
 # Read version from package.json
-get_claude_craft_version() {
+get_bear_craft_version() {
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[1]}")" && pwd)"
     node -p "require('${script_dir}/../../package.json').version" 2>/dev/null || echo "0.0.0"
 }
@@ -36,18 +36,23 @@ create_tcl_directory_structure() {
         ".claude/references"
         ".claude/references/base"
         ".claude/references/${tech_namespace}"
-        ".claude/skills"
-        ".claude/commands"
-        ".claude/commands/common"
-        ".claude/commands/workflow"
-        ".claude/commands/team"
-        ".claude/commands/qa"
-        ".claude/commands/uiux"
-        ".claude/commands/${tech_namespace}"
-        ".claude/agents"
-        ".claude/templates"
-        ".claude/checklists"
     )
+    # Plugin installation: commands, agents, skills, templates and checklists come from the bear-* plugins.
+    if [[ "${PLUGIN_MODE:-false}" != "true" ]]; then
+        dirs+=(
+            ".claude/skills"
+            ".claude/commands"
+            ".claude/commands/bear-common"
+            ".claude/commands/bear-workflow"
+            ".claude/commands/bear-team"
+            ".claude/commands/bear-qa"
+            ".claude/commands/bear-uiux"
+            ".claude/commands/bear-${tech_namespace}"
+            ".claude/agents"
+            ".claude/templates"
+            ".claude/checklists"
+        )
+    fi
 
     for dir in "${dirs[@]}"; do
         if [[ "$dry_run" = "true" ]]; then
@@ -250,7 +255,7 @@ generate_index_md() {
     fi
 
     cat > "$dest_file" << EOF
-# Claude-Craft Rules Index - ${tech_display_name}
+# Bear-Craft Rules Index - ${tech_display_name}
 
 > Condensed reference for ${tech_stack}
 
@@ -324,7 +329,7 @@ generate_context_yaml() {
     fi
 
     cat > "$dest_file" << EOF
-# Claude-Craft Context Configuration
+# Bear-Craft Context Configuration
 # Auto-suggest skills based on file patterns (no auto-loading)
 
 file_contexts:
@@ -357,7 +362,7 @@ show_tcl_summary() {
     echo "  │   ├── base/         (universal principles)"
     echo "  │   └── ${tech_namespace}/        (${tech_name} specific)"
     echo "  ├── skills/           (on-demand loading)"
-    echo "  ├── commands/${tech_namespace}/   (slash commands)"
+    echo "  ├── commands/bear-${tech_namespace}/   (slash commands)"
     echo "  └── agents/           (AI reviewers)"
     echo ""
     echo "Token reduction: ~95% (from ~70K to ~3.5K)"

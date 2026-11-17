@@ -4,7 +4,7 @@ import path from 'path';
 import * as yaml from 'js-yaml';
 
 // PM roadmap phase 2 (8.25.0): /project: 34 + /gate: 7 + 3 /common checks
-// merge into 5 /project: commands + /gate:check. Old commands stay as
+// merge into 5 /project: commands + /bear-gate:check. Old commands stay as
 // redirect stubs until 9.0 (removed in 9.0, see pm-v9-removal.test.mjs).
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
@@ -16,12 +16,12 @@ const C = (lang, f) => `Dev/i18n/${lang}/Common/commands/${f}.md`;
 
 // new command -> { file, subcommands it must document }
 const MERGED = {
-  '/project:backlog': { file: P, name: 'backlog', mentions: ['add', 'list', 'edit', 'move', 'epic', 'story', 'task', '.bmad/sprint-status.yaml'] },
-  '/project:reverse': { file: P, name: 'reverse', mentions: ['scan', 'prd', 'stories', 'gaps', 'all'] },
-  '/project:trace': { file: P, name: 'trace', mentions: ['--gaps', '--by-priority'] },
-  '/project:report': { file: P, name: 'report', mentions: ['burndown', 'metrics', 'deps', '--critical'] },
-  '/project:migrate': { file: P, name: 'migrate', mentions: ['--analyze', '--dry-run', '--resync', '--stories'] },
-  '/gate:check': {
+  '/bear-project:backlog': { file: P, name: 'backlog', mentions: ['add', 'list', 'edit', 'move', 'epic', 'story', 'task', '.bmad/sprint-status.yaml'] },
+  '/bear-project:reverse': { file: P, name: 'reverse', mentions: ['scan', 'prd', 'stories', 'gaps', 'all'] },
+  '/bear-project:trace': { file: P, name: 'trace', mentions: ['--gaps', '--by-priority'] },
+  '/bear-project:report': { file: P, name: 'report', mentions: ['burndown', 'metrics', 'deps', '--critical'] },
+  '/bear-project:migrate': { file: P, name: 'migrate', mentions: ['--analyze', '--dry-run', '--resync', '--stories'] },
+  '/bear-gate:check': {
     file: G,
     name: 'check',
     mentions: ['prd', 'spec', 'backlog', 'sprint', 'story', 'alignment', 'commit', 'merge', 'release', 'all', '--phase', 'project-management/prd.md'],

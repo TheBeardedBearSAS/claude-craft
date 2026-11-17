@@ -2,13 +2,13 @@
 
 > **Status** : DRAFT scaffold P3-29.
 
-Send Slack notifications on key Claude Craft events (audit done, release, errors).
+Send Slack notifications on key Bear Craft events (audit done, release, errors).
 
 ## Configuration
 
 ```bash
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/XXX/YYY/ZZZ"
-claude-craft plugin install notify-slack
+bear-craft plugin install notify-slack
 ```
 
 Or via `.claude/plugins/notify-slack.json` :

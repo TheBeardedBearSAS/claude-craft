@@ -1,10 +1,10 @@
 # {{PROJECT_NAME}}
 
-> Genere: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Genere: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Quoi (Stack & Structure)
 
-Ce projet utilise les regles **Claude Craft** pour le developpement assiste par IA.
+Ce projet utilise les regles **Bear Craft** pour le developpement assiste par IA.
 
 ### Technologies
 {TECH_LIST}

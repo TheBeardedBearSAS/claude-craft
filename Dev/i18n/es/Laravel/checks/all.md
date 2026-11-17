@@ -26,7 +26,7 @@ Preparar el entorno de auditoría:
 
 Ejecutar la verificación completa de arquitectura:
 
-**Comando**: Usar el comando slash `/laravel:check architecture` o seguir manualmente los pasos en `.claude/references/laravel/checks/architecture.md`
+**Comando**: Usar el comando slash `/bear-laravel:check architecture` o seguir manualmente los pasos en `.claude/references/laravel/checks/architecture.md`
 
 **Criterios evaluados**:
 - Separación de capas de Arquitectura Limpia (6 pts)
@@ -42,7 +42,7 @@ Ejecutar la verificación completa de arquitectura:
 
 Ejecutar la verificación de calidad del código:
 
-**Comando**: Usar el comando slash `/laravel:check code-quality` o seguir manualmente los pasos en `.claude/references/laravel/checks/code-quality.md`
+**Comando**: Usar el comando slash `/bear-laravel:check code-quality` o seguir manualmente los pasos en `.claude/references/laravel/checks/code-quality.md`
 
 **Criterios evaluados**:
 - Cumplimiento de PSR-12 y Laravel Pint (5 pts)
@@ -58,7 +58,7 @@ Ejecutar la verificación de calidad del código:
 
 Ejecutar la verificación de pruebas:
 
-**Comando**: Usar el comando slash `/laravel:check testing` o seguir manualmente los pasos en `.claude/references/laravel/checks/testing.md`
+**Comando**: Usar el comando slash `/bear-laravel:check testing` o seguir manualmente los pasos en `.claude/references/laravel/checks/testing.md`
 
 **Criterios evaluados**:
 - Cobertura de código (7 pts)
@@ -74,7 +74,7 @@ Ejecutar la verificación de pruebas:
 
 Ejecutar la verificación de seguridad:
 
-**Comando**: Usar el comando slash `/laravel:check security` o seguir manualmente los pasos en `.claude/references/laravel/checks/security.md`
+**Comando**: Usar el comando slash `/bear-laravel:check security` o seguir manualmente los pasos en `.claude/references/laravel/checks/security.md`
 
 **Criterios evaluados**:
 - Protecciones OWASP Top 10 (6 pts)

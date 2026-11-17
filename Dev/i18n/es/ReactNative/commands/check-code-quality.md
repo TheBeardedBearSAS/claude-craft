@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /reactnative:check code-quality"
+description: "Obsoleto (se elimina en 10.0): usa /bear-reactnative:check code-quality"
 deprecated: true
-replaced-by: /reactnative:check
+replaced-by: /bear-reactnative:check
 ---
 
-> ⚠️ `/reactnative:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/reactnative:check code-quality`.
+> ⚠️ `/bear-reactnative:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/bear-reactnative:check code-quality`.
 
-Ejecuta `/reactnative:check code-quality $ARGUMENTS`: lee `.claude/commands/reactnative/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-reactnative:check code-quality $ARGUMENTS`: lee `.claude/commands/bear-reactnative/check.md` y síguelo con estos argumentos.

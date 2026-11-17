@@ -29,7 +29,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/vite:check architecture` or manually follow steps in `.claude/references/vite/checks/architecture.md`
+**Command**: Use slash command `/bear-vite:check architecture` or manually follow steps in `.claude/references/vite/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Project shape detection and entry points (index.html at root, build.lib entry, multi-page input, Worker/WASM `new URL` pattern) (6 pts)
@@ -44,7 +44,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/vite:check code-quality` or manually follow steps in `.claude/references/vite/checks/code-quality.md`
+**Command**: Use slash command `/bear-vite:check code-quality` or manually follow steps in `.claude/references/vite/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - ESLint analysis (no-explicit-any, no-restricted-imports, no-console) (5 pts)
@@ -59,7 +59,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/vite:check testing` or manually follow steps in `.claude/references/vite/checks/testing.md`
+**Command**: Use slash command `/bear-vite:check testing` or manually follow steps in `.claude/references/vite/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage with Vitest (>= 80% statements, branches, functions, lines) (7 pts)
@@ -75,7 +75,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/vite:check security` or manually follow steps in `.claude/references/vite/checks/security.md`
+**Command**: Use slash command `/bear-vite:check security` or manually follow steps in `.claude/references/vite/checks/security.md`
 
 **Evaluated Criteria**:
 - Env / `define()` secret leakage (VITE_* prefix, hardcoded secrets) (7 pts)
@@ -111,7 +111,7 @@ Produce final recommendations:
 - [ ] Propose implementation order
 - [ ] Suggest quick wins (high impact/effort ratio)
 
-> **Library projects**: `/vite:check-library-build` complements this audit for library projects (build.lib output, exports map, type declarations, tree-shaking). Run it in addition when the project publishes a package.
+> **Library projects**: `/bear-vite:check-library-build` complements this audit for library projects (build.lib output, exports map, type declarations, tree-shaking). Run it in addition when the project publishes a package.
 
 ## OUTPUT FORMAT
 
@@ -238,7 +238,7 @@ Major refactoring / Overhaul necessary]
 
 ## IMPORTANT NOTES
 
-- This command orchestrates the 4 specialized audits (`/vite:check architecture`, `/vite:check code-quality`, `/vite:check testing`, `/vite:check security`)
+- This command orchestrates the 4 specialized audits (`/bear-vite:check architecture`, `/bear-vite:check code-quality`, `/bear-vite:check testing`, `/bear-vite:check security`)
 - Use Docker for all analysis tools
 - Provide concrete examples with file:line for each problem
 - Prioritize actions based on Impact/Effort matrix

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /angular:check architecture"
+description: "Deprecated (removed in 10.0): use /bear-angular:check architecture"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-architecture` is deprecated and will be removed in 10.0. Use `/angular:check architecture`.
+> ⚠️ `/bear-angular:check-architecture` is deprecated and will be removed in 10.0. Use `/bear-angular:check architecture`.
 
-Run `/angular:check architecture $ARGUMENTS`: read `.claude/commands/angular/check.md` and follow it with these arguments.
+Run `/bear-angular:check architecture $ARGUMENTS`: read `.claude/commands/bear-angular/check.md` and follow it with these arguments.

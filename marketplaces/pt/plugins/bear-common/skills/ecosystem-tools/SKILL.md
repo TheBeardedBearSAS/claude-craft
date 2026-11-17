@@ -1,0 +1,33 @@
+---
+name: ecosystem-tools
+description: Third-party Claude Code token/context/code-review tools. Use when choosing or recommending an external tool to reduce token usage, manage context, or review large codebases.
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - WebFetch
+model: haiku
+---
+
+# Ecosystem Tools
+
+Curated third-party Claude Code tools that complement Bear Craft's native token/context stack (RTK,
+`context: fork` skills, compaction hooks). None are bundled — they are documented with activation
+recipes and license caveats.
+
+See `../../../../docs/ECOSYSTEM.md` for the full catalogue, licenses, and `.mcp.json` snippets.
+
+## Quick reference
+
+| Tool | License | Use it for | Rec |
+|------|---------|-----------|-----|
+| **caveman** | Apache-2.0 | Compress agent **output** ~65% | ✅ Integrate |
+| **code-review-graph** | MIT | AST graph → read only the blast radius on review | ✅ Integrate |
+| **token-savior** | MIT | Symbol index + Bash output compaction, RTK alternative (−80% headline unverified; −45% cost re-measured) | 🔶 Reference |
+| **claude-token-efficient** | MIT | Anti-verbosity CLAUDE.md drop-in | ✅ Integrate |
+| **claude-hud** | MIT | Real-time context/agent/todo monitor (status line) | ✅ Integrate |
+| **context-mode** | ELv2 | Output sandboxing — license blocks commercial redistribution | 🔶 Reference |
+| **claude-context** | MIT | Semantic search; needs a Milvus/Zilliz vector DB | 🔶 Reference |
+
+> Audit the source and pin a version before enabling any third-party MCP server or skill — see
+> the security rule (11) and `docs/MCP.md#security`.

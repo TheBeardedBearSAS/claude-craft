@@ -24,27 +24,27 @@ Tu es un expert en qualité logicielle chargé d'effectuer un audit complet de c
 Tu dois orchestrer l'exécution des 4 audits spécialisés dans l'ordre suivant :
 
 **1. Audit Architecture (25 points)**
-- Exécuter la vérification selon les règles de `/react:check architecture`
+- Exécuter la vérification selon les règles de `/bear-react:check architecture`
 - Analyser la structure du projet, l'organisation des dossiers
 - Vérifier le respect de l'Atomic Design
 - Évaluer la gestion d'état et la modularité
 
 **2. Audit Qualité du Code (25 points)**
-- Exécuter la vérification selon les règles de `/react:check code-quality`
+- Exécuter la vérification selon les règles de `/bear-react:check code-quality`
 - Vérifier la configuration TypeScript (strict mode)
 - Analyser la qualité du typage
 - Vérifier ESLint, Prettier, conventions de nommage
 - Évaluer le respect des principes SOLID, DRY, KISS
 
 **3. Audit Testing (25 points)**
-- Exécuter la vérification selon les règles de `/react:check testing`
+- Exécuter la vérification selon les règles de `/bear-react:check testing`
 - Vérifier la configuration Vitest/Jest + RTL
 - Calculer le coverage actuel (objectif ≥80%)
 - Analyser la qualité des tests
 - Vérifier les bonnes pratiques React Testing Library
 
 **4. Audit Sécurité (25 points)**
-- Exécuter la vérification selon les règles de `/react:check security`
+- Exécuter la vérification selon les règles de `/bear-react:check security`
 - Scanner les vulnérabilités XSS
 - Vérifier l'absence de secrets dans le code
 - Analyser la sanitization des données
@@ -124,7 +124,7 @@ Générer un rapport exécutif structuré :
    • Pas de séparation claire shared/features
    • ...
 
-📋 Détails dans le rapport : /react:check architecture
+📋 Détails dans le rapport : /bear-react:check architecture
 
 ═══════════════════════════════════════════════════
 💎 2. QUALITÉ DU CODE : XX/25
@@ -146,7 +146,7 @@ Générer un rapport exécutif structuré :
    • Pas de Prettier configuré
    • ...
 
-📋 Détails dans le rapport : /react:check code-quality
+📋 Détails dans le rapport : /bear-react:check code-quality
 
 ═══════════════════════════════════════════════════
 🧪 3. TESTING : XX/25
@@ -173,7 +173,7 @@ Générer un rapport exécutif structuré :
    • Pas de tests d'intégration
    • ...
 
-📋 Détails dans le rapport : /react:check testing
+📋 Détails dans le rapport : /bear-react:check testing
 
 ═══════════════════════════════════════════════════
 🔒 4. SÉCURITÉ : XX/25
@@ -197,7 +197,7 @@ Générer un rapport exécutif structuré :
    • Tokens JWT dans localStorage
    • ...
 
-📋 Détails dans le rapport : /react:check security
+📋 Détails dans le rapport : /bear-react:check security
 
 ═══════════════════════════════════════════════════
 🎯 TOP 3 ACTIONS PRIORITAIRES GLOBALES
@@ -341,10 +341,10 @@ Générer un rapport exécutif structuré :
 
 Rapport généré par Claude Code - Audit de Conformité React
 Pour plus de détails sur chaque section, exécuter les commandes :
-  • /react:check architecture $ARGUMENTS
-  • /react:check code-quality $ARGUMENTS
-  • /react:check testing $ARGUMENTS
-  • /react:check security $ARGUMENTS
+  • /bear-react:check architecture $ARGUMENTS
+  • /bear-react:check code-quality $ARGUMENTS
+  • /bear-react:check testing $ARGUMENTS
+  • /bear-react:check security $ARGUMENTS
 ```
 
 ### Étape 6 : Génération de fichiers annexes

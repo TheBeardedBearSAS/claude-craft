@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Perimetre : encryption, secrets, iam, policies, full (par defaut : full)
 - (Optionnel) Chemin vers le repertoire de configuration
 
-Exemple : `/opentofu:security-audit scope:full path:infra/`
+Exemple : `/bear-opentofu:security-audit scope:full path:infra/`
 
 ## Plan Mode
 

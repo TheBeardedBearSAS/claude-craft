@@ -4,7 +4,7 @@
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Référence :** ISO 27001:2022 A.16  
 **Owner :** CTO (Incident Commander)  
 **Revue :** Annuelle (avril) + post-incident majeur  
@@ -13,7 +13,7 @@
 
 ## 1. Objectif
 
-Cet Incident Response Plan (IRP) définit le processus de détection, réponse, résolution et apprentissage des incidents de sécurité affectant Claude Craft, conformément ISO 27001 A.16 et RGPD (notification <72h).
+Cet Incident Response Plan (IRP) définit le processus de détection, réponse, résolution et apprentissage des incidents de sécurité affectant Bear Craft, conformément ISO 27001 A.16 et RGPD (notification <72h).
 
 ---
 
@@ -468,7 +468,7 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 - Post-mortem : budget Cloudflare upgrade (si plan gratuit insufficient, passer Pro/Business)
 
 **Communication :**
-- Status page (status.claude-craft.com si existe) : "Investigating connectivity issues"
+- Status page (status.bear-craft.com si existe) : "Investigating connectivity issues"
 - Résolution <4h : pas de communication clients proactive
 - Résolution >4h : Email clients notification dégradation + ETA
 
@@ -499,7 +499,7 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 - Monitoring 30j (détection C2 communications malware résiduel)
 
 **Communication :**
-- Notification communauté open-source (GitHub Security Advisory si package maintenu Claude Craft)
+- Notification communauté open-source (GitHub Security Advisory si package maintenu Bear Craft)
 - Signalement registry (NPM, PyPI) package malveillant
 
 ---
@@ -624,11 +624,11 @@ Preparation → Detection → Analysis → Containment → Eradication → Recov
 **Template Email Clients (Data Breach) :**
 
 ```
-Objet : [Action Requise] Incident de sécurité Claude Craft — Vos données
+Objet : [Action Requise] Incident de sécurité Bear Craft — Vos données
 
 Bonjour [Nom Utilisateur],
 
-Nous vous contactons concernant un incident de sécurité affectant Claude Craft survenu le [DATE].
+Nous vous contactons concernant un incident de sécurité affectant Bear Craft survenu le [DATE].
 
 **Ce qui s'est passé :**
 Le [DATE], nous avons détecté un accès non autorisé à [SYSTÈME]. Notre équipe a immédiatement 
@@ -647,8 +647,8 @@ Vos mots de passe et informations de paiement n'ont PAS été affectés (stocké
 
 **Ce que vous devez faire :**
 - Aucune action immédiate requise de votre part
-- Par précaution, nous recommandons de surveiller tout email suspect usurpant Claude Craft
-- Si vous réutilisiez votre mot de passe Claude Craft ailleurs : changez-le sur ces services
+- Par précaution, nous recommandons de surveiller tout email suspect usurpant Bear Craft
+- Si vous réutilisiez votre mot de passe Bear Craft ailleurs : changez-le sur ces services
 
 **Plus d'informations :**
 Post-mortem détaillé (anonymisé) : [LIEN BLOG]
@@ -659,7 +659,7 @@ priorité absolue, et nous avons pris des mesures pour qu'un tel incident ne se 
 
 Cordialement,
 [CTO NAME]
-Co-founder & CTO, The Bearded CTO
+Co-founder & CTO, The Bearded Bear
 ```
 
 **Template Notification CNIL (RGPD art. 33) :**
@@ -672,7 +672,7 @@ Le [DATE HEURE UTC+1], accès non autorisé base de données utilisateurs via [V
 Détection [DATE HEURE], containment [DATE HEURE].
 
 **2. Catégories et nombre personnes concernées :**
-[NOMBRE] personnes concernées (utilisateurs Claude Craft, résidents UE majoritairement).
+[NOMBRE] personnes concernées (utilisateurs Bear Craft, résidents UE majoritairement).
 
 **3. Catégories données concernées :**
 - Données identification : emails, noms (si collectés)

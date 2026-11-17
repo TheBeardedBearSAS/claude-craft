@@ -107,25 +107,25 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 
 ```bash
 # Lister tous les tests de regression
-/qa:regression --list
+/bear-qa:regression --list
 
 # Afficher le score de stabilite
-/qa:regression --stats
+/bear-qa:regression --stats
 
 # Executer la verification de regression (detecter les violations)
-/qa:regression --check
+/bear-qa:regression --check
 
 # Filtrer par story source
-/qa:regression --list --source=US-001
+/bear-qa:regression --list --source=US-001
 
 # Filtrer par statut
-/qa:regression --list --status=active
+/bear-qa:regression --list --status=active
 
 # Afficher la tendance historique
-/qa:regression --stats --trend
+/bear-qa:regression --stats --trend
 
 # Sortie en JSON
-/qa:regression --list --format=json
+/bear-qa:regression --list --format=json
 ```
 
 ## Structure de Sortie
@@ -146,18 +146,18 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 
 | Commande | Description |
 |----------|-------------|
-| `/qa:recette` | Executer les tests d'acceptance |
-| `/qa:fix` | Corriger les bugs d'une session |
-| `/qa:status` | Afficher le statut de session |
-| `/qa:status --report` | Generer un rapport |
+| `/bear-qa:recette` | Executer les tests d'acceptance |
+| `/bear-qa:fix` | Corriger les bugs d'une session |
+| `/bear-qa:status` | Afficher le statut de session |
+| `/bear-qa:status --report` | Generer un rapport |
 
 ## Messages d'Erreur
 
 | Erreur | Solution |
 |--------|----------|
-| "Registre introuvable" | Executez `/qa:recette` d'abord pour generer un registre |
+| "Registre introuvable" | Executez `/bear-qa:recette` d'abord pour generer un registre |
 | "Aucun test de regression" | Aucune erreur detectee lors des executions precedentes |
-| "Violation de la Regle d'Or" | Un bug est reapparu — executez `/qa:fix` |
+| "Violation de la Regle d'Or" | Un bug est reapparu — executez `/bear-qa:fix` |
 | "Fichier historique manquant" | Executez au moins 2 sessions recette pour les tendances |
 
 ## Bonnes Pratiques
@@ -175,7 +175,7 @@ Verification Regle d'Or : 1 VIOLATION DETECTEE
 ║                   PROCHAINE ÉTAPE                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Lancer une nouvelle session de recette                ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

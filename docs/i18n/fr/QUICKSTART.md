@@ -1,6 +1,6 @@
-# Démarrage Rapide - Claude Craft en 5 Minutes
+# Démarrage Rapide - Bear Craft en 5 Minutes
 
-Soyez opérationnel avec Claude Craft en seulement 5 minutes !
+Soyez opérationnel avec Bear Craft en seulement 5 minutes !
 
 ---
 
@@ -32,7 +32,7 @@ Exécutez ceci pour vérifier tous les prérequis en une fois :
 
 ```bash
 # Télécharger et exécuter le script de vérification
-curl -sSL https://raw.githubusercontent.com/TheBeardedBearSAS/claude-craft/main/Dev/scripts/check-prerequisites.sh | bash
+curl -sSL https://raw.githubusercontent.com/TheBeardedBearSAS/bear-craft/main/Dev/scripts/check-prerequisites.sh | bash
 
 # Ou si vous avez cloné le dépôt
 ./Dev/scripts/check-prerequisites.sh
@@ -48,18 +48,18 @@ La méthode la plus rapide :
 
 ```bash
 # Assistant interactif
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 
 # Ou installer directement dans un projet
-npx @the-bearded-bear/claude-craft install ~/mon-projet --tech=symfony --lang=fr
+npx @the-bearded-bear/bear-craft install ~/mon-projet --tech=symfony --lang=fr
 ```
 
 ### Méthode 2 : Clone + Makefile
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # 2. Installer dans votre projet (choisissez votre technologie)
 make install-symfony TARGET=~/mon-projet RULES_LANG=fr
@@ -74,14 +74,14 @@ make install-symfony TARGET=~/mon-projet RULES_LANG=fr
 # 1. Créer un nouveau répertoire de projet
 mkdir ~/ma-premiere-app && cd ~/ma-premiere-app && git init
 
-# 2. Installer les règles Claude Craft (exemple : Symfony + Français)
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=fr
+# 2. Installer les règles Bear Craft (exemple : Symfony + Français)
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=fr
 
 # 3. Lancer Claude Code
 claude
 ```
 
-C'est tout ! Vous avez maintenant accès à toutes les fonctionnalités de Claude Craft.
+C'est tout ! Vous avez maintenant accès à toutes les fonctionnalités de Bear Craft.
 
 ---
 
@@ -110,13 +110,13 @@ Dans Claude Code, essayez ces commandes :
 
 ```
 # Vérifier l'architecture de votre projet
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Obtenir une revue de code
 @symfony-reviewer Passe en revue mon dossier src/
 
 # Générer une nouvelle entité avec CRUD
-/symfony:generate-crud Produit
+/bear-symfony:generate-crud Produit
 ```
 
 ---
@@ -135,7 +135,7 @@ Dans Claude Code, essayez ces commandes :
 
 ## Technologies Disponibles
 
-Claude Craft supporte **11 stacks applicatifs** (+ 8 stacks d'infrastructure). Voici les principaux stacks de développement :
+Bear Craft supporte **11 stacks applicatifs** (+ 8 stacks d'infrastructure). Voici les principaux stacks de développement :
 
 | Technologie | Commande d'Installation | Focus |
 |-------------|-------------------------|-------|
@@ -160,7 +160,7 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 
 ```bash
 # Dans Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ---
@@ -170,7 +170,7 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 - **FAQ** : Questions et réponses courantes → [FAQ.md](FAQ.md)
 - **Dépannage** : Erreurs courantes et solutions → [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 - **Documentation Complète** : Toutes les commandes et agents → [COMMANDS-FULL-REFERENCE.md](../COMMANDS-FULL-REFERENCE.md)
-- **Issues GitHub** : [Signaler un bug](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- **Issues GitHub** : [Signaler un bug](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ---
 
@@ -178,17 +178,17 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│                   AIDE-MÉMOIRE CLAUDE CRAFT                │
+│                   AIDE-MÉMOIRE BEAR CRAFT                │
 ├────────────────────────────────────────────────────────────┤
 │ INSTALLATION                                               │
-│   npx @the-bearded-bear/claude-craft install . --tech=X   │
+│   npx @the-bearded-bear/bear-craft install . --tech=X   │
 │   make install-{tech} TARGET=~/projet RULES_LANG=fr       │
 ├────────────────────────────────────────────────────────────┤
 │ COMMANDES COURANTES (204+ disponibles)                     │
-│   /gate:check commit          Validation avant commit      │
-│   /common:setup-rtk           Optimisation tokens (RTK)    │
-│   /team:audit                 Audit multi-tech du projet   │
-│   /workflow:init              Démarrer la méthodologie     │
+│   /bear-gate:check commit          Validation avant commit      │
+│   /bear-common:setup-rtk           Optimisation tokens (RTK)    │
+│   /bear-team:audit                 Audit multi-tech du projet   │
+│   /bear-workflow:init              Démarrer la méthodologie     │
 ├────────────────────────────────────────────────────────────┤
 │ AGENTS UTILES                                              │
 │   @tdd-coach                  Guidance TDD                 │

@@ -62,4 +62,4 @@ Die letzten 5 `fix:`-Commits nehmen. Für jeden prüfen, ob ein entsprechender T
 
 ## Ausgabe
 
-Markdown-Report mit per-Section Pass/Fail, nicht abgedeckten Dateien, fehlschlagenden Adaptern und einem Score /20 für `/paperclip:check all`.
+Markdown-Report mit per-Section Pass/Fail, nicht abgedeckten Dateien, fehlschlagenden Adaptern und einem Score /20 für `/bear-paperclip:check all`.

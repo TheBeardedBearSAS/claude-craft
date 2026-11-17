@@ -13,7 +13,7 @@ $ARGUMENTS
 Argumentos:
 - (Opcional) Alvo: pool-sizing, timeouts, txn-mode-migration, full (padrao: full)
 
-Exemplo: `/pgbouncer:optimize target:pool-sizing`
+Exemplo: `/bear-pgbouncer:optimize target:pool-sizing`
 
 ## Plan Mode
 

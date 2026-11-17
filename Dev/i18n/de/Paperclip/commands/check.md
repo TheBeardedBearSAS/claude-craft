@@ -21,8 +21,8 @@ Das erste Argument ist die Achse; der Rest (zum Beispiel ein Projektpfad) wird u
 
 ## MISSION
 
-1. Lesen Sie das erste Argument. Entspricht es keiner der 5 Achsen oben, listen Sie diese mit einem Beispiel auf (`/paperclip:check security src/`) und brechen Sie ab.
+1. Lesen Sie das erste Argument. Entspricht es keiner der 5 Achsen oben, listen Sie diese mit einem Beispiel auf (`/bear-paperclip:check security src/`) und brechen Sie ab.
 2. Lesen Sie die Checklisten-Datei dieser Achse und folgen Sie ihr Schritt für Schritt. In dieser Datei steht `$ARGUMENTS` für die Argumente nach der Achse.
 3. Erstellen Sie den Bericht im Ausgabeformat, das die Checkliste festlegt.
 
-Beispiele: `/paperclip:check architecture`, `/paperclip:check testing ./app`, `/paperclip:check all`.
+Beispiele: `/bear-paperclip:check architecture`, `/bear-paperclip:check testing ./app`, `/bear-paperclip:check all`.

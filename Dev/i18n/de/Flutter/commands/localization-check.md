@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Langue à vérifier (ex: `fr`, `en`, `all`)
 
-Exemple : `/flutter:localization-check all`
+Exemple : `/bear-flutter:localization-check all`
 
 ## Plan-Modus
 

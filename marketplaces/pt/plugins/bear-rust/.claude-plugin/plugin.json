@@ -1,0 +1,21 @@
+{
+  "name": "bear-rust",
+  "displayName": "Bear Craft — Rust / Axum",
+  "description": "Rust / Axum 0.8 / Rust 1.99: Backend Rust 1.99 (edition 2024) with Axum 0.8, Tokio, SQLx, cargo-nextest. Audit and generation commands, reviewer agent and stack skills.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "rust"
+  ]
+}

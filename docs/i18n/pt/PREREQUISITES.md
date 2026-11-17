@@ -1,6 +1,6 @@
 # Pré-requisitos
 
-Guia completo de todas as dependências necessárias para o Claude Craft.
+Guia completo de todas as dependências necessárias para o Bear Craft.
 
 ---
 

@@ -238,7 +238,7 @@ exit 0
 
 ## Installing the distributed hooks
 
-claude-craft ships tested hook scripts (single source: `Dev/i18n/base/Common/hooks/scripts/`, shared helpers in `lib/hook-io.sh`). The installer copies them into the project's `.claude/hooks/` and merges the matching fragment into `.claude/settings.json` without removing or rewriting any hook of yours:
+bear-craft ships tested hook scripts (single source: `Dev/i18n/base/Common/hooks/scripts/`, shared helpers in `lib/hook-io.sh`). The installer copies them into the project's `.claude/hooks/` and merges the matching fragment into `.claude/settings.json` without removing or rewriting any hook of yours:
 
 ```bash
 bash Dev/scripts/install-common-rules.sh --hooks=default|full|none[,memory] <project>
@@ -251,6 +251,18 @@ bash Dev/scripts/install-common-rules.sh --hooks=default|full|none[,memory] <pro
 | `,memory` | SQLite cross-session memory (`.claude/hooks/memory-lifecycle/`, database `.claude/memory.db`); needs `sqlite3` and `jq` |
 
 Hook examples (`auto-format`, `output-filter`, ...) are copied to `.claude/templates/hooks/`; see the README next to them. `pre-compact.sh` (BMAD state backup) is shipped but not wired by any profile. Output contract: only exit code 2 blocks, except that the three safety guards (`guard-network`, `block-dangerous-commands`, `protect-sensitive-files`) set `"onFailure": "block"` (Claude Code 2.1.295+), so a missing, crashing or timed-out guard blocks the tool call (fail-closed); re-running the install adds `onFailure` to guards installed by an older version without replacing a value you set; only `hookSpecificOutput.additionalContext` reaches the model; PreCompact plain-text stdout is read as compaction instructions. For a plugin, `Tools/PluginExport/export-plugin.sh --tech=common` generates a `hooks.json` pointing to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`.
+
+### Shipping the hooks as plugins
+
+Three Claude Code plugins carry the hook profiles (`hooks/hooks.json`, commands pointing to `${CLAUDE_PLUGIN_ROOT}/hooks/scripts/`, `onFailure` kept; each embeds only the scripts it calls plus `lib/`). They exist in every language marketplace:
+
+| Plugin | Content | Requires |
+|--------|---------|----------|
+| `bear-hooks` | `default` profile (guards fail closed) | `jq` or `node`, `bash` |
+| `bear-hooks-full` | only what `full` adds to `default` — install it next to `bear-hooks` | `jq` or `node`, `bash` |
+| `bear-hooks-memory` | `memory` add-on (`memory-lifecycle`) | `sqlite3`, `jq`, `bash` |
+
+> **`bear-craft install --hooks=default|full|none[,memory]` installs these plugins for you** (`default` → `bear-hooks`; `full` → `bear-hooks` + `bear-hooks-full`; `none` → no hook plugin; `,memory` → + `bear-hooks-memory`) and no longer merges hooks into `.claude/settings.json`. `install` and `update` remove the hooks an older copy-based installation had merged (and its `.claude/hooks/` scripts). **Pick a single channel**: the `bear-hooks*` plugins (installed by the CLI or from the marketplace) *or* hooks merged by `make install-*` (full copy mode): enabling both registers every guard twice. `bear-common` no longer carries hooks.
 
 ---
 

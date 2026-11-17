@@ -4,7 +4,7 @@
 
 **Date :** 2026-04-15  
 **Version :** 1.0.0  
-**Projet :** Claude Craft v8.1.0  
+**Projet :** Bear Craft v8.1.0  
 **Référence :** ISO 27001:2022 A.17  
 **Owner :** CTO  
 **Revue :** Annuelle (avril) + post-DR test  
@@ -13,7 +13,7 @@
 
 ## 1. Objectif
 
-Ce Business Continuity Plan (BCP) et Disaster Recovery Plan (DRP) garantissent la continuité des opérations critiques de Claude Craft en cas de sinistre majeur (catastrophe naturelle, cyberattaque, panne fournisseur critique).
+Ce Business Continuity Plan (BCP) et Disaster Recovery Plan (DRP) garantissent la continuité des opérations critiques de Bear Craft en cas de sinistre majeur (catastrophe naturelle, cyberattaque, panne fournisseur critique).
 
 **Objectifs :**
 - **RTO (Recovery Time Objective) :** Service critique <4h, complet <24h
@@ -28,7 +28,7 @@ Ce Business Continuity Plan (BCP) et Disaster Recovery Plan (DRP) garantissent l
 
 | Fonction | Criticité | RTO | RPO | Justification |
 |----------|-----------|-----|-----|---------------|
-| **Release Claude Craft** | Critique | 4h | 15min (code source Git) | Bloque développement utilisateurs, impact réputation |
+| **Release Bear Craft** | Critique | 4h | 15min (code source Git) | Bloque développement utilisateurs, impact réputation |
 | **Support utilisateurs** | Haute | 8h | 24h (tickets historique) | Impact satisfaction, mais backlog acceptable court terme |
 | **Site web / docs** | Haute | 12h | 1h (contenu Markdown Git) | Information utilisateurs, SEO, mais cache CDN 24-48h |
 | **Analytics produit** | Moyenne | 48h | 24h (Posthog events) | Décisions produit différables, perte analytics 1j acceptable |
@@ -124,7 +124,7 @@ Ce Business Continuity Plan (BCP) et Disaster Recovery Plan (DRP) garantissent l
 
 **Failover plan :**
 1. **Détection panne Cloudflare :** Monitoring externe (UptimeRobot, StatusCake) alerte si 5 checks consécutifs échec
-2. **Basculement DNS :** Modification nameservers domaine `claude-craft.com` → Route53 AWS (TTL 300s = 5min propagation)
+2. **Basculement DNS :** Modification nameservers domaine `bear-craft.com` → Route53 AWS (TTL 300s = 5min propagation)
 3. **Origin direct :** S3 static website hosting ou GitHub Pages (docs uniquement, pas d'API)
 4. **Communication :** Status page (hébergé GitHub Pages, hors Cloudflare) notification utilisateurs
 
@@ -216,12 +216,12 @@ async function completionWithFailover(prompt: string): Promise<string> {
    ```bash
    # CTO ou Dev Lead exécute
    cd /backup/github-mirrors
-   git clone --mirror github-mirror-latest/claude-craft.git
+   git clone --mirror github-mirror-latest/bear-craft.git
    ```
 
 2. **Setup GitLab temporaire :**
    - Créer organization GitLab.com (gratuit)
-   - Push repos depuis mirrors : `git push --mirror https://gitlab.com/claudecraft/claude-craft.git`
+   - Push repos depuis mirrors : `git push --mirror https://gitlab.com/bearcraft/bear-craft.git`
    - Configurer CI/CD GitLab (fichier `.gitlab-ci.yml` pré-testé)
 
 3. **Migration équipe :**
@@ -441,9 +441,9 @@ async function completionWithFailover(prompt: string): Promise<string> {
 - **Urgence :** Phone tree (SMS/appels si Slack+email down)
 
 **Externe (clients/utilisateurs) :**
-- **Status page :** [status.claude-craft.com](https://status.claude-craft.com) (hébergé GitHub Pages, hors infrastructure principale)
+- **Status page :** [status.bear-craft.com](https://status.bear-craft.com) (hébergé GitHub Pages, hors infrastructure principale)
 - **Email :** Notification liste diffusion (si SaaS avec emails collectés)
-- **Social media :** Twitter [@ClaudeCraft](https://twitter.com/claudecraft) updates (backup communication)
+- **Social media :** Twitter [@BearCraft](https://twitter.com/bearcraft) updates (backup communication)
 
 **Régulateurs/Partenaires :**
 - **ANSSI CERT-FR :** cert-fr.cossi@ssi.gouv.fr (incidents cyber majeurs)
@@ -460,7 +460,7 @@ async function completionWithFailover(prompt: string): Promise<string> {
 
 **Status:** Investigating  
 **Last Update:** [TIMESTAMP UTC]  
-**Affected Services:** Claude Craft releases, documentation  
+**Affected Services:** Bear Craft releases, documentation  
 
 **Timeline:**
 - 14:32 UTC: Issue detected (GitHub unavailable)
@@ -477,23 +477,23 @@ our disaster recovery plan and migrated to GitLab temporarily. Releases and docu
 are now operational. No data loss. We will migrate back to GitHub once service is restored.
 
 **Actions Required:**
-- Developers: Use GitLab temporary repo: https://gitlab.com/claudecraft/claude-craft
+- Developers: Use GitLab temporary repo: https://gitlab.com/bearcraft/bear-craft
 - Users: No action needed, docs and downloads operational
 
 **Apologies:**
 We sincerely apologize for the inconvenience. Our team is monitoring the situation 24/7.
 
-**Contact:** support@claudecraft.com
+**Contact:** support@bearcraft.com
 ```
 
 **Template Email Utilisateurs (Post-Recovery) :**
 
 ```
-Objet : Claude Craft Service Restored — Incident Post-Mortem
+Objet : Bear Craft Service Restored — Incident Post-Mortem
 
 Bonjour,
 
-Le [DATE], Claude Craft a connu une interruption de service de [DURÉE] en raison de 
+Le [DATE], Bear Craft a connu une interruption de service de [DURÉE] en raison de 
 [CAUSE RÉSUMÉE : ex. panne fournisseur GitHub].
 
 **Ce qui s'est passé :**
@@ -508,7 +508,7 @@ de secours. Le service a été rétabli à [HEURE] avec zéro perte de données.
 - [REMEDIATION 2 : ex. Tests DR trimestriels au lieu annuels]
 
 **Engagement :**
-La disponibilité de Claude Craft est notre priorité absolue. Nous avons pris des mesures pour 
+La disponibilité de Bear Craft est notre priorité absolue. Nous avons pris des mesures pour 
 qu'un incident similaire ne se reproduise pas.
 
 Post-mortem détaillé (technique) : [LIEN BLOG]
@@ -517,7 +517,7 @@ Merci de votre patience et confiance.
 
 Cordialement,
 [CTO NAME]
-Co-founder & CTO, The Bearded CTO
+Co-founder & CTO, The Bearded Bear
 ```
 
 ---
@@ -543,7 +543,7 @@ Co-founder & CTO, The Bearded CTO
 
 | Métrique | Cible | Mesure | Fréquence |
 |----------|-------|--------|-----------|
-| **Uptime Claude Craft docs** | 99.9% (8.76h downtime/an) | UptimeRobot monitoring | Mensuel |
+| **Uptime Bear Craft docs** | 99.9% (8.76h downtime/an) | UptimeRobot monitoring | Mensuel |
 | **Uptime releases (CI/CD)** | 99.5% (43.8h downtime/an) | GitHub Actions status API | Mensuel |
 | **RTO effectif (incidents)** | ≤4h | Temps detection → service nominal | Par incident |
 | **RPO effectif (incidents)** | ≤15min code, ≤1h analytics | Delta dernier backup → incident | Par incident |

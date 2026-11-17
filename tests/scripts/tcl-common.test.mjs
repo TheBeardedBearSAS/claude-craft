@@ -24,7 +24,7 @@ afterAll(() => {
 /**
  * Helper: run a bash snippet that sources tcl-common.sh via a wrapper.
  * The wrapper is placed in Dev/scripts/ so that BASH_SOURCE[1] resolves
- * correctly for get_claude_craft_version (which uses BASH_SOURCE[1]).
+ * correctly for get_bear_craft_version (which uses BASH_SOURCE[1]).
  */
 function runTclFunction(bashCode) {
   const scriptsDir = path.join(PROJECT_ROOT, 'Dev/scripts');
@@ -49,8 +49,8 @@ ${bashCode}
 }
 
 describe('tcl-common.sh', { timeout: 30000 }, () => {
-  it('get_claude_craft_version returns valid semver', () => {
-    // get_claude_craft_version uses BASH_SOURCE[1] to locate package.json.
+  it('get_bear_craft_version returns valid semver', () => {
+    // get_bear_craft_version uses BASH_SOURCE[1] to locate package.json.
     // When sourced from a wrapper in Dev/scripts/, BASH_SOURCE[1] points to
     // the wrapper itself, so we need to call it from there.
     // We create a tiny wrapper script in Dev/scripts/ to make BASH_SOURCE work.
@@ -63,7 +63,7 @@ describe('tcl-common.sh', { timeout: 30000 }, () => {
         `#!/bin/bash
 set -euo pipefail
 source "${TCL_SCRIPT}"
-get_claude_craft_version
+get_bear_craft_version
 `,
       );
       fs.chmodSync(wrapperPath, 0o755);
@@ -93,8 +93,8 @@ get_claude_craft_version
       '.claude/references/react',
       '.claude/skills',
       '.claude/commands',
-      '.claude/commands/common',
-      '.claude/commands/react',
+      '.claude/commands/bear-common',
+      '.claude/commands/bear-react',
       '.claude/agents',
       '.claude/templates',
       '.claude/checklists',
@@ -113,7 +113,7 @@ get_claude_craft_version
     fs.mkdirSync(path.join(tmpDir, '.claude'), { recursive: true });
 
     runTclFunction(
-      `generate_minimal_claude_md "${tmpDir}" "TestProject" "React" "React 19 + TypeScript" "react" "- /react:check-architecture" "false" "false"`,
+      `generate_minimal_claude_md "${tmpDir}" "TestProject" "React" "React 19 + TypeScript" "react" "- /bear-react:check-architecture" "false" "false"`,
     );
 
     const claudeMd = path.join(tmpDir, '.claude', 'CLAUDE.md');

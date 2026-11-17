@@ -37,7 +37,7 @@ jobs:
         run: npm install --no-save --ignore-scripts @cyclonedx/cyclonedx-npm@5.0.0
 
       - name: Generate CycloneDX SBOM
-        run: ./node_modules/.bin/cyclonedx-npm --output-format JSON --output-file claude-craft-sbom.json
+        run: ./node_modules/.bin/cyclonedx-npm --output-format JSON --output-file bear-craft-sbom.json
 
       - name: Install cosign
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # pinned: v4.1.2
@@ -47,15 +47,15 @@ jobs:
         # (not a fork). Don't fail the whole SBOM job if signing is unavailable; the bundle is
         # attached when present.
         continue-on-error: true
-        run: cosign sign-blob --yes claude-craft-sbom.json --bundle claude-craft-sbom.json.bundle
+        run: cosign sign-blob --yes bear-craft-sbom.json --bundle bear-craft-sbom.json.bundle
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # pinned: v7.0.2
         with:
           name: sbom-cyclonedx
           path: |
-            ./claude-craft-sbom.json
-            ./claude-craft-sbom.json.bundle
+            ./bear-craft-sbom.json
+            ./bear-craft-sbom.json.bundle
           retention-days: 90
 
   release:
@@ -76,7 +76,7 @@ jobs:
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # pinned: v2.3.2
         with:
           files: |
-            ./claude-craft-sbom.json
-            ./claude-craft-sbom.json.bundle
+            ./bear-craft-sbom.json
+            ./bear-craft-sbom.json.bundle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

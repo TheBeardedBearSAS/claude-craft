@@ -14,7 +14,7 @@ Arguments :
 - Domaine (ex: `example.com`, `app.mysite.com`)
 - (Optionnel) Scheme personnalisé (ex: `myapp`)
 
-Exemple : `/reactnative:deep-link example.com myapp`
+Exemple : `/bear-reactnative:deep-link example.com myapp`
 
 ## Mode Plan
 

@@ -1,6 +1,6 @@
 # Guide de Référence des Outils
 
-Ce guide couvre les outils utilitaires inclus avec Claude-Craft pour gérer les profils, l'affichage du statut, la configuration des projets, ainsi que les commandes et fonctionnalités de Claude Code (v8.7).
+Ce guide couvre les outils utilitaires inclus avec Bear-Craft pour gérer les profils, l'affichage du statut, la configuration des projets, ainsi que les commandes et fonctionnalités de Claude Code (v8.7).
 
 ---
 
@@ -39,7 +39,7 @@ Claude Code fournit des commandes intégrées pour la gestion du contexte et des
 
 | Commande | Version | Description |
 |---------|---------|-------------|
-| `/loop [intervalle] [commande]` | v2.1.71+ | Exécuter des tâches récurrentes (ex. `/loop 5m /gate:check commit`) |
+| `/loop [intervalle] [commande]` | v2.1.71+ | Exécuter des tâches récurrentes (ex. `/loop 5m /bear-gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias de `/loop` |
 | `/color` | v2.1.94+ | Changer le schéma de couleurs du terminal |
 | `/rename` | v2.1.94+ | Renommer la session courante |
@@ -182,7 +182,7 @@ Disponible pour les plans Team avec approbation administrative.
 
 ## Templates de Hooks
 
-Claude-Craft fournit des templates de hooks prêts à l'emploi dans `.claude/templates/hooks/` :
+Bear-Craft fournit des templates de hooks prêts à l'emploi dans `.claude/templates/hooks/` :
 
 | Template | Objectif |
 |----------|---------|
@@ -518,7 +518,7 @@ rm /tmp/.ccusage_*
 
 ## Gestionnaire ProjectConfig
 
-Gérez les configurations de projet Claude-Craft via YAML.
+Gérez les configurations de projet Bear-Craft via YAML.
 
 ### Objectif
 

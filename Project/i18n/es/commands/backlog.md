@@ -11,18 +11,18 @@ Punto de entrada único para gestionar el backlog del proyecto: crear, listar, e
 
 | Invocación | Qué hace | Reemplaza |
 |------------|----------|-----------|
-| `/project:backlog add epic "Nombre" [prioridad]` | Crear un EPIC | `/project:backlog add epic` |
-| `/project:backlog add story EPIC-XXX "Nombre" [puntos]` | Crear una User Story en un EPIC | `/project:backlog add story` |
-| `/project:backlog add task US-XXX "[TIPO] Descripción" 4h` | Crear una Tarea en una User Story | `/project:backlog add task` |
-| `/project:backlog list epic [estado] [prioridad]` | Listar los EPICs con estado derivado y progreso | `/project:backlog list epic` |
-| `/project:backlog list story [epic EPIC-XXX \| sprint N \| status S \| backlog]` | Listar las User Stories | `/project:backlog list story` |
-| `/project:backlog list task [us US-XXX \| sprint N \| type T \| status S]` | Listar las Tareas | `/project:backlog list task` |
-| `/project:backlog edit epic EPIC-XXX [campo] [valor]` | Modificar un EPIC | `/project:backlog edit epic` |
-| `/project:backlog edit story US-XXX [campo] [valor]` | Modificar una User Story | `/project:backlog edit story` |
-| `/project:backlog move task TASK-XXX <in-progress\|blocked\|done>` | Cambiar el estado de una Tarea | `/project:backlog move task` |
-| `/project:backlog next story [--claim]` | Elegir la próxima story `ready-for-dev` según prioridad y dependencias (`--claim` la pasa a `in-progress`) | `/project:backlog next story` |
-| `/project:backlog move story US-XXX <backlog\|ready-for-dev\|in-progress\|review\|done\|blocked\|sprint-N> ["motivo"]` | Cambiar el estado de una story mediante la máquina de estados BMAD, con gates | `/project:backlog move story` |
-| `/project:backlog move story --auto [--dry-run]` | Evaluar las reglas `routing.auto_transitions` de `.bmad/sprint-status.yaml` y aplicar las transiciones disparadas | `/project:backlog move story --auto` |
+| `/bear-project:backlog add epic "Nombre" [prioridad]` | Crear un EPIC | `/bear-project:backlog add epic` |
+| `/bear-project:backlog add story EPIC-XXX "Nombre" [puntos]` | Crear una User Story en un EPIC | `/bear-project:backlog add story` |
+| `/bear-project:backlog add task US-XXX "[TIPO] Descripción" 4h` | Crear una Tarea en una User Story | `/bear-project:backlog add task` |
+| `/bear-project:backlog list epic [estado] [prioridad]` | Listar los EPICs con estado derivado y progreso | `/bear-project:backlog list epic` |
+| `/bear-project:backlog list story [epic EPIC-XXX \| sprint N \| status S \| backlog]` | Listar las User Stories | `/bear-project:backlog list story` |
+| `/bear-project:backlog list task [us US-XXX \| sprint N \| type T \| status S]` | Listar las Tareas | `/bear-project:backlog list task` |
+| `/bear-project:backlog edit epic EPIC-XXX [campo] [valor]` | Modificar un EPIC | `/bear-project:backlog edit epic` |
+| `/bear-project:backlog edit story US-XXX [campo] [valor]` | Modificar una User Story | `/bear-project:backlog edit story` |
+| `/bear-project:backlog move task TASK-XXX <in-progress\|blocked\|done>` | Cambiar el estado de una Tarea | `/bear-project:backlog move task` |
+| `/bear-project:backlog next story [--claim]` | Elegir la próxima story `ready-for-dev` según prioridad y dependencias (`--claim` la pasa a `in-progress`) | `/bear-project:backlog next story` |
+| `/bear-project:backlog move story US-XXX <backlog\|ready-for-dev\|in-progress\|review\|done\|blocked\|sprint-N> ["motivo"]` | Cambiar el estado de una story mediante la máquina de estados BMAD, con gates | `/bear-project:backlog move story` |
+| `/bear-project:backlog move story --auto [--dry-run]` | Evaluar las reglas `routing.auto_transitions` de `.bmad/sprint-status.yaml` y aplicar las transiciones disparadas | `/bear-project:backlog move story --auto` |
 
 No existen `edit task` ni `move epic`: los estados de los EPICs son derivados. Los estados de las stories se cambian con `move story` (máquina de estados con gates); las reglas `routing.auto_transitions` también se aplican tras cada transición.
 
@@ -45,7 +45,7 @@ $ARGUMENTS: `<acción> <entidad> [args]`
 - **Los archivos markdown solo contienen contenido** (nombre, descripción, puntos, criterios, estimación, texto del bloqueo, tiempo dedicado). No escribir nunca un estado en un archivo de EPIC, US o tarea, ni en las tablas que contienen.
 - **El estado de un EPIC es derivado, nunca almacenado**: todas las stories `backlog` (o ninguna story) = no iniciado; todas `done` = terminado; alguna `blocked` y ninguna en curso = bloqueado; en caso contrario en curso.
 - Los boards (`board.md`) son vistas generadas: regenerarlos desde `.bmad/sprint-status.yaml`, nunca editarlos a mano.
-- Si falta `.bmad/sprint-status.yaml`, crearlo a partir del esqueleto de `/workflow:init`.
+- Si falta `.bmad/sprint-status.yaml`, crearlo a partir del esqueleto de `/bear-workflow:init`.
 
 ### Rutas y plantillas
 
@@ -73,7 +73,7 @@ $ARGUMENTS: `<acción> <entidad> [args]`
 
 ## add epic
 
-`/project:backlog add epic "Nombre del EPIC" [prioridad]`
+`/bear-project:backlog add epic "Nombre del EPIC" [prioridad]`
 
 - **Nombre** (obligatorio), **Prioridad** (opcional): High, Medium, Low (por defecto: Medium)
 
@@ -91,16 +91,16 @@ $ARGUMENTS: `<acción> <entidad> [args]`
    Archivo: project-management/backlog/epics/EPIC-{ID}-{slug}.md
 
 Próximos pasos:
-  /project:backlog add story EPIC-{ID} "Nombre de la User Story"
+  /bear-project:backlog add story EPIC-{ID} "Nombre de la User Story"
 ```
 
-Ejemplo: `/project:backlog add epic "Sistema de autenticación" High` crea `project-management/backlog/epics/EPIC-001-sistema-de-autenticacion.md`.
+Ejemplo: `/bear-project:backlog add epic "Sistema de autenticación" High` crea `project-management/backlog/epics/EPIC-001-sistema-de-autenticacion.md`.
 
 Validación: nombre no vacío, prioridad entre High/Medium/Low, `project-management/backlog/epics/` existe, ID único.
 
 ## add story
 
-`/project:backlog add story EPIC-XXX "Nombre de la US" [puntos]`
+`/bear-project:backlog add story EPIC-XXX "Nombre de la US" [puntos]`
 
 - **EPIC-ID** (obligatorio), **Nombre** (obligatorio), **Puntos** (opcional): Fibonacci (1, 2, 3, 5, 8)
 
@@ -121,17 +121,17 @@ Validación: nombre no vacío, prioridad entre High/Medium/Low, `project-managem
    Archivo: project-management/backlog/user-stories/US-{ID}-{slug}.md
 
 Próximos pasos:
-  /project:backlog move story US-{ID} sprint-X                # Asignar a un sprint
-  /project:backlog add task US-{ID} "[BE] ..." 4h    # Añadir tareas
+  /bear-project:backlog move story US-{ID} sprint-X                # Asignar a un sprint
+  /bear-project:backlog add task US-{ID} "[BE] ..." 4h    # Añadir tareas
 ```
 
-Ejemplo: `/project:backlog add story EPIC-001 "Inicio de sesión" 5`.
+Ejemplo: `/bear-project:backlog add story EPIC-001 "Inicio de sesión" 5`.
 
 Verificación INVEST: **I**ndependiente, **N**egociable, **V**aliosa, **E**stimable (puntos proporcionados), **S**mall/pequeña (≤ 8 puntos, si no sugerir dividir), **T**esteable (criterios de aceptación claros).
 
 ## add task
 
-`/project:backlog add task US-XXX "[TIPO] Descripción" estimación`
+`/bear-project:backlog add task US-XXX "[TIPO] Descripción" estimación`
 
 - **US-ID** (obligatorio), **Descripción** con el tipo entre corchetes (obligatorio), **Estimación** en horas (obligatoria, p. ej. 4h, 2h, 0.5h)
 
@@ -165,17 +165,17 @@ Verificación INVEST: **I**ndependiente, **N**egociable, **V**aliosa, **E**stima
    Archivo: {RUTA}
 
 Próximos pasos:
-  /project:backlog move task TASK-{ID} in-progress  # Iniciar la tarea
-  /workflow:status --board                                     # Ver el Kanban
+  /bear-project:backlog move task TASK-{ID} in-progress  # Iniciar la tarea
+  /bear-workflow:status --board                                     # Ver el Kanban
 ```
 
-Ejemplos: `/project:backlog add task US-001 "[BE] Endpoint API de login" 4h`, `/project:backlog add task US-001 "[TEST] Tests unitarios de AuthService" 3h`.
+Ejemplos: `/bear-project:backlog add task US-001 "[BE] Endpoint API de login" 4h`, `/bear-project:backlog add task US-001 "[TEST] Tests unitarios de AuthService" 3h`.
 
 Validación: tipo válido, estimación entre 0.5h y 8h, la User Story existe, ID único.
 
 ## list epic
 
-`/project:backlog list epic [estado] [prioridad]`
+`/bear-project:backlog list epic [estado] [prioridad]`
 
 - **Estado** (derivado de las stories): todo, in-progress, blocked, done, all (por defecto: all)
 - **Prioridad**: high, medium, low
@@ -199,13 +199,13 @@ Resumen: 2 EPICs | 🔴 1 Por hacer | 🟡 1 En curso | 🟢 0 Terminado
 
 Con muchos EPICs (p. ej. 12), usar el formato compacto: una línea por grupo de estado (`🔴 Por hacer (5): EPIC-002, EPIC-003, ...`, `🟡 En curso (4): EPIC-001 (40%), ...`, `⏸️ Bloqueado`, `🟢 Terminado`).
 
-Ejemplos: `/project:backlog list epic`, `/project:backlog list epic in-progress`, `/project:backlog list epic all high`, `/project:backlog list epic blocked`.
+Ejemplos: `/bear-project:backlog list epic`, `/bear-project:backlog list epic in-progress`, `/bear-project:backlog list epic all high`, `/bear-project:backlog list epic blocked`.
 
 Para el detalle de un EPIC, sugerir: `cat project-management/backlog/epics/EPIC-001-*.md`.
 
 ## list story
 
-`/project:backlog list story [filtro] [valor]`
+`/bear-project:backlog list story [filtro] [valor]`
 
 - `epic EPIC-XXX`: filtrar por EPIC | `sprint N`: filtrar por sprint | `status STATUS`: backlog, ready-for-dev, in-progress, review, done, blocked | `backlog`: solo las US no asignadas a un sprint
 
@@ -230,13 +230,13 @@ Total: 3 US | 11 puntos | 🔴 2 | 🟡 1 | 🟢 0
 - Por sprint: columnas `ID | EPIC | Nombre | Estado | Puntos | Tareas | Progreso`, pie `Sprint 1: 3 US | 13 puntos | Terminado: 5 pts (38%)`
 - Backlog (sin asignar): columnas `ID | EPIC | Nombre | Prioridad | Puntos | Estado`, pie `Backlog: 3 US | 16 puntos por planificar`
 
-Ejemplos: `/project:backlog list story`, `... list story epic EPIC-001`, `... list story sprint 1`, `... list story status blocked`, `... list story backlog`.
+Ejemplos: `/bear-project:backlog list story`, `... list story epic EPIC-001`, `... list story sprint 1`, `... list story status blocked`, `... list story backlog`.
 
-Acciones sugeridas: `/project:backlog move story US-XXX sprint-2` (asignar a un sprint), `/project:backlog move story US-XXX in-progress` (cambiar el estado), `/project:backlog add task US-XXX "[BE] ..." 4h`.
+Acciones sugeridas: `/bear-project:backlog move story US-XXX sprint-2` (asignar a un sprint), `/bear-project:backlog move story US-XXX in-progress` (cambiar el estado), `/bear-project:backlog add task US-XXX "[BE] ..." 4h`.
 
 ## list task
 
-`/project:backlog list task [filtro] [valor]`
+`/bear-project:backlog list task [filtro] [valor]`
 
 - `us US-XXX` | `sprint N` | `type TYPE` (DB, BE, FE-WEB, FE-MOB, TEST, DOC, OPS, REV) | `status STATUS` (to-do, in-progress, blocked, done)
 
@@ -262,11 +262,11 @@ US-001: 4 tareas | 15h estimadas | 4h completadas (27%)
 - Por sprint: resumen por estado (`🔴 Por hacer (8 tareas, 24h)`, ...) y por tipo (una barra por `[DB]`, `[BE]`, ...), pie `Sprint 1: 25 tareas | 77h estimadas | 35h completadas (45%)`
 - Bloqueadas (`status blocked`): columnas `ID | US | Tipo | Descripción | Bloqueo`, pie `2 tareas bloqueadas | 14h en espera`, y luego una lista `Acciones:` con cómo resolver cada bloqueo
 
-Ejemplos: `/project:backlog list task`, `... list task us US-001`, `... list task sprint 1`, `... list task type BE`, `... list task status blocked`.
+Ejemplos: `/bear-project:backlog list task`, `... list task us US-001`, `... list task sprint 1`, `... list task type BE`, `... list task status blocked`.
 
 ## edit epic
 
-`/project:backlog edit epic EPIC-XXX [campo] [valor]`
+`/bear-project:backlog edit epic EPIC-XXX [campo] [valor]`
 
 | Campo | Descripción | Ejemplo |
 |-------|-------------|---------|
@@ -275,7 +275,7 @@ Ejemplos: `/project:backlog list task`, `... list task us US-001`, `... list tas
 | `mmf` | Minimum Marketable Feature | "Descripción del MMF" |
 | `description` | Descripción | "Nueva descripción" |
 
-> **El estado no es editable aquí.** El estado de un EPIC se deriva de los estados de sus stories en `.bmad/sprint-status.yaml`. Para cambiar el estado de una story usar `/project:backlog move story`; para el de una tarea, `/project:backlog move task`.
+> **El estado no es editable aquí.** El estado de un EPIC se deriva de los estados de sus stories en `.bmad/sprint-status.yaml`. Para cambiar el estado de una story usar `/bear-project:backlog move story`; para el de una tarea, `/bear-project:backlog move task`.
 
 - **Modo interactivo** (solo el ID): mostrar los campos actuales numerados (Nombre, Prioridad, MMF, Descripción) y preguntar cuál modificar (`1-4`, o `q` para salir)
 - **Modo directo** (campo y valor): modificar directamente el campo
@@ -293,13 +293,13 @@ Modificación:
 Archivo: project-management/backlog/epics/EPIC-001-sistema-de-autenticacion.md
 ```
 
-Ejemplos: `/project:backlog edit epic EPIC-001`, `... edit epic EPIC-001 name "Autenticación y autorización"`, `... edit epic EPIC-001 priority Low`, `... edit epic EPIC-001 mmf "Permitir SSO y 2FA"`.
+Ejemplos: `/bear-project:backlog edit epic EPIC-001`, `... edit epic EPIC-001 name "Autenticación y autorización"`, `... edit epic EPIC-001 priority Low`, `... edit epic EPIC-001 mmf "Permitir SSO y 2FA"`.
 
 Validación: el campo debe ser modificable, prioridad High/Medium/Low, nombre no vacío.
 
 ## edit story
 
-`/project:backlog edit story US-XXX [campo] [valor]`
+`/bear-project:backlog edit story US-XXX [campo] [valor]`
 
 | Campo | Descripción | Ejemplo |
 |-------|-------------|---------|
@@ -310,10 +310,10 @@ Validación: el campo debe ser modificable, prioridad High/Medium/Low, nombre no
 | `story` | Texto de la US | "Como..." |
 | `criteria` | Criterios de aceptación | (modo interactivo) |
 
-> **El estado no es editable aquí.** Los estados viven en `.bmad/sprint-status.yaml`. Para cambiar el estado de una story usar `/project:backlog move story`; para el de una tarea, `/project:backlog move task`.
+> **El estado no es editable aquí.** Los estados viven en `.bmad/sprint-status.yaml`. Para cambiar el estado de una story usar `/bear-project:backlog move story`; para el de una tarea, `/bear-project:backlog move task`.
 
 - **Modo interactivo** (solo el ID): mostrar los campos numerados (Nombre, EPIC, Puntos, Persona, Story, Criterios de aceptación) y preguntar cuál modificar (`1-6`, o `q`)
-- **Modo directo**: p. ej. `/project:backlog edit story US-001 points 8`
+- **Modo directo**: p. ej. `/bear-project:backlog edit story US-001 points 8`
 - **Criterios de aceptación** (interactivo): listar los criterios (CA-1, CA-2, ...) y preguntar `(a)ñadir, (m)odificar, (e)liminar, (s)alir`; un criterio nuevo se introduce en Gherkin (GIVEN / WHEN / THEN)
 
 Pasos: validar que la US existe, leer el archivo, modificar el campo, actualizar la fecha de modificación, guardar, actualizar el EPIC padre si ha cambiado, actualizar el índice.
@@ -334,15 +334,15 @@ Archivo: project-management/backlog/user-stories/US-001-inicio-de-sesion.md
 
 Si cambia el EPIC padre (`EPIC: EPIC-001 → EPIC-002`), indicar las actualizaciones: US retirada de la lista del EPIC anterior, añadida a la del nuevo, índice actualizado; actualizar también `epic_id` en `.bmad/sprint-status.yaml`.
 
-Ejemplos: `/project:backlog edit story US-001`, `... edit story US-001 points 3`, `... edit story US-001 epic EPIC-002`, `... edit story US-001 name "Inicio de sesión con SSO"`.
+Ejemplos: `/bear-project:backlog edit story US-001`, `... edit story US-001 points 3`, `... edit story US-001 epic EPIC-002`, `... edit story US-001 name "Inicio de sesión con SSO"`.
 
 Validación: puntos Fibonacci (1, 2, 3, 5, 8), avisar de dividir si > 8, el EPIC debe existir, la persona debe estar definida en personas.md.
 
 ## move task
 
-`/project:backlog move task TASK-XXX <destino>`
+`/bear-project:backlog move task TASK-XXX <destino>`
 
-- **TASK-ID** (obligatorio); **Destino** (obligatorio): `in-progress` (iniciar), `blocked`, `done`. Para el estado de una **story** usar `/project:backlog move story`.
+- **TASK-ID** (obligatorio); **Destino** (obligatorio): `in-progress` (iniciar), `blocked`, `done`. Para el estado de una **story** usar `/bear-project:backlog move story`.
 
 ```
 to-do ──→ in-progress ──→ done
@@ -389,8 +389,8 @@ Salidas:
    Progreso: 2/6 → 3/6 (50%)
 
 Próximos pasos:
-  /project:backlog move task TASK-003 done       # Al terminar
-  /project:backlog move task TASK-003 blocked    # Si se bloquea
+  /bear-project:backlog move task TASK-003 done       # Al terminar
+  /bear-project:backlog move task TASK-003 blocked    # Si se bloquea
 ```
 
 Para `done`, mostrar también la estimación frente al tiempo real (`Estimación: 4h`, `Tiempo real: 3.5h ✓`), la barra de progreso de la US y los totales del sprint (tareas terminadas, horas completadas). Cuando todas las tareas de la US están done:
@@ -399,7 +399,7 @@ Para `done`, mostrar también la estimación frente al tiempo real (`Estimación
 🎉 Todas las tareas de US-001 están terminadas!
 
 Siguiente paso recomendado:
-  /project:backlog move story US-001 done
+  /bear-project:backlog move story US-001 done
 ```
 
 Error de workflow:
@@ -414,20 +414,20 @@ Error de workflow:
 Regla: Una tarea debe pasar por "In Progress" antes de "Done"
 
 Acción correcta:
-  /project:backlog move task TASK-004 in-progress
+  /bear-project:backlog move task TASK-004 in-progress
   # ... trabajar en la tarea ...
-  /project:backlog move task TASK-004 done
+  /bear-project:backlog move task TASK-004 done
 ```
 
-Para `blocked`, mostrar `Estado: in-progress → blocked`, el texto del bloqueo y cómo desbloquear (terminar la tarea que bloquea y luego `/project:backlog move task TASK-005 in-progress`).
+Para `blocked`, mostrar `Estado: in-progress → blocked`, el texto del bloqueo y cómo desbloquear (terminar la tarea que bloquea y luego `/bear-project:backlog move task TASK-005 in-progress`).
 
-Ejemplos: `/project:backlog move task TASK-001 in-progress`, `... move task TASK-001 done`, `... move task TASK-001 blocked`, `... move task TASK-001 in-progress` (desbloquear).
+Ejemplos: `/bear-project:backlog move task TASK-001 in-progress`, `... move task TASK-001 done`, `... move task TASK-001 blocked`, `... move task TASK-001 in-progress` (desbloquear).
 
 Métricas actualizadas en cada movimiento: número de tareas por estado, horas estimadas vs reales, progreso de la US, progreso del sprint, board Kanban.
 
 ## next story
 
-`/project:backlog next story [--claim]`
+`/bear-project:backlog next story [--claim]`
 
 - **--claim** (opcional): pasa automáticamente la story a `in-progress`
 
@@ -435,7 +435,7 @@ Métricas actualizadas en cada movimiento: número de tareas por estado, horas e
 2. **Verificar los requisitos previos** de cada story lista: sin dependencias bloqueantes (todas las stories `Depends on` están en `done` o `review`; si no, indicar cuáles bloquean), puntos de story estimados, tareas descompuestas, criterios de aceptación definidos
 3. **Seleccionar**, en este orden: todas las dependencias resueltas, sin dependencias bloqueantes, ID de story más bajo (antes en el backlog), puntos de story más bajos (las más simples primero)
 4. **Mostrar** la story: ID y título, puntos, EPIC, criterios de aceptación, lista de tareas, requisitos previos, dependencias, notas
-5. **Reservar** (solo con `--claim`): mismo efecto que `/project:backlog move story US-XXX in-progress` (gates, historial): estado `in-progress`, `tdd_phase` en `red`, `current_task` en la primera tarea, entrada añadida a `history`
+5. **Reservar** (solo con `--claim`): mismo efecto que `/bear-project:backlog move story US-XXX in-progress` (gates, historial): estado `in-progress`, `tdd_phase` en `red`, `current_task` en la primera tarea, entrada añadida a `history`
 6. **Guiar**: primera tarea a trabajar y recordatorio TDD
 
 ```
@@ -467,20 +467,20 @@ Dependencias:
 ✅ US-001 (Página de inicio de sesión) — done
 
 Para empezar:
-  /project:backlog move story US-012 in-progress
-O usar: /project:backlog next story --claim
+  /bear-project:backlog move story US-012 in-progress
+O usar: /bear-project:backlog next story --claim
 ═══════════════════════════════════════════════════════
 ```
 
-Cuando ninguna story está lista, mostrar el estado del backlog (stories en backlog por refinar, en curso, bloqueadas) y sugerencias: refinar las stories del backlog (`/project:migrate --stories`), ayudar con las stories en curso, desbloquear una story bloqueada (mostrar su `blocked_reason`), ver el grafo de dependencias (`/project:report deps`), ver el sprint (`/workflow:status`) y comprobar la preparación de las stories (`/gate:check backlog`).
+Cuando ninguna story está lista, mostrar el estado del backlog (stories en backlog por refinar, en curso, bloqueadas) y sugerencias: refinar las stories del backlog (`/bear-project:migrate --stories`), ayudar con las stories en curso, desbloquear una story bloqueada (mostrar su `blocked_reason`), ver el grafo de dependencias (`/bear-project:report deps`), ver el sprint (`/bear-workflow:status`) y comprobar la preparación de las stories (`/bear-gate:check backlog`).
 
 Tras reservar una story, seguir el TDD: 🔴 RED (test que falla para el primer AC/tarea), 🟢 GREEN (código mínimo para pasar), 🔵 REFACTOR (limpiar, los tests siguen en verde), y repetir por cada tarea. `tdd_phase` en `.bmad/sprint-status.yaml` registra la fase.
 
-Ejemplos: `/project:backlog next story`, `/project:backlog next story --claim`.
+Ejemplos: `/bear-project:backlog next story`, `/bear-project:backlog next story --claim`.
 
 ## move story
 
-`/project:backlog move story US-XXX <estado> ["motivo"]`
+`/bear-project:backlog move story US-XXX <estado> ["motivo"]`
 
 - **US-ID** (obligatorio); **Estado** (obligatorio): `backlog`, `ready-for-dev`, `in-progress`, `review`, `done`, `blocked`, o `sprint-N` (asigna la story al sprint N, p. ej. `sprint-2`)
 - **motivo** (obligatorio para `blocked`): se almacena en `blocked_reason`
@@ -567,24 +567,24 @@ Acciones requeridas:
 1. Completar las tareas restantes (TASK-015, TASK-016)
 2. Pasar el TDD a fase green: .bmad/sprint-status.yaml → US-005: tdd_phase: green
 
-Luego reintentar: /project:backlog move story US-005 review
+Luego reintentar: /bear-project:backlog move story US-005 review
 ```
 
 Transición inválida: mostrar el estado actual y el solicitado, el motivo (`No se puede pasar directamente de 'in-progress' a 'done'`), las transiciones válidas desde el estado actual y la máquina de estados.
 
 Casos particulares:
 
-- **Bloquear**: `/project:backlog move story US-003 blocked "Esperando credenciales de la API"` almacena el motivo y conserva el estado anterior para reanudar
-- **Desbloquear**: `/project:backlog move story US-003 in-progress` vuelve al estado anterior
-- **Cambios solicitados** (review): `/project:backlog move story US-005 in-progress`
-- **Asignar a un sprint**: `/project:backlog move story US-003 sprint-2` asigna la story al sprint 2, crea el directorio del sprint si es necesario; el estado de la story se conserva
+- **Bloquear**: `/bear-project:backlog move story US-003 blocked "Esperando credenciales de la API"` almacena el motivo y conserva el estado anterior para reanudar
+- **Desbloquear**: `/bear-project:backlog move story US-003 in-progress` vuelve al estado anterior
+- **Cambios solicitados** (review): `/bear-project:backlog move story US-005 in-progress`
+- **Asignar a un sprint**: `/bear-project:backlog move story US-003 sprint-2` asigna la story al sprint 2, crea el directorio del sprint si es necesario; el estado de la story se conserva
 - **Cascada a las tareas**: `→ in-progress` deja las tareas en su estado actual (se inician individualmente); `→ done` comprueba que todas las tareas estén `done` y avisa si no; `→ blocked` marca como `blocked` todas las tareas en curso
 
-Próximos pasos según el estado destino: `→ in-progress`: `/workflow:implement --story US-XXX` | `→ review`: `/gate:check story` (validar la DoD) | `→ done`: `/project:backlog next story` (y `/workflow:review` cuando el sprint haya terminado) | `→ blocked`: resolver el bloqueo y luego `/project:backlog move story US-XXX in-progress`.
+Próximos pasos según el estado destino: `→ in-progress`: `/bear-workflow:implement --story US-XXX` | `→ review`: `/bear-gate:check story` (validar la DoD) | `→ done`: `/bear-project:backlog next story` (y `/bear-workflow:review` cuando el sprint haya terminado) | `→ blocked`: resolver el bloqueo y luego `/bear-project:backlog move story US-XXX in-progress`.
 
 ### move story --auto
 
-`/project:backlog move story --auto [--dry-run]`
+`/bear-project:backlog move story --auto [--dry-run]`
 
 Evalúa las reglas de enrutamiento y hace transitar las stories en consecuencia (sin ID de story). **--dry-run** previsualiza las transiciones sin aplicarlas. Las mismas reglas también se aplican tras cada transición `move story` y, según los ajustes de `routing.auto_transitions`, en el hook Stop, tras completar una tarea y al iniciar la sesión.
 
@@ -648,6 +648,6 @@ routing:
         action: "notify"
 ```
 
-Próximos pasos: `/project:backlog next story` (elegir la próxima story enrutada), `/workflow:implement` (iniciar el desarrollo).
+Próximos pasos: `/bear-project:backlog next story` (elegir la próxima story enrutada), `/bear-workflow:implement` (iniciar el desarrollo).
 
-Ejemplos: `/project:backlog move story US-005 review`, `/project:backlog move story US-003 blocked "Esperando una API externa"`, `/project:backlog move story --auto --dry-run`, `/project:backlog move story --auto`.
+Ejemplos: `/bear-project:backlog move story US-005 review`, `/bear-project:backlog move story US-003 blocked "Esperando una API externa"`, `/bear-project:backlog move story --auto --dry-run`, `/bear-project:backlog move story --auto`.

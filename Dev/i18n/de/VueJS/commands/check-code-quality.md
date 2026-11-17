@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vuejs:check code-quality verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vuejs:check code-quality verwenden"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-code-quality` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vuejs:check code-quality`.
+> ⚠️ `/bear-vuejs:check-code-quality` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vuejs:check code-quality`.
 
-Führen Sie `/vuejs:check code-quality $ARGUMENTS` aus: Lesen Sie `.claude/commands/vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vuejs:check code-quality $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.

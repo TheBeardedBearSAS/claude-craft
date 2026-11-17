@@ -1,8 +1,8 @@
-# Architecture Monorepo — Claude Craft
+# Architecture Monorepo — Bear Craft
 
 ## Vue d'ensemble
 
-Claude Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optimiser les audits, détections et workflows dans les codebases multi-projets. Support de tous les outils majeurs : Nx, Turborepo, pnpm workspaces, npm/yarn workspaces, Lerna, Rush, Bazel.
+Bear Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optimiser les audits, détections et workflows dans les codebases multi-projets. Support de tous les outils majeurs : Nx, Turborepo, pnpm workspaces, npm/yarn workspaces, Lerna, Rush, Bazel.
 
 ---
 
@@ -21,7 +21,7 @@ Claude Craft Phase 4 (P4-39) introduit le support natif des monorepos pour optim
 
 ## Détection automatique
 
-Claude Craft détecte automatiquement le type de monorepo au démarrage en analysant les fichiers de configuration racine.
+Bear Craft détecte automatiquement le type de monorepo au démarrage en analysant les fichiers de configuration racine.
 
 ### Fichiers marqueurs
 
@@ -218,13 +218,13 @@ function parseBazelWorkspaces(rootPath: string): Workspace[] {
 
 ## Stratégies d'audit
 
-### Audit global (`/team:audit`)
+### Audit global (`/bear-team:audit`)
 
-Par défaut, `/team:audit` analyse **tous** les workspaces du monorepo séquentiellement.
+Par défaut, `/bear-team:audit` analyse **tous** les workspaces du monorepo séquentiellement.
 
 ```bash
 # Audit global (séquentiel)
-/team:audit
+/bear-team:audit
 
 # Output :
 # Analyzing monorepo (Nx, 12 workspaces)...
@@ -246,7 +246,7 @@ Flag `--monorepo` active la parallélisation intelligente.
 
 ```bash
 # Audit parallèle (worker pool)
-/team:audit --monorepo
+/bear-team:audit --monorepo
 
 # Output :
 # Analyzing monorepo (Nx, 12 workspaces)...
@@ -354,7 +354,7 @@ function findDependents(workspaceName: string): string[] {
 
 ```bash
 # Audit uniquement les workspaces affectés depuis main
-/team:audit --monorepo --affected --base=main --head=HEAD
+/bear-team:audit --monorepo --affected --base=main --head=HEAD
 
 # Output :
 # Analyzing monorepo (Turborepo, 12 workspaces)...
@@ -383,7 +383,7 @@ Cacher les résultats d'audit par workspace pour éviter de ré-auditer si aucun
 ### Structure cache
 
 ```
-.claude-craft/
+.bear-craft/
   cache/
     monorepo/
       <workspace-hash>/
@@ -421,7 +421,7 @@ function computeWorkspaceHash(workspace: Workspace): string {
 ```typescript
 function getCachedAudit(workspace: Workspace): AuditResult | null {
   const hash = computeWorkspaceHash(workspace);
-  const cachePath = join('.claude-craft', 'cache', 'monorepo', hash, 'audit.json');
+  const cachePath = join('.bear-craft', 'cache', 'monorepo', hash, 'audit.json');
 
   if (existsSync(cachePath)) {
     const metadata = JSON.parse(readFileSync(join(dirname(cachePath), 'metadata.json'), 'utf-8'));
@@ -437,7 +437,7 @@ function getCachedAudit(workspace: Workspace): AuditResult | null {
 
 function setCachedAudit(workspace: Workspace, result: AuditResult): void {
   const hash = computeWorkspaceHash(workspace);
-  const cachePath = join('.claude-craft', 'cache', 'monorepo', hash);
+  const cachePath = join('.bear-craft', 'cache', 'monorepo', hash);
   mkdirSync(cachePath, { recursive: true });
 
   writeFileSync(join(cachePath, 'audit.json'), JSON.stringify(result, null, 2));
@@ -513,7 +513,7 @@ async function readWorkspaceFiles(workspace: Workspace): Promise<string[]> {
 
 ### Monorepo multi-stack
 
-Claude Craft supporte les monorepos mélangeant plusieurs stacks (Symfony + React + Python).
+Bear Craft supporte les monorepos mélangeant plusieurs stacks (Symfony + React + Python).
 
 **Exemple :**
 
@@ -573,9 +573,9 @@ async function auditWorkspace(workspace: Workspace): Promise<AuditResult> {
 #### Projet existant
 
 ```bash
-# Claude Craft détecte automatiquement le monorepo
+# Bear Craft détecte automatiquement le monorepo
 cd my-monorepo
-claude-craft --help
+bear-craft --help
 
 # Output :
 # Monorepo detected: Nx (12 workspaces)
@@ -589,16 +589,16 @@ claude-craft --help
 #### Nouveau projet
 
 ```bash
-# Créer un monorepo Nx avec Claude Craft
+# Créer un monorepo Nx avec Bear Craft
 npx create-nx-workspace@latest my-monorepo --preset=empty
 cd my-monorepo
-npx @the-bearded-bear/claude-craft install . --tech=react,symfony --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react,symfony --lang=en
 
 # Output :
-# Installing Claude Craft in monorepo mode (Nx)...
+# Installing Bear Craft in monorepo mode (Nx)...
 # Detected workspaces: 0 (empty workspace)
 # Creating .claude/ structure...
-# Done! Run `/team:audit --monorepo` to start.
+# Done! Run `/bear-team:audit --monorepo` to start.
 ```
 
 ### Commandes
@@ -607,41 +607,41 @@ npx @the-bearded-bear/claude-craft install . --tech=react,symfony --lang=en
 
 ```bash
 # Audit tous les workspaces (séquentiel)
-/team:audit
+/bear-team:audit
 
 # Audit tous les workspaces (parallèle)
-/team:audit --monorepo
+/bear-team:audit --monorepo
 ```
 
 #### Audit partial (affected)
 
 ```bash
 # Audit uniquement les workspaces affectés depuis main
-/team:audit --monorepo --affected --base=main
+/bear-team:audit --monorepo --affected --base=main
 
 # Audit avec cache bypass
-/team:audit --monorepo --affected --base=main --no-cache
+/bear-team:audit --monorepo --affected --base=main --no-cache
 ```
 
 #### Audit workspace spécifique
 
 ```bash
 # Audit un workspace précis
-/team:audit --workspace=@acme/api
+/bear-team:audit --workspace=@acme/api
 ```
 
 #### Rapport aggregé
 
 ```bash
 # Générer un rapport aggregé root + drill-down
-/team:audit --monorepo --output=reports/monorepo-audit.html
+/bear-team:audit --monorepo --output=reports/monorepo-audit.html
 ```
 
 **Rapport HTML :**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Claude Craft Audit — Monorepo (Nx, 12 workspaces)              │
+│ Bear Craft Audit — Monorepo (Nx, 12 workspaces)              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  Summary:                                                       │
@@ -692,8 +692,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
-      - run: /team:audit --monorepo --output=audit.html
+      - run: npm install -g @the-bearded-bear/bear-craft
+      - run: /bear-team:audit --monorepo --output=audit.html
       - uses: actions/upload-artifact@v4
         with:
           name: audit-report
@@ -719,9 +719,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g @the-bearded-bear/claude-craft
+      - run: npm install -g @the-bearded-bear/bear-craft
       - run: |
-          /team:audit \
+          /bear-team:audit \
             --monorepo \
             --affected \
             --base=origin/${{ github.base_ref }} \
@@ -749,12 +749,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Claude Craft
-          command: npm install -g @the-bearded-bear/claude-craft
+          name: Install Bear Craft
+          command: npm install -g @the-bearded-bear/bear-craft
       - run:
           name: Audit affected workspaces
           command: |
-            /team:audit \
+            /bear-team:audit \
               --monorepo \
               --affected \
               --base=origin/main \
@@ -780,9 +780,9 @@ workflows:
 audit:monorepo:
   image: node:20
   script:
-    - npm install -g @the-bearded-bear/claude-craft
+    - npm install -g @the-bearded-bear/bear-craft
     - |
-      /team:audit \
+      /bear-team:audit \
         --monorepo \
         --affected \
         --base=origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
@@ -808,7 +808,7 @@ audit:monorepo:
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                     CLI Entry Point                            │
-│                   /team:audit --monorepo                       │
+│                   /bear-team:audit --monorepo                       │
 └───────────────────┬────────────────────────────────────────────┘
                     │
                     ▼
@@ -832,7 +832,7 @@ audit:monorepo:
 ┌────────────────────────────────────────────────────────────────┐
 │                   Cache Manager                                │
 │  - For each workspace: compute hash                            │
-│  - Check .claude-craft/cache/monorepo/<hash>/audit.json        │
+│  - Check .bear-craft/cache/monorepo/<hash>/audit.json        │
 │  - Return: cached results (if valid) or null                   │
 └───────────────────┬────────────────────────────────────────────┘
                     │
@@ -867,4 +867,4 @@ audit:monorepo:
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vuejs:check all verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vuejs:check all verwenden"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-compliance` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vuejs:check all`.
+> ⚠️ `/bear-vuejs:check-compliance` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vuejs:check all`.
 
-Führen Sie `/vuejs:check all $ARGUMENTS` aus: Lesen Sie `.claude/commands/vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vuejs:check all $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.

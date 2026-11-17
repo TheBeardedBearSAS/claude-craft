@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Claude Craft 9.0</title>
+<style>
+  :root {
+    --bg: #0d1110;
+    --panel: #151b19;
+    --line: #26302c;
+    --text: #e9efec;
+    --muted: #8a9a93;
+    --dim: #5d6b65;
+    --accent: #c6f432;
+    --accent-ink: #0d1110;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1200px; height: 1200px; background: var(--bg); color: var(--text);
+    font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+    padding: 84px 88px; display: flex; flex-direction: column;
+  }
+  .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-size: 26px; color: var(--muted); letter-spacing: .5px; }
+  .brand b { color: var(--text); }
+  .badge {
+    background: var(--accent); color: var(--accent-ink); font-weight: 700;
+    font-size: 30px; padding: 10px 24px; border-radius: 999px;
+  }
+  h1 { font-size: 76px; line-height: 1.05; margin-top: 64px; letter-spacing: -1.5px; }
+  h1 span { color: var(--accent); }
+  .sub { font-size: 28px; color: var(--muted); margin-top: 22px; line-height: 1.4; }
+
+  .compare { display: grid; grid-template-columns: 1fr 64px 1fr; align-items: center; margin-top: 56px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 30px 32px; height: 100%; }
+  .label { font-size: 20px; text-transform: uppercase; letter-spacing: 2px; color: var(--dim); margin-bottom: 18px; }
+  .before li { list-style: none; font-size: 23px; color: var(--dim); text-decoration: line-through; padding: 5px 0; }
+  .arrow { text-align: center; font-size: 46px; color: var(--accent); }
+  .after .cmd { font-size: 31px; color: var(--text); font-weight: 700; }
+  .after .cmd em { color: var(--accent); font-style: normal; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .chip { font-size: 20px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 15px; color: var(--muted); }
+  .chip.all { border-color: var(--accent); color: var(--accent); }
+  .note { font-size: 19px; color: var(--muted); margin-top: 20px; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 44px; }
+  .stat { border-top: 3px solid var(--accent); padding-top: 18px; }
+  .stat .n { font-size: 46px; font-weight: 700; }
+  .stat .n small { font-size: 28px; color: var(--muted); font-weight: 400; }
+  .stat .t { font-size: 21px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
+
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; font-size: 21px; color: var(--muted); }
+  .foot .mono { color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: 12px 18px; border-radius: 12px; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand"><b>Claude Craft</b> · framework open source (MIT) pour Claude Code</div>
+    <div class="badge">v9.0.0</div>
+  </div>
+
+  <h1>Moins de commandes,<br><span>plus de clarté.</span></h1>
+  <p class="sub">La 9.0 consolide : un seul point d'entrée d'audit par stack,<br>un seul parcours de gestion de projet.</p>
+
+  <div class="compare">
+    <div class="card before">
+      <div class="label">Avant · 8.x</div>
+      <ul class="mono">
+        <li>/react:check-architecture</li>
+        <li>/react:check-code-quality</li>
+        <li>/react:check-security</li>
+        <li>/react:check-testing</li>
+        <li>/react:check-compliance</li>
+      </ul>
+    </div>
+    <div class="arrow">→</div>
+    <div class="card after">
+      <div class="label">Après · 9.0</div>
+      <div class="cmd mono">/react:check <em>&lt;axe&gt;</em></div>
+      <div class="chips mono">
+        <span class="chip">architecture</span>
+        <span class="chip">code-quality</span>
+        <span class="chip">security</span>
+        <span class="chip">testing</span>
+        <span class="chip all">all · noté /100</span>
+      </div>
+      <p class="note">Les anciens noms redirigent jusqu'à la 10.0.</p>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">65 <small>→</small> 13</div><div class="t">commandes d'audit :<br>une par stack</div></div>
+    <div class="stat"><div class="n">86 <small>→</small> 35</div><div class="t">commandes de gestion<br>de projet</div></div>
+    <div class="stat"><div class="n">13 <small>stacks</small></div><div class="t">5 langues · 33 agents<br>spécialisés</div></div>
+  </div>
+
+  <div class="foot">
+    <span class="mono">npx @the-bearded-bear/claude-craft update</span>
+    <span>github.com/TheBeardedBearSAS/claude-craft</span>
+  </div>
+</body>
+</html>

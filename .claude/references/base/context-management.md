@@ -379,7 +379,7 @@ Session 2: Implementation (coder, tester)
 La commande `/loop` permet de planifier des taches recurrentes:
 
 ```bash
-/loop 5m /common:pre-commit-check    # Verifier toutes les 5 minutes
+/loop 5m /bear-common:pre-commit-check    # Verifier toutes les 5 minutes
 /loop "Surveiller les tests CI"       # Auto-cadence par le modele
 ```
 
@@ -704,7 +704,7 @@ Les fichiers sont fusionnes par ordre alphabetique, permettant aux equipes de su
 
 ## Optimisation des tokens — Quick Setup
 
-> **Commande:** `/common:setup-rtk` pour configurer automatiquement toutes les optimisations.
+> **Commande:** `/bear-common:setup-rtk` pour configurer automatiquement toutes les optimisations.
 
 ### 1. RTK (Rust Token Killer)
 
@@ -802,4 +802,4 @@ Templates disponibles dans `Dev/i18n/base/Common/hooks/templates/examples/`:
 
 **Date de derniere mise a jour:** 2026-04
 **Version:** 1.2.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

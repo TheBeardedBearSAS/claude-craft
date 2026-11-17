@@ -113,10 +113,10 @@ setup() {
     # An invalid language code should fail; many scripts accept any string then
     # fail on missing files, both forms are acceptable as long as nothing is
     # written.
-    run bash "$SCRIPTS_DIR/install-symfony-rules.sh" --lang=xx --dry-run /tmp/claude-craft-test-target-$$
+    run bash "$SCRIPTS_DIR/install-symfony-rules.sh" --lang=xx --dry-run /tmp/bear-craft-test-target-$$
     # We don't assert exit status (varies by script) — we just verify nothing
     # was written outside expected places.
-    [ ! -d "/tmp/claude-craft-test-target-$$/.claude" ] || rm -rf "/tmp/claude-craft-test-target-$$"
+    [ ! -d "/tmp/bear-craft-test-target-$$/.claude" ] || rm -rf "/tmp/bear-craft-test-target-$$"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -130,7 +130,7 @@ setup() {
     # Even when invoked directly, the script must not be able to clobber /etc.
     # This test does not require root; it only verifies the script doesn't
     # try (we expect either a permission denied or an explicit refusal).
-    run bash "$SCRIPTS_DIR/install-symfony-rules.sh" --dry-run /etc/claude-craft-should-never-exist-$$
+    run bash "$SCRIPTS_DIR/install-symfony-rules.sh" --dry-run /etc/bear-craft-should-never-exist-$$
     # We don't care about exit code; we care that nothing got created.
-    [ ! -d "/etc/claude-craft-should-never-exist-$$/.claude" ]
+    [ ! -d "/etc/bear-craft-should-never-exist-$$/.claude" ]
 }

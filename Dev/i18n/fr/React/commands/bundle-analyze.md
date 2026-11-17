@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Mode : full, dependencies, chunks
 
-Exemple : `/react:bundle-analyze` ou `/react:bundle-analyze dependencies`
+Exemple : `/bear-react:bundle-analyze` ou `/bear-react:bundle-analyze dependencies`
 
 ## Mode Plan
 

@@ -1,4 +1,4 @@
-name: "Claude Craft CodeQL config"
+name: "Bear Craft CodeQL config"
 
 # Scaffolding templates contain Handlebars-style placeholders (e.g. `{{ComponentName}}`)
 # and are NOT valid standalone TypeScript/JavaScript. They are consumed by the CLI

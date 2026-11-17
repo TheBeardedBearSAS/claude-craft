@@ -218,4 +218,4 @@ Paperclip liefert ein Dockerfile mit (siehe `docs.paperclip.ing/deployment/docke
 
 ---
 
-**Zuletzt aktualisiert:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded CTO
+**Zuletzt aktualisiert:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded Bear

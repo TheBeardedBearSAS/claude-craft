@@ -17,8 +17,8 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, '../../package.json'), 'u
 // relative path (e.g. "guides/x.md" -> { en: "en/guides/x", fr: "fr/guides/x" }).
 const localeGroups = buildLocaleGroups(listPageIds(resolve(__dirname, '..')))
 
-const GITHUB_URL = 'https://github.com/TheBeardedBearSAS/claude-craft'
-const SITE_NAME = 'Claude Craft'
+const GITHUB_URL = 'https://github.com/TheBeardedBearSAS/bear-craft'
+const SITE_NAME = 'Bear Craft'
 const SITE_DESCRIPTION = 'A comprehensive framework for AI-assisted development with Claude Code'
 
 const websiteSchema = {
@@ -132,13 +132,13 @@ const guidesItemsPt = [
 ]
 
 export default defineConfig({
-  title: 'Claude Craft',
+  title: 'Bear Craft',
   description: 'A comprehensive framework for AI-assisted development with Claude Code',
   lang: 'en-US',
-  base: '/claude-craft/',
+  base: '/bear-craft/',
 
   head: [
-    ['link', { rel: 'icon', href: '/claude-craft/favicon.ico' }],
+    ['link', { rel: 'icon', href: '/bear-craft/favicon.ico' }],
     // Fonts are self-hosted (Inter via VitePress theme, JetBrains Mono in public/fonts/).
     // No external Google Fonts request — removes a render-path round-trip and a third-party dependency.
   ],
@@ -203,7 +203,7 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/logo.svg',
-    siteTitle: 'Claude Craft',
+    siteTitle: 'Bear Craft',
 
     search: {
       provider: 'local',
@@ -254,11 +254,11 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/TheBeardedBearSAS/claude-craft' },
+      { icon: 'github', link: 'https://github.com/TheBeardedBearSAS/bear-craft' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/TheBeardedBearSAS/claude-craft/edit/main/website/:path',
+      pattern: 'https://github.com/TheBeardedBearSAS/bear-craft/edit/main/website/:path',
       text: 'Edit this page on GitHub',
     },
 
@@ -276,7 +276,7 @@ export default defineConfig({
         ],
       },
       { text: 'Changelog', link: '/en/changelog' },
-      { text: 'Compare', link: '/en/compare/claude-craft-vs-superclaude' },
+      { text: 'Compare', link: '/en/compare/bear-craft-vs-superclaude' },
       { text: 'About', link: '/en/about' },
     ],
 

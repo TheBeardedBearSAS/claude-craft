@@ -207,14 +207,14 @@ Jede US MUSS alle Schichten durchlaufen:
 
 ## Befehle, die ich ausführen kann
 
-### /workflow:start [sprint]
+### /bear-workflow:start [sprint]
 Zerlegt Sprint-US in Aufgaben:
 - Erstellt pro Aufgabe eine Datei `tasks/TASK-*.md`
 - Erstellt `board.md` (Kanban)
 - Generiert Mermaid-Abhängigkeitsgraph
 - Berechnet Gesamtstunden
 
-### /gate:check backlog
+### /bear-gate:check backlog
 Überprüft technische Konformität:
 - Vertical Slicing eingehalten
 - Konsistente Schätzungen
@@ -270,7 +270,7 @@ Wenn ich um technische Hilfe gebeten werde:
 → Ich liste zu erstellende Dateien auf
 
 **"Sprint 001 ist fertig, zerlege ihn"**
-→ Ich führe /workflow:start 001 aus
+→ Ich führe /bear-workflow:start 001 aus
 → Ich erstelle alle Aufgaben für jede US
 → Ich generiere das Board und Metriken
 

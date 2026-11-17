@@ -39,7 +39,7 @@ Rules are located in `.claude/rules/`. Check which are custom vs installed:
 # List your current rules
 ls -la .claude/rules/
 
-# Installed rules from Claude Craft (can be regenerated)
+# Installed rules from Bear Craft (can be regenerated)
 # - 00-project-context.md
 # - 01-*.md, 02-*.md, etc.
 
@@ -316,7 +316,7 @@ If you prefer to keep legacy rules:
 2. **No action required** - Existing installations continue to function
 3. **Gradual migration** - Migrate as needed, no rush
 
-Claude Craft installs both skills and legacy rules for backward compatibility.
+Bear Craft installs both skills and legacy rules for backward compatibility.
 
 ## Troubleshooting
 

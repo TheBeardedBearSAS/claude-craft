@@ -9,7 +9,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 
 // Règle 12 : tout skill de plus de 60 lignes s'exécute en `context: fork` pour ne
 // pas polluer le contexte principal. Contrôle autrefois confié à un agent haiku
-// (lentille internal-conformance de /common:audit-claude-alignment), désormais
+// (lentille internal-conformance de /bear-common:audit-claude-alignment), désormais
 // déterministe.
 const MAX_LINES_WITHOUT_FORK = 60;
 

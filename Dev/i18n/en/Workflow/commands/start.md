@@ -11,8 +11,8 @@ You are an experienced Scrum Master and Tech Lead. You must prepare and facilita
 
 | Invocation | What it does | Replaces |
 |------------|--------------|----------|
-| `/workflow:start <N>` | Full start: prerequisites, capacity, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint and stories written to `.bmad/sprint-status.yaml`, tasks registered | former sprint start steps (removed in 9.0) |
-| `/workflow:start <N> --tasks-only` | Decompose the stories of an **existing** sprint into tasks (Steps 7 to 9 only, skip Steps 1 to 6) | `/workflow:start <N>` |
+| `/bear-workflow:start <N>` | Full start: prerequisites, capacity, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint and stories written to `.bmad/sprint-status.yaml`, tasks registered | former sprint start steps (removed in 9.0) |
+| `/bear-workflow:start <N> --tasks-only` | Decompose the stories of an **existing** sprint into tasks (Steps 7 to 9 only, skip Steps 1 to 6) | `/bear-workflow:start <N>` |
 
 ## Arguments
 $ARGUMENTS
@@ -22,7 +22,7 @@ Arguments:
 - (Optional) Duration in days (default: 10 days = 2 weeks)
 - `--tasks-only`: only decompose the stories of an existing sprint into tasks
 
-Examples: `/workflow:start 5`, `/workflow:start 5 --tasks-only`
+Examples: `/bear-workflow:start 5`, `/bear-workflow:start 5 --tasks-only`
 
 > **Plan mode is mandatory for the decomposition** (Step 7): analyze the impacted code, propose the task breakdown and wait for validation before writing files.
 
@@ -242,13 +242,13 @@ Points |
 
 ### Step 6: Sync `.bmad/sprint-status.yaml`
 
-`/gate:check sprint` and `/workflow:implement` read the sprint from `.bmad/sprint-status.yaml`. Write it now from the `sprint-goal.md` above and the selected US files (`project-management/backlog/user-stories/US-*.md`):
+`/bear-gate:check sprint` and `/bear-workflow:implement` read the sprint from `.bmad/sprint-status.yaml`. Write it now from the `sprint-goal.md` above and the selected US files (`project-management/backlog/user-stories/US-*.md`):
 
 1. Create `.bmad/` if missing.
 2. `metadata`: `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, taken from `sprint-goal.md`.
 3. `stories`: one entry per selected US: `title`, `status: ready-for-dev`, `story_points`, `epic_id`, `priority` (MoSCoW), `dependencies`, `tasks`, `history: []`.
 4. File already present for the **same** `sprint_id`: keep the existing statuses (never move a story back) and only add the new US.
-5. File present for **another** sprint: first move under `archived_sprints.<old sprint_id>` (`status`, `points`) only the **finished (`done`) stories of that previous sprint** — never the backlog stories recorded by `/workflow:plan` — then write the new sprint. Unfinished stories stay in `stories` (with `sprint_id` updated if that key is used).
+5. File present for **another** sprint: first move under `archived_sprints.<old sprint_id>` (`status`, `points`) only the **finished (`done`) stories of that previous sprint** — never the backlog stories recorded by `/bear-workflow:plan` — then write the new sprint. Unfinished stories stay in `stories` (with `sprint_id` updated if that key is used).
 
 ```yaml
 # .bmad/sprint-status.yaml
@@ -297,7 +297,7 @@ Read `sprint-goal.md`, `sprint-dependencies.md` and every referenced US in `proj
 
 **Vertical slicing**: each US gets DB + API + front + tests + doc + review tasks as needed. Typical size: simple CRUD ~15 tasks, business feature ~18, UI only ~11.
 
-For each US, create one `tasks/TASK-{NNN}.md` per task from `.claude/templates/project/task.md` (IDs continue after the last existing `TASK-*`, as `/project:backlog add task` does) with: type, estimation, `Depends on`, description, files to create or modify, validation criteria. Then add a section to `tasks/README.md`:
+For each US, create one `tasks/TASK-{NNN}.md` per task from `.claude/templates/project/task.md` (IDs continue after the last existing `TASK-*`, as `/bear-project:backlog add task` does) with: type, estimation, `Depends on`, description, files to create or modify, validation criteria. Then add a section to `tasks/README.md`:
 
 ```markdown
 ## US-XXX: [Title] (Epic EPIC-XXX, [X] points)
@@ -327,7 +327,7 @@ Create `board.md` (template `.claude/templates/project/board.md`):
 ```markdown
 # Task Board - Sprint {N}
 
-> Generated view: regenerated from `.bmad/sprint-status.yaml` by `/workflow:status --board`. Do not edit by hand.
+> Generated view: regenerated from `.bmad/sprint-status.yaml` by `/bear-workflow:status --board`. Do not edit by hand.
 
 ## to-do
 | ID | US | Task | Estimation | Assigned |
@@ -347,7 +347,7 @@ Create `board.md` (template `.claude/templates/project/board.md`):
 
 For every created task (US tasks and cross-cutting tasks), following `.claude/templates/project/sprint-status.md`:
 
-1. Create `.bmad/sprint-status.yaml` from the `/workflow:init` skeleton if missing (with `--tasks-only` the sprint and stories already exist; if not, run the full `/workflow:start <N>`)
+1. Create `.bmad/sprint-status.yaml` from the `/bear-workflow:init` skeleton if missing (with `--tasks-only` the sprint and stories already exist; if not, run the full `/bear-workflow:start <N>`)
 2. Append the TASK ids to `stories.<US>.tasks.list`
 3. Set `stories.<US>.tasks.status.<TASK>: to-do`
 4. Update `stories.<US>.tasks.total` (`completed` stays the number of `done` tasks)
@@ -419,15 +419,15 @@ For every created task (US tasks and cross-cutting tasks), following `.claude/te
 ║                      NEXT STEP                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /gate:check sprint {N}                                ║
+║  → /bear-gate:check sprint {N}                                ║
 ║    Check the sprint is ready (gate)                      ║
 ║                                                          ║
-║  → /workflow:implement {N}                               ║
+║  → /bear-workflow:implement {N}                               ║
 ║    Start TDD/BDD development                             ║
 ║                                                          ║
 ║  See also:                                               ║
-║  • /project:backlog next story — Pick the first story    ║
-║  • /workflow:status  — Check sprint progress             ║
+║  • /bear-project:backlog next story — Pick the first story    ║
+║  • /bear-workflow:status  — Check sprint progress             ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

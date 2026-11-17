@@ -1,6 +1,6 @@
 {
-  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
-  "name": "claude-craft-plugin-export-pdf",
+  "$schema": "https://bear-craft.dev/schema/plugin-v1.json",
+  "name": "bear-craft-plugin-export-pdf",
   "version": "0.1.0-draft",
   "displayName": "PDF Export",
   "description": "Export audit reports to branded PDF (LaTeX or Weasyprint backend)",

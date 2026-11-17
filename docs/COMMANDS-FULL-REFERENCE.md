@@ -7,400 +7,400 @@
 
 | Namespace | Count |
 |-----------|-------|
-| `/angular:*` | 7 |
-| `/ansible:*` | 5 |
-| `/common:*` | 13 |
-| `/coolify:*` | 5 |
-| `/csharp:*` | 7 |
-| `/docker:*` | 5 |
-| `/flutter:*` | 11 |
-| `/frankenphp:*` | 5 |
-| `/gate:*` | 1 |
-| `/hcloud:*` | 5 |
-| `/kubernetes:*` | 5 |
-| `/laravel:*` | 7 |
-| `/opentofu:*` | 5 |
-| `/paperclip:*` | 9 |
-| `/pgbouncer:*` | 5 |
-| `/php:*` | 6 |
-| `/project:*` | 5 |
-| `/python:*` | 11 |
-| `/qa:*` | 5 |
-| `/react:*` | 11 |
-| `/reactnative:*` | 11 |
-| `/ruby:*` | 1 |
-| `/rust:*` | 1 |
-| `/symfony:*` | 11 |
-| `/tauri:*` | 1 |
-| `/team:*` | 4 |
-| `/uiux:*` | 7 |
-| `/vercel:*` | 7 |
-| `/vite:*` | 8 |
-| `/vuejs:*` | 7 |
-| `/wordpress:*` | 1 |
-| `/workflow:*` | 9 |
+| `/bear-angular:*` | 7 |
+| `/bear-ansible:*` | 5 |
+| `/bear-common:*` | 13 |
+| `/bear-coolify:*` | 5 |
+| `/bear-csharp:*` | 7 |
+| `/bear-docker:*` | 5 |
+| `/bear-flutter:*` | 11 |
+| `/bear-frankenphp:*` | 5 |
+| `/bear-gate:*` | 1 |
+| `/bear-hcloud:*` | 5 |
+| `/bear-kubernetes:*` | 5 |
+| `/bear-laravel:*` | 7 |
+| `/bear-opentofu:*` | 5 |
+| `/bear-paperclip:*` | 9 |
+| `/bear-pgbouncer:*` | 5 |
+| `/bear-php:*` | 6 |
+| `/bear-project:*` | 5 |
+| `/bear-python:*` | 11 |
+| `/bear-qa:*` | 5 |
+| `/bear-react:*` | 11 |
+| `/bear-reactnative:*` | 11 |
+| `/bear-ruby:*` | 1 |
+| `/bear-rust:*` | 1 |
+| `/bear-symfony:*` | 11 |
+| `/bear-tauri:*` | 1 |
+| `/bear-team:*` | 4 |
+| `/bear-uiux:*` | 7 |
+| `/bear-vercel:*` | 7 |
+| `/bear-vite:*` | 8 |
+| `/bear-vuejs:*` | 7 |
+| `/bear-wordpress:*` | 1 |
+| `/bear-workflow:*` | 9 |
 | **Total** | **201** |
 
-## `/angular:*`
+## `/bear-angular:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/angular:check`](../.claude/commands/angular/check.md) | Audit Angular par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/angular:check-architecture`](../.claude/commands/angular/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /angular:check architecture |
-| [`/angular:check-code-quality`](../.claude/commands/angular/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /angular:check code-quality |
-| [`/angular:check-compliance`](../.claude/commands/angular/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /angular:check all |
-| [`/angular:check-security`](../.claude/commands/angular/check-security.md) | Obsolète (retirée en 10.0) : utilisez /angular:check security |
-| [`/angular:check-testing`](../.claude/commands/angular/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /angular:check testing |
-| [`/angular:generate-component`](../.claude/commands/angular/generate-component.md) | Generate Angular standalone component with tests |
+| [`/bear-angular:check`](../.claude/commands/bear-angular/check.md) | Audit Angular par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-angular:check-architecture`](../.claude/commands/bear-angular/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check architecture |
+| [`/bear-angular:check-code-quality`](../.claude/commands/bear-angular/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check code-quality |
+| [`/bear-angular:check-compliance`](../.claude/commands/bear-angular/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check all |
+| [`/bear-angular:check-security`](../.claude/commands/bear-angular/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check security |
+| [`/bear-angular:check-testing`](../.claude/commands/bear-angular/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-angular:check testing |
+| [`/bear-angular:generate-component`](../.claude/commands/bear-angular/generate-component.md) | Generate Angular standalone component with tests |
 
-## `/ansible:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/ansible:architecture`](../Infra/i18n/en/Ansible/commands/architecture.md) | Design complete Ansible automation architecture |
-| [`/ansible:debug`](../Infra/i18n/en/Ansible/commands/debug.md) | Diagnose Ansible playbook issues from symptoms |
-| [`/ansible:deploy-setup`](../Infra/i18n/en/Ansible/commands/deploy-setup.md) | Setup CI/CD pipeline for Ansible automation |
-| [`/ansible:optimize`](../Infra/i18n/en/Ansible/commands/optimize.md) | Optimize Ansible performance and playbook quality |
-| [`/ansible:security-audit`](../Infra/i18n/en/Ansible/commands/security-audit.md) | Audit Ansible security posture |
-
-## `/common:*`
+## `/bear-ansible:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/common:add-technology`](../.claude/commands/common/add-technology.md) | Ajouter une nouvelle technologie à claude-craft avec les best practices de Context7 et recherche web |
-| [`/common:aliases`](../.claude/commands/common/aliases.md) | CLI aliases for frequently used commands |
-| [`/common:architecture-decision`](../.claude/commands/common/architecture-decision.md) | Architecture Decision Record (ADR) |
-| [`/common:audit-claude-alignment`](../.claude/commands/common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
-| [`/common:audit-freshness`](../.claude/commands/common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) : pré-collecte déterministe des registres officiels, agents uniquement sur les stacks en écart |
-| [`/common:generate-changelog`](../.claude/commands/common/generate-changelog.md) | Génération Automatique du Changelog |
-| [`/common:getting-started`](../.claude/commands/common/getting-started.md) | Interactive 10-minute guided tour for new Claude Craft users |
-| [`/common:init`](../.claude/commands/common/init.md) | Bootstrap the Claude-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
-| [`/common:pack-repo`](../.claude/commands/common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
-| [`/common:ralph-run`](../.claude/commands/common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
-| [`/common:search`](../.claude/commands/common/search.md) | Search commands, skills and agents by keyword |
-| [`/common:setup-ci`](../.claude/commands/common/setup-ci.md) | Configuration CI/CD |
-| [`/common:setup-rtk`](../.claude/commands/common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
+| [`/bear-ansible:architecture`](../Infra/i18n/en/Ansible/commands/architecture.md) | Design complete Ansible automation architecture |
+| [`/bear-ansible:debug`](../Infra/i18n/en/Ansible/commands/debug.md) | Diagnose Ansible playbook issues from symptoms |
+| [`/bear-ansible:deploy-setup`](../Infra/i18n/en/Ansible/commands/deploy-setup.md) | Setup CI/CD pipeline for Ansible automation |
+| [`/bear-ansible:optimize`](../Infra/i18n/en/Ansible/commands/optimize.md) | Optimize Ansible performance and playbook quality |
+| [`/bear-ansible:security-audit`](../Infra/i18n/en/Ansible/commands/security-audit.md) | Audit Ansible security posture |
 
-## `/coolify:*`
+## `/bear-common:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/coolify:coolify-backup`](../Infra/i18n/en/Coolify/commands/coolify-backup.md) | Configure and manage Coolify backups |
-| [`/coolify:coolify-debug`](../Infra/i18n/en/Coolify/commands/coolify-debug.md) | Diagnose Coolify deployment issues |
-| [`/coolify:coolify-deploy`](../Infra/i18n/en/Coolify/commands/coolify-deploy.md) | Deploy application to Coolify |
-| [`/coolify:coolify-setup`](../Infra/i18n/en/Coolify/commands/coolify-setup.md) | Initialize project for Coolify deployment |
-| [`/coolify:optimize`](../Infra/i18n/en/Coolify/commands/optimize.md) | Optimize Coolify deployment |
+| [`/bear-common:add-technology`](../.claude/commands/bear-common/add-technology.md) | Ajouter une nouvelle technologie à bear-craft avec les best practices de Context7 et recherche web |
+| [`/bear-common:aliases`](../.claude/commands/bear-common/aliases.md) | CLI aliases for frequently used commands |
+| [`/bear-common:architecture-decision`](../.claude/commands/bear-common/architecture-decision.md) | Architecture Decision Record (ADR) |
+| [`/bear-common:audit-claude-alignment`](../.claude/commands/bear-common/audit-claude-alignment.md) | Audit hebdomadaire d'alignement sur l'écosystème Claude (CLI, modèles, best practices Anthropic, communauté) via équipe d'agents + PR de correction |
+| [`/bear-common:audit-freshness`](../.claude/commands/bear-common/audit-freshness.md) | Audit de fraîcheur multi-stack (versions + best practices) : pré-collecte déterministe des registres officiels, agents uniquement sur les stacks en écart |
+| [`/bear-common:generate-changelog`](../.claude/commands/bear-common/generate-changelog.md) | Génération Automatique du Changelog |
+| [`/bear-common:getting-started`](../.claude/commands/bear-common/getting-started.md) | Interactive 10-minute guided tour for new Bear Craft users |
+| [`/bear-common:init`](../.claude/commands/bear-common/init.md) | Bootstrap the Bear-Craft structure for a new project, or analyze the codebase and configure the project context (--context) |
+| [`/bear-common:pack-repo`](../.claude/commands/bear-common/pack-repo.md) | Pack la codebase en un fichier AI-friendly (Repomix wrapper + fallback shell). Token counting inclus. |
+| [`/bear-common:ralph-run`](../.claude/commands/bear-common/ralph-run.md) | Executer Claude en boucle continue jusqu'a completion de la tache (Ralph Wiggum v2.0) |
+| [`/bear-common:search`](../.claude/commands/bear-common/search.md) | Search commands, skills and agents by keyword |
+| [`/bear-common:setup-ci`](../.claude/commands/bear-common/setup-ci.md) | Configuration CI/CD |
+| [`/bear-common:setup-rtk`](../.claude/commands/bear-common/setup-rtk.md) | Configure RTK and token optimization for Claude Code |
 
-## `/csharp:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/csharp:check`](../.claude/commands/csharp/check.md) | Audit C#/.NET par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/csharp:check-architecture`](../.claude/commands/csharp/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check architecture |
-| [`/csharp:check-code-quality`](../.claude/commands/csharp/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check code-quality |
-| [`/csharp:check-compliance`](../.claude/commands/csharp/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check all |
-| [`/csharp:check-security`](../.claude/commands/csharp/check-security.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check security |
-| [`/csharp:check-testing`](../.claude/commands/csharp/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /csharp:check testing |
-| [`/csharp:generate-feature`](../.claude/commands/csharp/generate-feature.md) | Generate a complete feature with Clean Architecture structure |
-
-## `/docker:*`
+## `/bear-coolify:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/docker:docker-architecture`](../Infra/i18n/en/Docker/commands/docker-architecture.md) | Complete Docker Architecture |
-| [`/docker:docker-cicd-pipeline`](../Infra/i18n/en/Docker/commands/docker-cicd-pipeline.md) | Docker CI/CD Pipeline |
-| [`/docker:docker-compose-setup`](../Infra/i18n/en/Docker/commands/docker-compose-setup.md) | Docker Compose Setup |
-| [`/docker:docker-debug`](../Infra/i18n/en/Docker/commands/docker-debug.md) | Docker Diagnostics |
-| [`/docker:optimize`](../Infra/i18n/en/Docker/commands/optimize.md) | Dockerfile Optimization |
+| [`/bear-coolify:backup`](../Infra/i18n/en/Coolify/commands/backup.md) | Configure and manage Coolify backups |
+| [`/bear-coolify:debug`](../Infra/i18n/en/Coolify/commands/debug.md) | Diagnose Coolify deployment issues |
+| [`/bear-coolify:deploy`](../Infra/i18n/en/Coolify/commands/deploy.md) | Deploy application to Coolify |
+| [`/bear-coolify:optimize`](../Infra/i18n/en/Coolify/commands/optimize.md) | Optimize Coolify deployment |
+| [`/bear-coolify:setup`](../Infra/i18n/en/Coolify/commands/setup.md) | Initialize project for Coolify deployment |
 
-## `/flutter:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/flutter:analyze-performance`](../.claude/commands/flutter/analyze-performance.md) | Analyse Performance Flutter |
-| [`/flutter:check`](../.claude/commands/flutter/check.md) | Audit Flutter par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/flutter:check-architecture`](../.claude/commands/flutter/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check architecture |
-| [`/flutter:check-code-quality`](../.claude/commands/flutter/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check code-quality |
-| [`/flutter:check-compliance`](../.claude/commands/flutter/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check all |
-| [`/flutter:check-security`](../.claude/commands/flutter/check-security.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check security |
-| [`/flutter:check-testing`](../.claude/commands/flutter/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /flutter:check testing |
-| [`/flutter:generate-feature`](../.claude/commands/flutter/generate-feature.md) | Génération Feature Flutter Complète |
-| [`/flutter:generate-widget`](../.claude/commands/flutter/generate-widget.md) | Génération Widget Flutter avec Tests |
-| [`/flutter:golden-update`](../.claude/commands/flutter/golden-update.md) | Mise à jour Golden Tests |
-| [`/flutter:localization-check`](../.claude/commands/flutter/localization-check.md) | Vérification des Traductions |
-
-## `/frankenphp:*`
+## `/bear-csharp:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/frankenphp:architecture`](../Infra/i18n/en/FrankenPHP/commands/architecture.md) | Design complete FrankenPHP serving architecture |
-| [`/frankenphp:debug`](../Infra/i18n/en/FrankenPHP/commands/debug.md) | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
-| [`/frankenphp:deploy-setup`](../Infra/i18n/en/FrankenPHP/commands/deploy-setup.md) | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
-| [`/frankenphp:optimize`](../Infra/i18n/en/FrankenPHP/commands/optimize.md) | Optimize FrankenPHP worker performance and throughput |
-| [`/frankenphp:security-audit`](../Infra/i18n/en/FrankenPHP/commands/security-audit.md) | Audit FrankenPHP security posture |
+| [`/bear-csharp:check`](../.claude/commands/bear-csharp/check.md) | Audit C#/.NET par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-csharp:check-architecture`](../.claude/commands/bear-csharp/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check architecture |
+| [`/bear-csharp:check-code-quality`](../.claude/commands/bear-csharp/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check code-quality |
+| [`/bear-csharp:check-compliance`](../.claude/commands/bear-csharp/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check all |
+| [`/bear-csharp:check-security`](../.claude/commands/bear-csharp/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check security |
+| [`/bear-csharp:check-testing`](../.claude/commands/bear-csharp/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-csharp:check testing |
+| [`/bear-csharp:generate-feature`](../.claude/commands/bear-csharp/generate-feature.md) | Generate a complete feature with Clean Architecture structure |
 
-## `/gate:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/gate:check`](../.claude/commands/gate/check.md) | Exécuter n'importe quelle porte qualité : portes documentaires (PRD, spec technique, backlog, sprint, story, alignement), portes de code (commit, merge, release), le rapport complet ou un checkpoint de phase |
-
-## `/hcloud:*`
+## `/bear-docker:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/hcloud:architecture`](../Infra/i18n/en/Hcloud/commands/architecture.md) | Design complete Hetzner Cloud infrastructure architecture |
-| [`/hcloud:debug`](../Infra/i18n/en/Hcloud/commands/debug.md) | Diagnose Hetzner Cloud infrastructure issues from symptoms |
-| [`/hcloud:deploy-setup`](../Infra/i18n/en/Hcloud/commands/deploy-setup.md) | Setup CI/CD pipeline for Hetzner Cloud deployments |
-| [`/hcloud:optimize`](../Infra/i18n/en/Hcloud/commands/optimize.md) | Optimize Hetzner Cloud cost and performance |
-| [`/hcloud:security-audit`](../Infra/i18n/en/Hcloud/commands/security-audit.md) | Audit Hetzner Cloud security posture |
+| [`/bear-docker:architecture`](../Infra/i18n/en/Docker/commands/architecture.md) | Complete Docker Architecture |
+| [`/bear-docker:cicd-pipeline`](../Infra/i18n/en/Docker/commands/cicd-pipeline.md) | Docker CI/CD Pipeline |
+| [`/bear-docker:compose-setup`](../Infra/i18n/en/Docker/commands/compose-setup.md) | Docker Compose Setup |
+| [`/bear-docker:debug`](../Infra/i18n/en/Docker/commands/debug.md) | Docker Diagnostics |
+| [`/bear-docker:optimize`](../Infra/i18n/en/Docker/commands/optimize.md) | Dockerfile Optimization |
 
-## `/kubernetes:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/kubernetes:architecture`](../Infra/i18n/en/Kubernetes/commands/architecture.md) | Design complete Kubernetes architecture |
-| [`/kubernetes:debug`](../Infra/i18n/en/Kubernetes/commands/debug.md) | Diagnose Kubernetes issues from symptoms |
-| [`/kubernetes:deploy-setup`](../Infra/i18n/en/Kubernetes/commands/deploy-setup.md) | Setup GitOps deployment pipeline for Kubernetes |
-| [`/kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | Optimize Kubernetes resource usage and costs |
-| [`/kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | Kubernetes security posture audit |
-
-## `/laravel:*`
+## `/bear-flutter:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/laravel:check`](../.claude/commands/laravel/check.md) | Audit Laravel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/laravel:check-architecture`](../.claude/commands/laravel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check architecture |
-| [`/laravel:check-code-quality`](../.claude/commands/laravel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check code-quality |
-| [`/laravel:check-compliance`](../.claude/commands/laravel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check all |
-| [`/laravel:check-security`](../.claude/commands/laravel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check security |
-| [`/laravel:check-testing`](../.claude/commands/laravel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /laravel:check testing |
-| [`/laravel:generate-controller`](../.claude/commands/laravel/generate-controller.md) | Generate a Laravel controller following best practices |
+| [`/bear-flutter:analyze-performance`](../.claude/commands/bear-flutter/analyze-performance.md) | Analyse Performance Flutter |
+| [`/bear-flutter:check`](../.claude/commands/bear-flutter/check.md) | Audit Flutter par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-flutter:check-architecture`](../.claude/commands/bear-flutter/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check architecture |
+| [`/bear-flutter:check-code-quality`](../.claude/commands/bear-flutter/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check code-quality |
+| [`/bear-flutter:check-compliance`](../.claude/commands/bear-flutter/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check all |
+| [`/bear-flutter:check-security`](../.claude/commands/bear-flutter/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check security |
+| [`/bear-flutter:check-testing`](../.claude/commands/bear-flutter/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-flutter:check testing |
+| [`/bear-flutter:generate-feature`](../.claude/commands/bear-flutter/generate-feature.md) | Génération Feature Flutter Complète |
+| [`/bear-flutter:generate-widget`](../.claude/commands/bear-flutter/generate-widget.md) | Génération Widget Flutter avec Tests |
+| [`/bear-flutter:golden-update`](../.claude/commands/bear-flutter/golden-update.md) | Mise à jour Golden Tests |
+| [`/bear-flutter:localization-check`](../.claude/commands/bear-flutter/localization-check.md) | Vérification des Traductions |
 
-## `/opentofu:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/opentofu:architecture`](../Infra/i18n/en/OpenTofu/commands/architecture.md) | Design complete OpenTofu IaC architecture |
-| [`/opentofu:debug`](../Infra/i18n/en/OpenTofu/commands/debug.md) | Diagnose OpenTofu state issues and drift |
-| [`/opentofu:deploy-setup`](../Infra/i18n/en/OpenTofu/commands/deploy-setup.md) | Setup CI/CD pipeline for OpenTofu |
-| [`/opentofu:optimize`](../Infra/i18n/en/OpenTofu/commands/optimize.md) | OpenTofu cost optimization and resource analysis |
-| [`/opentofu:security-audit`](../Infra/i18n/en/OpenTofu/commands/security-audit.md) | Audit OpenTofu security posture |
-
-## `/paperclip:*`
+## `/bear-frankenphp:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/paperclip:check`](../Dev/i18n/en/Paperclip/commands/check.md) | Paperclip audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
-| [`/paperclip:check-architecture`](../Dev/i18n/en/Paperclip/commands/check-architecture.md) | Deprecated (removed in 10.0): use /paperclip:check architecture |
-| [`/paperclip:check-code-quality`](../Dev/i18n/en/Paperclip/commands/check-code-quality.md) | Deprecated (removed in 10.0): use /paperclip:check code-quality |
-| [`/paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Deprecated (removed in 10.0): use /paperclip:check all |
-| [`/paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Deprecated (removed in 10.0): use /paperclip:check security |
-| [`/paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Deprecated (removed in 10.0): use /paperclip:check testing |
-| [`/paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
-| [`/paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
-| [`/paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
+| [`/bear-frankenphp:architecture`](../Infra/i18n/en/FrankenPHP/commands/architecture.md) | Design complete FrankenPHP serving architecture |
+| [`/bear-frankenphp:debug`](../Infra/i18n/en/FrankenPHP/commands/debug.md) | Diagnose FrankenPHP worker and Caddyfile issues from symptoms |
+| [`/bear-frankenphp:deploy-setup`](../Infra/i18n/en/FrankenPHP/commands/deploy-setup.md) | Generate FrankenPHP deployment files for Docker, Kubernetes, or standalone |
+| [`/bear-frankenphp:optimize`](../Infra/i18n/en/FrankenPHP/commands/optimize.md) | Optimize FrankenPHP worker performance and throughput |
+| [`/bear-frankenphp:security-audit`](../Infra/i18n/en/FrankenPHP/commands/security-audit.md) | Audit FrankenPHP security posture |
 
-## `/pgbouncer:*`
+## `/bear-gate:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/pgbouncer:architecture`](../Infra/i18n/en/PgBouncer/commands/architecture.md) | Design complete PgBouncer connection pooling architecture |
-| [`/pgbouncer:debug`](../Infra/i18n/en/PgBouncer/commands/debug.md) | Diagnose PgBouncer connection pool issues from symptoms |
-| [`/pgbouncer:deploy-setup`](../Infra/i18n/en/PgBouncer/commands/deploy-setup.md) | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
-| [`/pgbouncer:optimize`](../Infra/i18n/en/PgBouncer/commands/optimize.md) | Optimize PgBouncer pool performance and connection utilization |
-| [`/pgbouncer:security-audit`](../Infra/i18n/en/PgBouncer/commands/security-audit.md) | Audit PgBouncer security posture |
+| [`/bear-gate:check`](../.claude/commands/bear-gate/check.md) | Exécuter n'importe quelle porte qualité : portes documentaires (PRD, spec technique, backlog, sprint, story, alignement), portes de code (commit, merge, release), le rapport complet ou un checkpoint de phase |
 
-## `/php:*`
+## `/bear-hcloud:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/php:check`](../.claude/commands/php/check.md) | Audit PHP par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/php:check-architecture`](../.claude/commands/php/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /php:check architecture |
-| [`/php:check-code-quality`](../.claude/commands/php/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /php:check code-quality |
-| [`/php:check-compliance`](../.claude/commands/php/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /php:check all |
-| [`/php:check-security`](../.claude/commands/php/check-security.md) | Obsolète (retirée en 10.0) : utilisez /php:check security |
-| [`/php:check-testing`](../.claude/commands/php/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /php:check testing |
+| [`/bear-hcloud:architecture`](../Infra/i18n/en/Hcloud/commands/architecture.md) | Design complete Hetzner Cloud infrastructure architecture |
+| [`/bear-hcloud:debug`](../Infra/i18n/en/Hcloud/commands/debug.md) | Diagnose Hetzner Cloud infrastructure issues from symptoms |
+| [`/bear-hcloud:deploy-setup`](../Infra/i18n/en/Hcloud/commands/deploy-setup.md) | Setup CI/CD pipeline for Hetzner Cloud deployments |
+| [`/bear-hcloud:optimize`](../Infra/i18n/en/Hcloud/commands/optimize.md) | Optimize Hetzner Cloud cost and performance |
+| [`/bear-hcloud:security-audit`](../Infra/i18n/en/Hcloud/commands/security-audit.md) | Audit Hetzner Cloud security posture |
 
-## `/project:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/project:backlog`](../Project/i18n/en/commands/backlog.md) | Manage the backlog: add, list, edit and move EPICs, User Stories and Tasks, pick the next story, move story statuses and apply routing rules |
-| [`/project:migrate`](../Project/i18n/en/commands/migrate.md) | One-shot migration of an existing backlog to BMAD v6 (analyze, migrate, fill stories, resync) |
-| [`/project:report`](../Project/i18n/en/commands/report.md) | Project analytics reports: sprint burndown, metrics dashboard, story dependency graph and critical path |
-| [`/project:reverse`](../Project/i18n/en/commands/reverse.md) | Brownfield reverse-engineering pipeline: scan the codebase, then derive a draft PRD, user stories and a spec-vs-code gap analysis |
-| [`/project:trace`](../Project/i18n/en/commands/trace.md) | Bidirectional traceability matrix (requirement → story → code → tests); --gaps lists uncovered requirements, --by-priority groups by MoSCoW |
-
-## `/python:*`
+## `/bear-kubernetes:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/python:async-check`](../.claude/commands/python/async-check.md) | Vérification Patterns Async Python |
-| [`/python:check`](../.claude/commands/python/check.md) | Audit Python par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/python:check-architecture`](../.claude/commands/python/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /python:check architecture |
-| [`/python:check-code-quality`](../.claude/commands/python/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /python:check code-quality |
-| [`/python:check-compliance`](../.claude/commands/python/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /python:check all |
-| [`/python:check-security`](../.claude/commands/python/check-security.md) | Obsolète (retirée en 10.0) : utilisez /python:check security |
-| [`/python:check-testing`](../.claude/commands/python/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /python:check testing |
-| [`/python:dependency-audit`](../.claude/commands/python/dependency-audit.md) | Audit des Dépendances Python |
-| [`/python:generate-endpoint`](../.claude/commands/python/generate-endpoint.md) | Génération Endpoint FastAPI |
-| [`/python:generate-model`](../.claude/commands/python/generate-model.md) | Génération Model SQLAlchemy |
-| [`/python:type-coverage`](../.claude/commands/python/type-coverage.md) | Vérification Couverture des Types Python |
+| [`/bear-kubernetes:architecture`](../Infra/i18n/en/Kubernetes/commands/architecture.md) | Design complete Kubernetes architecture |
+| [`/bear-kubernetes:debug`](../Infra/i18n/en/Kubernetes/commands/debug.md) | Diagnose Kubernetes issues from symptoms |
+| [`/bear-kubernetes:deploy-setup`](../Infra/i18n/en/Kubernetes/commands/deploy-setup.md) | Setup GitOps deployment pipeline for Kubernetes |
+| [`/bear-kubernetes:optimize`](../Infra/i18n/en/Kubernetes/commands/optimize.md) | Optimize Kubernetes resource usage and costs |
+| [`/bear-kubernetes:security-audit`](../Infra/i18n/en/Kubernetes/commands/security-audit.md) | Kubernetes security posture audit |
 
-## `/qa:*`
+## `/bear-laravel:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/qa:fix`](../.claude/commands/qa/fix.md) | Correction automatisee des bugs identifies par la QA Recette |
-| [`/qa:recette`](../.claude/commands/qa/recette.md) | Tests d'acceptance automatises avec Claude in Chrome |
-| [`/qa:regression`](../.claude/commands/qa/regression.md) | Voir et gerer le registre de tests de regression QA Recette |
-| [`/qa:status`](../.claude/commands/qa/status.md) | Afficher le statut et la progression des sessions QA Recette, ou générer des rapports (--report) |
-| [`/qa:tdd`](../.claude/commands/qa/tdd.md) | Correction de Bug en Mode TDD/BDD |
+| [`/bear-laravel:check`](../.claude/commands/bear-laravel/check.md) | Audit Laravel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-laravel:check-architecture`](../.claude/commands/bear-laravel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check architecture |
+| [`/bear-laravel:check-code-quality`](../.claude/commands/bear-laravel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check code-quality |
+| [`/bear-laravel:check-compliance`](../.claude/commands/bear-laravel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check all |
+| [`/bear-laravel:check-security`](../.claude/commands/bear-laravel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check security |
+| [`/bear-laravel:check-testing`](../.claude/commands/bear-laravel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-laravel:check testing |
+| [`/bear-laravel:generate-controller`](../.claude/commands/bear-laravel/generate-controller.md) | Generate a Laravel controller following best practices |
 
-## `/react:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/react:accessibility-check`](../.claude/commands/react/accessibility-check.md) | Audit Accessibilité React |
-| [`/react:bundle-analyze`](../.claude/commands/react/bundle-analyze.md) | Analyse du Bundle React |
-| [`/react:check`](../.claude/commands/react/check.md) | Audit React par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/react:check-architecture`](../.claude/commands/react/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /react:check architecture |
-| [`/react:check-code-quality`](../.claude/commands/react/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /react:check code-quality |
-| [`/react:check-compliance`](../.claude/commands/react/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /react:check all |
-| [`/react:check-security`](../.claude/commands/react/check-security.md) | Obsolète (retirée en 10.0) : utilisez /react:check security |
-| [`/react:check-testing`](../.claude/commands/react/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /react:check testing |
-| [`/react:generate-component`](../.claude/commands/react/generate-component.md) | Génération Composant React |
-| [`/react:generate-hook`](../.claude/commands/react/generate-hook.md) | Génération Custom Hook React |
-| [`/react:storybook-story`](../.claude/commands/react/storybook-story.md) | Génération Story Storybook |
-
-## `/reactnative:*`
+## `/bear-opentofu:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/reactnative:app-size`](../.claude/commands/reactnative/app-size.md) | Analyse Taille Application React Native |
-| [`/reactnative:check`](../.claude/commands/reactnative/check.md) | Audit React Native par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/reactnative:check-architecture`](../.claude/commands/reactnative/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check architecture |
-| [`/reactnative:check-code-quality`](../.claude/commands/reactnative/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check code-quality |
-| [`/reactnative:check-compliance`](../.claude/commands/reactnative/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check all |
-| [`/reactnative:check-security`](../.claude/commands/reactnative/check-security.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check security |
-| [`/reactnative:check-testing`](../.claude/commands/reactnative/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /reactnative:check testing |
-| [`/reactnative:deep-link`](../.claude/commands/reactnative/deep-link.md) | Configuration Deep Linking React Native |
-| [`/reactnative:generate-screen`](../.claude/commands/reactnative/generate-screen.md) | Génération Screen React Native |
-| [`/reactnative:native-module`](../.claude/commands/reactnative/native-module.md) | Guide Création Module Natif React Native |
-| [`/reactnative:store-prepare`](../.claude/commands/reactnative/store-prepare.md) | Checklist Publication Store React Native |
+| [`/bear-opentofu:architecture`](../Infra/i18n/en/OpenTofu/commands/architecture.md) | Design complete OpenTofu IaC architecture |
+| [`/bear-opentofu:debug`](../Infra/i18n/en/OpenTofu/commands/debug.md) | Diagnose OpenTofu state issues and drift |
+| [`/bear-opentofu:deploy-setup`](../Infra/i18n/en/OpenTofu/commands/deploy-setup.md) | Setup CI/CD pipeline for OpenTofu |
+| [`/bear-opentofu:optimize`](../Infra/i18n/en/OpenTofu/commands/optimize.md) | OpenTofu cost optimization and resource analysis |
+| [`/bear-opentofu:security-audit`](../Infra/i18n/en/OpenTofu/commands/security-audit.md) | Audit OpenTofu security posture |
 
-## `/ruby:*`
+## `/bear-paperclip:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/ruby:check`](../Dev/i18n/en/Ruby/commands/check.md) | Ruby/Rails audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+| [`/bear-paperclip:check`](../Dev/i18n/en/Paperclip/commands/check.md) | Paperclip audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+| [`/bear-paperclip:check-architecture`](../Dev/i18n/en/Paperclip/commands/check-architecture.md) | Deprecated (removed in 10.0): use /bear-paperclip:check architecture |
+| [`/bear-paperclip:check-code-quality`](../Dev/i18n/en/Paperclip/commands/check-code-quality.md) | Deprecated (removed in 10.0): use /bear-paperclip:check code-quality |
+| [`/bear-paperclip:check-compliance`](../Dev/i18n/en/Paperclip/commands/check-compliance.md) | Deprecated (removed in 10.0): use /bear-paperclip:check all |
+| [`/bear-paperclip:check-security`](../Dev/i18n/en/Paperclip/commands/check-security.md) | Deprecated (removed in 10.0): use /bear-paperclip:check security |
+| [`/bear-paperclip:check-testing`](../Dev/i18n/en/Paperclip/commands/check-testing.md) | Deprecated (removed in 10.0): use /bear-paperclip:check testing |
+| [`/bear-paperclip:generate-adapter`](../Dev/i18n/en/Paperclip/commands/generate-adapter.md) | Scaffold a Paperclip extension (plugin via create-paperclip-plugin, or built-in adapter) |
+| [`/bear-paperclip:generate-agent-config`](../Dev/i18n/en/Paperclip/commands/generate-agent-config.md) | Draft a Paperclip agent-hire payload (for the API or the dashboard) |
+| [`/bear-paperclip:setup-company`](../Dev/i18n/en/Paperclip/commands/setup-company.md) | Bootstrap a new Paperclip company (onboarding + first agent) |
 
-## `/rust:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/rust:check`](../Dev/i18n/en/Rust/commands/check.md) | Rust/Axum audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
-
-## `/symfony:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/symfony:api-endpoint`](../.claude/commands/symfony/api-endpoint.md) | Création Endpoint API Platform |
-| [`/symfony:check`](../.claude/commands/symfony/check.md) | Audit Symfony par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/symfony:check-architecture`](../.claude/commands/symfony/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check architecture |
-| [`/symfony:check-code-quality`](../.claude/commands/symfony/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check code-quality |
-| [`/symfony:check-compliance`](../.claude/commands/symfony/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check all |
-| [`/symfony:check-security`](../.claude/commands/symfony/check-security.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check security |
-| [`/symfony:check-testing`](../.claude/commands/symfony/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /symfony:check testing |
-| [`/symfony:generate-command`](../.claude/commands/symfony/generate-command.md) | Génération Commande Symfony |
-| [`/symfony:generate-crud`](../.claude/commands/symfony/generate-crud.md) | Génération CRUD Complet |
-| [`/symfony:migration-plan`](../.claude/commands/symfony/migration-plan.md) | Planification Migration Base de Données |
-| [`/symfony:optimize-doctrine`](../.claude/commands/symfony/optimize-doctrine.md) | Optimisation Requêtes Doctrine |
-
-## `/tauri:*`
+## `/bear-pgbouncer:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/tauri:check`](../Dev/i18n/en/Tauri/commands/check.md) | Tauri v2 audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+| [`/bear-pgbouncer:architecture`](../Infra/i18n/en/PgBouncer/commands/architecture.md) | Design complete PgBouncer connection pooling architecture |
+| [`/bear-pgbouncer:debug`](../Infra/i18n/en/PgBouncer/commands/debug.md) | Diagnose PgBouncer connection pool issues from symptoms |
+| [`/bear-pgbouncer:deploy-setup`](../Infra/i18n/en/PgBouncer/commands/deploy-setup.md) | Setup PgBouncer deployment with Docker, Kubernetes, or systemd |
+| [`/bear-pgbouncer:optimize`](../Infra/i18n/en/PgBouncer/commands/optimize.md) | Optimize PgBouncer pool performance and connection utilization |
+| [`/bear-pgbouncer:security-audit`](../Infra/i18n/en/PgBouncer/commands/security-audit.md) | Audit PgBouncer security posture |
 
-## `/team:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/team:audit`](../.claude/commands/team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
-| [`/team:delivery`](../.claude/commands/team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
-| [`/team:security`](../.claude/commands/team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
-| [`/team:sprint`](../.claude/commands/team/sprint.md) | Obsolète (retirée en 10.0) : utilisez /team:delivery --phase=implementation |
-
-## `/uiux:*`
+## `/bear-php:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/uiux:a11y-audit`](../.claude/commands/uiux/a11y-audit.md) | Audit Accessibilité WCAG 2.2 AAA |
-| [`/uiux:a11y-component`](../.claude/commands/uiux/a11y-component.md) | Spécification Accessibilité Composant |
-| [`/uiux:audit`](../.claude/commands/uiux/audit.md) | Audit Complet UI/UX/Accessibilité |
-| [`/uiux:component-spec`](../.claude/commands/uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
-| [`/uiux:design-tokens`](../.claude/commands/uiux/design-tokens.md) | Définition Design Tokens |
-| [`/uiux:generate-design-md`](../.claude/commands/uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
-| [`/uiux:user-flow`](../.claude/commands/uiux/user-flow.md) | Conception Parcours Utilisateur |
+| [`/bear-php:check`](../.claude/commands/bear-php/check.md) | Audit PHP par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-php:check-architecture`](../.claude/commands/bear-php/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check architecture |
+| [`/bear-php:check-code-quality`](../.claude/commands/bear-php/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check code-quality |
+| [`/bear-php:check-compliance`](../.claude/commands/bear-php/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check all |
+| [`/bear-php:check-security`](../.claude/commands/bear-php/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check security |
+| [`/bear-php:check-testing`](../.claude/commands/bear-php/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-php:check testing |
 
-## `/vercel:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/vercel:check`](../.claude/commands/vercel/check.md) | Audit Vercel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/vercel:check-architecture`](../.claude/commands/vercel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check architecture |
-| [`/vercel:check-code-quality`](../.claude/commands/vercel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check code-quality |
-| [`/vercel:check-compliance`](../.claude/commands/vercel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check all |
-| [`/vercel:check-security`](../.claude/commands/vercel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check security |
-| [`/vercel:check-testing`](../.claude/commands/vercel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vercel:check testing |
-| [`/vercel:deploy-config`](../.claude/commands/vercel/deploy-config.md) | Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json |
-
-## `/vite:*`
+## `/bear-project:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/vite:check`](../.claude/commands/vite/check.md) | Audit Vite par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/vite:check-architecture`](../.claude/commands/vite/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vite:check architecture |
-| [`/vite:check-code-quality`](../.claude/commands/vite/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vite:check code-quality |
-| [`/vite:check-compliance`](../.claude/commands/vite/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vite:check all |
-| [`/vite:check-library-build`](../.claude/commands/vite/check-library-build.md) | Validate build.lib output and vite-plugin-dts .d.ts generation for a Vite library |
-| [`/vite:check-security`](../.claude/commands/vite/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vite:check security |
-| [`/vite:check-testing`](../.claude/commands/vite/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vite:check testing |
-| [`/vite:scaffold-project`](../.claude/commands/vite/scaffold-project.md) | Scaffold a new Vite project (vanilla-ts or lit-ts template) or a library skeleton |
+| [`/bear-project:backlog`](../Project/i18n/en/commands/backlog.md) | Manage the backlog: add, list, edit and move EPICs, User Stories and Tasks, pick the next story, move story statuses and apply routing rules |
+| [`/bear-project:migrate`](../Project/i18n/en/commands/migrate.md) | One-shot migration of an existing backlog to BMAD v6 (analyze, migrate, fill stories, resync) |
+| [`/bear-project:report`](../Project/i18n/en/commands/report.md) | Project analytics reports: sprint burndown, metrics dashboard, story dependency graph and critical path |
+| [`/bear-project:reverse`](../Project/i18n/en/commands/reverse.md) | Brownfield reverse-engineering pipeline: scan the codebase, then derive a draft PRD, user stories and a spec-vs-code gap analysis |
+| [`/bear-project:trace`](../Project/i18n/en/commands/trace.md) | Bidirectional traceability matrix (requirement → story → code → tests); --gaps lists uncovered requirements, --by-priority groups by MoSCoW |
 
-## `/vuejs:*`
+## `/bear-python:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/vuejs:check`](../.claude/commands/vuejs/check.md) | Audit Vue.js par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
-| [`/vuejs:check-architecture`](../.claude/commands/vuejs/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check architecture |
-| [`/vuejs:check-code-quality`](../.claude/commands/vuejs/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check code-quality |
-| [`/vuejs:check-compliance`](../.claude/commands/vuejs/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check all |
-| [`/vuejs:check-security`](../.claude/commands/vuejs/check-security.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check security |
-| [`/vuejs:check-testing`](../.claude/commands/vuejs/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /vuejs:check testing |
-| [`/vuejs:generate-component`](../.claude/commands/vuejs/generate-component.md) | Generate a Vue.js component with TypeScript, tests, and Storybook |
+| [`/bear-python:async-check`](../.claude/commands/bear-python/async-check.md) | Vérification Patterns Async Python |
+| [`/bear-python:check`](../.claude/commands/bear-python/check.md) | Audit Python par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-python:check-architecture`](../.claude/commands/bear-python/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check architecture |
+| [`/bear-python:check-code-quality`](../.claude/commands/bear-python/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check code-quality |
+| [`/bear-python:check-compliance`](../.claude/commands/bear-python/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check all |
+| [`/bear-python:check-security`](../.claude/commands/bear-python/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check security |
+| [`/bear-python:check-testing`](../.claude/commands/bear-python/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-python:check testing |
+| [`/bear-python:dependency-audit`](../.claude/commands/bear-python/dependency-audit.md) | Audit des Dépendances Python |
+| [`/bear-python:generate-endpoint`](../.claude/commands/bear-python/generate-endpoint.md) | Génération Endpoint FastAPI |
+| [`/bear-python:generate-model`](../.claude/commands/bear-python/generate-model.md) | Génération Model SQLAlchemy |
+| [`/bear-python:type-coverage`](../.claude/commands/bear-python/type-coverage.md) | Vérification Couverture des Types Python |
 
-## `/wordpress:*`
-
-| Command | Description |
-|---------|-------------|
-| [`/wordpress:check`](../Dev/i18n/en/WordPress/commands/check.md) | WordPress audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
-
-## `/workflow:*`
+## `/bear-qa:*`
 
 | Command | Description |
 |---------|-------------|
-| [`/workflow:auto-sprint`](../.claude/commands/workflow/auto-sprint.md) | Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge) |
-| [`/workflow:design`](../.claude/commands/workflow/design.md) | Exécuter la phase de Conception (Solutioning) - générer la spécification technique (défaut) ou la constitution du projet (--constitution) |
-| [`/workflow:implement`](../.claude/commands/workflow/implement.md) | Exécuter la phase d'Implémentation - développement TDD/BDD d'un sprint, d'un epic, d'une story ou de la file batch (séquentiel, ou parallèle via /team:delivery --phase=implementation) |
-| [`/workflow:init`](../.claude/commands/workflow/init.md) | Analyser le contexte du projet et recommander le track de workflow optimal |
-| [`/workflow:plan`](../.claude/commands/workflow/plan.md) | Exécuter la phase de Planification - recherche (--research), PRD (--only=prd) et backlog SCRUM (--only=backlog) |
-| [`/workflow:retro`](../.claude/commands/workflow/retro.md) | Facilitation Rétrospective |
-| [`/workflow:review`](../.claude/commands/workflow/review.md) | Préparation Sprint Review |
-| [`/workflow:start`](../.claude/commands/workflow/start.md) | Préparation du début de sprint : dossier de sprint, entrées sprint-status.yaml et décomposition en tâches |
-| [`/workflow:status`](../.claude/commands/workflow/status.md) | Où en suis-je + prochaine action : phase du workflow, métriques du sprint, tableau Kanban (--board), file d'attente batch (--queue), daily stand-up (--standup) et gates (--gates) |
+| [`/bear-qa:fix`](../.claude/commands/bear-qa/fix.md) | Correction automatisee des bugs identifies par la QA Recette |
+| [`/bear-qa:recette`](../.claude/commands/bear-qa/recette.md) | Tests d'acceptance automatises avec Claude in Chrome |
+| [`/bear-qa:regression`](../.claude/commands/bear-qa/regression.md) | Voir et gerer le registre de tests de regression QA Recette |
+| [`/bear-qa:status`](../.claude/commands/bear-qa/status.md) | Afficher le statut et la progression des sessions QA Recette, ou générer des rapports (--report) |
+| [`/bear-qa:tdd`](../.claude/commands/bear-qa/tdd.md) | Correction de Bug en Mode TDD/BDD |
+
+## `/bear-react:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-react:accessibility-check`](../.claude/commands/bear-react/accessibility-check.md) | Audit Accessibilité React |
+| [`/bear-react:bundle-analyze`](../.claude/commands/bear-react/bundle-analyze.md) | Analyse du Bundle React |
+| [`/bear-react:check`](../.claude/commands/bear-react/check.md) | Audit React par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-react:check-architecture`](../.claude/commands/bear-react/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check architecture |
+| [`/bear-react:check-code-quality`](../.claude/commands/bear-react/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check code-quality |
+| [`/bear-react:check-compliance`](../.claude/commands/bear-react/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check all |
+| [`/bear-react:check-security`](../.claude/commands/bear-react/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check security |
+| [`/bear-react:check-testing`](../.claude/commands/bear-react/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-react:check testing |
+| [`/bear-react:generate-component`](../.claude/commands/bear-react/generate-component.md) | Génération Composant React |
+| [`/bear-react:generate-hook`](../.claude/commands/bear-react/generate-hook.md) | Génération Custom Hook React |
+| [`/bear-react:storybook-story`](../.claude/commands/bear-react/storybook-story.md) | Génération Story Storybook |
+
+## `/bear-reactnative:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-reactnative:app-size`](../.claude/commands/bear-reactnative/app-size.md) | Analyse Taille Application React Native |
+| [`/bear-reactnative:check`](../.claude/commands/bear-reactnative/check.md) | Audit React Native par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-reactnative:check-architecture`](../.claude/commands/bear-reactnative/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check architecture |
+| [`/bear-reactnative:check-code-quality`](../.claude/commands/bear-reactnative/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check code-quality |
+| [`/bear-reactnative:check-compliance`](../.claude/commands/bear-reactnative/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check all |
+| [`/bear-reactnative:check-security`](../.claude/commands/bear-reactnative/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check security |
+| [`/bear-reactnative:check-testing`](../.claude/commands/bear-reactnative/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check testing |
+| [`/bear-reactnative:deep-link`](../.claude/commands/bear-reactnative/deep-link.md) | Configuration Deep Linking React Native |
+| [`/bear-reactnative:generate-screen`](../.claude/commands/bear-reactnative/generate-screen.md) | Génération Screen React Native |
+| [`/bear-reactnative:native-module`](../.claude/commands/bear-reactnative/native-module.md) | Guide Création Module Natif React Native |
+| [`/bear-reactnative:store-prepare`](../.claude/commands/bear-reactnative/store-prepare.md) | Checklist Publication Store React Native |
+
+## `/bear-ruby:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-ruby:check`](../Dev/i18n/en/Ruby/commands/check.md) | Ruby/Rails audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+
+## `/bear-rust:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-rust:check`](../Dev/i18n/en/Rust/commands/check.md) | Rust/Axum audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+
+## `/bear-symfony:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-symfony:api-endpoint`](../.claude/commands/bear-symfony/api-endpoint.md) | Création Endpoint API Platform |
+| [`/bear-symfony:check`](../.claude/commands/bear-symfony/check.md) | Audit Symfony par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-symfony:check-architecture`](../.claude/commands/bear-symfony/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check architecture |
+| [`/bear-symfony:check-code-quality`](../.claude/commands/bear-symfony/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check code-quality |
+| [`/bear-symfony:check-compliance`](../.claude/commands/bear-symfony/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check all |
+| [`/bear-symfony:check-security`](../.claude/commands/bear-symfony/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check security |
+| [`/bear-symfony:check-testing`](../.claude/commands/bear-symfony/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-symfony:check testing |
+| [`/bear-symfony:generate-command`](../.claude/commands/bear-symfony/generate-command.md) | Génération Commande Symfony |
+| [`/bear-symfony:generate-crud`](../.claude/commands/bear-symfony/generate-crud.md) | Génération CRUD Complet |
+| [`/bear-symfony:migration-plan`](../.claude/commands/bear-symfony/migration-plan.md) | Planification Migration Base de Données |
+| [`/bear-symfony:optimize-doctrine`](../.claude/commands/bear-symfony/optimize-doctrine.md) | Optimisation Requêtes Doctrine |
+
+## `/bear-tauri:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-tauri:check`](../Dev/i18n/en/Tauri/commands/check.md) | Tauri v2 audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+
+## `/bear-team:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-team:audit`](../.claude/commands/bear-team/audit.md) | Équipe d'Audit Complet - Audit multi-technologie parallèle par sous-agents (Agent Teams en option) |
+| [`/bear-team:delivery`](../.claude/commands/bear-team/delivery.md) | Équipe de Livraison - Cycle de vie complet du sprint (rédaction + implémentation) par sous-agents (Agent Teams en option) |
+| [`/bear-team:security`](../.claude/commands/bear-team/security.md) | Équipe de Revue de Sécurité - Audit de sécurité multi-dimension parallèle par sous-agents (Agent Teams en option) |
+| [`/bear-team:sprint`](../.claude/commands/bear-team/sprint.md) | Obsolète (retirée en 10.0) : utilisez /bear-team:delivery --phase=implementation |
+
+## `/bear-uiux:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-uiux:a11y-audit`](../.claude/commands/bear-uiux/a11y-audit.md) | Audit Accessibilité WCAG 2.2 AAA |
+| [`/bear-uiux:a11y-component`](../.claude/commands/bear-uiux/a11y-component.md) | Spécification Accessibilité Composant |
+| [`/bear-uiux:audit`](../.claude/commands/bear-uiux/audit.md) | Audit Complet UI/UX/Accessibilité |
+| [`/bear-uiux:component-spec`](../.claude/commands/bear-uiux/component-spec.md) | Spécification Complète Composant UI/UX/A11y |
+| [`/bear-uiux:design-tokens`](../.claude/commands/bear-uiux/design-tokens.md) | Définition Design Tokens |
+| [`/bear-uiux:generate-design-md`](../.claude/commands/bear-uiux/generate-design-md.md) | Génère un DESIGN.md à la racine du projet à partir du template Bear Craft + analyse des sources UI existantes (Tailwind, tokens, CSS). |
+| [`/bear-uiux:user-flow`](../.claude/commands/bear-uiux/user-flow.md) | Conception Parcours Utilisateur |
+
+## `/bear-vercel:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-vercel:check`](../.claude/commands/bear-vercel/check.md) | Audit Vercel par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-vercel:check-architecture`](../.claude/commands/bear-vercel/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check architecture |
+| [`/bear-vercel:check-code-quality`](../.claude/commands/bear-vercel/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check code-quality |
+| [`/bear-vercel:check-compliance`](../.claude/commands/bear-vercel/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check all |
+| [`/bear-vercel:check-security`](../.claude/commands/bear-vercel/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check security |
+| [`/bear-vercel:check-testing`](../.claude/commands/bear-vercel/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vercel:check testing |
+| [`/bear-vercel:deploy-config`](../.claude/commands/bear-vercel/deploy-config.md) | Detect the project's Vercel deployment shape and generate or validate a tailored vercel.json |
+
+## `/bear-vite:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-vite:check`](../.claude/commands/bear-vite/check.md) | Audit Vite par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-vite:check-architecture`](../.claude/commands/bear-vite/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check architecture |
+| [`/bear-vite:check-code-quality`](../.claude/commands/bear-vite/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check code-quality |
+| [`/bear-vite:check-compliance`](../.claude/commands/bear-vite/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check all |
+| [`/bear-vite:check-library-build`](../.claude/commands/bear-vite/check-library-build.md) | Validate build.lib output and vite-plugin-dts .d.ts generation for a Vite library |
+| [`/bear-vite:check-security`](../.claude/commands/bear-vite/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check security |
+| [`/bear-vite:check-testing`](../.claude/commands/bear-vite/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vite:check testing |
+| [`/bear-vite:scaffold-project`](../.claude/commands/bear-vite/scaffold-project.md) | Scaffold a new Vite project (vanilla-ts or lit-ts template) or a library skeleton |
+
+## `/bear-vuejs:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-vuejs:check`](../.claude/commands/bear-vuejs/check.md) | Audit Vue.js par axe : architecture, code-quality, security, testing, ou all (agrégat noté) |
+| [`/bear-vuejs:check-architecture`](../.claude/commands/bear-vuejs/check-architecture.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check architecture |
+| [`/bear-vuejs:check-code-quality`](../.claude/commands/bear-vuejs/check-code-quality.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check code-quality |
+| [`/bear-vuejs:check-compliance`](../.claude/commands/bear-vuejs/check-compliance.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check all |
+| [`/bear-vuejs:check-security`](../.claude/commands/bear-vuejs/check-security.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check security |
+| [`/bear-vuejs:check-testing`](../.claude/commands/bear-vuejs/check-testing.md) | Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check testing |
+| [`/bear-vuejs:generate-component`](../.claude/commands/bear-vuejs/generate-component.md) | Generate a Vue.js component with TypeScript, tests, and Storybook |
+
+## `/bear-wordpress:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-wordpress:check`](../Dev/i18n/en/WordPress/commands/check.md) | WordPress audit by axis: architecture, code-quality, security, testing, or all (scored aggregate) |
+
+## `/bear-workflow:*`
+
+| Command | Description |
+|---------|-------------|
+| [`/bear-workflow:auto-sprint`](../.claude/commands/bear-workflow/auto-sprint.md) | Orchestrateur de sprint de bout en bout (démarrage -> décomposition -> validation -> implémentation -> PR -> CI -> revue -> rétro -> merge) |
+| [`/bear-workflow:design`](../.claude/commands/bear-workflow/design.md) | Exécuter la phase de Conception (Solutioning) - générer la spécification technique (défaut) ou la constitution du projet (--constitution) |
+| [`/bear-workflow:implement`](../.claude/commands/bear-workflow/implement.md) | Exécuter la phase d'Implémentation - développement TDD/BDD d'un sprint, d'un epic, d'une story ou de la file batch (séquentiel, ou parallèle via /bear-team:delivery --phase=implementation) |
+| [`/bear-workflow:init`](../.claude/commands/bear-workflow/init.md) | Analyser le contexte du projet et recommander le track de workflow optimal |
+| [`/bear-workflow:plan`](../.claude/commands/bear-workflow/plan.md) | Exécuter la phase de Planification - recherche (--research), PRD (--only=prd) et backlog SCRUM (--only=backlog) |
+| [`/bear-workflow:retro`](../.claude/commands/bear-workflow/retro.md) | Facilitation Rétrospective |
+| [`/bear-workflow:review`](../.claude/commands/bear-workflow/review.md) | Préparation Sprint Review |
+| [`/bear-workflow:start`](../.claude/commands/bear-workflow/start.md) | Préparation du début de sprint : dossier de sprint, entrées sprint-status.yaml et décomposition en tâches |
+| [`/bear-workflow:status`](../.claude/commands/bear-workflow/status.md) | Où en suis-je + prochaine action : phase du workflow, métriques du sprint, tableau Kanban (--board), file d'attente batch (--queue), daily stand-up (--standup) et gates (--gates) |
 
 <!-- AUTO-GEN-END -->
 

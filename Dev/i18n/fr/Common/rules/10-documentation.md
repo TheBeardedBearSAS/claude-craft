@@ -552,4 +552,4 @@ flowchart TD
 
 **Date de dernière mise à jour:** 2025-01
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

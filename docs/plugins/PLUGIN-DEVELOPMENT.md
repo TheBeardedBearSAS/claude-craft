@@ -2,7 +2,7 @@
 
 > **Version:** 1.0.0 | **Date:** 2026-04-17
 
-Guide de développement de plugins pour Claude Craft.
+Guide de développement de plugins pour Bear Craft.
 
 ---
 
@@ -21,10 +21,10 @@ Guide de développement de plugins pour Claude Craft.
 
 ### Principe
 
-Les plugins étendent Claude Craft avec des comportements personnalisés via des hooks de lifecycle.
+Les plugins étendent Bear Craft avec des comportements personnalisés via des hooks de lifecycle.
 
 ```
-Claude Craft Core
+Bear Craft Core
   ↓
 Plugin Loader (.claude/plugins/)
   ↓
@@ -71,13 +71,13 @@ Plugin Hooks
 {
   "name": "@company/plugin-eslint",
   "version": "1.0.0",
-  "description": "ESLint plugin for Claude Craft",
+  "description": "ESLint plugin for Bear Craft",
   "main": "dist/index.js",
-  "keywords": ["claude-craft", "plugin", "eslint"],
+  "keywords": ["bear-craft", "plugin", "eslint"],
   "peerDependencies": {
-    "@the-bearded-bear/claude-craft": "^8.0.0"
+    "@the-bearded-bear/bear-craft": "^8.0.0"
   },
-  "claudeCraft": {
+  "bearCraft": {
     "type": "plugin",
     "hooks": ["afterCommand"]
   }
@@ -87,7 +87,7 @@ Plugin Hooks
 ### src/index.ts
 
 ```typescript
-import { ClaudePlugin, PluginContext, PluginConfig } from '@the-bearded-bear/claude-craft';
+import { ClaudePlugin, PluginContext, PluginConfig } from '@the-bearded-bear/bear-craft';
 
 export default class ESLintPlugin implements ClaudePlugin {
   name = 'eslint';
@@ -161,7 +161,7 @@ async afterCommand(ctx: PluginContext): Promise<void> {
 
 ### 3. onAudit
 
-**Déclenché pendant:** Exécution de `/team:audit`.
+**Déclenché pendant:** Exécution de `/bear-team:audit`.
 
 **Use cases:**
 - Collecte de métriques personnalisées
@@ -302,7 +302,7 @@ interface ClaudePlugin {
 **Lint automatique après génération de code.**
 
 ```typescript
-import { ClaudePlugin, PluginContext } from '@the-bearded-bear/claude-craft';
+import { ClaudePlugin, PluginContext } from '@the-bearded-bear/bear-craft';
 import { ESLint } from 'eslint';
 
 export default class ESLintPlugin implements ClaudePlugin {
@@ -346,7 +346,7 @@ export default class ESLintPlugin implements ClaudePlugin {
 **Notifications Slack/Discord après audit.**
 
 ```typescript
-import { ClaudePlugin, PluginContext } from '@the-bearded-bear/claude-craft';
+import { ClaudePlugin, PluginContext } from '@the-bearded-bear/bear-craft';
 import axios from 'axios';
 
 export default class NotifyPlugin implements ClaudePlugin {
@@ -363,7 +363,7 @@ export default class NotifyPlugin implements ClaudePlugin {
     const summary = this.buildSummary(sections);
 
     await axios.post(webhookUrl, {
-      text: 'Claude Craft Audit Report',
+      text: 'Bear Craft Audit Report',
       blocks: [
         {
           type: 'section',
@@ -388,7 +388,7 @@ export default class NotifyPlugin implements ClaudePlugin {
 **Collecte de métriques d'usage.**
 
 ```typescript
-import { ClaudePlugin, PluginContext } from '@the-bearded-bear/claude-craft';
+import { ClaudePlugin, PluginContext } from '@the-bearded-bear/bear-craft';
 import { writeFileSync, existsSync, readFileSync } from 'fs';
 
 interface Metrics {
@@ -447,7 +447,7 @@ export default class MetricsPlugin implements ClaudePlugin {
 
 ```bash
 npm init @company/plugin-name
-npm install --save-peer @the-bearded-bear/claude-craft
+npm install --save-peer @the-bearded-bear/bear-craft
 npm install --save-dev typescript @types/node
 ```
 
@@ -473,7 +473,7 @@ Inclure dans le README:
 
 ### 5. Discovery
 
-Taguer avec `claude-craft-plugin` pour apparaître dans la recherche.
+Taguer avec `bear-craft-plugin` pour apparaître dans la recherche.
 
 ---
 
@@ -487,5 +487,5 @@ Taguer avec `claude-craft-plugin` pour apparaître dans la recherche.
 
 ---
 
-**Maintainer:** The Bearded CTO  
+**Maintainer:** The Bearded Bear  
 **License:** MIT

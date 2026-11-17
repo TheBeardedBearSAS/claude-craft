@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/symfony:check architecture` verwenden oder die Schritte in `.claude/references/symfony/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-symfony:check architecture` verwenden oder die Schritte in `.claude/references/symfony/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Clean-Architecture-Struktur (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/symfony:check code-quality` verwenden oder die Schritte in `.claude/references/symfony/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-symfony:check code-quality` verwenden oder die Schritte in `.claude/references/symfony/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - PSR-12-Konformität (5 Pkt.)
@@ -58,7 +58,7 @@ Code-Qualitätsprüfung durchführen:
 
 Test-Prüfung durchführen:
 
-**Befehl**: Slash-Befehl `/symfony:check testing` verwenden oder die Schritte in `.claude/references/symfony/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-symfony:check testing` verwenden oder die Schritte in `.claude/references/symfony/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (7 Pkt.)
@@ -74,7 +74,7 @@ Test-Prüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/symfony:check security` verwenden oder die Schritte in `.claude/references/symfony/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-symfony:check security` verwenden oder die Schritte in `.claude/references/symfony/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Konfiguration des Symfony Security Bundle (6 Pkt.)

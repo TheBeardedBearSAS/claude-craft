@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Framework: symfony, laravel, php
 - (Opcional) Modo: worker, classic
 
-Exemplo: `/frankenphp:debug "worker memory keeps growing, RSS at 2GB after 1 hour"`
+Exemplo: `/bear-frankenphp:debug "worker memory keeps growing, RSS at 2GB after 1 hour"`
 
 ## Plan Mode
 

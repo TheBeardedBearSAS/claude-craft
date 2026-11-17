@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Namespace à auditer (défaut : tous les namespaces)
 - (Optionnel) Périmètre : rbac, network, pods, secrets, images, full (défaut : full)
 
-Exemple : `/kubernetes:security-audit namespace:app-prod scope:full`
+Exemple : `/bear-kubernetes:security-audit namespace:app-prod scope:full`
 
 ## Plan Mode
 

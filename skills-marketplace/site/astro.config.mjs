@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
 
-// Configuration minimale Astro 5 pour skills.claude-craft.dev.
+// Configuration minimale Astro 5 pour skills.bear-craft.dev.
 // Déploiement cible : Cloudflare Pages (SSG).
 export default defineConfig({
-  site: 'https://skills.claude-craft.dev',
+  site: 'https://skills.bear-craft.dev',
   output: 'static',
   build: {
     assets: 'assets',

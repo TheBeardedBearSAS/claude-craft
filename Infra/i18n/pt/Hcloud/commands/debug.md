@@ -17,7 +17,7 @@ Argumentos:
 - (Opcional) Nome ou tipo do recurso
 - (Opcional) Location ou localização
 
-Exemplo: `/hcloud:debug "Conexao SSH recusada no web-01" resource:server`
+Exemplo: `/bear-hcloud:debug "Conexao SSH recusada no web-01" resource:server`
 
 ## Plan Mode
 

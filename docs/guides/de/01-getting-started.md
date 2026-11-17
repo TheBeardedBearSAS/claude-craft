@@ -1,12 +1,12 @@
-# Erste Schritte mit Claude-Craft
+# Erste Schritte mit Bear-Craft
 
-Willkommen bei Claude-Craft! Dieser Leitfaden hilft Ihnen zu verstehen, was Claude-Craft ist, und Ihr erstes Projekt in nur 5 Minuten zum Laufen zu bringen.
+Willkommen bei Bear-Craft! Dieser Leitfaden hilft Ihnen zu verstehen, was Bear-Craft ist, und Ihr erstes Projekt in nur 5 Minuten zum Laufen zu bringen.
 
 ---
 
-## Was ist Claude-Craft?
+## Was ist Bear-Craft?
 
-Claude-Craft ist ein umfassendes Framework für KI-gestützte Entwicklung mit Claude Code. Es bietet:
+Bear-Craft ist ein umfassendes Framework für KI-gestützte Entwicklung mit Claude Code. Es bietet:
 
 - **125 Slash-Befehle** – Schnelle Aktionen in 15 Namespaces für Codegenerierung, Analyse und Qualitätsprüfungen
 - **70 KI-Agenten (31 spezialisiert + 39 Infra auf Abruf)** – Spezialisierte Assistenten mit optimierten Aufwandsstufen und dauerhaftem Gedächtnis
@@ -87,9 +87,9 @@ Alle Inhalte sind in 5 Sprachen verfügbar:
 ### Methode 1: Makefile (Empfohlen)
 
 ```bash
-# Claude-Craft klonen
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+# Bear-Craft klonen
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # Für ein Symfony-Projekt installieren (auf Französisch)
 make install-symfony TARGET=~/my-project RULES_LANG=fr
@@ -101,8 +101,8 @@ make install-flutter TARGET=~/my-app RULES_LANG=en
 ### Methode 2: Direktes Skript
 
 ```bash
-# Zum Claude-Craft-Verzeichnis navigieren
-cd claude-craft
+# Zum Bear-Craft-Verzeichnis navigieren
+cd bear-craft
 
 # Installationsskript ausführen
 ./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
@@ -135,10 +135,10 @@ cd ~/my-api
 git init
 ```
 
-### Schritt 2: Claude-Craft-Regeln installieren
+### Schritt 2: Bear-Craft-Regeln installieren
 
 ```bash
-# Aus dem claude-craft-Verzeichnis heraus
+# Aus dem bear-craft-Verzeichnis heraus
 make install-symfony TARGET=~/my-api RULES_LANG=fr
 ```
 
@@ -172,7 +172,7 @@ Sie können den Projektkontext interaktiv oder manuell konfigurieren:
 ```bash
 cd ~/my-api && claude
 # Dann ausführen:
-/common:init --context
+/bear-common:init --context
 ```
 
 **Option B: Manuell**
@@ -197,7 +197,7 @@ Jetzt können Sie alle installierten Befehle und Agenten verwenden!
 
 ---
 
-## Wie ist Claude Craft strukturiert?
+## Wie ist Bear Craft strukturiert?
 
 ### Regeln (`rules/`)
 
@@ -236,13 +236,13 @@ Slash-Befehle sind Schnellaktionen:
 
 ```bash
 # Code generieren
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Qualität prüfen
-/symfony:check all
+/bear-symfony:check all
 
 # Architektur analysieren
-/common:architecture-decision
+/bear-common:architecture-decision
 ```
 
 ### Vorlagen (`templates/`)
@@ -263,11 +263,11 @@ Qualitätstore für verschiedene Szenarien:
 
 ---
 
-## Was sind die Schlüsselkonzepte von Claude Craft?
+## Was sind die Schlüsselkonzepte von Bear Craft?
 
 ### 1. TDD-Workflow
 
-Claude-Craft setzt testgetriebene Entwicklung durch:
+Bear-Craft setzt testgetriebene Entwicklung durch:
 
 ```
 1. Anforderungen analysieren
@@ -305,7 +305,7 @@ Jedes Feature muss Qualitätstore passieren:
 
 ## Automatische Optimierungen (v8.7)
 
-Claude-Craft enthält jetzt standardmäßig optimierte Voreinstellungen:
+Bear-Craft enthält jetzt standardmäßig optimierte Voreinstellungen:
 
 **Automatisch installiert:**
 - ✓ `.claudeignore` zur Reduzierung des Kontextrauschens
@@ -320,7 +320,7 @@ Für maximale CLI-Output-Reduzierung (60–90 % Einsparungen):
 
 ```bash
 # In Claude Code den Setup-Befehl ausführen
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 **Erwartete Einsparungen:** 55–65 % Gesamttoken-Reduzierung mit vollständigem RTK + Optimierungen. Weitere Informationen finden Sie im [Setup-Leitfaden](08-setup-new-project.md).
@@ -365,10 +365,10 @@ make config-validate CONFIG=file.yaml
 
 | Befehl | Zweck |
 |--------|-------|
-| `/common:analyze-feature` | Anforderungen analysieren |
+| `/bear-common:analyze-feature` | Anforderungen analysieren |
 | `/{tech}:generate-crud` | CRUD-Code generieren |
 | `/{tech}:check all` | Vollständiges Qualitätsaudit |
-| `/common:security-audit` | Sicherheitsüberprüfung |
+| `/bear-common:security-audit` | Sicherheitsüberprüfung |
 
 ---
 

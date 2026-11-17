@@ -14,7 +14,7 @@ Arguments :
 - Plateforme CI (github, gitlab, circleci)
 - (Optionnel) Technologies détectées automatiquement
 
-Exemple : `/common:setup-ci github`
+Exemple : `/bear-common:setup-ci github`
 
 ## Mode Plan
 

@@ -1,6 +1,6 @@
 # Skills Publishing Guide
 
-How to create, validate, and distribute Claude Code skills from Claude-Craft.
+How to create, validate, and distribute Claude Code skills from Bear-Craft.
 
 ---
 
@@ -57,9 +57,9 @@ See @REFERENCE.md for detailed documentation.
 
 ### Frontmatter Fields
 
-#### Claude-Craft Convention Fields
+#### Bear-Craft Convention Fields
 
-These fields are used by Claude-Craft for skill organization and auto-suggestion:
+These fields are used by Bear-Craft for skill organization and auto-suggestion:
 
 | Field | Required | Description |
 |-------|----------|-------------|
@@ -129,7 +129,7 @@ Before sharing a skill, verify the following:
 ### Distribution Files
 
 - [ ] `README.md` included with installation instructions
-- [ ] Attribution to Claude-Craft included
+- [ ] Attribution to Bear-Craft included
 - [ ] License information included
 
 ---
@@ -169,21 +169,21 @@ Share skills via a Git repository. Users clone or copy individual skill director
 
 ```bash
 # Clone the full framework
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
 
 # Copy specific skills
-cp -r claude-craft/.claude/skills/solid-principles/ your-project/.claude/skills/
+cp -r bear-craft/.claude/skills/solid-principles/ your-project/.claude/skills/
 ```
 
 **Pros:** Version-controlled, easy to update, community contributions.
 **Cons:** Requires manual copy to target projects.
 
-### 4. npm Package (via Claude-Craft installer)
+### 4. npm Package (via Bear-Craft installer)
 
-Claude-Craft distributes skills as part of its npm package:
+Bear-Craft distributes skills as part of its npm package:
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 ```
 
 This installs the full framework including all universal and tech-specific skills.
@@ -220,12 +220,12 @@ For organizations, skills can be deployed enterprise-wide through Claude Code ma
 
 ## Attribution
 
-When distributing skills from Claude-Craft, include attribution:
+When distributing skills from Bear-Craft, include attribution:
 
 ### In README.md
 
 ```markdown
-Part of [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) --
+Part of [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) --
 AI-assisted development framework for Claude Code.
 ```
 
@@ -234,12 +234,12 @@ AI-assisted development framework for Claude Code.
 You may add a comment in the SKILL.md frontmatter or content:
 
 ```markdown
-> From [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft)
+> From [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft)
 ```
 
 ### License
 
-All Claude-Craft skills are distributed under the MIT license. See the main repository for the full license text.
+All Bear-Craft skills are distributed under the MIT license. See the main repository for the full license text.
 
 ---
 
@@ -335,4 +335,4 @@ These 4 universal skills are prepared for standalone distribution:
 - [Claude Code Skills Documentation](https://code.claude.com/docs/en/skills)
 - [Agent Skills Open Standard](https://agentskills.io)
 - [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
-- [Claude-Craft Repository](https://github.com/TheBeardedBearSAS/claude-craft)
+- [Bear-Craft Repository](https://github.com/TheBeardedBearSAS/bear-craft)

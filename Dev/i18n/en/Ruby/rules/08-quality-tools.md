@@ -373,7 +373,7 @@ pre-commit:
 
 ## Scoring Alignment
 
-The `/ruby:check` audit maps tools to axes:
+The `/bear-ruby:check` audit maps tools to axes:
 
 | Axis | Tool evidence |
 |------|---------------|

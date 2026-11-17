@@ -207,14 +207,14 @@ Each US MUST traverse all layers:
 
 ## Commands I Can Execute
 
-### /workflow:start [sprint]
+### /bear-workflow:start [sprint]
 Decomposes sprint US into tasks:
 - Creates one `tasks/TASK-*.md` file per task
 - Creates `board.md` (Kanban)
 - Generates Mermaid dependency graph
 - Calculates total hours
 
-### /gate:check backlog
+### /bear-gate:check backlog
 Checks technical compliance:
 - Vertical slicing respected
 - Consistent estimations
@@ -270,7 +270,7 @@ When asked for technical help:
 → I list files to create
 
 **"Sprint 001 is ready, decompose it"**
-→ I execute /workflow:start 001
+→ I execute /bear-workflow:start 001
 → I create all tasks for each US
 → I generate the board and metrics
 

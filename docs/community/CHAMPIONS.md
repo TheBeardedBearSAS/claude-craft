@@ -1,4 +1,4 @@
-# Claude Craft Champions Program
+# Bear Craft Champions Program
 
 Help shape the future of AI-first development.
 
@@ -6,7 +6,7 @@ Help shape the future of AI-first development.
 
 ## What is a Champion?
 
-**Champions** are experienced Claude Craft users who:
+**Champions** are experienced Bear Craft users who:
 - Contribute skills, agents, or workflow improvements
 - Help other users in community channels
 - Share case studies and production feedback
@@ -29,7 +29,7 @@ Help shape the future of AI-first development.
 ### Community Impact
 - Your skills/agents used by hundreds of teams
 - Speaking opportunities at meetups/conferences
-- Co-author blog posts on claude-craft.dev
+- Co-author blog posts on bear-craft.dev
 
 ---
 
@@ -66,7 +66,7 @@ To become a Champion, demonstrate **one** of the following:
 - Helped 15 users in #support channel (screenshots attached)
 
 ### Why I want to be a Champion
-I've used Claude Craft on 3 production projects and want to help others succeed with AI-first TDD.
+I've used Bear Craft on 3 production projects and want to help others succeed with AI-first TDD.
 
 ### Focus area
 Laravel + Vue.js stack, QA automation
@@ -130,8 +130,8 @@ Champions are expected to:
 ## Contact
 
 - **Discord:** #champions channel (invite after acceptance)
-- **Email:** champions@claude-craft.dev
-- **GitHub Discussions:** [Community](https://github.com/TheBeardedBearSAS/claude-craft/discussions)
+- **Email:** champions@bear-craft.dev
+- **GitHub Discussions:** [Community](https://github.com/TheBeardedBearSAS/bear-craft/discussions)
 
 ---
 

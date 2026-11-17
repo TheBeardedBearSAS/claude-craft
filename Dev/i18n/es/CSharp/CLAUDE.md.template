@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - C#/.NET
 
-> Generado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Generado: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Que (Stack y Estructura)
 
@@ -59,10 +59,10 @@ dotnet format                # Formatear codigo
 ```
 
 ### Comandos disponibles
-- `/csharp:check all` - Auditoria completa
-- `/csharp:check architecture` - Validacion arquitectura
-- `/csharp:check code-quality` - Analisis calidad codigo
-- `/csharp:generate-feature` - Generar feature CQRS
+- `/bear-csharp:check all` - Auditoria completa
+- `/bear-csharp:check architecture` - Validacion arquitectura
+- `/bear-csharp:check code-quality` - Analisis calidad codigo
+- `/bear-csharp:generate-feature` - Generar feature CQRS
 
 ### Flujo de desarrollo
 1. **Analizar** - `rules/01-workflow-analysis.md`

@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vuejs:check security verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vuejs:check security verwenden"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-security` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vuejs:check security`.
+> ⚠️ `/bear-vuejs:check-security` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vuejs:check security`.
 
-Führen Sie `/vuejs:check security $ARGUMENTS` aus: Lesen Sie `.claude/commands/vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vuejs:check security $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.

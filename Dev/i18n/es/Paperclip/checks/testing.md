@@ -62,4 +62,4 @@ Tomar los últimos 5 commits `fix:`. Para cada uno, verificar que se agregó o m
 
 ## Output
 
-Reporte Markdown con pasa/falla por sección, archivos sin cubrir, adaptadores que fallan, y un puntaje /20 para `/paperclip:check all`.
+Reporte Markdown con pasa/falla por sección, archivos sin cubrir, adaptadores que fallan, y un puntaje /20 para `/bear-paperclip:check all`.

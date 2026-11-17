@@ -1,10 +1,10 @@
 # {{PROJECT_NAME}}
 
-> Generated: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Generated: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## What (Stack & Structure)
 
-This project uses **Claude Craft** rules for AI-assisted development.
+This project uses **Bear Craft** rules for AI-assisted development.
 
 ### Technologies
 {TECH_LIST}

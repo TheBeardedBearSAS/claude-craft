@@ -11,10 +11,10 @@ One-shot migration of an existing backlog to the BMAD v6 layout, with `.bmad/spr
 
 | Invocation | What it does | Replaces |
 |------------|--------------|----------|
-| `/project:migrate --analyze` | Report only: structure, INVEST scores, BMAD v6 gaps. Writes nothing | `analyze-backlog` |
-| `/project:migrate` | Default: migrate the backlog and create `.bmad/sprint-status.yaml` | `migrate-backlog` |
-| `/project:migrate --stories [story-id]` | Fill missing story fields (tasks, AC, history, INVEST) | `update-stories` |
-| `/project:migrate --resync` | Reconcile content and IDs between markdown and the YAML | `sync-backlog` |
+| `/bear-project:migrate --analyze` | Report only: structure, INVEST scores, BMAD v6 gaps. Writes nothing | `analyze-backlog` |
+| `/bear-project:migrate` | Default: migrate the backlog and create `.bmad/sprint-status.yaml` | `migrate-backlog` |
+| `/bear-project:migrate --stories [story-id]` | Fill missing story fields (tasks, AC, history, INVEST) | `update-stories` |
+| `/bear-project:migrate --resync` | Reconcile content and IDs between markdown and the YAML | `sync-backlog` |
 | `--dry-run` | Preview only, applies to every mode | - |
 | `--force` | Overwrite existing BMAD files (migration mode) | - |
 
@@ -56,7 +56,7 @@ Location: project-management/backlog/ | Epics: {N} | Stories: {N} | Tasks: {N}
 | US-001 | Login | 5/6    | Estimable |
 
 Migration gaps: tdd_phase 100% | tasks.list 60% | history 100%
-Next: /project:migrate
+Next: /bear-project:migrate
 ```
 
 ## Default: migration
@@ -104,7 +104,7 @@ Dry run: lists the files that would be created (e.g. `.bmad/sprint-status.yaml`)
 
 Rollback: `tar -xzf .bmad/backup/backlog-*.tar.gz -C project-management/ && rm .bmad/sprint-status.yaml`.
 
-Next steps: review the YAML, run `/workflow:status`, set sprint metadata (dates, goals), check quality gates with `/gate:check all`.
+Next steps: review the YAML, run `/bear-workflow:status`, set sprint metadata (dates, goals), check quality gates with `/bear-gate:check all`.
 
 ## --stories
 
@@ -127,7 +127,7 @@ Fill missing BMAD v6 fields of existing stories (all, or one `story-id`).
 4. **INVEST**: add `invest_score` (independent, negotiable, valuable, estimable, small, testable, total).
 5. **Update** `sprint-status.yaml` by merging the fields; optionally add a metadata comment to story files (`<!-- BMAD v6 Metadata … -->` with `tdd_phase`, `invest_score`, `last_sync`).
 
-Output: table of updated stories (fields added, INVEST score), summary per field (added / skipped), warnings (e.g. "US-003: missing story points", "US-007: no acceptance criteria"), modified files. Then fix the warnings, run `/project:migrate --resync` and `/gate:check backlog`.
+Output: table of updated stories (fields added, INVEST score), summary per field (added / skipped), warnings (e.g. "US-003: missing story points", "US-007: no acceptance criteria"), modified files. Then fix the warnings, run `/bear-project:migrate --resync` and `/bear-gate:check backlog`.
 
 ## --resync
 
@@ -141,18 +141,18 @@ Reconcile content and IDs between the markdown files and the YAML. Status is nev
 6. **Orphans**: in YAML but not in files → mark `archived` or warn; in files but not in YAML → add to the YAML (status `backlog`).
 7. **Timestamps**: `last_sync` in the YAML and `<!-- last_sync: … -->` in story files.
 
-Output: changes files → YAML, changes YAML → files, conflicts resolved, orphans (archived / added), "Last sync" time. Then review `git diff` and run `/workflow:status`.
+Output: changes files → YAML, changes YAML → files, conflicts resolved, orphans (archived / added), "Last sync" time. Then review `git diff` and run `/bear-workflow:status`.
 
-Automation: a pre-commit hook may run `/project:migrate --resync` (`.bmad/hooks/pre-commit.sh`).
+Automation: a pre-commit hook may run `/bear-project:migrate --resync` (`.bmad/hooks/pre-commit.sh`).
 
 ## Examples
 
 ```
-/project:migrate --analyze
-/project:migrate --dry-run
-/project:migrate
-/project:migrate --force
-/project:migrate --stories US-001
-/project:migrate --stories --dry-run
-/project:migrate --resync --dry-run
+/bear-project:migrate --analyze
+/bear-project:migrate --dry-run
+/bear-project:migrate
+/bear-project:migrate --force
+/bear-project:migrate --stories US-001
+/bear-project:migrate --stories --dry-run
+/bear-project:migrate --resync --dry-run
 ```

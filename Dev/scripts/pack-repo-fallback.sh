@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pack-repo-fallback.sh — Fallback shell natif pour /common:pack-repo
+# pack-repo-fallback.sh — Fallback shell natif pour /bear-common:pack-repo
 # Utilisé quand repomix (npm) n'est pas disponible.
 # Limitations : pas de compression, token count estimé (4 chars ≈ 1 token).
 #

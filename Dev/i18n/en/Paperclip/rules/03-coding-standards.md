@@ -170,4 +170,4 @@ Plugin / adapter config lives **inside** the plugin or adapter package, not in t
 
 ---
 
-**Last updated:** 2026-04 | **Version:** 1.0.0 | **Author:** The Bearded CTO
+**Last updated:** 2026-04 | **Version:** 1.0.0 | **Author:** The Bearded Bear

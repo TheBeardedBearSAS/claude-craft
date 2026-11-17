@@ -14,7 +14,7 @@ Arguments :
 - Numéro du sprint
 - (Optionnel) Format de rétro (starfish, 4L, sailboat, start-stop-continue)
 
-Exemple : `/workflow:retro 5 starfish`
+Exemple : `/bear-workflow:retro 5 starfish`
 
 ## MISSION
 
@@ -336,13 +336,13 @@ Verbatims :
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
 ║  Si d'autres sprints restent :                           ║
-║  → /workflow:start {N+1}                                 ║
+║  → /bear-workflow:start {N+1}                                 ║
 ║    Démarrer le prochain sprint                           ║
 ║                                                          ║
 ║  Si le projet est terminé :                              ║
-║  → /gate:check release                             ║
+║  → /bear-gate:check release                             ║
 ║    Préparer la release                                   ║
-║  → /common:generate-changelog                            ║
+║  → /bear-common:generate-changelog                            ║
 ║    Générer le changelog                                  ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

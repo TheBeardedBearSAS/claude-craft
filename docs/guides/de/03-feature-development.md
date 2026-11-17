@@ -1,6 +1,6 @@
 # Leitfaden zur Feature-Entwicklung
 
-Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neuer Features mit Claude-Craft, von der ersten Analyse bis zum abschließenden Review.
+Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neuer Features mit Bear-Craft, von der ersten Analyse bis zum abschließenden Review.
 
 ---
 
@@ -20,7 +20,7 @@ Dieser Leitfaden beschreibt den vollständigen Workflow für die Entwicklung neu
 
 ## TDD-Workflow – Überblick
 
-Claude-Craft setzt einen testgetriebenen Entwicklungs-Workflow durch:
+Bear-Craft setzt einen testgetriebenen Entwicklungs-Workflow durch:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
@@ -61,7 +61,7 @@ Verwenden Sie `/effort low` für einfache Nachschläge und `/effort medium` für
 ### Den Analysebefehl verwenden
 
 ```bash
-/common:analyze-feature "User authentication with JWT tokens and role-based access"
+/bear-common:analyze-feature "User authentication with JWT tokens and role-based access"
 ```
 
 Dieser Befehl wird:
@@ -136,7 +136,7 @@ Der API-Designer wird:
 ### Architekturentscheidung
 
 ```bash
-/common:architecture-decision "How to implement role-based access control"
+/bear-common:architecture-decision "How to implement role-based access control"
 ```
 
 Verwenden Sie diesen Befehl für wichtige Architekturentscheidungen. Er erstellt einen Architecture Decision Record (ADR), der Folgendes dokumentiert:
@@ -241,16 +241,16 @@ Feature: User Authentication
 
 ```bash
 # Symfony
-/symfony:check testing
+/bear-symfony:check testing
 
 # Flutter
-/flutter:check testing
+/bear-flutter:check testing
 
 # Python
-/python:check testing
+/bear-python:check testing
 
 # React
-/react:check testing
+/bear-react:check testing
 ```
 
 ### Checkliste für das Schreiben von Tests
@@ -274,52 +274,52 @@ Jetzt implementieren Sie den Code, damit die Tests bestehen.
 
 ```bash
 # CRUD mit Tests generieren
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # API-Endpunkt generieren
-/symfony:api-endpoint POST /api/users CreateUserRequest
+/bear-symfony:api-endpoint POST /api/users CreateUserRequest
 
 # Command generieren
-/symfony:generate-command SendWelcomeEmailCommand
+/bear-symfony:generate-command SendWelcomeEmailCommand
 ```
 
 #### Flutter
 
 ```bash
 # BLoC generieren
-/flutter:generate-bloc Authentication
+/bear-flutter:generate-bloc Authentication
 
 # Screen generieren
-/flutter:generate-screen LoginScreen
+/bear-flutter:generate-screen LoginScreen
 
 # Widget generieren
-/flutter:generate-widget UserAvatar
+/bear-flutter:generate-widget UserAvatar
 ```
 
 #### Python
 
 ```bash
 # FastAPI-Endpunkt generieren
-/python:generate-endpoint POST /users CreateUser
+/bear-python:generate-endpoint POST /users CreateUser
 
 # Service generieren
-/python:generate-service UserService
+/bear-python:generate-service UserService
 
 # Modell generieren
-/python:generate-model User
+/bear-python:generate-model User
 ```
 
 #### React
 
 ```bash
 # Komponente generieren
-/react:generate-component UserProfile
+/bear-react:generate-component UserProfile
 
 # Hook generieren
-/react:generate-hook useAuth
+/bear-react:generate-hook useAuth
 
 # Context generieren
-/react:generate-context AuthContext
+/bear-react:generate-context AuthContext
 ```
 
 ### Templates verwenden
@@ -366,14 +366,14 @@ Nachdem die Tests bestehen, verbessern Sie die Codequalität.
 
 ```bash
 # Codequalität prüfen
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
-/react:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
+/bear-react:check code-quality
 
 # Architekturkonformität prüfen
-/symfony:check architecture
-/flutter:check architecture
+/bear-symfony:check architecture
+/bear-flutter:check architecture
 ```
 
 ### Den Refactoring-Spezialisten verwenden
@@ -417,10 +417,10 @@ Abschließende Qualitätsprüfung vor dem Abschluss.
 
 ```bash
 # Vollständige Compliance-Prüfung (gibt Score /100 zurück)
-/symfony:check all
-/flutter:check all
-/python:check all
-/react:check all
+/bear-symfony:check all
+/bear-flutter:check all
+/bear-python:check all
+/bear-react:check all
 ```
 
 Dieses umfassende Audit prüft:
@@ -452,7 +452,7 @@ Der Reviewer wird:
 ### Sicherheits-Audit
 
 ```bash
-/common:security-audit
+/bear-common:security-audit
 ```
 
 Oder den sicherheitsfokussierten Agenten verwenden:
@@ -495,7 +495,7 @@ Lassen Sie uns ein vollständiges Feature durchgehen: Benutzerregistrierung hinz
 ### Schritt 1: Analyse
 
 ```markdown
-/common:analyze-feature "User registration with email verification"
+/bear-common:analyze-feature "User registration with email verification"
 
 Expected:
 - User submits email and password
@@ -543,8 +543,8 @@ Test cases:
 ### Schritt 5: Code generieren
 
 ```bash
-/symfony:generate-crud User --with-api
-/symfony:generate-command SendVerificationEmailCommand
+/bear-symfony:generate-crud User --with-api
+/bear-symfony:generate-command SendVerificationEmailCommand
 ```
 
 ### Schritt 6: Implementieren
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Schritt 7: Refactoring
 
 ```bash
-/symfony:check code-quality
+/bear-symfony:check code-quality
 ```
 
 Identifizierte Probleme beheben.
@@ -596,7 +596,7 @@ Complete implementation including:
 ### Schritt 9: Abschließende Prüfung
 
 ```bash
-/symfony:check all
+/bear-symfony:check all
 ```
 
 Ziel: Score 90+/100
@@ -621,13 +621,13 @@ Ziel: Score 90+/100
 
 | Phase | Befehle |
 |-------|---------|
-| Analyse | `/common:analyze-feature` |
-| Design | `/common:architecture-decision` |
+| Analyse | `/bear-common:analyze-feature` |
+| Design | `/bear-common:architecture-decision` |
 | Tests | `/{tech}:check testing` |
 | Generierung | `/{tech}:generate-*` |
 | Qualität | `/{tech}:check code-quality` |
 | Review | `/{tech}:check all` |
-| Sicherheit | `/common:security-audit` |
+| Sicherheit | `/bear-common:security-audit` |
 
 ### Speicherort der Templates
 

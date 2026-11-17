@@ -9,13 +9,13 @@ Sie agieren als **Product Owner / Scrum Master** und steuern einen vollständige
 in einem **einzigen Befehl**. Jede Zeremonie läuft in einem **isolierten Unter-Agenten**: Das eigene
 Kontextfenster des Unter-Agenten ersetzt das manuelle `/clear` zwischen den Schritten, sodass der
 Orchestrator-Kontext schlank bleibt. Die Implementierungsphase wird **von Ihnen als Dirigent** übernommen
-(gleiche Logik wie `/team:delivery --phase=implementation`), um verschachtelte Agent Teams zu vermeiden.
+(gleiche Logik wie `/bear-team:delivery --phase=implementation`), um verschachtelte Agent Teams zu vermeiden.
 
 Dies automatisiert, was zuvor sechs manuelle Befehle mit einem `/clear` dazwischen erforderte:
 
 ```
-/workflow:start N -> /workflow:start N --tasks-only -> /gate:check sprint 00N
--> /workflow:implement N -> /workflow:review N -> /workflow:retro N
+/bear-workflow:start N -> /bear-workflow:start N --tasks-only -> /bear-gate:check sprint 00N
+-> /bear-workflow:implement N -> /bear-workflow:review N -> /bear-workflow:retro N
 ```
 
 …und ergänzt dies um: Branch, Commit, Pull Request, CI-Überwachung und Merge.
@@ -25,13 +25,13 @@ Dies automatisiert, was zuvor sechs manuelle Befehle mit einem `/clear` dazwisch
 $ARGUMENTS
 
 - `<N>` : Sprint-Nummer (z.B. `5`). **Erforderlich.**
-- `--from-prd` : Vor Phase 1 wird `/workflow:plan --only=backlog` (Unter-Agent) ausgeführt, um das Backlog aus `project-management/prd.md` zu erzeugen; danach läuft die normale Pipeline weiter.
+- `--from-prd` : Vor Phase 1 wird `/bear-workflow:plan --only=backlog` (Unter-Agent) ausgeführt, um das Backlog aus `project-management/prd.md` zu erzeugen; danach läuft die normale Pipeline weiter.
 - `--auto-merge` : Merge automatisch durchführen, sobald CI grün und DoD bestanden ist. **Standard: AUS** — der
   Befehl pausiert und wartet auf ein explizites menschliches GO vor dem Merge (berücksichtigt „review obligatoire",
   Regel 09, und das Karpathy-Prinzip „kein Auto-Merge ohne menschliche Review").
 - `--max-fix-attempts=2` : Maximale automatische Korrekturversuche pro fehlgeschlagenem Gate vor dem Abbruch (Standard: 2).
 - `--max-workers=3` : Maximale parallele Entwickler-Worker in der Implementierungsphase (Standard: 2, Maximum: 3).
-- `--engine=subagents`: Engine der Implementierungsphase (Standard: `subagents`, Delegation über das `Agent`-Tool). `teams`: experimentelle Agent Teams, mit Fallback auf `subagents`, wenn nicht verfügbar. Siehe `/team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“
+- `--engine=subagents`: Engine der Implementierungsphase (Standard: `subagents`, Delegation über das `Agent`-Tool). `teams`: experimentelle Agent Teams, mit Fallback auf `subagents`, wenn nicht verfügbar. Siehe `/bear-team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“
 - `--base=main` : Basis-Branch für den PR (Standard: `main`).
 - `--dry-run` : Gibt die geplanten 9 Phasen und den aufgelösten Sprint-Kontext aus und hält dann an. **Keine Schreibvorgänge.**
 - `--overnight` : Wird an die Implementierungsphase weitergegeben (begrenzt, stoppt um 6 Uhr morgens).
@@ -42,7 +42,7 @@ $ARGUMENTS
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` gesetzt — nur mit `--engine=teams`
 - `gh` CLI authentifiziert (PR erstellen / Prüfungen / Merge)
 - Docker verfügbar (alle Tests laufen über Docker — siehe Projekt-CLAUDE.md)
-- BMAD v6-Projekt: `.bmad/sprint-status.yaml` wird bei Bedarf von `/workflow:start` (Phase 1) angelegt
+- BMAD v6-Projekt: `.bmad/sprint-status.yaml` wird bei Bedarf von `/bear-workflow:start` (Phase 1) angelegt
 
 > Falls eine Voraussetzung fehlt, sofort mit einer klaren, handlungsorientierten Meldung abbrechen. Eine Phase nicht stillschweigend überspringen.
 
@@ -74,25 +74,25 @@ Den Sprint-Ordner durch Glob-Suche `project-management/sprints/sprint-{N}-*/` au
 
 ### Phase 0b — Backlog aus dem PRD (Unter-Agent, nur mit `--from-prd`)
 
-> „Lesen Sie `.claude/commands/workflow/plan.md` und führen Sie `/workflow:plan --only=backlog` aus (Eingabe: `project-management/prd.md`). Geben Sie eine knappe Zusammenfassung und die erstellten Dateien zurück.“
+> „Lesen Sie `.claude/commands/bear-workflow/plan.md` und führen Sie `/bear-workflow:plan --only=backlog` aus (Eingabe: `project-management/prd.md`). Geben Sie eine knappe Zusammenfassung und die erstellten Dateien zurück.“
 
 ### Phase 1 — Start (Unter-Agent)
 
 Einen isolierten Unter-Agenten starten:
 
-> „Lesen Sie `.claude/commands/workflow/start.md` und führen Sie es für Sprint **N** aus.
+> „Lesen Sie `.claude/commands/bear-workflow/start.md` und führen Sie es für Sprint **N** aus.
 > Erstellen Sie die Sprint-Ordnerstruktur, `sprint-goal.md` und die Vor-Sprint-Checkliste.
 > Geben Sie eine knappe Zusammenfassung (< 50 Tokens) und die Liste der erstellten Dateien zurück."
 
 ### Phase 2 — Zerlegung (Unter-Agent)
 
-> „Lesen Sie `.claude/commands/workflow/start.md` (`/workflow:start {N} --tasks-only`) und führen Sie es für Sprint **N** aus.
+> „Lesen Sie `.claude/commands/bear-workflow/start.md` (`/bear-workflow:start {N} --tasks-only`) und führen Sie es für Sprint **N** aus.
 > Generieren Sie die `tasks/TASK-*.md`-Dateien, `board.md` und den Abhängigkeitsgraphen.
 > Geben Sie eine knappe Zusammenfassung und die erstellten Dateien zurück."
 
 ### Phase 3 — Gate-Validierung (Unter-Agent + Auto-Korrektur-Schleife)
 
-> „Lesen Sie `.claude/commands/gate/check.md` (gate `sprint`) und führen Sie es für Sprint **00N** aus.
+> „Lesen Sie `.claude/commands/bear-gate/check.md` (gate `sprint`) und führen Sie es für Sprint **00N** aus.
 > Geben Sie PASS/FAIL, die Punktzahl und die Liste der fehlgeschlagenen Kriterien zurück."
 
 **Bei FAIL → Auto-Korrektur-Schleife** (bis zu `--max-fix-attempts`):
@@ -103,11 +103,11 @@ Einen isolierten Unter-Agenten starten:
 
 ### Phase 4 — Implementierung (Sie = Dirigent)
 
-> Entspricht `/workflow:implement --parallel N` (das an `/team:delivery --phase=implementation` delegiert).
+> Entspricht `/bear-workflow:implement --parallel N` (das an `/bear-team:delivery --phase=implementation` delegiert).
 
-Direkt die **Lead-Rolle der Implementierungsphase von `/team:delivery --phase=implementation` übernehmen** (kein verschachteltes Agent Team starten):
+Direkt die **Lead-Rolle der Implementierungsphase von `/bear-team:delivery --phase=implementation` übernehmen** (kein verschachteltes Agent Team starten):
 
-**Engine**: Mit `--engine=subagents` (Standard) in Schritt 4 pro Story einen Sub-Agenten über das `Agent`-Tool starten (`isolation: "worktree"`, alle in einer Nachricht) statt `TaskCreate`, und in Schritt 5 auf ihre Rückkehr warten statt `TaskList` abzufragen (vollständige Zuordnung in `/team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“). Mit `--engine=teams` die Schritte wie beschrieben befolgen.
+**Engine**: Mit `--engine=subagents` (Standard) in Schritt 4 pro Story einen Sub-Agenten über das `Agent`-Tool starten (`isolation: "worktree"`, alle in einer Nachricht) statt `TaskCreate`, und in Schritt 5 auf ihre Rückkehr warten statt `TaskList` abzufragen (vollständige Zuordnung in `/bear-team:delivery --phase=implementation`, Abschnitt „Ausführungs-Engine“). Mit `--engine=teams` die Schritte wie beschrieben befolgen.
 
 1. `.bmad/sprint-status.yaml` lesen; Stories mit Status `ready-for-dev` filtern.
 2. Datei-Domain-Unabhängigkeit analysieren (`**/Shared/**`, `**/Common/**`, `**/Utils/**`,
@@ -142,12 +142,12 @@ fehlgeschlagenen Prüfungen erneut beauftragen; nach `--max-fix-attempts` die St
 
 ### Phase 7 — Review (Unter-Agent)
 
-> „Lesen Sie `.claude/commands/workflow/review.md` und führen Sie es für Sprint **N** aus (verwendet
+> „Lesen Sie `.claude/commands/bear-workflow/review.md` und führen Sie es für Sprint **N** aus (verwendet
 > `git log` / `gh pr` zum Sammeln von Sprint-Daten). Erstellen Sie `sprint-review.md`. Geben Sie eine knappe Zusammenfassung zurück."
 
 ### Phase 8 — Retro (Unter-Agent)
 
-> „Lesen Sie `.claude/commands/workflow/retro.md` und führen Sie es für Sprint **N** aus.
+> „Lesen Sie `.claude/commands/bear-workflow/retro.md` und führen Sie es für Sprint **N** aus.
 > Erstellen Sie `sprint-retro.md` mit SMART-Maßnahmen. Geben Sie eine knappe Zusammenfassung zurück."
 
 ### Phase 9 — Merge (direkt, gesperrt)
@@ -206,4 +206,4 @@ Phase                  | Status  | Anmerkungen
 - **Auto-Merge ist opt-in** und absichtlich hinter einem Flag gesperrt.
 - **Docker ist obligatorisch** für Tests (Projekt-CLAUDE.md).
 - Die Isolation der Unter-Agenten ersetzt `/clear` — jeden Unter-Agenten-Bericht knapp halten.
-- Für die parallele Agent-Teams-Variante, die die Stories zusätzlich mit Cross-Review schreibt, `/team:delivery` verwenden.
+- Für die parallele Agent-Teams-Variante, die die Stories zusätzlich mit Cross-Review schreibt, `/bear-team:delivery` verwenden.

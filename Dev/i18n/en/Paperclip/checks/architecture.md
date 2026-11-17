@@ -70,4 +70,4 @@ Markdown report with:
 - Pass/fail per checkbox above
 - Offending file paths (line numbers when available)
 - Severity: Blocker / Major / Minor
-- Score /25 for use by `/paperclip:check all`
+- Score /25 for use by `/bear-paperclip:check all`

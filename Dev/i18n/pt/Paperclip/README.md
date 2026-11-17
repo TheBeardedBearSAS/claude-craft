@@ -1,9 +1,9 @@
-# Paperclip — Integração Claude-Craft
+# Paperclip — Integração Bear-Craft
 
 > **Paperclip**: orquestração open-source para empresas zero-humanas.
 > Docs: https://docs.paperclip.ing/ · Repo: https://github.com/paperclipai/paperclip · License: MIT
 
-Este diretório contém as regras, comandos, skills e templates do Claude-Craft para trabalhar com Paperclip — tanto como **contribuidor** de uma base de código Paperclip quanto como **operador** usando Paperclip com Claude Code como adaptador.
+Este diretório contém as regras, comandos, skills e templates do Bear-Craft para trabalhar com Paperclip — tanto como **contribuidor** de uma base de código Paperclip quanto como **operador** usando Paperclip com Claude Code como adaptador.
 
 ## Stack
 
@@ -35,18 +35,18 @@ Paperclip/
 
 | Comando | Propósito |
 |---|---|
-| `/paperclip:check all` | Auditoria completa (Arquitetura + Qualidade + Testes + Segurança + Protocolo de adaptador), pontuação /100 |
-| `/paperclip:check architecture` | Divisão de duas camadas + limites de módulos + cobertura de log de atividades |
-| `/paperclip:check code-quality` | Rigor TypeScript, lint, complexidade, higiene de logging |
-| `/paperclip:check testing` | Cobertura, testes de contrato de adaptador, isolamento entre tenants |
-| `/paperclip:check security` | Tenancy, segredos, aprovações, orçamentos, canal de adaptador assinado |
-| `/paperclip:generate-adapter` | Criar scaffold de um adaptador (local / process / http) |
-| `/paperclip:generate-agent-config` | Gerar um `agent.yaml` com orçamento + aprovações |
-| `/paperclip:setup-company` | Inicializar uma nova empresa Paperclip de ponta a ponta |
+| `/bear-paperclip:check all` | Auditoria completa (Arquitetura + Qualidade + Testes + Segurança + Protocolo de adaptador), pontuação /100 |
+| `/bear-paperclip:check architecture` | Divisão de duas camadas + limites de módulos + cobertura de log de atividades |
+| `/bear-paperclip:check code-quality` | Rigor TypeScript, lint, complexidade, higiene de logging |
+| `/bear-paperclip:check testing` | Cobertura, testes de contrato de adaptador, isolamento entre tenants |
+| `/bear-paperclip:check security` | Tenancy, segredos, aprovações, orçamentos, canal de adaptador assinado |
+| `/bear-paperclip:generate-adapter` | Criar scaffold de um adaptador (local / process / http) |
+| `/bear-paperclip:generate-agent-config` | Gerar um `agent.yaml` com orçamento + aprovações |
+| `/bear-paperclip:setup-company` | Inicializar uma nova empresa Paperclip de ponta a ponta |
 
 ## Instalação
 
-### Via Makefile (a partir de um checkout do claude-craft)
+### Via Makefile (a partir de um checkout do bear-craft)
 
 ```bash
 make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
@@ -76,4 +76,4 @@ make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
 
 - Documentação Paperclip: https://docs.paperclip.ing/
 - Repositório Paperclip: https://github.com/paperclipai/paperclip
-- Claude-Craft: https://github.com/TheBeardedBearSAS/claude-craft
+- Bear-Craft: https://github.com/TheBeardedBearSAS/bear-craft

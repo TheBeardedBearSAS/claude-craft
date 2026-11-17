@@ -1,6 +1,6 @@
 # Werkzeug-Referenzhandbuch
 
-Dieser Leitfaden behandelt die Hilfswerkzeuge von Claude-Craft zur Verwaltung von Profilen, Statusanzeigen, Projektkonfigurationen sowie Befehle und Funktionen von Claude Code (v8.7).
+Dieser Leitfaden behandelt die Hilfswerkzeuge von Bear-Craft zur Verwaltung von Profilen, Statusanzeigen, Projektkonfigurationen sowie Befehle und Funktionen von Claude Code (v8.7).
 
 ---
 
@@ -39,7 +39,7 @@ Claude Code stellt eingebaute Befehle für die Kontext- und Sitzungsverwaltung b
 
 | Befehl | Version | Beschreibung |
 |--------|---------|--------------|
-| `/loop [interval] [befehl]` | v2.1.71+ | Wiederkehrende Aufgaben ausführen (z. B. `/loop 5m /gate:check commit`) |
+| `/loop [interval] [befehl]` | v2.1.71+ | Wiederkehrende Aufgaben ausführen (z. B. `/loop 5m /bear-gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias für `/loop` |
 | `/color` | v2.1.94+ | Farbschema des Terminals ändern |
 | `/rename` | v2.1.94+ | Aktuelle Sitzung umbenennen |
@@ -182,7 +182,7 @@ Verfügbar für Team-Pläne mit Administratorgenehmigung.
 
 ## Hook-Vorlagen
 
-Claude-Craft stellt fertig verwendbare Hook-Vorlagen in `.claude/templates/hooks/` bereit:
+Bear-Craft stellt fertig verwendbare Hook-Vorlagen in `.claude/templates/hooks/` bereit:
 
 | Vorlage | Zweck |
 |---------|-------|
@@ -518,7 +518,7 @@ rm /tmp/.ccusage_*
 
 ## ProjectConfig-Manager
 
-Claude-Craft-Projektkonfigurationen über YAML verwalten.
+Bear-Craft-Projektkonfigurationen über YAML verwalten.
 
 ### Zweck
 

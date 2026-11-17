@@ -82,7 +82,7 @@ Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--eng
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/ralph-teams-adapter.sh` disponible
 
-> ℹ️ Ces scripts sont installés automatiquement par claude-craft (`make install-agentteams` ou via l'installeur). S'ils sont absents, la commande continue en **mode dégradé** : estimation de coût manuelle et `--ralph-mode` indisponible (non bloquant).
+> ℹ️ Ces scripts sont installés automatiquement par bear-craft (`make install-agentteams` ou via l'installeur). S'ils sont absents, la commande continue en **mode dégradé** : estimation de coût manuelle et `--ralph-mode` indisponible (non bloquant).
 
 ## Mode Plan
 
@@ -93,10 +93,10 @@ Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--eng
 | Condition | Utiliser Team Delivery | Alternative |
 |-----------|----------------------|-------------|
 | Cycle complet (plan + code), 3+ stories | **Oui (~2.2x accélération)** | Trop lent en séquentiel |
-| < 3 stories | Non | `@product-owner` + `/workflow:implement` |
-| Story unique | Non | `/common:ralph-run` |
+| < 3 stories | Non | `@product-owner` + `/bear-workflow:implement` |
+| Story unique | Non | `/bear-common:ralph-run` |
 | 5+ stories indépendantes | **Oui (meilleur ROI)** | Possible mais lent en séquentiel |
-| Implémentation seule (stories existantes) | Utiliser `--phase=implementation` | `/workflow:implement` |
+| Implémentation seule (stories existantes) | Utiliser `--phase=implementation` | `/bear-workflow:implement` |
 | Rédaction seule (pas de code nécessaire) | Utiliser `--phase=writing` | `@product-owner` manuellement |
 | Budget très contraint | Non (+30-40% surcoût en tokens) | Workflow séquentiel |
 | Besoin de mapping de domaines fichiers | **Oui (intégré)** | Coordination manuelle |

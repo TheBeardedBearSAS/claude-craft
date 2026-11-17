@@ -20,8 +20,8 @@ if command -v rtk &>/dev/null; then
 else
   echo "RTK ist NICHT installiert"
   echo ""
-  echo "Installationsoptionen (das curl|bash-Muster ist durch Claude Craft Hooks BLOCKIERT):"
-  echo "  1. (Empfohlen) make install-rtk    # aus dem claude-craft Root"
+  echo "Installationsoptionen (das curl|bash-Muster ist durch Bear Craft Hooks BLOCKIERT):"
+  echo "  1. (Empfohlen) make install-rtk    # aus dem bear-craft Root"
   echo "  2. cargo install rtk-cli            # wenn Rust Toolchain vorhanden"
   echo "  3. Release-Binary manuell herunterladen: https://github.com/rtk-ai/rtk/releases"
 fi
@@ -85,7 +85,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-5-5"
 export CLAUDE_CODE_FORK_SUBAGENT=1
 
 # 1-Stunden Prompt-Cache TTL aktivieren (Claude Code 2.1.108+)
-# → -40% Kosten bei wiederholenden Sitzungen (BMAD Sprints, /team:* Schleifen)
+# → -40% Kosten bei wiederholenden Sitzungen (BMAD Sprints, /bear-team:* Schleifen)
 # → Gleicher Prompt-Cache-Schlüssel wird bis zu 1h statt 5min Standard wiederverwendet
 export ENABLE_PROMPT_CACHING_1H=1
 

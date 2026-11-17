@@ -48,7 +48,7 @@ El proceso siguiente se describe con las primitivas de Agent Teams. Con `--engin
 
 **Alcance**: `--scope=full|code|deps|infra` se aplica a ambos motores (`full` = 3 reviewers en paralelo, un alcance único = un solo reviewer).
 
-**Diferencia con `/security-review` nativo**: el comando integrado `/security-review` de Claude Code solo analiza el diff (cambios pendientes de la rama actual). `/team:security` audita todo el repositorio según el alcance elegido (código, dependencias, infraestructura). Usar `/security-review` antes de un commit o una PR, `/team:security` para una auditoría completa.
+**Diferencia con `/security-review` nativo**: el comando integrado `/security-review` de Claude Code solo analiza el diff (cambios pendientes de la rama actual). `/bear-team:security` audita todo el repositorio según el alcance elegido (código, dependencias, infraestructura). Usar `/security-review` antes de un commit o una PR, `/bear-team:security` para una auditoría completa.
 
 ## Prerequisitos
 
@@ -59,7 +59,7 @@ El proceso siguiente se describe con las primitivas de Agent Teams. Con `--engin
 - `Tools/AgentTeams/lib/result-aggregator.sh` disponible
 - `Tools/AgentTeams/lib/cost-estimator.sh` disponible
 
-> ℹ️ Estos scripts se instalan automáticamente con claude-craft (`make install-agentteams` o mediante el instalador). Si faltan, el comando continúa en **modo degradado**: estimación de coste manual y `--ralph-mode` no disponible (no bloqueante).
+> ℹ️ Estos scripts se instalan automáticamente con bear-craft (`make install-agentteams` o mediante el instalador). Si faltan, el comando continúa en **modo degradado**: estimación de coste manual y `--ralph-mode` no disponible (no bloqueante).
 
 ## Proteccion Fast Mode (Confirmacion Bloqueante)
 

@@ -21,8 +21,8 @@ El primer argumento es el eje; el resto (por ejemplo, la ruta de un proyecto) se
 
 ## MISIÓN
 
-1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/python:check security src/`) y detente.
+1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/bear-python:check security src/`) y detente.
 2. Lee el archivo de checklist de ese eje y síguelo paso a paso. En ese archivo, `$ARGUMENTS` designa los argumentos que siguen al eje.
 3. Genera el informe en el formato de salida que define la checklist.
 
-Ejemplos: `/python:check architecture`, `/python:check testing ./app`, `/python:check all`.
+Ejemplos: `/bear-python:check architecture`, `/bear-python:check testing ./app`, `/bear-python:check all`.

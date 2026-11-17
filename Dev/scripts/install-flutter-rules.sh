@@ -16,7 +16,7 @@ DEFAULT_STACK="Flutter 3+, Dart 3+, Riverpod, GoRouter, Freezed, Dio"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(
@@ -60,8 +60,8 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:check-performance\` - Performance analysis"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:check-performance\` - Performance analysis"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 lib/

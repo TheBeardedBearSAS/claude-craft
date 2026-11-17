@@ -223,13 +223,13 @@ check_common_installation() {
     check_dir_count "$path/.claude/agents" "agents" 5 || ((issues++)) || true
 
     # Commands/common (obligatoire, min 10)
-    check_dir_count "$path/.claude/commands/common" "commands/common" 10 || ((issues++)) || true
+    check_dir_count "$path/.claude/commands/bear-common" "commands/bear-common" 10 || ((issues++)) || true
 
     # Checklists (obligatoire, min 2)
     check_dir_count "$path/.claude/checklists" "checklists" 2 || ((issues++)) || true
 
     # Optionnels
-    check_dir_optional "$path/.claude/commands/project" "commands/project"
+    check_dir_optional "$path/.claude/commands/bear-project" "commands/bear-project"
 
     return $issues
 }
@@ -260,7 +260,7 @@ check_tech_installation() {
     local issues=0
 
     if [[ "$DEV_TECHS" == *" $tech "* ]]; then
-        check_dir_count "$path/.claude/commands/$tech" "commands/$tech" 1 || ((issues++)) || true
+        check_dir_count "$path/.claude/commands/bear-$tech" "commands/bear-$tech" 1 || ((issues++)) || true
         # Layout actuel : references/<tech> ; installations anciennes : rules/
         if [[ -d "$path/.claude/references/$tech" ]]; then
             check_dir_count "$path/.claude/references/$tech" "references/$tech" 1 || ((issues++)) || true
@@ -270,12 +270,12 @@ check_tech_installation() {
         check_file_exists "$path/.claude/CLAUDE.md" "CLAUDE.md" || ((issues++)) || true
         check_dir_count "$path/.claude/agents" "agents" 1 || ((issues++)) || true
     elif [[ "$INFRA_TECHS" == *" $tech "* ]]; then
-        check_dir_count "$path/.claude/commands/$tech" "commands/$tech" 1 || ((issues++)) || true
+        check_dir_count "$path/.claude/commands/bear-$tech" "commands/bear-$tech" 1 || ((issues++)) || true
         check_agents_prefix "$path/.claude/agents" "$tech" || ((issues++)) || true
     elif [[ "$tech" == "project" ]]; then
         local ns
         for ns in project gate; do
-            check_dir_count "$path/.claude/commands/$ns" "commands/$ns" 1 || ((issues++)) || true
+            check_dir_count "$path/.claude/commands/bear-$ns" "commands/bear-$ns" 1 || ((issues++)) || true
         done
         check_file_exists "$path/.claude/agents/tech-lead.md" "agents/tech-lead" || ((issues++)) || true
         check_file_exists "$path/.claude/agents/product-owner.md" "agents/product-owner" || ((issues++)) || true

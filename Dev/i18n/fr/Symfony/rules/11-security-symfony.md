@@ -1068,4 +1068,4 @@ final readonly class AuditListener
 
 **Date de dernière mise à jour:** 2025-01-26
 **Version:** 1.0.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

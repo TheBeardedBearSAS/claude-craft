@@ -1,4 +1,4 @@
-# AI Evaluation Framework — Claude Craft Benchmarks
+# AI Evaluation Framework — Bear Craft Benchmarks
 
 **Version** : 1.0.0
 **Dataset** : 50 tâches calibrées en 5 catégories
@@ -11,15 +11,15 @@
 Ce framework définit 50 tâches standardisées pour évaluer objectivement les outils de développement assistés par IA. Les métriques mesurent la vitesse (Time to First Version), la qualité du code, la couverture de tests, et le nombre d'interventions humaines nécessaires.
 
 **Utilisation** :
-- Benchmarker Claude Craft vs concurrents
+- Benchmarker Bear Craft vs concurrents
 - Tracker les régressions entre versions
-- Publier un leaderboard public sur `claude-craft-evals.dev`
+- Publier un leaderboard public sur `bear-craft-evals.dev`
 
 ---
 
 ## Métriques
 
-| Métrique | Description | Cible Claude Craft |
+| Métrique | Description | Cible Bear Craft |
 |----------|-------------|-------------------|
 | **TTFV** | Time to First Version (code qui compile + tests passent) | < 5 min (CRUD), < 20 min (feature) |
 | **Code Quality Score** | SonarQube aggregate (A-F) | ≥ B |
@@ -633,7 +633,7 @@ Ce framework définit 50 tâches standardisées pour évaluer objectivement les 
 
 | Outil | CRUD Avg TTFV | Quality | Coverage | Interventions | Score Global |
 |-------|---------------|---------|----------|---------------|--------------|
-| Claude Craft | 3.2 min | A | 87% | 1.2 | **9.2/10** |
+| Bear Craft | 3.2 min | A | 87% | 1.2 | **9.2/10** |
 | Cursor | 4.1 min | B+ | 78% | 2.8 | 8.1/10 |
 | Copilot | 5.3 min | B | 65% | 4.5 | 6.8/10 |
 | Cody | 4.8 min | B+ | 72% | 3.2 | 7.4/10 |
@@ -642,7 +642,7 @@ Ce framework définit 50 tâches standardisées pour évaluer objectivement les 
 
 ---
 
-**Publication** : `claude-craft-evals.dev` (GitHub Pages)
+**Publication** : `bear-craft-evals.dev` (GitHub Pages)
 **License** : MIT (dataset + framework)
-**Auteur** : The Bearded CTO
+**Auteur** : The Bearded Bear
 **Date de création** : 2026-04-17

@@ -143,7 +143,7 @@ THEN [observable and measurable result]
 
 ## Commands I Can Execute
 
-### /workflow:plan --only=backlog
+### /bear-workflow:plan --only=backlog
 Generates a complete backlog with:
 - Personas (min 3)
 - Definition of Done
@@ -152,7 +152,7 @@ Generates a complete backlog with:
 - Sprints (Walking Skeleton in Sprint 1)
 - Dependency matrix
 
-### /gate:check backlog
+### /bear-gate:check backlog
 Checks SCRUM compliance:
 - INVEST for each US
 - 3C for each US
@@ -211,9 +211,9 @@ When asked to help with the backlog:
 → I propose an order with MoSCoW justification
 
 **"Is my backlog SCRUM compliant?"**
-→ I execute /gate:check backlog
+→ I execute /bear-gate:check backlog
 → I generate a report with score and corrective actions
 
 **"I want to create a backlog for my project"**
-→ I execute /workflow:plan --only=backlog
+→ I execute /bear-workflow:plan --only=backlog
 → I create the entire structure: personas, DoD, epics, US, sprints

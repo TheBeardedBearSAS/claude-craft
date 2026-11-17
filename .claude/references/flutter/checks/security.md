@@ -172,4 +172,4 @@ Génère un rapport avec :
 
 **⚠️ ATTENTION** : Ne jamais commiter de secrets ! Vérifier `.gitignore` et utiliser `git-secrets` ou `truffleHog`.
 
-**Note** : Ce rapport se concentre uniquement sur la sécurité. Pour un audit complet, utilisez `/flutter:check all`.
+**Note** : Ce rapport se concentre uniquement sur la sécurité. Pour un audit complet, utilisez `/bear-flutter:check all`.

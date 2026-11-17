@@ -5,11 +5,11 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Import the class (auto-run is guarded, so this is safe)
-const { ClaudeCraftCLI } = await import('../../cli/index.js');
+const { BearCraftCLI } = await import('../../cli/index.js');
 
-describe('ClaudeCraftCLI class', () => {
+describe('BearCraftCLI class', () => {
   it('constructor sets default config', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     expect(cli.config).toBeDefined();
     expect(cli.config.language).toBe('en');
     expect(cli.config.technologies).toEqual([]);
@@ -19,12 +19,12 @@ describe('ClaudeCraftCLI class', () => {
   });
 
   it('config.targetPath defaults to process.cwd()', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     expect(cli.config.targetPath).toBe(process.cwd());
   });
 
   it('parseArgs delegates to lib/parse-args and returns structured result', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     const result = cli.parseArgs(['install', '/some/path', '--tech=react']);
     expect(result.command).toBe('install');
     expect(result.path).toBe('/some/path');
@@ -32,14 +32,14 @@ describe('ClaudeCraftCLI class', () => {
   });
 
   it('detectProject delegates to lib/detect-project and returns result', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     const result = cli.detectProject(__dirname);
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
   });
 });
 
-describe('ClaudeCraftCLI.run()', () => {
+describe('BearCraftCLI.run()', () => {
   let originalArgv;
   let logSpy;
   let errorSpy;
@@ -61,7 +61,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('--version prints version and returns', async () => {
     process.argv = ['node', 'index.js', '--version'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toMatch(/^\d+\.\d+\.\d+$/);
@@ -69,7 +69,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('-v prints version (short alias)', async () => {
     process.argv = ['node', 'index.js', '-v'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toMatch(/^\d+\.\d+\.\d+$/);
@@ -77,7 +77,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('--lang=zz exits with error for invalid language', async () => {
     process.argv = ['node', 'index.js', 'install', '.', '--lang=zz'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await expect(cli.run()).rejects.toThrow('process.exit called');
     const errOutput = errorSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(errOutput).toContain('Unknown language');
@@ -86,7 +86,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('--tech=cobol exits with error for invalid technology', async () => {
     process.argv = ['node', 'index.js', 'install', '.', '--tech=cobol'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await expect(cli.run()).rejects.toThrow('process.exit called');
     const errOutput = errorSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(errOutput).toContain('Unknown technology');
@@ -95,7 +95,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('help command prints usage', async () => {
     process.argv = ['node', 'index.js', 'help'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Usage');
@@ -103,7 +103,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('init command prints workflow message', async () => {
     process.argv = ['node', 'index.js', 'init'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('workflow');
@@ -111,7 +111,7 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('unknown command exits with error', async () => {
     process.argv = ['node', 'index.js', 'foobar'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await expect(cli.run()).rejects.toThrow('process.exit called');
     const output = logSpy.mock.calls.map((c) => c[0]).join('\n');
     expect(output).toContain('Unknown command');
@@ -120,35 +120,35 @@ describe('ClaudeCraftCLI.run()', () => {
 
   it('config.targetPath resolves to cwd when no path given', async () => {
     process.argv = ['node', 'index.js', '--version'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     expect(cli.config.targetPath).toBe(process.cwd());
   });
 
   it('sets valid language from --lang option', async () => {
     process.argv = ['node', 'index.js', 'help', '--lang=fr'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     expect(cli.config.language).toBe('fr');
   });
 
   it('sets valid tech from --tech option', async () => {
     process.argv = ['node', 'index.js', 'help', '--tech=react'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     expect(cli.config.technologies).toEqual(['react']);
   });
 
   it('resolves targetPath from command argument', async () => {
     process.argv = ['node', 'index.js', 'help', '/tmp/some-path'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     await cli.run();
     expect(cli.config.targetPath).toBe('/tmp/some-path');
   });
 
   it('flatten command calls flattenCodebase', async () => {
     process.argv = ['node', 'index.js', 'flatten', '--output=test.md'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     // Mock flattenCodebase to avoid actual file system operations
     cli.flattenCodebase = vi.fn().mockResolvedValue(undefined);
     await cli.run();
@@ -156,13 +156,13 @@ describe('ClaudeCraftCLI.run()', () => {
   });
 
   it('flattenCodebase method exists and is callable', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     expect(typeof cli.flattenCodebase).toBe('function');
   });
 
   it('flattenCodebase prints banner and codebase flattener header', async () => {
     process.argv = ['node', 'index.js', 'flatten'];
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     // Mock the flatten function to avoid actual file operations
     const { flatten: flattenFn } = await import('../../cli/lib/flattener.js');
     cli.flattenCodebase = vi.fn().mockResolvedValue(undefined);
@@ -171,7 +171,7 @@ describe('ClaudeCraftCLI.run()', () => {
   });
 
   it('createReadline and closeReadline manage rl lifecycle', () => {
-    const cli = new ClaudeCraftCLI();
+    const cli = new BearCraftCLI();
     expect(cli.rl).toBeNull();
     cli.createReadline();
     expect(cli.rl).not.toBeNull();

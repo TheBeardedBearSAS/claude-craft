@@ -1,22 +1,22 @@
 # CLI-Referenz
 
-Vollständige Referenz für die Claude Craft Kommandozeilenschnittstelle.
+Vollständige Referenz für die Bear Craft Kommandozeilenschnittstelle.
 
 ---
 
 ## NPX-Installation
 
-Die empfohlene Methode zur Installation von Claude Craft ist über NPX:
+Die empfohlene Methode zur Installation von Bear Craft ist über NPX:
 
 ```bash
-npx @the-bearded-bear/claude-craft [Befehl] [Optionen]
+npx @the-bearded-bear/bear-craft [Befehl] [Optionen]
 ```
 
 ### Verfügbare Befehle
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `install` | Claude Craft in einem Projekt installieren |
+| `install` | Bear Craft in einem Projekt installieren |
 | `flatten` | Abgeflachten Codebase-Kontext generieren |
 | (kein Befehl) | Interaktiver Installationsassistent |
 
@@ -27,7 +27,7 @@ npx @the-bearded-bear/claude-craft [Befehl] [Optionen]
 Führe ohne Argumente aus für den interaktiven Assistenten:
 
 ```bash
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 ```
 
 Der Assistent führt dich durch:
@@ -43,7 +43,7 @@ Der Assistent führt dich durch:
 ### Grundlegende Verwendung
 
 ```bash
-npx @the-bearded-bear/claude-craft install <Zielverzeichnis> [Optionen]
+npx @the-bearded-bear/bear-craft install <Zielverzeichnis> [Optionen]
 ```
 
 ### Optionen
@@ -88,20 +88,20 @@ npx @the-bearded-bear/claude-craft install <Zielverzeichnis> [Optionen]
 
 ```bash
 # Symfony-Regeln auf Deutsch installieren
-npx @the-bearded-bear/claude-craft install ~/mein-projekt --tech=symfony --lang=de
+npx @the-bearded-bear/bear-craft install ~/mein-projekt --tech=symfony --lang=de
 
 # Mehrere Technologien installieren
-npx @the-bearded-bear/claude-craft install . --tech=react
-npx @the-bearded-bear/claude-craft install . --tech=python
+npx @the-bearded-bear/bear-craft install . --tech=react
+npx @the-bearded-bear/bear-craft install . --tech=python
 
 # Neuinstallation mit Backup erzwingen
-npx @the-bearded-bear/claude-craft install ~/app --tech=flutter --force --backup
+npx @the-bearded-bear/bear-craft install ~/app --tech=flutter --force --backup
 
 # Dry Run zur Vorschau der Änderungen
-npx @the-bearded-bear/claude-craft install . --tech=angular --dry-run
+npx @the-bearded-bear/bear-craft install . --tech=angular --dry-run
 
 # Alle Technologien installieren
-npx @the-bearded-bear/claude-craft install ~/projekt --tech=all --lang=de
+npx @the-bearded-bear/bear-craft install ~/projekt --tech=all --lang=de
 ```
 
 ---
@@ -113,7 +113,7 @@ Generiert eine abgeflachte Zusammenfassung deiner Codebase für KI-Assistenten.
 ### Verwendung
 
 ```bash
-npx @the-bearded-bear/claude-craft flatten [Optionen]
+npx @the-bearded-bear/bear-craft flatten [Optionen]
 ```
 
 ### Optionen
@@ -128,16 +128,16 @@ npx @the-bearded-bear/claude-craft flatten [Optionen]
 
 ```bash
 # Abgeflachte Codebase generieren
-npx @the-bearded-bear/claude-craft flatten
+npx @the-bearded-bear/bear-craft flatten
 
 # Benutzerdefinierte Ausgabedatei
-npx @the-bearded-bear/claude-craft flatten --output=CONTEXT.md
+npx @the-bearded-bear/bear-craft flatten --output=CONTEXT.md
 
 # Token-Anzahl begrenzen (aktiviert Fragmentierung für große Projekte)
-npx @the-bearded-bear/claude-craft flatten --max-tokens=50000
+npx @the-bearded-bear/bear-craft flatten --max-tokens=50000
 
 # Zusätzliche Verzeichnisse ausschließen
-npx @the-bearded-bear/claude-craft flatten --exclude="*.test.ts,*.spec.ts"
+npx @the-bearded-bear/bear-craft flatten --exclude="*.test.ts,*.spec.ts"
 ```
 
 ### Ausgabe
@@ -215,8 +215,8 @@ make migrate-check                         # Migrationsstatus überprüfen
 ### Plugin-Export
 
 ```bash
-make plugin-export                         # Als Claude Code Plugin exportieren
-make plugin-export-all                     # Alle Technologien exportieren
+make plugin-export-all                     # marketplaces/<lang>/plugins/bear-<ns>/ (generated)
+make plugin-check                          # marketplaces/ in sync with the installers
 ```
 
 ---
@@ -293,7 +293,7 @@ Führt Claude in einer kontinuierlichen Schleife bis zum Abschluss der Aufgabe a
 ### Verwendung
 
 ```bash
-npx @the-bearded-bear/claude-craft ralph "Aufgabenbeschreibung"
+npx @the-bearded-bear/bear-craft ralph "Aufgabenbeschreibung"
 ```
 
 ### Optionen
@@ -308,13 +308,13 @@ npx @the-bearded-bear/claude-craft ralph "Aufgabenbeschreibung"
 
 ```bash
 # Grundlegende Aufgabe
-npx @the-bearded-bear/claude-craft ralph "Benutzerauthentifizierung implementieren"
+npx @the-bearded-bear/bear-craft ralph "Benutzerauthentifizierung implementieren"
 
 # Mit allen DoD-Überprüfungen
-npx @the-bearded-bear/claude-craft ralph --full "Login-Bug beheben"
+npx @the-bearded-bear/bear-craft ralph --full "Login-Bug beheben"
 
 # Benutzerdefiniertes Iterationslimit
-npx @the-bearded-bear/claude-craft ralph --max-iterations=20 "Zahlungsmodul refaktorieren"
+npx @the-bearded-bear/bear-craft ralph --max-iterations=20 "Zahlungsmodul refaktorieren"
 ```
 
 ---
@@ -326,10 +326,10 @@ Startet eine lokale Weboberfläche, um das BMAD-v6-Backlog und die Sprints als S
 ### Verwendung
 
 ```bash
-npx @the-bearded-bear/claude-craft kanban [Pfad] [Optionen]
+npx @the-bearded-bear/bear-craft kanban [Pfad] [Optionen]
 ```
 
-Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unterverzeichnis `project-management/` enthalten (erzeugt durch `/workflow:plan` oder `/workflow:start`).
+Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unterverzeichnis `project-management/` enthalten (erzeugt durch `/bear-workflow:plan` oder `/bear-workflow:start`).
 
 ### Optionen
 
@@ -339,7 +339,7 @@ Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unter
 | `--open` | Öffnet den Browser automatisch |
 | `--readonly` | Deaktiviert jedes Schreiben: Der Server antwortet auf jedes PATCH, PUT, POST und DELETE mit 403 `readonly`, und das Board bietet keine Verschiebe-Bedienelemente |
 | `--no-watch` | Deaktiviert den Datei-Watcher (kein Neuladen bei externen Änderungen) |
-| `--user=<Name>` | Autor, der in der `history` der am Board vorgenommenen Änderungen steht (`kanban:<Name>`). Standard: `CLAUDE_CRAFT_USER`, dann `git config user.name`, dann der Systembenutzer, zuletzt `kanban` |
+| `--user=<Name>` | Autor, der in der `history` der am Board vorgenommenen Änderungen steht (`kanban:<Name>`). Standard: `BEAR_CRAFT_USER`, dann `git config user.name`, dann der Systembenutzer, zuletzt `kanban` |
 
 ### Ansichten
 
@@ -364,7 +364,7 @@ Sechs Ansichten, aufgelistet in der Navigationsleiste.
 - **Suchen, filtern und sortieren**: Das Suchfeld (`Strg+K` oder `/`) filtert die Ansichten Board und Backlog; die Filter für Priorität, Zuständige/n und Epic sowie die Sortierung stehen in der URL, zum Beispiel `#/kanban?q=auth&prio=must,should&who=alice&epic=E4&sort=priority&dir=desc`. `?story=US-E4-03` öffnet eine Story aus jeder Ansicht, `#/docs/<Pfad>` öffnet ein Dokument.
 - **Sprache der Oberfläche**: Englisch, Französisch, Spanisch, Deutsch oder Portugiesisch, automatisch nach dem Browser gewählt oder im Einstellungsfenster. Story-Titel und Dokumente werden unverändert angezeigt.
 
-Die Befehle `/workflow:*` und `/project:*` bleiben gültig und schreiben dieselben Dateien.
+Die Befehle `/bear-workflow:*` und `/bear-project:*` bleiben gültig und schreiben dieselben Dateien.
 
 ### Wohin geschrieben wird
 
@@ -409,7 +409,7 @@ done          -> (terminal)
 
 ### BMAD-v6-Quelle sprint-status
 
-Die Stories stammen aus `.bmad/sprint-status.yaml` (geschrieben von `/workflow:*` und `/project:backlog`) und aus den Markdown-Dateien in `project-management/`. Wird eine Story in der YAML geführt, hat die YAML Vorrang für Status, Titel, Punkte, Priorität, Zuständige/n, Epic, Aufgaben und Sprint; das Markdown behält den Inhalt. Das Board aktualisiert sich live, sobald sich eine der Quellen ändert. Stories eines abgeschlossenen Sprints (`archived_sprints`) sind schreibgeschützt.
+Die Stories stammen aus `.bmad/sprint-status.yaml` (geschrieben von `/bear-workflow:*` und `/bear-project:backlog`) und aus den Markdown-Dateien in `project-management/`. Wird eine Story in der YAML geführt, hat die YAML Vorrang für Status, Titel, Punkte, Priorität, Zuständige/n, Epic, Aufgaben und Sprint; das Markdown behält den Inhalt. Das Board aktualisiert sich live, sobald sich eine der Quellen ändert. Stories eines abgeschlossenen Sprints (`archived_sprints`) sind schreibgeschützt.
 
 Ist das Board leer oder fehlt eine Story, listet das Diagnose-Banner die nicht lesbaren Dateien auf; dieselbe Liste liefert `GET /api/diagnostics`. Siehe [Fehlerbehebung](../../TROUBLESHOOTING.md#kanban-board-empty).
 
@@ -458,10 +458,10 @@ Die Tastenkürzel sind optional: Alle Aktionen bleiben mit `Tab` und den nativen
 
 ```bash
 # Im aktuellen Projekt starten und den Browser öffnen
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 
 # Schreibgeschützter Modus
-npx @the-bearded-bear/claude-craft kanban --readonly --port=4040
+npx @the-bearded-bear/bear-craft kanban --readonly --port=4040
 ```
 
 ---
@@ -497,9 +497,9 @@ projects:
 
 | Variable | Beschreibung | Standard |
 |----------|--------------|----------|
-| `CLAUDE_CRAFT_LANG` | Standardsprache | `en` |
-| `CLAUDE_CRAFT_TARGET` | Standard-Zielverzeichnis | `.` |
-| `CLAUDE_CRAFT_CONFIG` | Config-Dateipfad | `claude-projects.yaml` |
+| `BEAR_CRAFT_LANG` | Standardsprache | `en` |
+| `BEAR_CRAFT_TARGET` | Standard-Zielverzeichnis | `.` |
+| `BEAR_CRAFT_CONFIG` | Config-Dateipfad | `claude-projects.yaml` |
 
 ---
 
@@ -538,7 +538,7 @@ make fix-permissions
 ### Falsche yq-Version
 
 ```bash
-# Claude Craft benötigt yq v4 (Mike Farahs Version)
+# Bear Craft benötigt yq v4 (Mike Farahs Version)
 yq --version
 # Sollte anzeigen: yq (https://github.com/mikefarah/yq/) version v4.x.x
 ```
@@ -551,7 +551,7 @@ yq --version
 
 ```bash
 # In Claude Code alle Optimierungen mit einem Befehl konfigurieren
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### RTK-Befehle

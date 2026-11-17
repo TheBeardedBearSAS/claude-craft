@@ -3,7 +3,7 @@ description: "Analyseberichte zum Projekt: Sprint-Burndown, Metrik-Dashboard, Ab
 argument-hint: "<burndown|metrics|deps> [--critical] [--sprint=Sprint-N] [--type=points|stories|tasks] [--format=...] [--velocity=N] [--output=path]"
 ---
 
-# /project:report
+# /bear-project:report
 
 ## Auftrag
 
@@ -13,10 +13,10 @@ Zentraler Einstiegspunkt für lesende Projektanalysen. Jeder Unterbefehl wandelt
 
 | Aufruf | Funktion | Ersetzt |
 |--------|----------|---------|
-| `/project:report burndown` | Mermaid-Burndown-Diagramm + Abweichung und Prognose | `/project:report burndown` |
-| `/project:report metrics` | Dashboard zu Velocity, Spec-Abdeckung, Gates, Sprint-Gesundheit, Regression | `/project:report metrics` |
-| `/project:report deps` | Abhängigkeitsgraph der Stories, Engpässe, parallele Gruppen | `/project:report deps` |
-| `/project:report deps --critical` | Kritischer Pfad, Puffer und paralleler Ausführungsplan | `/project:report deps --critical` |
+| `/bear-project:report burndown` | Mermaid-Burndown-Diagramm + Abweichung und Prognose | `/bear-project:report burndown` |
+| `/bear-project:report metrics` | Dashboard zu Velocity, Spec-Abdeckung, Gates, Sprint-Gesundheit, Regression | `/bear-project:report metrics` |
+| `/bear-project:report deps` | Abhängigkeitsgraph der Stories, Engpässe, parallele Gruppen | `/bear-project:report deps` |
+| `/bear-project:report deps --critical` | Kritischer Pfad, Puffer und paralleler Ausführungsplan | `/bear-project:report deps --critical` |
 
 ## Argumente
 
@@ -77,13 +77,13 @@ Voraussetzungen: `.bmad/sprint-status.yaml`; `project-management/backlog/` mit S
 | Kategorie | Metriken (Quelle) |
 |-----------|-------------------|
 | Velocity | Erledigte Punkte pro Sprint, gleitender Durchschnitt (letzte 3), Commitment-Quote (erledigt / zugesagt, Ziel > 80%), Übertrag (`sprint-status.yaml`, Metrik-Historie) |
-| Spec-Abdeckung | % der FR-xxx durch Stories abgedeckt, % der Stories mit Code-Referenzen, % der AC mit Tests, % vollständiger Ketten FR→US→Code→Test (PRD, Stories, `/project:trace`) |
-| Quality Gates | PRD-Gate (>= 80%), Story-DoD, Erfolgsquote Sprint Ready, Erfolgsquote im ersten Durchlauf (Gate-Historie aus `/gate:check`) |
+| Spec-Abdeckung | % der FR-xxx durch Stories abgedeckt, % der Stories mit Code-Referenzen, % der AC mit Tests, % vollständiger Ketten FR→US→Code→Test (PRD, Stories, `/bear-project:trace`) |
+| Quality Gates | PRD-Gate (>= 80%), Story-DoD, Erfolgsquote Sprint Ready, Erfolgsquote im ersten Durchlauf (Gate-Historie aus `/bear-gate:check`) |
 | Sprint-Gesundheit | Erledigte Stories und Tasks / gesamt, blockierte Stories, TDD-Konformität (`sprint-status.yaml`) |
 | Regression | Gefundene / behobene Bugs pro Sprint, Regressionsrate, Escape-Rate (QA-Recette-Sitzungen, Regressionsregister) |
 
 Ablauf:
-1. **Sammeln**: `.bmad/sprint-status.yaml`, `.bmad/metrics/`, Traceability-Daten (`/project:trace`), Gate-Historie und QA-Recette-Sitzungen (falls vorhanden) lesen.
+1. **Sammeln**: `.bmad/sprint-status.yaml`, `.bmad/metrics/`, Traceability-Daten (`/bear-project:trace`), Gate-Historie und QA-Recette-Sitzungen (falls vorhanden) lesen.
 2. **Berechnen**: alle fünf Kategorien sowie Trends gegenüber dem Vorsprint (steigend / fallend / gleich).
 3. **Dashboard** (eine Zeile pro Metrik mit Statussymbolen, Schwellenwerte wie oben):
 
@@ -142,7 +142,7 @@ Puffer: US-003 5Pkt | US-004 2Pkt (beobachten) | US-006, US-007 8Pkt
 ## Beispiel
 
 ```
-User: /project:report deps --critical --sprint=Sprint-3 --velocity=21
+User: /bear-project:report deps --critical --sprint=Sprint-3 --velocity=21
 
 Claude: Kritischer Pfad: US-001 -> US-002 -> US-005 (13 Pkt), passt in 1 Sprint.
 Risiko: Ein Verzug von 2 oder mehr Tagen bei US-001 gefährdet den gesamten Sprint.
@@ -150,7 +150,7 @@ Risiko: Ein Verzug von 2 oder mehr Tagen bei US-001 gefährdet den gesamten Spri
 
 ## Verwandte Befehle
 
-- `/project:trace` — Traceability-Matrix und Abdeckung
-- `/workflow:status` — Übersicht über den Sprint-Status
-- `/project:backlog next story` — Nächste Story (berücksichtigt Abhängigkeiten)
-- `/workflow:retro` — Sprint-Retrospektive (nutzt die Metriken)
+- `/bear-project:trace` — Traceability-Matrix und Abdeckung
+- `/bear-workflow:status` — Übersicht über den Sprint-Status
+- `/bear-project:backlog next story` — Nächste Story (berücksichtigt Abhängigkeiten)
+- `/bear-workflow:retro` — Sprint-Retrospektive (nutzt die Metriken)

@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Mensaje de error
 - (Opcional) Dirección del recurso
 
-Ejemplo: `/opentofu:debug "conflicto de bloqueo de estado en entorno de producción"`
+Ejemplo: `/bear-opentofu:debug "conflicto de bloqueo de estado en entorno de producción"`
 
 ## Plan Mode
 

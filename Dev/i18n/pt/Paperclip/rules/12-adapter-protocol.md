@@ -236,4 +236,4 @@ O autor adapter/plugin **NAO DEVE** tentar forcar esses localmente. Nunca cache 
 
 ---
 
-**Ultima atualizacao:** 2026-04 | **Versao:** 2.0.0 | **Autor:** The Bearded CTO
+**Ultima atualizacao:** 2026-04 | **Versao:** 2.0.0 | **Autor:** The Bearded Bear

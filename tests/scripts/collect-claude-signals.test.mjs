@@ -3,7 +3,7 @@ import { rmSync, existsSync, readFileSync, mkdirSync, writeFileSync } from 'node
 import path from 'node:path';
 
 /**
- * Garde-fou du collecteur de signaux de `/common:audit-claude-alignment`.
+ * Garde-fou du collecteur de signaux de `/bear-common:audit-claude-alignment`.
  *
  * Le collecteur est le seul composant déterministe de la commande : c'est lui
  * qui décide quelles lentilles méritent un sous-agent cette semaine. Une

@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Herramienta CI: github-actions, gitlab-ci (por defecto: github-actions)
 - (Opcional) Controlador: awx, semaphore, none
 
-Ejemplo: `/ansible:deploy-setup "Infraestructura web" ci:github-actions controller:awx`
+Ejemplo: `/bear-ansible:deploy-setup "Infraestructura web" ci:github-actions controller:awx`
 
 ## Plan Mode
 
@@ -158,5 +158,5 @@ PROXIMOS PASOS
 3. [ ] Almacenar clave privada SSH en secrets de CI (ANSIBLE_SSH_KEY)
 4. [ ] Probar pipeline de extremo a extremo en una rama de feature
 5. [ ] Configurar monitoreo y notificaciones con @ansible-quality
-6. [ ] Auditar postura de seguridad con /ansible:security-audit
+6. [ ] Auditar postura de seguridad con /bear-ansible:security-audit
 ```

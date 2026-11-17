@@ -1026,7 +1026,7 @@ make ci
 
 **Date de dernière mise à jour:** 2026-01-29
 **Version:** 2.0.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear
 
 ## Versions Requises
 

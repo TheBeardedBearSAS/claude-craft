@@ -594,6 +594,6 @@ Security from the start, not after.
 
 **Version**: 1.0.0
 **Created on**: 2025-12-03
-**Author**: TheBeardedCTO
+**Author**: The Bearded Bear
 
 **Remember**: These rules are guides to produce quality code. Adapt them to your specific context.

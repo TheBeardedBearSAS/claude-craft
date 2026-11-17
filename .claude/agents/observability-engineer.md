@@ -160,12 +160,12 @@ def get_users():
 - Audit observabilité existante
 - Configuration alerting / on-call
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `.claude/skills/observability/SKILL.md` — patterns instrumentation
 - `@devops-engineer` — infrastructure monitoring, Prometheus/Grafana setup
 - `@performance-auditor` — optimisation guidée par traces/metrics
-- `/team:audit` — audit observabilité parallèle
+- `/bear-team:audit` — audit observabilité parallèle
 
 ## Ressources
 

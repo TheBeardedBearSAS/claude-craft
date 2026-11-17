@@ -594,6 +594,6 @@ Objetivo 60 FPS, otimizações nativas.
 
 **Version**: 1.0.0
 **Criado em**: 2025-12-03
-**Autor**: TheBeardedCTO
+**Autor**: The Bearded Bear
 
 **Remember**: Essas regras são guias para produzir código de qualidade. Adapte-as ao seu contexto específico.

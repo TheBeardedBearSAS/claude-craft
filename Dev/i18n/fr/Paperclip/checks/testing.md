@@ -62,4 +62,4 @@ Prendre les 5 derniers commits `fix:`. Pour chacun, vérifier qu'un test corresp
 
 ## Sortie
 
-Rapport Markdown avec passe/échoue par section, fichiers non couverts, adaptateurs en échec, et un score /20 pour `/paperclip:check all`.
+Rapport Markdown avec passe/échoue par section, fichiers non couverts, adaptateurs en échec, et un score /20 pour `/bear-paperclip:check all`.

@@ -14,7 +14,7 @@ Argumentos:
 - Ação: update, check, compare
 - (Opcional) Caminho para um teste específico
 
-Exemplo: `/flutter:golden-update update` ou `/flutter:golden-update check test/widgets/button_test.dart`
+Exemplo: `/bear-flutter:golden-update update` ou `/bear-flutter:golden-update check test/widgets/button_test.dart`
 
 ## Modo de Planejamento
 

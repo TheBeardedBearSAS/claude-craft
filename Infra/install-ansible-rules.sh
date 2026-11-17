@@ -21,6 +21,7 @@ lang="en"
 
 # Shared UI library
 source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
+source "${SCRIPT_DIR}/../Dev/scripts/lib/legacy-commands.sh"
 
 # ============================================================================
 # FUNCTIONS
@@ -62,11 +63,11 @@ Description:
     - @ansible-quality        - Ansible linting, testing, and quality specialist
 
     5 commands:
-    - /ansible:architecture     - Design complete Ansible automation architecture
-    - /ansible:deploy-setup     - Setup CI/CD pipeline for Ansible
-    - /ansible:debug            - Diagnose Ansible playbook issues
-    - /ansible:security-audit   - Audit Ansible security posture
-    - /ansible:optimize         - Optimize Ansible performance and quality
+    - /bear-ansible:architecture     - Design complete Ansible automation architecture
+    - /bear-ansible:deploy-setup     - Setup CI/CD pipeline for Ansible
+    - /bear-ansible:debug            - Diagnose Ansible playbook issues
+    - /bear-ansible:security-audit   - Audit Ansible security posture
+    - /bear-ansible:optimize         - Optimize Ansible performance and quality
 EOF
 }
 
@@ -115,7 +116,7 @@ verify_source_files() {
 detect_installation() {
     local target_dir="$1"
 
-    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]]; then
+    if [[ -d "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}" ]]; then
         echo "existing"
     elif [[ -d "${target_dir}/.claude" ]]; then
         echo "partial"
@@ -130,13 +131,13 @@ create_backup() {
     local dry_run="$2"
     local backup_dir="${target_dir}/.claude-backup-ansible-$(date +%Y%m%d-%H%M%S)"
 
-    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]] || [[ -d "${target_dir}/.claude/agents" ]]; then
+    if [[ -d "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}" ]] || [[ -d "${target_dir}/.claude/agents" ]]; then
         if [[ "$dry_run" = "true" ]]; then
             log_dry_run "Backup Ansible files to ${backup_dir}"
         else
             mkdir -p "${backup_dir}/commands"
             mkdir -p "${backup_dir}/agents"
-            cp -r "${target_dir}/.claude/commands/${TECH_NAMESPACE}" "${backup_dir}/commands/" 2>/dev/null || true
+            cp -r "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}" "${backup_dir}/commands/" 2>/dev/null || true
             # Only backup ansible-related agents
             for agent in ansible-architect ansible-deployment ansible-debug ansible-security ansible-quality; do
                 if [[ -f "${target_dir}/.claude/agents/${agent}.md" ]]; then
@@ -156,7 +157,7 @@ create_directory_structure() {
     local dirs=(
         ".claude"
         ".claude/commands"
-        ".claude/commands/${TECH_NAMESPACE}"
+        ".claude/commands/bear-${TECH_NAMESPACE}"
         ".claude/agents"
     )
 
@@ -208,13 +209,14 @@ copy_commands() {
             local count=0
             for cmd_file in "${cmd_dir}/"*.md; do
                 if [[ -f "$cmd_file" ]]; then
-                    cp "$cmd_file" "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"
+                    cp "$cmd_file" "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}/"
                     ((++count))
                 fi
             done
             log_success "${count} Ansible commands copied"
         fi
     fi
+    [[ "$dry_run" = "true" ]] || migrate_legacy_commands "$target_dir" "$TECH_NAMESPACE"
 }
 
 # Show installation summary
@@ -225,8 +227,8 @@ show_summary() {
     # Count installed files
     local commands_count=0
     local agents_count=0
-    if [[ -d "${target_dir}/.claude/commands/${TECH_NAMESPACE}" ]]; then
-        commands_count=$(ls -1 "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"*.md 2>/dev/null | wc -l)
+    if [[ -d "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}" ]]; then
+        commands_count=$(ls -1 "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}/"*.md 2>/dev/null | wc -l)
     fi
     # Count only Ansible agents
     for agent in ansible-architect ansible-deployment ansible-debug ansible-security ansible-quality; do
@@ -244,18 +246,18 @@ show_summary() {
     echo "  ${target_dir}/"
     echo "  |-- .claude/"
     echo "  |   |-- commands/"
-    echo "  |   |   |-- ${TECH_NAMESPACE}/       (${commands_count} commands)"
+    echo "  |   |   |-- bear-${TECH_NAMESPACE}/       (${commands_count} commands)"
     echo "  |   |-- agents/             (${agents_count} Ansible agents)"
     echo ""
 
     # List available commands
     if [[ $commands_count -gt 0 ]]; then
         echo "Available Ansible commands:"
-        for cmd_file in "${target_dir}/.claude/commands/${TECH_NAMESPACE}/"*.md; do
+        for cmd_file in "${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}/"*.md; do
             if [[ -f "$cmd_file" ]]; then
                 local cmd_name
                 cmd_name=$(basename "$cmd_file" .md)
-                echo "  - /${TECH_NAMESPACE}:${cmd_name}"
+                echo "  - /bear-${TECH_NAMESPACE}:${cmd_name}"
             fi
         done
         echo ""
@@ -275,9 +277,9 @@ show_summary() {
     echo "Usage examples:"
     echo "  @ansible-architect      Design Ansible project architecture"
     echo "  @ansible-security       Audit Ansible security posture"
-    echo "  /ansible:architecture   Design complete Ansible architecture"
-    echo "  /ansible:debug          Diagnose Ansible playbook issues"
-    echo "  /ansible:deploy-setup   Setup Ansible CI/CD pipeline"
+    echo "  /bear-ansible:architecture   Design complete Ansible architecture"
+    echo "  /bear-ansible:debug          Diagnose Ansible playbook issues"
+    echo "  /bear-ansible:deploy-setup   Setup Ansible CI/CD pipeline"
     echo ""
 }
 

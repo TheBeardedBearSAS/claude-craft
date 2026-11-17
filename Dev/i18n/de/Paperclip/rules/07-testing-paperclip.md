@@ -195,4 +195,4 @@ Kein Fix ohne Regressions-Test.
 
 ---
 
-**Zuletzt aktualisiert:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded CTO
+**Zuletzt aktualisiert:** 2026-04 | **Version:** 1.0.0 | **Autor:** The Bearded Bear

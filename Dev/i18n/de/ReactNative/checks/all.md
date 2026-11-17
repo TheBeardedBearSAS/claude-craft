@@ -13,10 +13,10 @@ $ARGUMENTS
 Sie sind ein Experte für React Native Projekt-Compliance. Ihre Aufgabe ist es, ein vollständiges Audit durch Kombination der spezialisierten Audits zu orchestrieren: Architektur, Code-Qualität, Tests und Sicherheit.
 
 Dieser Befehl aggregiert die Ergebnisse aus:
-1. `/reactnative:check architecture` (25 Punkte)
-2. `/reactnative:check code-quality` (25 Punkte)
-3. `/reactnative:check testing` (25 Punkte)
-4. `/reactnative:check security` (25 Punkte)
+1. `/bear-reactnative:check architecture` (25 Punkte)
+2. `/bear-reactnative:check code-quality` (25 Punkte)
+3. `/bear-reactnative:check testing` (25 Punkte)
+4. `/bear-reactnative:check security` (25 Punkte)
 
 ### Schritt 1: Die 4 spezialisierten Audits ausführen
 
@@ -24,16 +24,16 @@ Sequentiell ausführen (oder die auszuführenden Befehle anzeigen):
 
 ```bash
 # 1. Architektur-Audit
-/reactnative:check architecture
+/bear-reactnative:check architecture
 
 # 2. Code-Qualitäts-Audit
-/reactnative:check code-quality
+/bear-reactnative:check code-quality
 
 # 3. Test-Audit
-/reactnative:check testing
+/bear-reactnative:check testing
 
 # 4. Sicherheits-Audit
-/reactnative:check security
+/bear-reactnative:check security
 ```
 
 ### Schritt 2: Ergebnisse aggregieren

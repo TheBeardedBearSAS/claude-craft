@@ -1,12 +1,12 @@
 ---
 name: debug-methodical
 description: 4-phase debugging methodology — reproduce, isolate, fix, verify (no random fixes)
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [debugging, troubleshooting, regression, bug-fix, methodical]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Debug-Methodical — 4-Phase Debugging
@@ -113,5 +113,5 @@ Rigorous debugging methodology instead of "try random fixes until it works".
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

@@ -27,7 +27,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung ausführen:
 
-**Befehl**: Den Slash-Befehl `/tauri:check architecture` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/architecture.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-tauri:check architecture` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/architecture.md` folgen
 
 **Bewertete Kriterien**:
 - Projektlayout (`src/` / `src-tauri/`, Einstieg `lib.rs` `run()`, Mobile-Einstiegspunkt) und schlankes `main.rs` (5 Pkt.)
@@ -43,7 +43,7 @@ Vollständige Architekturprüfung ausführen:
 
 Codequalitätsprüfung ausführen:
 
-**Befehl**: Den Slash-Befehl `/tauri:check code-quality` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/code-quality.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-tauri:check code-quality` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/code-quality.md` folgen
 
 **Bewertete Kriterien**:
 - Clippy sauber mit `-D warnings` und `cargo fmt --check` (5 Pkt.)
@@ -59,7 +59,7 @@ Codequalitätsprüfung ausführen:
 
 Testprüfung ausführen:
 
-**Befehl**: Den Slash-Befehl `/tauri:check testing` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/testing.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-tauri:check testing` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/testing.md` folgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (Ziel >= 80 %) über Rust-Kern und Frontend (7 Pkt.)
@@ -75,7 +75,7 @@ Testprüfung ausführen:
 
 Sicherheitsprüfung ausführen:
 
-**Befehl**: Den Slash-Befehl `/tauri:check security` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/security.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-tauri:check security` verwenden oder manuell den Schritten in `.claude/references/tauri/checks/security.md` folgen
 
 **Bewertete Kriterien**:
 - Capabilities und Berechtigungen: eine Capability pro Fenster/Rolle, minimale Rechte (6 Pkt.)

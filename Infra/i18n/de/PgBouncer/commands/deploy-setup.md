@@ -15,7 +15,7 @@ Argumente:
 - (Optional) Methode: docker-compose, kubernetes-standalone, kubernetes-sidecar, systemd (Standard: docker-compose)
 - (Optional) HA: yes, no (Standard: no)
 
-Beispiel: `/pgbouncer:deploy-setup "Produktions-Webanwendung" method:kubernetes-standalone ha:yes`
+Beispiel: `/bear-pgbouncer:deploy-setup "Produktions-Webanwendung" method:kubernetes-standalone ha:yes`
 
 ## Plan-Modus
 
@@ -113,6 +113,6 @@ NAECHSTE SCHRITTE
 2. [ ] PgBouncer in Zielumgebung deployen
 3. [ ] Health Checks verifizieren
 4. [ ] Anwendungs-DATABASE_URL auf PgBouncer umstellen
-5. [ ] Sicherheit mit /pgbouncer:security-audit auditieren
-6. [ ] Monitoring mit /pgbouncer:optimize einrichten
+5. [ ] Sicherheit mit /bear-pgbouncer:security-audit auditieren
+6. [ ] Monitoring mit /bear-pgbouncer:optimize einrichten
 ```

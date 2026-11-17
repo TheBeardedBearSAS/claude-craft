@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Mensagem de erro
 - (Opcional) Endereço do recurso
 
-Exemplo: `/opentofu:debug "conflito de lock no estado do ambiente de produção"`
+Exemplo: `/bear-opentofu:debug "conflito de lock no estado do ambiente de produção"`
 
 ## Modo Plan
 

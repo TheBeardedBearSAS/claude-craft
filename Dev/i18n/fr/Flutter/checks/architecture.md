@@ -88,4 +88,4 @@ Génère un rapport avec :
 
 ---
 
-**Note** : Ce rapport se concentre uniquement sur l'architecture. Pour un audit complet, utilisez `/flutter:check all`.
+**Note** : Ce rapport se concentre uniquement sur l'architecture. Pour un audit complet, utilisez `/bear-flutter:check all`.

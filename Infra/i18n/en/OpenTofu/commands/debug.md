@@ -15,7 +15,7 @@ Arguments:
 - (Optional) Error message
 - (Optional) Resource address
 
-Example: `/opentofu:debug "state lock conflict on prod environment"`
+Example: `/bear-opentofu:debug "state lock conflict on prod environment"`
 
 ## Plan Mode
 

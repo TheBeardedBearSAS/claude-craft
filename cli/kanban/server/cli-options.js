@@ -43,13 +43,14 @@ function osUsername() {
 }
 
 /**
- * Author identity for history entries: --user > CLAUDE_CRAFT_USER > git user.name > OS user > 'kanban'.
+ * Author identity for history entries: --user > BEAR_CRAFT_USER > CLAUDE_CRAFT_USER (legacy, removed in 11.0)
+ * > git user.name > OS user > 'kanban'.
  * @param {{ user?: unknown }} options
  * @param {Record<string, string|undefined>} env
  * @param {{ gitUserName?: string }} [sources]
  */
 export function resolveUser(options, env, { gitUserName = '' } = {}) {
-  const candidates = [options?.user, env?.CLAUDE_CRAFT_USER, gitUserName, osUsername()];
+  const candidates = [options?.user, env?.BEAR_CRAFT_USER, env?.CLAUDE_CRAFT_USER, gitUserName, osUsername()];
   for (const candidate of candidates) {
     const name = clean(candidate);
     if (name) return name;

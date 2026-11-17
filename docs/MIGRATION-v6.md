@@ -2,7 +2,7 @@
 
 **Version:** 6.0.0
 
-Guide for migrating Claude Craft projects from version 5.x to 6.0.
+Guide for migrating Bear Craft projects from version 5.x to 6.0.
 
 ---
 
@@ -55,10 +55,10 @@ The `/workflow:*` commands provide the same functionality with clearer intent an
 
 ## Migration Steps
 
-### Step 1: Update Claude Craft
+### Step 1: Update Bear Craft
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --force
+npx @the-bearded-bear/bear-craft install . --force
 ```
 
 ### Step 2: Update Custom Scripts
@@ -108,7 +108,7 @@ If you need to revert to v5.x:
 
 ```bash
 # Reinstall previous version
-npx @the-bearded-bear/claude-craft@5 install . --force
+npx @the-bearded-bear/bear-craft@5 install . --force
 
 # Or restore from git
 git checkout -- .claude/
@@ -119,7 +119,7 @@ git checkout -- .claude/
 ## Getting Help
 
 - Check [Troubleshooting Guide](TROUBLESHOOTING.md)
-- [Open GitHub Issue](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- [Open GitHub Issue](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ---
 

@@ -14,7 +14,7 @@ Arguments:
 - Component name to specify
 - (Optional) Usage context
 
-Example: `/uiux:component-spec Button` or `/uiux:component-spec "Trip Card" context:"Tourism SaaS"`
+Example: `/bear-uiux:component-spec Button` or `/bear-uiux:component-spec "Trip Card" context:"Tourism SaaS"`
 
 ## Plan Mode
 
@@ -41,7 +41,7 @@ Define visuals:
 
 ### Step 3: A11y Specification (A11y Expert)
 
-Run `/uiux:a11y-component {NAME}` and carry its specification (HTML semantics, ARIA attributes, keyboard navigation, focus, contrast, screen reader announcements) into the ♿ section of the synthesis. Do not redefine it here.
+Run `/bear-uiux:a11y-component {NAME}` and carry its specification (HTML semantics, ARIA attributes, keyboard navigation, focus, contrast, screen reader announcements) into the ♿ section of the synthesis. Do not redefine it here.
 
 ### Step 4: Synthesis
 

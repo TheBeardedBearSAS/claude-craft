@@ -26,7 +26,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification complète de l'architecture :
 
-**Commande** : Utiliser la commande slash `/vuejs:check architecture` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/architecture.md`
+**Commande** : Utiliser la commande slash `/bear-vuejs:check architecture` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/architecture.md`
 
 **Critères évalués** :
 - Organisation des composants et des fonctionnalités (6 pts)
@@ -42,7 +42,7 @@ Exécuter la vérification complète de l'architecture :
 
 Exécuter la vérification de la qualité du code :
 
-**Commande** : Utiliser la commande slash `/vuejs:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/code-quality.md`
+**Commande** : Utiliser la commande slash `/bear-vuejs:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/code-quality.md`
 
 **Critères évalués** :
 - Mode strict TypeScript et sûreté des types (5 pts)
@@ -58,7 +58,7 @@ Exécuter la vérification de la qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la commande slash `/vuejs:check testing` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/testing.md`
+**Commande** : Utiliser la commande slash `/bear-vuejs:check testing` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/testing.md`
 
 **Critères évalués** :
 - Couverture du code (7 pts)
@@ -74,7 +74,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la commande slash `/vuejs:check security` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/security.md`
+**Commande** : Utiliser la commande slash `/bear-vuejs:check security` ou suivre manuellement les étapes dans `.claude/references/vuejs/checks/security.md`
 
 **Critères évalués** :
 - Prévention XSS (utilisation de v-html) (6 pts)

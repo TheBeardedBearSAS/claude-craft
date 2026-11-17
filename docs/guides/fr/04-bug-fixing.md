@@ -1,6 +1,6 @@
 # Guide de Correction de Bugs
 
-Ce guide couvre l'approche systématique pour corriger les bugs avec Claude-Craft, du diagnostic à la validation.
+Ce guide couvre l'approche systématique pour corriger les bugs avec Bear-Craft, du diagnostic à la validation.
 
 ---
 
@@ -98,7 +98,7 @@ Trouvez la cause racine du bug.
 ### Utiliser la Commande d'Analyse
 
 ```bash
-/common:analyze-bug "Les utilisateurs ne peuvent pas se connecter avec les bons identifiants après réinitialisation du mot de passe"
+/bear-common:analyze-bug "Les utilisateurs ne peuvent pas se connecter avec les bons identifiants après réinitialisation du mot de passe"
 ```
 
 Cette commande va :
@@ -319,19 +319,19 @@ make test
 
 ```bash
 # Qualité du code (par technologie, parmi les 204+ commandes disponibles)
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
-/react:check code-quality
-/angular:check code-quality
-/vuejs:check code-quality
-/csharp:check code-quality
-/laravel:check code-quality
-/reactnative:check code-quality
-/php:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
+/bear-react:check code-quality
+/bear-angular:check code-quality
+/bear-vuejs:check code-quality
+/bear-csharp:check code-quality
+/bear-laravel:check code-quality
+/bear-reactnative:check code-quality
+/bear-php:check code-quality
 
 # Sécurité (si la correction touche du code sensible)
-/common:security-audit
+/bear-common:security-audit
 
 # Conformité complète
 /{tech}:check all
@@ -475,7 +475,7 @@ git checkout -b hotfix/issue-123-echec-connexion
 
 # 4. Vérifier
 make test
-/symfony:check all
+/bear-symfony:check all
 
 # 5. Commiter avec un message clair
 git commit -m "fix(auth): résoudre l'échec critique de connexion après réinitialisation
@@ -629,7 +629,7 @@ public function calculateTotal(): Money
 make test
 
 # Vérification qualité
-/symfony:check all
+/bear-symfony:check all
 # Score : 94/100 ✓
 ```
 

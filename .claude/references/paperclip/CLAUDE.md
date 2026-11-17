@@ -81,7 +81,7 @@ paperclipai approval list
 paperclipai activity list
 ```
 
-Hiring an agent is done via the dashboard (**Agents → Hire**) or `POST /companies/:companyId/agents`. See `/paperclip:generate-agent-config` for a guided payload builder.
+Hiring an agent is done via the dashboard (**Agents → Hire**) or `POST /companies/:companyId/agents`. See `/bear-paperclip:generate-agent-config` for a guided payload builder.
 
 ## Governance model (server-enforced)
 

@@ -5,7 +5,7 @@ set -euo pipefail
 #
 # Résout hook-io.sh et les gardes (block-dangerous-commands.sh, guard-network.sh) :
 #   1. copiés dans le projet à côté des hooks (.ralph/hooks/ et .ralph/hooks/lib/)
-#   2. sinon dans le paquet claude-craft (Dev/i18n/base/Common/hooks/scripts/)
+#   2. sinon dans le paquet bear-craft (Dev/i18n/base/Common/hooks/scripts/)
 # =============================================================================
 
 RALPH_HOOKS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)

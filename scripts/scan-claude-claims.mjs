@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * scan-claude-claims.mjs — inventaire déterministe des affirmations Claude du
- * dépôt, pour `/common:audit-claude-alignment`.
+ * dépôt, pour `/bear-common:audit-claude-alignment`.
  *
  * Pourquoi : les lentilles de l'audit ne lisaient qu'une liste figée de fichiers
  * pivots (~15) alors que 160 fichiers suivis citent des IDs de modèles, des

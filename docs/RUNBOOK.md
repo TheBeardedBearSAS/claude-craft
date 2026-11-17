@@ -1,6 +1,6 @@
 # Operations Runbook
 
-This document provides procedures for common operations, incident response, and maintenance tasks for Claude Craft maintainers.
+This document provides procedures for common operations, incident response, and maintenance tasks for Bear Craft maintainers.
 
 ---
 
@@ -18,7 +18,7 @@ This document provides procedures for common operations, incident response, and 
 
 ### Standard Release (Maximum 1 per week)
 
-Claude Craft follows a maximum cadence of **1 release per week**. Exceptions are critical security fixes and documented regressions.
+Bear Craft follows a maximum cadence of **1 release per week**. Exceptions are critical security fixes and documented regressions.
 
 #### Pre-Release Checklist
 
@@ -162,14 +162,14 @@ git push origin vX.Y.Z+1
 
 ```bash
 # Deprecate the problematic version
-npm deprecate @the-bearded-bear/claude-craft@X.Y.Z "Critical bug - use vX.Y.Z+1 instead"
+npm deprecate @the-bearded-bear/bear-craft@X.Y.Z "Critical bug - use vX.Y.Z+1 instead"
 ```
 
 ### Option 3: Unpublish (Only within 72h)
 
 ```bash
 # ONLY if published < 72h ago
-npm unpublish @the-bearded-bear/claude-craft@X.Y.Z
+npm unpublish @the-bearded-bear/bear-craft@X.Y.Z
 
 # Then re-publish previous version with a new patch
 git checkout vX.Y.Z-1
@@ -345,7 +345,7 @@ npm run lint:shell
 
 ## Contact
 
-- **Maintainer:** The Bearded CTO
+- **Maintainer:** The Bearded Bear
 - **Email:** flavien.metivier@gmail.com
 - **Security:** security@the-bearded-bear.com
 

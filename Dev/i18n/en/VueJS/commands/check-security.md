@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /vuejs:check security"
+description: "Deprecated (removed in 10.0): use /bear-vuejs:check security"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-security` is deprecated and will be removed in 10.0. Use `/vuejs:check security`.
+> ⚠️ `/bear-vuejs:check-security` is deprecated and will be removed in 10.0. Use `/bear-vuejs:check security`.
 
-Run `/vuejs:check security $ARGUMENTS`: read `.claude/commands/vuejs/check.md` and follow it with these arguments.
+Run `/bear-vuejs:check security $ARGUMENTS`: read `.claude/commands/bear-vuejs/check.md` and follow it with these arguments.

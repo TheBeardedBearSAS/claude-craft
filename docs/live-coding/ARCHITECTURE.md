@@ -1,8 +1,8 @@
-# Architecture Live Coding — Claude Craft
+# Architecture Live Coding — Bear Craft
 
 ## Vue d'ensemble
 
-Claude Craft Phase 4 (P4-40) introduit le **live coding / pair programming interactif** : un développeur code avec Claude, et des spectateurs (ou co-pilots) peuvent suivre en temps réel via un viewer web. Cas d'usage : formation, démo, debugging collaboratif, audit en direct.
+Bear Craft Phase 4 (P4-40) introduit le **live coding / pair programming interactif** : un développeur code avec Claude, et des spectateurs (ou co-pilots) peuvent suivre en temps réel via un viewer web. Cas d'usage : formation, démo, debugging collaboratif, audit en direct.
 
 ---
 
@@ -28,9 +28,9 @@ Claude Craft Phase 4 (P4-40) introduit le **live coding / pair programming inter
 | Cas | Description |
 |-----|-------------|
 | **Formation** | Formateur code avec Claude, étudiants suivent en temps réel |
-| **Démo produit** | Démo Claude Craft en live (conférences, webinars) |
+| **Démo produit** | Démo Bear Craft en live (conférences, webinars) |
 | **Debugging collaboratif** | Dev partage session, collègue suit et suggère |
-| **Audit en direct** | Auditeur observe exécution `/team:audit` en temps réel |
+| **Audit en direct** | Auditeur observe exécution `/bear-team:audit` en temps réel |
 | **Pair programming** | Deux devs, un pilote (Claude + humain), un co-pilot (spectateur) |
 
 ### Experience utilisateur
@@ -40,7 +40,7 @@ Claude Craft Phase 4 (P4-40) introduit le **live coding / pair programming inter
 claude-code --live
 
 # Output :
-# Live session started: https://live.claude-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T
+# Live session started: https://live.bear-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T
 # Share this URL with viewers (read-only) or collaborators (read-write).
 # Session expires after 30 minutes of inactivity.
 ```
@@ -49,13 +49,13 @@ claude-code --live
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Claude Craft Live — Session 01J7XKQZ8M9N2P3Q4R5S6T              │
+│ Bear Craft Live — Session 01J7XKQZ8M9N2P3Q4R5S6T              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  [Timeline] ──●──────●────────●──────────●─────────────> Now   │
 │             14:02  14:05    14:08      14:12                   │
 │                                                                 │
-│  [14:12:34] User: /team:audit --sequential                     │
+│  [14:12:34] User: /bear-team:audit --sequential                     │
 │  [14:12:35] Agent: Analyzing project structure...              │
 │  [14:12:37] Tool: Read (src/controllers/OrderController.php)   │
 │  [14:12:38] Tool Result: 245 lines, 3 classes                  │
@@ -91,7 +91,7 @@ claude-code --live
 
 **Stack :** Hono (Edge runtime, Cloudflare Workers ou Node.js) + `ws` (WebSocket)
 
-**URL :** `wss://live.claude-craft.dev`
+**URL :** `wss://live.bear-craft.dev`
 
 ### Authentification
 
@@ -119,7 +119,7 @@ Format : **ULID** (Universally Unique Lexicographically Sortable Identifier)
 
 Exemple : `01J7XKQZ8M9N2P3Q4R5S6T`
 
-**URL session :** `https://live.claude-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T`
+**URL session :** `https://live.bear-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T`
 
 ---
 
@@ -164,7 +164,7 @@ Tous les events suivent le format JSON :
   "timestamp": 1713182405000,
   "sessionId": "01J7XKQZ8M9N2P3Q4R5S6T",
   "payload": {
-    "command": "/team:audit --sequential"
+    "command": "/bear-team:audit --sequential"
   }
 }
 ```
@@ -354,7 +354,7 @@ function DiffPanel({ sessionId }: { sessionId: string }) {
   const [chunks, setChunks] = useState<Map<string, string[]>>(new Map());
 
   useEffect(() => {
-    const ws = new WebSocket(`wss://live.claude-craft.dev/s/${sessionId}`);
+    const ws = new WebSocket(`wss://live.bear-craft.dev/s/${sessionId}`);
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -511,7 +511,7 @@ Par défaut, les sessions sont **éphémères** (RAM uniquement). L'utilisateur 
 claude-code --live --persist
 
 # Output :
-# Live session started (persistent): https://live.claude-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T
+# Live session started (persistent): https://live.bear-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T
 # Events will be saved to S3 (replay available for 30 days).
 ```
 
@@ -522,7 +522,7 @@ claude-code --live --persist
 Structure :
 
 ```
-s3://claude-craft-live-sessions/
+s3://bear-craft-live-sessions/
   <session-id>/
     metadata.json          # { sessionId, user, startedAt, endedAt, stack }
     events.jsonl           # Stream d'events (1 event/ligne)
@@ -534,7 +534,7 @@ s3://claude-craft-live-sessions/
 
 ```bash
 # Viewer replay mode
-https://live.claude-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T?replay=true
+https://live.bear-craft.dev/s/01J7XKQZ8M9N2P3Q4R5S6T?replay=true
 
 # UI : timeline scrubber, play/pause, speed control
 ```
@@ -590,7 +590,7 @@ Automatique après 30 jours (S3 lifecycle policy).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ [Logo] Claude Craft Live    Session: 01J7XKQZ...  [Settings ⚙] │
+│ [Logo] Bear Craft Live    Session: 01J7XKQZ...  [Settings ⚙] │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  Timeline                                                       │
@@ -608,7 +608,7 @@ Automatique après 30 jours (S3 lifecycle policy).
 │  ☐ Agent                  │                                     │
 │                           │  [Split View] [Unified View]        │
 │  [14:12:34] User:         │                                     │
-│  /team:audit              │                                     │
+│  /bear-team:audit              │                                     │
 │                           │                                     │
 │  [14:12:35] Agent:        │                                     │
 │  Analyzing project...     │                                     │
@@ -640,7 +640,7 @@ Automatique après 30 jours (S3 lifecycle policy).
 
 - **Analytics** : Dashboard (nombre sessions, durée moyenne, viewers max)
 - **SSO** : SAML/OIDC integration
-- **Custom domain** : `live.acme.com` au lieu de `live.claude-craft.dev`
+- **Custom domain** : `live.acme.com` au lieu de `live.bear-craft.dev`
 - **Webhooks** : Notification Slack/Teams à la fin de session
 - **Branded viewer** : Logo custom, couleurs
 
@@ -761,7 +761,7 @@ export class LiveSession {
 
   async sendEvent(event: any): Promise<void> {
     await axios.post(
-      `https://live.claude-craft.dev/s/${this.sessionId}/event`,
+      `https://live.bear-craft.dev/s/${this.sessionId}/event`,
       event,
       {
         headers: {
@@ -885,4 +885,4 @@ function onToolUse(tool: string, input: any, liveSession?: LiveSession): void {
 
 **Date de dernière mise à jour :** 2026-04-15  
 **Version :** 1.0.0  
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

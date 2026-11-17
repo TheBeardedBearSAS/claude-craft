@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: '.github/cla-signatures/v1/signatures.json'
-          path-to-document: 'https://github.com/TheBeardedBearSAS/claude-craft/blob/main/.github/CLA.md'
+          path-to-document: 'https://github.com/TheBeardedBearSAS/bear-craft/blob/main/.github/CLA.md'
           # Store signatures on a dedicated UNPROTECTED branch: main is protected
           # ("changes must be made through a PR"), so GITHUB_TOKEN cannot commit the
           # signatures file there. cla-signatures has no protection rule.

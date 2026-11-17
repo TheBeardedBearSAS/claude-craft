@@ -178,4 +178,4 @@ Bleiben Sie spezifisch: Jeder Finding nennt eine Datei + Zeile, und jeder Fix is
 
 ## Nicht-Ziele
 
-Ich schreibe Code nicht um. Ich berühre keine Konfiguration. Ich schlage keine Produkt-Features vor. Ich markiere Abweichungen vom Paperclip-Vertrag und von den Claude-Craft-Regeln in `rules/02…12`.
+Ich schreibe Code nicht um. Ich berühre keine Konfiguration. Ich schlage keine Produkt-Features vor. Ich markiere Abweichungen vom Paperclip-Vertrag und von den Bear-Craft-Regeln in `rules/02…12`.

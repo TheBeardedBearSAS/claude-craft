@@ -21,8 +21,8 @@ Le premier argument est l'axe ; le reste (par exemple un chemin de projet) est t
 
 ## MISSION
 
-1. Lisez le premier argument. S'il ne correspond à aucun des 5 axes ci-dessus, listez-les avec un exemple (`/flutter:check security src/`) et arrêtez-vous.
+1. Lisez le premier argument. S'il ne correspond à aucun des 5 axes ci-dessus, listez-les avec un exemple (`/bear-flutter:check security src/`) et arrêtez-vous.
 2. Lisez le fichier de checklist de cet axe et suivez-le étape par étape. Dans ce fichier, `$ARGUMENTS` désigne les arguments qui suivent l'axe.
 3. Produisez le rapport au format de sortie défini par la checklist.
 
-Exemples : `/flutter:check architecture`, `/flutter:check testing ./app`, `/flutter:check all`.
+Exemples : `/bear-flutter:check architecture`, `/bear-flutter:check testing ./app`, `/bear-flutter:check all`.

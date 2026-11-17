@@ -767,4 +767,4 @@ builder.Configuration.AddAzureKeyVault(
 
 **Last updated:** 2026-06
 **Version:** 2.1.0 (JWT EdDSA OWASP 2026 alignment)
-**Author:** The Bearded CTO
+**Author:** The Bearded Bear

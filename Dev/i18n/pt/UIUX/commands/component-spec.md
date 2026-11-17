@@ -14,7 +14,7 @@ Argumentos:
 - Nome do componente a especificar
 - (Opcional) Contexto de uso
 
-Exemplo: `/uiux:component-spec Button` ou `/uiux:component-spec "Cartão de Viagem" contexto:"SaaS de Turismo"`
+Exemplo: `/bear-uiux:component-spec Button` ou `/bear-uiux:component-spec "Cartão de Viagem" contexto:"SaaS de Turismo"`
 
 ## Modo Plano
 
@@ -41,7 +41,7 @@ Definir o visual:
 
 ### Etapa 3: Especificação A11y (Especialista A11y)
 
-Executar `/uiux:a11y-component {NOME}` e levar a sua especificação (semântica HTML, atributos ARIA, navegação por teclado, foco, contraste, anúncios do leitor de ecrã) para a secção ♿ da síntese. Não a redefinir aqui.
+Executar `/bear-uiux:a11y-component {NOME}` e levar a sua especificação (semântica HTML, atributos ARIA, navegação por teclado, foco, contraste, anúncios do leitor de ecrã) para a secção ♿ da síntese. Não a redefinir aqui.
 
 ### Etapa 4: Síntese
 

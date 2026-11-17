@@ -15,7 +15,7 @@ Arguments :
 - (Optionnel) Methode : docker-compose, kubernetes, standalone-binary (par defaut : docker-compose)
 - (Optionnel) Framework : symfony, laravel, php (par defaut : auto-detect)
 
-Exemple : `/frankenphp:deploy-setup "API de production" method:kubernetes framework:symfony`
+Exemple : `/bear-frankenphp:deploy-setup "API de production" method:kubernetes framework:symfony`
 
 ## Plan Mode
 
@@ -112,6 +112,6 @@ PROCHAINES ETAPES
 1. [ ] Configurer les variables d'environnement (SERVER_NAME, secrets)
 2. [ ] Construire et deployer l'image FrankenPHP
 3. [ ] Verifier que les health checks passent
-4. [ ] Auditer la securite avec /frankenphp:security-audit
-5. [ ] Optimiser la performance avec /frankenphp:optimize
+4. [ ] Auditer la securite avec /bear-frankenphp:security-audit
+5. [ ] Optimiser la performance avec /bear-frankenphp:optimize
 ```

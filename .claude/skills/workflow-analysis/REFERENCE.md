@@ -223,4 +223,4 @@ Avant toute modification :
 
 **Date de dernière mise à jour:** 2026-10
 **Version:** 1.1.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

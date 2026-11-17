@@ -1,6 +1,6 @@
 #!/bin/bash
 #===============================================================================
-# check-prerequisites.sh - Verify Claude Craft Prerequisites
+# check-prerequisites.sh - Verify Bear Craft Prerequisites
 #
 # Usage:
 #   ./check-prerequisites.sh [--verbose] [--fix]
@@ -32,7 +32,7 @@ for arg in "$@"; do
     esac
 done
 
-ui_box "Claude Craft Prerequisites Check"
+ui_box "Bear Craft Prerequisites Check"
 echo ""
 
 ERRORS=0
@@ -202,8 +202,8 @@ ui_separator
 if [[ $ERRORS -eq 0 ]]; then
     ui_success "All required prerequisites are installed!"
     echo ""
-    echo "You can now install Claude Craft:"
-    echo "  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony"
+    echo "You can now install Bear Craft:"
+    echo "  npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony"
     echo ""
     exit 0
 else

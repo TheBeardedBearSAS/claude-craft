@@ -62,4 +62,4 @@ Escolha os últimos 5 commits `fix:`. Para cada um, verifique se um teste corres
 
 ## Saída
 
-Relatório markdown com passa/falha por seção, arquivos não cobertos, adaptadores falhando, e uma pontuação /20 para `/paperclip:check all`.
+Relatório markdown com passa/falha por seção, arquivos não cobertos, adaptadores falhando, e uma pontuação /20 para `/bear-paperclip:check all`.

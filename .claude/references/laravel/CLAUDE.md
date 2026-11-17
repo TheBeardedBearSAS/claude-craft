@@ -235,4 +235,4 @@ parameters:
 
 **Version :** 1.0
 **Dernière mise à jour :** 2026-04
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

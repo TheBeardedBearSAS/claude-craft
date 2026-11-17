@@ -339,10 +339,10 @@ docker run --rm -v $(pwd):/app -w /app cirrusci/flutter:stable flutter pub upgra
 ---
 
 **📝 Nota**: Para auditorías focalizadas, utiliza los comandos especializados:
-- `/flutter:check architecture` - Auditoría arquitectura únicamente
-- `/flutter:check code-quality` - Auditoría calidad de código únicamente
-- `/flutter:check testing` - Auditoría tests únicamente
-- `/flutter:check security` - Auditoría seguridad únicamente
+- `/bear-flutter:check architecture` - Auditoría arquitectura únicamente
+- `/bear-flutter:check code-quality` - Auditoría calidad de código únicamente
+- `/bear-flutter:check testing` - Auditoría tests únicamente
+- `/bear-flutter:check security` - Auditoría seguridad únicamente
 
 **Fecha de la auditoría**: [Fecha del día]
 **Versión Flutter**: [Detectar desde `flutter --version`]

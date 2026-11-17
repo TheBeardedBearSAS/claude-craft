@@ -1,5 +1,5 @@
 /**
- * CLI `list` command — detailed listing of installed claude-craft components.
+ * CLI `list` command — detailed listing of installed bear-craft components.
  * @module cli/lib/list
  */
 
@@ -8,6 +8,7 @@ import path from 'path';
 import c from './colors.js';
 import { countFiles, listDirs } from './fs-utils.js';
 import { detectProject } from './detect-project.js';
+import { readPluginState } from './plugin-install.js';
 
 /**
  * Run the list command against a target directory.
@@ -16,13 +17,39 @@ import { detectProject } from './detect-project.js';
 function runList(targetPath) {
   const claudeDir = path.join(targetPath, '.claude');
 
-  console.log(`\n${c.bold}Claude Craft Installation — Detailed Listing${c.reset}`);
+  console.log(`\n${c.bold}Bear Craft Installation — Detailed Listing${c.reset}`);
   console.log(`${c.dim}Directory: ${targetPath}${c.reset}\n`);
 
   if (!fs.existsSync(claudeDir)) {
-    console.log(`${c.red}No claude-craft installation detected.${c.reset}`);
-    console.log(`Run: npx @the-bearded-bear/claude-craft install ${targetPath}\n`);
+    console.log(`${c.red}No bear-craft installation detected.${c.reset}`);
+    console.log(`Run: npx @the-bearded-bear/bear-craft install ${targetPath}\n`);
     process.exitCode = 1;
+    return;
+  }
+
+  // Plugin installation: commands, agents and skills come from the enabled bear-* plugins
+  const state = readPluginState(targetPath);
+  if (state) {
+    console.log(`${c.bold}Plugins (${state.marketplace}, v${state.record.version}):${c.reset}`);
+    let totals = { commands: 0, agents: 0, skills: 0 };
+    for (const p of state.plugins) {
+      totals = {
+        commands: totals.commands + p.commands,
+        agents: totals.agents + p.agents,
+        skills: totals.skills + p.skills,
+      };
+      const parts = [`${p.commands} command(s)`, `${p.agents} agent(s)`, `${p.skills} skill(s)`];
+      console.log(`  ${c.cyan}/${p.name}:*${c.reset} — ${parts.join(', ')}`);
+    }
+    console.log(
+      `  ${c.dim}Total: ${state.plugins.length} plugin(s), ${totals.commands} commands, ${totals.agents} agents, ${totals.skills} skills${c.reset}`
+    );
+    const refDirs = listDirs(path.join(claudeDir, 'references'));
+    console.log(`\n${c.bold}References:${c.reset}`);
+    console.log(
+      refDirs.length > 0 ? `  ${c.cyan}${refDirs.join(', ')}${c.reset}` : `  ${c.yellow}No references found${c.reset}`
+    );
+    console.log('');
     return;
   }
 

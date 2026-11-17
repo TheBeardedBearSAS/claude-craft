@@ -1,12 +1,12 @@
 ---
 name: testing
 description: TDD/BDD testing principles with 2026 best practices — mutation testing, browser mode, property-based testing
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [testing, tdd, bdd, coverage, mutation, vitest, playwright, jest]
 category: quality
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Testing — TDD/BDD Principles (2026)
@@ -89,5 +89,5 @@ test('sorting preserves length', () => {
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

@@ -13,8 +13,8 @@ export default {
   // ---- app : shell, titre, recherche, bannières, page introuvable ----
   'app.skipLink': 'Skip to main content',
   'app.sidebar.label': 'Sidebar',
-  'app.titleTemplate': '{view} — {sprint} · claude-craft kanban',
-  'app.titleNoSprint': '{view} · claude-craft kanban',
+  'app.titleTemplate': '{view} — {sprint} · bear-craft kanban',
+  'app.titleNoSprint': '{view} · bear-craft kanban',
   'app.title.board': 'Board',
   'app.title.backlog': 'Backlog',
   'app.title.sprints': 'Sprints',
@@ -65,8 +65,8 @@ export default {
   'nav.boardCount': '{n} stories on the board',
 
   // ---- board : colonnes, cartes, menu Déplacer, WIP, raccourcis ----
-  'board.empty.backlog': 'No stories — run /workflow:plan',
-  'board.empty.ready-for-dev': 'No stories ready — run /workflow:start',
+  'board.empty.backlog': 'No stories — run /bear-workflow:plan',
+  'board.empty.ready-for-dev': 'No stories ready — run /bear-workflow:start',
   'board.empty.in-progress': 'Nothing in progress',
   'board.empty.review': 'Nothing to review',
   'board.empty.done': 'Nothing done yet',

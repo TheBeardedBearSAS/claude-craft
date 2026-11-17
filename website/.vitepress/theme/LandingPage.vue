@@ -37,7 +37,7 @@ const translations = {
     feat_skills_desc: "Best practices in official Claude Code format. Architecture, testing, security patterns for all technologies.",
     feat_3_title: "Automated Workflows",
     feat_3_desc: "Use 143 slash commands to automate tedious tasks. Generate components, check architecture, and run pre-commit audits.",
-    tools_title: "What developer experience tools does Claude Craft include?",
+    tools_title: "What developer experience tools does Bear Craft include?",
     tools_desc: "Enhance your terminal workflow with power tools designed for daily use.",
     tool_status_title: "Custom Status Line",
     tool_status_desc: "Rich status bar with profile, model, git branch, and context usage tracking.",
@@ -53,7 +53,7 @@ const translations = {
     install_method_2_desc: "Perfect for Monorepos and complex setups.",
     install_method_3_title: "Direct Script",
     install_method_3_desc: "Granular control without Make dependencies.",
-    tech_title: "Which technologies does Claude Craft support?",
+    tech_title: "Which technologies does Bear Craft support?",
     tech_desc: "Tailored rulesets for your favorite stacks.",
     qs_title: "How do you get up and running in seconds?",
     qs_step1_title: "Clone the repository",
@@ -63,9 +63,9 @@ const translations = {
     qs_lang_note: "Supports: en, fr, es, de, pt",
     qs_step3_title: "Use in Claude Code",
     qs_step3_desc: "Start using slash commands and agents immediately.",
-    agents_title: "Who are the AI agents in Claude Craft?",
+    agents_title: "Who are the AI agents in Bear Craft?",
     agents_desc: "Specialized personas ready to assist you.",
-    footer_copyright: "\u00a9 2026 Claude Craft. MIT License. By The Bearded CTO.",
+    footer_copyright: "\u00a9 2026 Bear Craft. MIT License. By The Bearded Bear.",
     footer_built: "Built for Claude Code by Anthropic",
     cta_view_github: "View on GitHub",
     trust_stars_alt: "GitHub stars",
@@ -97,7 +97,7 @@ const translations = {
     feat_skills_desc: "Bonnes pratiques au format officiel Claude Code.",
     feat_3_title: "Flux Automatis\u00e9s",
     feat_3_desc: "Utilisez 143 commandes pour automatiser les t\u00e2ches fastidieuses.",
-    tools_title: "Quels outils d'exp\u00e9rience d\u00e9veloppeur Claude Craft propose-t-il ?",
+    tools_title: "Quels outils d'exp\u00e9rience d\u00e9veloppeur Bear Craft propose-t-il ?",
     tools_desc: "Am\u00e9liorez votre flux de travail terminal avec des outils puissants.",
     tool_status_title: "Barre d'\u00c9tat Personnalis\u00e9e",
     tool_status_desc: "Barre d'\u00e9tat riche avec profil, mod\u00e8le, git et suivi du contexte.",
@@ -113,7 +113,7 @@ const translations = {
     install_method_2_desc: "Parfait pour les Monorepos et configurations complexes.",
     install_method_3_title: "Script Direct",
     install_method_3_desc: "Contr\u00f4le granulaire sans d\u00e9pendance \u00e0 Make.",
-    tech_title: "Quelles technologies Claude Craft prend-il en charge ?",
+    tech_title: "Quelles technologies Bear Craft prend-il en charge ?",
     tech_desc: "Des jeux de r\u00e8gles sur mesure pour vos stacks pr\u00e9f\u00e9r\u00e9es.",
     qs_title: "Comment \u00eatre op\u00e9rationnel en quelques secondes ?",
     qs_step1_title: "Cloner le d\u00e9p\u00f4t",
@@ -123,9 +123,9 @@ const translations = {
     qs_lang_note: "Supporte: en, fr, es, de, pt",
     qs_step3_title: "Utiliser dans Claude Code",
     qs_step3_desc: "Commencez imm\u00e9diatement \u00e0 utiliser les commandes slash et les agents.",
-    agents_title: "Quels sont les agents IA de Claude Craft ?",
+    agents_title: "Quels sont les agents IA de Bear Craft ?",
     agents_desc: "Des personas sp\u00e9cialis\u00e9s pr\u00eats \u00e0 vous aider.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licence MIT. Par The Bearded CTO.",
+    footer_copyright: "\u00a9 2026 Bear Craft. Licence MIT. Par The Bearded Bear.",
     footer_built: "Con\u00e7u pour Claude Code par Anthropic",
     cta_view_github: "Voir sur GitHub",
     trust_stars_alt: "\u00c9toiles GitHub",
@@ -143,7 +143,7 @@ const translations = {
     feat_2_title: "Agentes Especializados", feat_2_desc: "Despliega revisores, arquitectos y entrenadores virtuales.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Mejores pr\u00e1cticas en formato oficial de Claude Code.",
     feat_3_title: "Flujos Automatizados", feat_3_desc: "Usa 143 comandos para automatizar tareas.",
-    tools_title: "¿Qué herramientas de experiencia de desarrollador incluye Claude Craft?", tools_desc: "Mejora tu flujo de trabajo en la terminal.",
+    tools_title: "¿Qué herramientas de experiencia de desarrollador incluye Bear Craft?", tools_desc: "Mejora tu flujo de trabajo en la terminal.",
     tool_status_title: "L\u00ednea de Estado", tool_status_desc: "Barra de estado rica con perfil, modelo y git.",
     tool_account_title: "Gestor Multi-Cuenta", tool_account_desc: "Cambia f\u00e1cilmente entre perfiles.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Circuit breaker adaptativo.",
@@ -152,13 +152,13 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "R\u00e1pida configuraci\u00f3n.",
     install_method_2_title: "Config YAML", install_method_2_desc: "Para Monorepos.",
     install_method_3_title: "Script Directo", install_method_3_desc: "Control granular.",
-    tech_title: "\u00bfQu\u00e9 tecnolog\u00edas admite Claude Craft?", tech_desc: "Reglas adaptadas para tus stacks favoritos.",
+    tech_title: "\u00bfQu\u00e9 tecnolog\u00edas admite Bear Craft?", tech_desc: "Reglas adaptadas para tus stacks favoritos.",
     qs_title: "¿Cómo puedes estar listo en segundos?", qs_step1_title: "Clonar el repositorio", qs_step1_desc: "Obt\u00e9n el framework.",
     qs_step2_title: "Instalar reglas", qs_step2_desc: "Usa el Makefile para inyectar reglas.",
     qs_lang_note: "Soporta: en, fr, es, de, pt",
     qs_step3_title: "Usar en Claude Code", qs_step3_desc: "Comienza a usar comandos slash.",
-    agents_title: "¿Quiénes son los agentes de IA de Claude Craft?", agents_desc: "Personas especializadas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licencia MIT. Por The Bearded CTO.", footer_built: "Creado para Claude Code por Anthropic",
+    agents_title: "¿Quiénes son los agentes de IA de Bear Craft?", agents_desc: "Personas especializadas.",
+    footer_copyright: "\u00a9 2026 Bear Craft. Licencia MIT. Por The Bearded Bear.", footer_built: "Creado para Claude Code por Anthropic",
     cta_view_github: "Ver en GitHub", trust_stars_alt: "Estrellas de GitHub", trust_license_alt: "Licencia MIT", trust_changelog: "Registro de cambios",
   },
   de: {
@@ -172,7 +172,7 @@ const translations = {
     feat_2_title: "Spezialisierte Agenten", feat_2_desc: "Virtuelle Reviewer, Architekten und Coaches.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Best Practices im offiziellen Claude Code Format.",
     feat_3_title: "Automatisierte Abl\u00e4ufe", feat_3_desc: "143 Befehle f\u00fcr Automatisierung.",
-    tools_title: "Welche Entwickler-Tools bietet Claude Craft?", tools_desc: "Leistungsstarke Terminal-Tools.",
+    tools_title: "Welche Entwickler-Tools bietet Bear Craft?", tools_desc: "Leistungsstarke Terminal-Tools.",
     tool_status_title: "Statuszeile", tool_status_desc: "Reichhaltige Statusleiste.",
     tool_account_title: "Multi-Account Manager", tool_account_desc: "Einfacher Profilwechsel.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Adaptiver Circuit Breaker.",
@@ -181,13 +181,13 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "Schnelle Einrichtung.",
     install_method_2_title: "YAML Konfig", install_method_2_desc: "F\u00fcr Monorepos.",
     install_method_3_title: "Direktes Skript", install_method_3_desc: "Granulare Kontrolle.",
-    tech_title: "Welche Technologien unterst\u00fctzt Claude Craft?", tech_desc: "Ma\u00dfgeschneiderte Regels\u00e4tze.",
+    tech_title: "Welche Technologien unterst\u00fctzt Bear Craft?", tech_desc: "Ma\u00dfgeschneiderte Regels\u00e4tze.",
     qs_title: "Wie sind Sie in Sekunden einsatzbereit?", qs_step1_title: "Repository klonen", qs_step1_desc: "Framework herunterladen.",
     qs_step2_title: "Regeln installieren", qs_step2_desc: "Makefile verwenden.",
     qs_lang_note: "Unterst\u00fctzt: en, fr, es, de, pt",
     qs_step3_title: "In Claude Code verwenden", qs_step3_desc: "Slash-Befehle und Agenten nutzen.",
-    agents_title: "Wer sind die KI-Agenten von Claude Craft?", agents_desc: "Spezialisierte Personas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. MIT Lizenz. Von The Bearded CTO.", footer_built: "Entwickelt f\u00fcr Claude Code von Anthropic",
+    agents_title: "Wer sind die KI-Agenten von Bear Craft?", agents_desc: "Spezialisierte Personas.",
+    footer_copyright: "\u00a9 2026 Bear Craft. MIT Lizenz. Von The Bearded Bear.", footer_built: "Entwickelt f\u00fcr Claude Code von Anthropic",
     cta_view_github: "Auf GitHub ansehen", trust_stars_alt: "GitHub Sterne", trust_license_alt: "MIT-Lizenz", trust_changelog: "\u00c4nderungsprotokoll",
   },
   pt: {
@@ -201,7 +201,7 @@ const translations = {
     feat_2_title: "Agentes Especializados", feat_2_desc: "Implante revisores, arquitetos e treinadores virtuais.",
     feat_skills_title: "55 Skills", feat_skills_desc: "Melhores pr\u00e1ticas no formato oficial do Claude Code.",
     feat_3_title: "Fluxos Automatizados", feat_3_desc: "Use 143 comandos para automatizar tarefas.",
-    tools_title: "Quais ferramentas de experiência do desenvolvedor o Claude Craft inclui?", tools_desc: "Melhore seu fluxo de trabalho no terminal.",
+    tools_title: "Quais ferramentas de experiência do desenvolvedor o Bear Craft inclui?", tools_desc: "Melhore seu fluxo de trabalho no terminal.",
     tool_status_title: "Linha de Status", tool_status_desc: "Barra de status rica.",
     tool_account_title: "Gerenciador Multi-Conta", tool_account_desc: "Alterne entre perfis.",
     tool_ralph_title: "Ralph Wiggum v2.0", tool_ralph_desc: "Circuit breaker adaptativo.",
@@ -210,13 +210,13 @@ const translations = {
     install_method_1_title: "Makefile", install_method_1_desc: "Configura\u00e7\u00e3o r\u00e1pida.",
     install_method_2_title: "Config YAML", install_method_2_desc: "Para Monorepos.",
     install_method_3_title: "Script Direto", install_method_3_desc: "Controle granular.",
-    tech_title: "Quais tecnologias o Claude Craft suporta?", tech_desc: "Regras personalizadas para suas stacks.",
+    tech_title: "Quais tecnologias o Bear Craft suporta?", tech_desc: "Regras personalizadas para suas stacks.",
     qs_title: "Como ficar funcionando em segundos?", qs_step1_title: "Clonar o reposit\u00f3rio", qs_step1_desc: "Obtenha o framework.",
     qs_step2_title: "Instalar regras", qs_step2_desc: "Use o Makefile para injetar regras.",
     qs_lang_note: "Suporta: en, fr, es, de, pt",
     qs_step3_title: "Usar no Claude Code", qs_step3_desc: "Comece a usar comandos slash.",
-    agents_title: "Quem s\u00e3o os agentes de IA do Claude Craft?", agents_desc: "Personas especializadas.",
-    footer_copyright: "\u00a9 2026 Claude Craft. Licen\u00e7a MIT. Por The Bearded CTO.", footer_built: "Constru\u00eddo para Claude Code por Anthropic",
+    agents_title: "Quem s\u00e3o os agentes de IA do Bear Craft?", agents_desc: "Personas especializadas.",
+    footer_copyright: "\u00a9 2026 Bear Craft. Licen\u00e7a MIT. Por The Bearded Bear.", footer_built: "Constru\u00eddo para Claude Code por Anthropic",
     cta_view_github: "Ver no GitHub", trust_stars_alt: "Estrelas do GitHub", trust_license_alt: "Licen\u00e7a MIT", trust_changelog: "Registro de altera\u00e7\u00f5es",
   },
 }
@@ -236,7 +236,7 @@ const langToLocale = {
 function changeLanguage(lang) {
   currentLang.value = lang
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('claude_craft_lang', lang)
+    localStorage.setItem('bear_craft_lang', lang)
   }
   if (typeof document !== 'undefined') {
     document.documentElement.lang = langToLocale[lang] || lang
@@ -244,7 +244,8 @@ function changeLanguage(lang) {
 }
 
 onMounted(() => {
-  const saved = localStorage.getItem('claude_craft_lang')
+  // `claude_craft_lang` : clé d'avant le renommage en bear-craft (10.0.0), relue une fois migrée.
+  const saved = localStorage.getItem('bear_craft_lang') ?? localStorage.getItem('claude_craft_lang')
   const browser = navigator.language.split('-')[0]
   if (saved && availableLangs.includes(saved)) {
     currentLang.value = saved
@@ -264,7 +265,7 @@ onMounted(() => {
         <div style="display: flex; align-items: center; justify-content: space-between; height: 4rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-            <span style="font-weight: 700; font-size: 1.25rem; letter-spacing: -0.025em;">Claude Craft</span>
+            <span style="font-weight: 700; font-size: 1.25rem; letter-spacing: -0.025em;">Bear Craft</span>
           </div>
           <div class="nav-links" style="display: flex; align-items: center; gap: 1rem;">
             <a :href="'#features'" style="color: #94a3b8; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0.75rem;">{{ t('nav_features') }}</a>
@@ -279,7 +280,7 @@ onMounted(() => {
               <option value="de" style="background: #1e293b;">Deutsch</option>
               <option value="pt" style="background: #1e293b;">Português</option>
             </select>
-            <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" aria-label="GitHub repository" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; color: white; text-decoration: none; font-size: 0.875rem;">
+            <a href="https://github.com/TheBeardedBearSAS/bear-craft" target="_blank" aria-label="GitHub repository" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.375rem; color: white; text-decoration: none; font-size: 0.875rem;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
               GitHub
             </a>
@@ -305,7 +306,7 @@ onMounted(() => {
           <option value="de" style="background: #1e293b;">Deutsch</option>
           <option value="pt" style="background: #1e293b;">Português</option>
         </select>
-        <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; color: #94a3b8; text-decoration: none; font-size: 0.875rem;">
+        <a href="https://github.com/TheBeardedBearSAS/bear-craft" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; color: #94a3b8; text-decoration: none; font-size: 0.875rem;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
           GitHub
         </a>
@@ -325,10 +326,10 @@ onMounted(() => {
         </div>
 
         <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
-            <img src="https://img.shields.io/github/stars/TheBeardedBearSAS/claude-craft?style=social" :alt="t('trust_stars_alt')" width="110" height="20" loading="lazy" style="display: block;" />
+          <a href="https://github.com/TheBeardedBearSAS/bear-craft" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
+            <img src="https://img.shields.io/github/stars/TheBeardedBearSAS/bear-craft?style=social" :alt="t('trust_stars_alt')" width="110" height="20" loading="lazy" style="display: block;" />
           </a>
-          <a href="https://github.com/TheBeardedBearSAS/claude-craft/blob/main/LICENSE" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
+          <a href="https://github.com/TheBeardedBearSAS/bear-craft/blob/main/LICENSE" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; line-height: 0;">
             <img src="https://img.shields.io/badge/license-MIT-blue" :alt="t('trust_license_alt')" width="86" height="20" loading="lazy" style="display: block;" />
           </a>
           <a :href="withBase('/en/changelog')" style="display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background: rgba(255,255,255,0.05); border-radius: 0.25rem; font-size: 0.75rem; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.05); text-decoration: none;">
@@ -350,7 +351,7 @@ onMounted(() => {
             {{ t('cta_get_started') }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 0.5rem;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" rel="noopener" class="hero-cta" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; box-sizing: border-box; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
+          <a href="https://github.com/TheBeardedBearSAS/bear-craft" target="_blank" rel="noopener" class="hero-cta" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 48px; box-sizing: border-box; padding: 0.75rem 2rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 1.125rem; backdrop-filter: blur(4px);">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
             {{ t('cta_view_github') }}
           </a>
@@ -459,16 +460,16 @@ onMounted(() => {
               </div>
               <div style="padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; color: #cbd5e1; min-height: 280px;">
                 <div style="margin-bottom: 0.75rem;">
-                  <span style="color: #94a3b8;">$</span> <span style="color: #e2e8f0;">npx @the-bearded-bear/claude-craft install . --tech=react --lang=fr</span>
+                  <span style="color: #94a3b8;">$</span> <span style="color: #e2e8f0;">npx @the-bearded-bear/bear-craft install . --tech=react --lang=fr</span>
                 </div>
                 <div style="color: #4ade80; margin-bottom: 0.25rem;">Installing React rules (French)... Done</div>
                 <div style="color: #94a3b8; margin-bottom: 0.75rem;">Installing Templates... Done</div>
                 <div style="margin-bottom: 0.75rem;">
-                  <span style="color: #94a3b8;">$</span> <span style="color: #e2e8f0;">npx @the-bearded-bear/claude-craft install-tools</span>
+                  <span style="color: #94a3b8;">$</span> <span style="color: #e2e8f0;">npx @the-bearded-bear/bear-craft install-tools</span>
                 </div>
                 <div style="color: #4ade80; margin-bottom: 0.75rem;">Installing StatusLine... Done</div>
                 <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(15,23,42,0.8); border-radius: 0.375rem; border: 1px solid rgba(255,255,255,0.1);">
-                  <span style="color: #c084fc;">User:</span> <span style="color: #e2e8f0;">/react:generate-component Button</span><br>
+                  <span style="color: #c084fc;">User:</span> <span style="color: #e2e8f0;">/bear-react:generate-component Button</span><br>
                   <span style="color: #60a5fa;">Claude:</span> <span style="color: #94a3b8;">I'll generate a Button component using your project's React standards...</span>
                 </div>
               </div>
@@ -511,9 +512,9 @@ onMounted(() => {
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-            <span style="font-weight: 700; font-size: 1.25rem;">Claude Craft</span>
+            <span style="font-weight: 700; font-size: 1.25rem;">Bear Craft</span>
           </div>
-          <a href="https://github.com/TheBeardedBearSAS/claude-craft" target="_blank" aria-label="GitHub repository" style="color: #94a3b8; text-decoration: none;">
+          <a href="https://github.com/TheBeardedBearSAS/bear-craft" target="_blank" aria-label="GitHub repository" style="color: #94a3b8; text-decoration: none;">
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
           </a>
         </div>

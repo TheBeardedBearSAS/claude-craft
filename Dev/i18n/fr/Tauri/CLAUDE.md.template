@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - Tauri v2
 
-> Généré : {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Généré : {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Quoi (Stack et Structure)
 
@@ -68,7 +68,7 @@ docker compose exec app npx vitest run               # Tests frontend (mockIPC)
 > Les builds GUI desktop nécessitent les bibliothèques système WebView ; si le conteneur ne peut pas les exécuter, buildez en CI et gardez des tests unitaires compatibles avec le conteneur.
 
 ### Commandes disponibles
-- `/tauri:check <architecture|code-quality|security|testing|all>` - Audit par axe, ou agrégat noté
+- `/bear-tauri:check <architecture|code-quality|security|testing|all>` - Audit par axe, ou agrégat noté
 
 ### Workflow de développement
 1. **Analyser** - Lire le code, comprendre le domaine (`rules/01-workflow-analysis.md`)

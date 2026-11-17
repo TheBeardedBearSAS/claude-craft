@@ -113,8 +113,8 @@ describe('command count claims use a canonical figure', () => {
 
 // Lot 7 (9.0): the narrated references document the per-stack /<tech>:check <axis> entry point.
 describe('docs document /<tech>:check', () => {
-  // gate/check.md is /gate:check, not a stack audit
-  const stacks = listNamespaces().filter((ns) => ns !== 'gate' && fs.existsSync(path.join(COMMANDS_DIR, ns, 'check.md')));
+  // gate/check.md is /bear-gate:check, not a stack audit
+  const stacks = listNamespaces().filter((ns) => ns !== 'bear-gate' && fs.existsSync(path.join(COMMANDS_DIR, ns, 'check.md')));
 
   it('every stack in .claude/commands has a check.md', () => {
     expect(stacks).toHaveLength(12);

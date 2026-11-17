@@ -97,12 +97,12 @@ Priorisieren: hohe Einsparung × geringer Aufwand × niedriges Risiko.
 - Senkung der Anthropic/OpenAI-Rechnung
 - Architekturüberprüfung unter Kostengesichtspunkten
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — Infrastruktur
 - `@performance-auditor` — Abwägung Leistung vs. Kosten
 - `.claude/rules/12-context-management.md` — Claude Code Token-Optimierung
-- `/common:setup-rtk` — RTK 60-90% Token-Einsparungen
+- `/bear-common:setup-rtk` — RTK 60-90% Token-Einsparungen
 - Skill `atomic-tasks` — frischer Subagent = weniger Tokens
 
 ## Ressourcen

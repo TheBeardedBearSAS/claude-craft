@@ -22,7 +22,7 @@ license: MIT
 ## Prérequis
 
 - Claude Code ≥ 2.1.47
-- Claude Craft ≥ 8.0.0
+- Bear Craft ≥ 8.0.0
 - (optionnel) Stack spécifique installée
 
 ## Instructions

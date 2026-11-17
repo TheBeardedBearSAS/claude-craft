@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /vite:check security"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-vite:check security"
 deprecated: true
-replaced-by: /vite:check
+replaced-by: /bear-vite:check
 ---
 
-> ⚠️ `/vite:check-security` est obsolète et sera retirée en 10.0. Utilisez `/vite:check security`.
+> ⚠️ `/bear-vite:check-security` est obsolète et sera retirée en 10.0. Utilisez `/bear-vite:check security`.
 
-Exécutez `/vite:check security $ARGUMENTS` : lisez `.claude/commands/vite/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-vite:check security $ARGUMENTS` : lisez `.claude/commands/bear-vite/check.md` et suivez-le avec ces arguments.

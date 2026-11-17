@@ -1,20 +1,20 @@
-# Contributing to Claude Craft
+# Contributing to Bear Craft
 
-Thank you for your interest in contributing to Claude Craft! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Bear Craft! This document provides guidelines and information for contributors.
 
 ---
 
 ## First-Time Contributors — 15 Minute Onboarding
 
-Welcome! We're excited to have you contribute to Claude Craft. Here's how to get started in just 15 minutes:
+Welcome! We're excited to have you contribute to Bear Craft. Here's how to get started in just 15 minutes:
 
 ### Step 1: Fork and Clone (2 minutes)
 
 ```bash
 # Fork the repository on GitHub (click "Fork" button)
 # Then clone your fork
-git clone https://github.com/YOUR_USERNAME/claude-craft.git
-cd claude-craft
+git clone https://github.com/YOUR_USERNAME/bear-craft.git
+cd bear-craft
 ```
 
 ### Step 2: Install Dependencies (3 minutes)
@@ -42,7 +42,7 @@ make dry-run-symfony TARGET=./test-output/test-project
 
 ### Step 4: Pick a Good First Issue (3 minutes)
 
-Browse [good-first-issue](https://github.com/TheBeardedBearSAS/claude-craft/labels/good-first-issue) labels to find an issue that interests you.
+Browse [good-first-issue](https://github.com/TheBeardedBearSAS/bear-craft/labels/good-first-issue) labels to find an issue that interests you.
 
 **Great starter issues**:
 - Fix documentation typos (any language: ES, DE, PT, FR)
@@ -105,13 +105,13 @@ git push origin fix/issue-XXX
 
 ---
 
-**That's it!** You're now a Claude Craft contributor. Thank you! 🎉
+**That's it!** You're now a Bear Craft contributor. Thank you! 🎉
 
 ---
 
 ## Release Cadence
 
-To protect maintainer bandwidth and community stability, Claude Craft follows a **maximum cadence of 1 release per week**.
+To protect maintainer bandwidth and community stability, Bear Craft follows a **maximum cadence of 1 release per week**.
 
 Exceptions:
 - Critical security fixes (CVE, supply-chain): ship immediately
@@ -125,7 +125,7 @@ For major changes, use pre-release versions following SemVer:
 - **beta** - Features completes, testing interne
 - **rc** - Release Candidate, pret pour production
 
-This rule is non-negotiable and is enforced via the release checklist (`/common:release-checklist`). See `docs/RUNBOOK.md` for the complete release process.
+This rule is non-negotiable and is enforced via the release checklist (`/bear-common:release-checklist`). See `docs/RUNBOOK.md` for the complete release process.
 
 ---
 
@@ -164,7 +164,7 @@ This rule is non-negotiable and is enforced via the release checklist (`/common:
 ## Project Structure
 
 ```
-claude-craft/
+bear-craft/
 ├── Dev/
 │   ├── i18n/                   # Internationalized content
 │   │   ├── {lang}/             # Language (en, fr, es, de, pt)
@@ -193,7 +193,7 @@ claude-craft/
 
 ## Technology Tiers
 
-Claude Craft uses a **3-tier maturity model** to classify its technology stacks. This ensures users know what level of support to expect, and gives contributors a clear path for improving stacks.
+Bear Craft uses a **3-tier maturity model** to classify its technology stacks. This ensures users know what level of support to expect, and gives contributors a clear path for improving stacks.
 
 ### Tier Definitions
 
@@ -502,7 +502,7 @@ The repository uses a two-tier directory naming convention that communicates the
 
 ### `PascalCase/` — Installable / Distributed Content
 
-Directories written in PascalCase contain content that is **copied into user projects** during installation. They form the distributable payload of Claude Craft.
+Directories written in PascalCase contain content that is **copied into user projects** during installation. They form the distributable payload of Bear Craft.
 
 Examples: `Dev/`, `Infra/`, `Project/`
 
@@ -550,11 +550,11 @@ docs: update README with new features
 
 ## Security & Supply Chain
 
-Claude Craft follows modern software supply chain security practices. For detailed information on our security policies, see [SECURITY.md](SECURITY.md).
+Bear Craft follows modern software supply chain security practices. For detailed information on our security policies, see [SECURITY.md](SECURITY.md).
 
 ### Security Expectations for Contributors
 
-When contributing to Claude Craft:
+When contributing to Bear Craft:
 
 1. **No secrets in commits**: Never commit API keys, tokens, or credentials
 2. **Dependency hygiene**: Only add well-maintained dependencies with active security patching
@@ -571,10 +571,10 @@ Before contributing, you can verify the integrity of the published package:
 npm audit signatures
 
 # Check SLSA provenance
-npm view @the-bearded-bear/claude-craft dist.attestations
+npm view @the-bearded-bear/bear-craft dist.attestations
 
 # Download and verify SBOM from GitHub Releases
-# https://github.com/TheBeardedBearSAS/claude-craft/releases
+# https://github.com/TheBeardedBearSAS/bear-craft/releases
 ```
 
 ### Dependency Updates
@@ -621,8 +621,8 @@ Recommended:
 
 ```bash
 # Clone the repository
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # Make scripts executable
 make fix-permissions
@@ -675,7 +675,7 @@ Before releasing a new version:
 
 ## Supported Languages
 
-Claude Craft uses a tiered language support model:
+Bear Craft uses a tiered language support model:
 
 ### Tier 1 (Actively Maintained)
 - **English (en)** - Primary language, always up-to-date

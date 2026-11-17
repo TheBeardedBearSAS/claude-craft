@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /angular:check architecture"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-angular:check architecture"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/angular:check architecture`.
+> ⚠️ `/bear-angular:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/bear-angular:check architecture`.
 
-Exécutez `/angular:check architecture $ARGUMENTS` : lisez `.claude/commands/angular/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-angular:check architecture $ARGUMENTS` : lisez `.claude/commands/bear-angular/check.md` et suivez-le avec ces arguments.

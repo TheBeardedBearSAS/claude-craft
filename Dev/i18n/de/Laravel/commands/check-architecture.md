@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /laravel:check architecture verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-laravel:check architecture verwenden"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-architecture` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/laravel:check architecture`.
+> ⚠️ `/bear-laravel:check-architecture` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-laravel:check architecture`.
 
-Führen Sie `/laravel:check architecture $ARGUMENTS` aus: Lesen Sie `.claude/commands/laravel/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-laravel:check architecture $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-laravel/check.md` und folgen Sie der Datei mit diesen Argumenten.

@@ -119,19 +119,19 @@ Quando um erro e detectado:
 
 ```bash
 # Testar uma story especifica
-/qa:recette --scope=story --id=US-001
+/bear-qa:recette --scope=story --id=US-001
 
 # Testar todas as stories de um sprint
-/qa:recette --scope=sprint --id=Sprint-3
+/bear-qa:recette --scope=sprint --id=Sprint-3
 
 # Dry run para ver o plano de testes
-/qa:recette --scope=story --id=US-001 --dry-run
+/bear-qa:recette --scope=story --id=US-001 --dry-run
 
 # Retomar uma sessao interrompida
-/qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
+/bear-qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
 
 # Gravar execucao em GIF
-/qa:recette --scope=story --id=US-001 --record-gif
+/bear-qa:recette --scope=story --id=US-001 --record-gif
 ```
 
 ## Recuperacao de Sessao
@@ -162,7 +162,7 @@ recovery:
 Para retomar:
 
 ```bash
-/qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
+/bear-qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
 ```
 
 ## Registro de Regressao
@@ -214,11 +214,11 @@ entries:
 
 | Comando | Descricao |
 |---------|-----------|
-| `/qa:fix` | Corrigir bugs de uma sessao |
-| `/qa:status` | Mostrar status da sessao |
-| `/qa:regression` | Ver testes de regressao |
-| `/qa:status --report` | Gerar relatorio |
-| `/gate:check story` | Validar AC de uma story |
+| `/bear-qa:fix` | Corrigir bugs de uma sessao |
+| `/bear-qa:status` | Mostrar status da sessao |
+| `/bear-qa:regression` | Ver testes de regressao |
+| `/bear-qa:status --report` | Gerar relatorio |
+| `/bear-gate:check story` | Validar AC de uma story |
 
 ## Capacidades do Chrome
 
@@ -255,15 +255,15 @@ entries:
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
 ║  Se bugs foram encontrados:                              ║
-║  → /qa:fix                                               ║
+║  → /bear-qa:fix                                               ║
 ║    Correção automatizada de bugs                         ║
-║  → /qa:tdd                                               ║
+║  → /bear-qa:tdd                                               ║
 ║    Correção com abordagem TDD                            ║
 ║                                                          ║
 ║  Se todos os testes passam:                              ║
-║  → /qa:status --report                                            ║
+║  → /bear-qa:status --report                                            ║
 ║    Gerar o relatório de recette                          ║
-║  → /project:backlog move story done                               ║
+║  → /bear-project:backlog move story done                               ║
 ║    Marcar a story como concluída                         ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

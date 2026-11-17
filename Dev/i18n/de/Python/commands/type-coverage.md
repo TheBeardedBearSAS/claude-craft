@@ -14,7 +14,7 @@ Argumente:
 - (Optional) Pfad zu spezifischem Modul
 - (Optional) Mindest-Coverage-Schwellenwert (z.B. `80`)
 
-Beispiel: `/python:type-coverage app/` oder `/python:type-coverage app/api/ 90`
+Beispiel: `/bear-python:type-coverage app/` oder `/bear-python:type-coverage app/api/ 90`
 
 ## Plan-Modus
 

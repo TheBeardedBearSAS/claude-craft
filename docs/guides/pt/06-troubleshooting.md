@@ -1,6 +1,6 @@
 # Guia de Solução de Problemas
 
-Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craft.
+Este guia cobre os problemas mais comuns e suas soluções ao usar o Bear-Craft.
 
 ---
 
@@ -21,7 +21,7 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 ### Comandos Não Reconhecidos Após a Instalação
 
 **Sintomas:**
-- Comandos slash como `/symfony:check all` não funcionam
+- Comandos slash como `/bear-symfony:check all` não funcionam
 - Claude não reconhece os comandos instalados
 
 **Soluções:**
@@ -43,7 +43,7 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 3. **Verificar o formato do arquivo de comando**
    ```bash
-   head -5 .claude/commands/symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check-compliance.md
    # Deve começar com o cabeçalho markdown correto
    ```
 
@@ -55,9 +55,9 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 **Soluções:**
 
-1. **Verificar o caminho do Claude-Craft**
+1. **Verificar o caminho do Bear-Craft**
    ```bash
-   # Certifique-se de estar executando do diretório claude-craft
+   # Certifique-se de estar executando do diretório bear-craft
    pwd
    ls -la Dev/scripts/
    ```
@@ -222,14 +222,14 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 ### Comando Não Encontrado
 
 **Sintomas:**
-- `/symfony:generate-crud` retorna "unknown command"
+- `/bear-symfony:generate-crud` retorna "unknown command"
 - Sugestões de comandos não aparecem
 
 **Soluções:**
 
 1. **Verificar o diretório de comandos**
    ```bash
-   ls .claude/commands/symfony/
+   ls .claude/commands/bear-symfony/
    # Deve incluir generate-crud.md
    ```
 
@@ -261,17 +261,17 @@ Este guia cobre os problemas mais comuns e suas soluções ao usar o Claude-Craf
 
 2. **Revisar o arquivo de comando**
    ```bash
-   cat .claude/commands/symfony/generate-crud.md
+   cat .claude/commands/bear-symfony/generate-crud.md
    # Entender o que o comando espera
    ```
 
 3. **Fornecer os parâmetros obrigatórios**
    ```bash
    # Em vez de
-   /symfony:generate-crud
+   /bear-symfony:generate-crud
 
    # Use
-   /symfony:generate-crud User --with-api --with-tests
+   /bear-symfony:generate-crud User --with-api --with-tests
    ```
 
 ### Saída do Comando Incorreta
@@ -614,7 +614,7 @@ Se estiver usando servidores MCP com hooks, certifique-se de que o Claude Code s
 
 6. **Configurar RTK** para economia de 55-65% de tokens
    ```bash
-   /common:setup-rtk
+   /bear-common:setup-rtk
    ```
 
 7. **Usar agentes para tarefas complexas**
@@ -650,7 +650,7 @@ Se estiver usando servidores MCP com hooks, certifique-se de que o Claude Code s
 Se encontrar bugs:
 
 1. Coletar informações:
-   - Versão do Claude-Craft
+   - Versão do Bear-Craft
    - Sistema operacional
    - Passos para reproduzir
    - Mensagens de erro
@@ -666,7 +666,7 @@ Se encontrar bugs:
 
 Ambiente:
 - SO: [seu SO]
-- Versão do Claude-Craft: [versão]
+- Versão do Bear-Craft: [versão]
 - Tecnologia: [symfony/flutter/etc.]
 
 O que tentei:

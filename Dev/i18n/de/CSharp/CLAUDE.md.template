@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - C#/.NET
 
-> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Erstellt: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Was (Stack & Struktur)
 
@@ -65,10 +65,10 @@ dotnet format --verify-no-changes        # Format pruefen
 4. **Commit** - Conventional Commits Format
 
 ### Verfuegbare Skills
-- `/csharp:check all` - Compliance Audit
-- `/csharp:check architecture` - Architektur Validierung
-- `/csharp:check code-quality` - Code Qualitaet
-- `/csharp:generate-feature` - CQRS Feature generieren
+- `/bear-csharp:check all` - Compliance Audit
+- `/bear-csharp:check architecture` - Architektur Validierung
+- `/bear-csharp:check code-quality` - Code Qualitaet
+- `/bear-csharp:generate-feature` - CQRS Feature generieren
 
 ## Referenzen
 | Kontext | Datei |

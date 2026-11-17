@@ -392,7 +392,7 @@ Session 2: Implementation (coder, tester)
 La commande `/loop` permet de planifier des taches recurrentes:
 
 ```bash
-/loop 5m /gate:check commit    # Verifier toutes les 5 minutes
+/loop 5m /bear-gate:check commit    # Verifier toutes les 5 minutes
 /loop "Surveiller les tests CI"       # Auto-cadence par le modele
 ```
 
@@ -781,7 +781,7 @@ Pour les 5 agents `opus` (security-auditor, database-architect, migration-specia
 
 ## Outils tiers de l'écosystème (tokens & contexte)
 
-En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit des outils couvrant des angles non traités nativement. Aucun n'est embarqué dans Claude Craft : ils sont documentés et recommandés.
+En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit des outils couvrant des angles non traités nativement. Aucun n'est embarqué dans Bear Craft : ils sont documentés et recommandés.
 
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
@@ -809,4 +809,4 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 
 **Date de derniere mise a jour:** 2026-04
 **Version:** 1.2.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

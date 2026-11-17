@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /symfony:check security"
+description: "Obsoleto (se elimina en 10.0): usa /bear-symfony:check security"
 deprecated: true
-replaced-by: /symfony:check
+replaced-by: /bear-symfony:check
 ---
 
-> ⚠️ `/symfony:check-security` está obsoleto y se eliminará en 10.0. Usa `/symfony:check security`.
+> ⚠️ `/bear-symfony:check-security` está obsoleto y se eliminará en 10.0. Usa `/bear-symfony:check security`.
 
-Ejecuta `/symfony:check security $ARGUMENTS`: lee `.claude/commands/symfony/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-symfony:check security $ARGUMENTS`: lee `.claude/commands/bear-symfony/check.md` y síguelo con estos argumentos.

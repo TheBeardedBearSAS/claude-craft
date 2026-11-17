@@ -1,5 +1,5 @@
 ---
-description: "Génère un DESIGN.md à la racine du projet à partir du template Claude Craft + analyse des sources UI existantes (Tailwind, tokens, CSS)."
+description: "Génère un DESIGN.md à la racine du projet à partir du template Bear Craft + analyse des sources UI existantes (Tailwind, tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
@@ -17,16 +17,16 @@ Crée un fichier `DESIGN.md` à la racine du projet pour servir de source de vé
 
 ```bash
 # Copie simple du template (à remplir manuellement)
-/uiux:generate-design-md
+/bear-uiux:generate-design-md
 
 # Pré-remplir depuis tailwind.config.*
-/uiux:generate-design-md --from-tailwind
+/bear-uiux:generate-design-md --from-tailwind
 
 # Pré-remplir depuis fichier de tokens JSON
-/uiux:generate-design-md --from-tokens=./design-tokens.json
+/bear-uiux:generate-design-md --from-tokens=./design-tokens.json
 
 # Mode interactif (questions ciblées)
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 ```
 
 ## Processus
@@ -107,14 +107,14 @@ Checklist post-génération :
 - **Skill `design-md-convention`** — règles de rédaction
 - **Template** `.claude/templates/DESIGN.md.template`
 - **Agents consommateurs** : `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@{react,vue,angular}-reviewer`
-- **Commandes liées** : `/uiux:design-tokens`, `/uiux:audit`, `/uiux:a11y-audit`
+- **Commandes liées** : `/bear-uiux:design-tokens`, `/bear-uiux:audit`, `/bear-uiux:a11y-audit`
 
 ## Exemples
 
 ### Projet React + Tailwind
 
 ```bash
-/uiux:generate-design-md --from-tailwind --interactive
+/bear-uiux:generate-design-md --from-tailwind --interactive
 # Questions interactives
 # → DESIGN.md généré avec palette Tailwind + breakpoints + typo
 ```
@@ -122,7 +122,7 @@ Checklist post-génération :
 ### Projet sans stack UI détectable
 
 ```bash
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 # Copie template + questions
 # → DESIGN.md à compléter manuellement
 ```

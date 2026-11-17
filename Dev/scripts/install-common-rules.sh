@@ -18,6 +18,8 @@
 #   --interactive   Interactive mode to choose components
 #   --lang=XX       Language (en, fr, es, de, pt) - default: en
 #   --hooks=MODE    Hooks: default, full or none, + ",memory" for SQLite memory - default: default
+#   --plugin-mode   Plugin installation: copy only what the plugins do not carry
+#                   (rules, config, CLAUDE.md, AGENTS.md, .github templates, AgentTeams lib)
 #   --agents-only   Install agents only
 #   --commands-only Install commands only
 #   --templates-only Install templates only
@@ -42,12 +44,13 @@ I18N_DIR="$(dirname "$SCRIPT_DIR")/i18n"
 
 # Source TCL common functions
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # Shared UI (colors + logging)
 # shellcheck source=lib/shell-ui.sh
 source "${SCRIPT_DIR}/lib/shell-ui.sh"
 source "${SCRIPT_DIR}/lib/stack-profiles.sh"
+source "${SCRIPT_DIR}/lib/legacy-commands.sh"
 
 # Default options
 action="install"
@@ -66,6 +69,7 @@ lang="en"
 tech_arg=""
 hooks_mode="default"
 hooks_memory=false
+plugin_mode=false
 
 # --hooks=PROFILE[,memory] : un profil (default|full|none) + l'add-on optionnel memory.
 parse_hooks_arg() {
@@ -272,6 +276,10 @@ parse_args() {
                 rules_only=true
                 shift
                 ;;
+            --plugin-mode)
+                plugin_mode=true
+                shift
+                ;;
             -h|--help)
                 load_messages
                 print_usage
@@ -427,7 +435,9 @@ install_rules() {
     local lang_skills="$I18N_DIR/$lang/Common/skills"
     local dest_skills="$target_dir/.claude/skills"
 
-    if [[ -d "$base_skills" ]] || [[ -d "$lang_skills" ]]; then
+    if $plugin_mode; then
+        : # skills are carried by the bear-* plugins
+    elif [[ -d "$base_skills" ]] || [[ -d "$lang_skills" ]]; then
         [[ -d "$base_skills" ]] && copy_directory "$base_skills" "$dest_skills" "*.md"
         [[ -d "$lang_skills" ]] && copy_directory "$lang_skills" "$dest_skills" "*.md"
     else
@@ -466,7 +476,7 @@ install_commands() {
     log_info "${MSG_INSTALLING_COMMANDS}"
 
     # Namespace mapping: SourceDir:target_dir_name
-    local namespaces="Common:common Workflow:workflow Team:team QA:qa UIUX:uiux"
+    local namespaces="Common:bear-common Workflow:bear-workflow Team:bear-team QA:bear-qa UIUX:bear-uiux"
     local found_any=false
 
     # Temporarily set IFS to include space for word splitting
@@ -493,19 +503,20 @@ install_commands() {
     IFS="$OLD_IFS"
 
     # The deprecated common:pre-commit-check|pre-merge-check|release-checklist
-    # stubs redirect to /gate:check, which otherwise ships only with the Project
+    # stubs redirect to /bear-gate:check, which otherwise ships only with the Project
     # package: install it here too so a Dev-only install keeps them working.
     local gate_check="$SCRIPT_DIR/../../Project/i18n/$lang/Gate/commands/check.md"
     if [[ -f "$gate_check" ]]; then
-        copy_file "$gate_check" "$target_dir/.claude/commands/gate/check.md"
+        copy_file "$gate_check" "$target_dir/.claude/commands/bear-gate/check.md"
     fi
 
     # Delete commands retired from the distribution (config/removed-commands.yaml)
     $dry_run || bash "$SCRIPT_DIR/prune-removed-commands.sh" "$target_dir"
+    $dry_run || migrate_legacy_commands "$target_dir" common workflow team qa uiux gate
 
     if ! $found_any; then
         if [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
-            copy_directory "$SCRIPT_DIR/claude-commands/common" "$target_dir/.claude/commands/common" "*.md" "add-technology.md"
+            copy_directory "$SCRIPT_DIR/claude-commands/common" "$target_dir/.claude/commands/bear-common" "*.md" "add-technology.md"
         else
             log_warning "${MSG_COMMANDS_NOT_FOUND}"
         fi
@@ -513,8 +524,8 @@ install_commands() {
 }
 
 # Install AgentTeams helper scripts (cost-estimator, ralph-teams-adapter,
-# compatibility-check, ...) used by the /team:* commands. They are shipped
-# alongside the Team command namespace so /team:delivery etc. find them at
+# compatibility-check, ...) used by the /bear-team:* commands. They are shipped
+# alongside the Team command namespace so /bear-team:delivery etc. find them at
 # <project>/Tools/AgentTeams/lib/ instead of warning "scripts MISSING".
 install_agentteams() {
     local craft_root
@@ -658,7 +669,7 @@ install_config() {
     [[ ! -f "$settings_src" ]] && settings_src="$base_templates/settings.json.template"
     local settings_dest="$target_dir/.claude/settings.json"
     if [[ -f "$settings_src" ]]; then
-        if [[ ! -f "$settings_dest" ]] || $force; then
+        if [[ ! -f "$settings_dest" ]] || { $force && ! $plugin_mode; }; then
             if $dry_run; then
                 log_dry_run "${MSG_CREATING:-Creating} .claude/settings.json"
             else
@@ -812,7 +823,7 @@ install_claude_md() {
                     local cmd_desc
                     cmd_desc=$(grep -m1 "^description:" "$cmd_file" 2>/dev/null | sed 's/^description:[[:space:]]*//' | tr -d '"' | head -c 60 || true)
                     if [[ -n "$cmd_desc" ]]; then
-                        cmds_seen["${ns_prefix}:${cmd_name}"]="- \`/${ns_prefix}:${cmd_name}\` - ${cmd_desc}\n"
+                        cmds_seen["${ns_prefix}:${cmd_name}"]="- \`/bear-${ns_prefix}:${cmd_name}\` - ${cmd_desc}\n"
                     fi
                 done < <(find "$src_commands" -name "*.md" -type f | sort)
             fi
@@ -876,7 +887,7 @@ run_interactive() {
     read -p "Install common agents? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_agents_choice=true
 
-    read -p "Install /common: commands? (y/n) [y]: " choice
+    read -p "Install /bear-common:* commands? (y/n) [y]: " choice
     [[ "$choice" != "n" && "$choice" != "N" ]] && install_commands_choice=true
 
     read -p "Install PR/Issues templates? (y/n) [y]: " choice
@@ -956,6 +967,13 @@ main() {
 
     echo ""
 
+    if $plugin_mode; then
+        install_rules
+        install_templates
+        install_agentteams
+        install_config
+        install_claude_md
+    else
     # Install selected components
     if $rules_only; then
         install_rules
@@ -983,6 +1001,7 @@ main() {
         install_config
         install_hooks
         install_claude_md
+    fi
     fi
 
     # Copy AGENTS.md template to target root (idempotent — won't overwrite existing)

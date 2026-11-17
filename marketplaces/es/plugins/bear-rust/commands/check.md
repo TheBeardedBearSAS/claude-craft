@@ -1,0 +1,28 @@
+---
+description: "Auditoría Rust/Axum por eje: architecture, code-quality, security, testing, o all (agregado con puntuación)"
+argument-hint: "<architecture|code-quality|security|testing|all> [ruta]"
+---
+
+# Verificación Rust
+
+## Argumentos
+
+$ARGUMENTS
+
+El primer argumento es el eje; el resto (por ejemplo, la ruta de un proyecto) se transmite tal cual. Sin eje, ejecuta `all`.
+
+| Eje | Checklist que seguir |
+|-----|----------------------|
+| `architecture` | `${CLAUDE_PLUGIN_ROOT}/references/rust/checks/architecture.md` |
+| `code-quality` | `${CLAUDE_PLUGIN_ROOT}/references/rust/checks/code-quality.md` |
+| `security` | `${CLAUDE_PLUGIN_ROOT}/references/rust/checks/security.md` |
+| `testing` | `${CLAUDE_PLUGIN_ROOT}/references/rust/checks/testing.md` |
+| `all` | `${CLAUDE_PLUGIN_ROOT}/references/rust/checks/all.md`: los 4 ejes y luego un informe consolidado puntuado sobre 100 |
+
+## MISIÓN
+
+1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/bear-rust:check security crates/api`) y detente.
+2. Lee el archivo de checklist de ese eje y síguelo paso a paso. En ese archivo, `$ARGUMENTS` designa los argumentos que siguen al eje.
+3. Genera el informe en el formato de salida que define la checklist.
+
+Ejemplos: `/bear-rust:check architecture`, `/bear-rust:check testing ./crates/api`, `/bear-rust:check all`.

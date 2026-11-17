@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - C#/.NET
 
-> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Gerado: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## O Que (Stack & Estrutura)
 
@@ -57,10 +57,10 @@ dotnet test --collect:"XPlat Code Coverage" # Testes + cobertura
 dotnet format --verify-no-changes   # Verificar formatacao
 ```
 
-### Comandos Claude Craft
-- `/csharp:check all` - Auditoria completa
-- `/csharp:check architecture` - Validacao de arquitetura
-- `/csharp:generate-feature` - Gerar feature CQRS
+### Comandos Bear Craft
+- `/bear-csharp:check all` - Auditoria completa
+- `/bear-csharp:check architecture` - Validacao de arquitetura
+- `/bear-csharp:generate-feature` - Gerar feature CQRS
 
 ### Workflow de desenvolvimento
 1. **Analisar** - `rules/01-workflow-analysis.md`

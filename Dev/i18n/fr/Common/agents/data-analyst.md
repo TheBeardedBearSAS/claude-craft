@@ -99,12 +99,12 @@ Avant toute query : quelle décision sera prise avec ce résultat ?
 - Investigation d'anomalie (chute de conversion, pic d'erreurs)
 - Sélection du bon outil BI
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@database-architect` — design de schéma
 - `@performance-auditor` — métriques système
 - `.claude/rules/14-multitenant.md` — isolation des données par tenant
-- `/workflow:status --standup` — données d'entrée pour le standup
+- `/bear-workflow:status --standup` — données d'entrée pour le standup
 - Infrastructure d'observabilité via `@devops-engineer`
 
 ## Ressources

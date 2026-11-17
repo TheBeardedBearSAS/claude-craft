@@ -4,7 +4,7 @@ Claude Code hooks enforce rules programmatically, beyond what CLAUDE.md can sugg
 
 > **Key insight:** CLAUDE.md = suggestions. Hooks = requirements.
 
-These examples are copied into `.claude/templates/hooks/` by the claude-craft installer
+These examples are copied into `.claude/templates/hooks/` by the bear-craft installer
 (`install-common-rules.sh --hooks=default|full|none`, `--hooks=none` copies nothing).
 The scripts they call are installed in `.claude/hooks/`. In the repository itself they
 live in `Dev/i18n/base/Common/hooks/templates/examples/`.
@@ -34,13 +34,13 @@ Never copy an example over `.claude/settings.json` or `.claude/settings.local.js
 would erase your existing hooks and settings. Merge instead:
 
 ```bash
-node <claude-craft>/Dev/scripts/lib/merge-hooks.mjs add \
+node <bear-craft>/Dev/scripts/lib/merge-hooks.mjs add \
   --settings .claude/settings.json \
   --fragment .claude/templates/hooks/output-filter.json
 ```
 
 `merge-hooks.mjs` is idempotent and never removes or rewrites a hook it does not own
-(`<claude-craft>` is the installed npm package or your clone of the repository).
+(`<bear-craft>` is the installed npm package or your clone of the repository).
 You can also paste the `hooks` section by hand.
 
 ## Hook contract (summary)

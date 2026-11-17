@@ -56,7 +56,7 @@ const DESCRIPTION =
 
 // Evidence for the form's "validate_claims" field (required for frameworks).
 const VALIDATE_CLAIMS =
-  'Public npm package (@the-bearded-bear/claude-craft), MIT, 1200+ passing tests + mutation testing, ' +
+  'Public npm package (@the-bearded-bear/bear-craft), MIT, 1200+ passing tests + mutation testing, ' +
   '13 stack-specific reviewers, BMAD v6 sprint workflow, and a strictly schema-valid plugin manifest.';
 
 function readJson(relPath) {
@@ -202,17 +202,17 @@ async function main() {
   const npmRegistry = `https://registry.npmjs.org/${pkg.name}`;
 
   const resource = {
-    displayName: 'claude-craft',
+    displayName: 'bear-craft',
     category: CATEGORY,
     subcategory: SUBCATEGORY,
     primaryLink,
-    authorName: owner.name || 'The Bearded CTO',
+    authorName: owner.name || 'The Bearded Bear',
     authorLink: owner.url || 'https://the-bearded-bear.com',
     license: pkg.license || 'MIT',
     description: DESCRIPTION,
     releaseVersion: `v${pkg.version}`,
     dateAdded: stamp(new Date()),
-    id: computeId('tool', 'claude-craft', primaryLink),
+    id: computeId('tool', 'bear-craft', primaryLink),
   };
 
   // Validate URLs. The GitHub primary link is the submitted one and must be reachable;

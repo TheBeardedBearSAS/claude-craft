@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Focus : security, outdated, licenses, all
 
-Exemple : `/python:dependency-audit security` ou `/python:dependency-audit all`
+Exemple : `/bear-python:dependency-audit security` ou `/bear-python:dependency-audit all`
 
 ## Mode Plan
 

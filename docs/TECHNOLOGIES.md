@@ -4,7 +4,7 @@ Detailed information about rules, patterns, and best practices for each supporte
 
 ## Maturity Tiers
 
-Claude Craft classifies its 12 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
+Bear Craft classifies its 12 application technology stacks into 3 maturity tiers. This reflects the depth of support: i18n coverage, agent specialization, commands, skills, and reference documentation.
 
 ### Tier Overview
 
@@ -103,13 +103,13 @@ src/
 
 ```bash
 # Generate CRUD with proper architecture
-/symfony:generate-crud Product
+/bear-symfony:generate-crud Product
 
 # Check architecture compliance
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Plan database migration
-/symfony:migration-plan "Add user preferences"
+/bear-symfony:migration-plan "Add user preferences"
 ```
 
 ### Templates
@@ -164,13 +164,13 @@ lib/
 
 ```bash
 # Generate feature module
-/flutter:generate-feature authentication
+/bear-flutter:generate-feature authentication
 
 # Generate widget with tests
-/flutter:generate-widget UserAvatar
+/bear-flutter:generate-widget UserAvatar
 
 # Analyze performance
-/flutter:analyze-performance
+/bear-flutter:analyze-performance
 ```
 
 ### State Management
@@ -245,13 +245,13 @@ src/
 
 ```bash
 # Generate FastAPI endpoint
-/python:generate-endpoint users
+/bear-python:generate-endpoint users
 
 # Check async code
-/python:async-check
+/bear-python:async-check
 
 # Type coverage analysis
-/python:type-coverage
+/bear-python:type-coverage
 ```
 
 ### Type Hints
@@ -315,13 +315,13 @@ src/
 
 ```bash
 # Generate component with tests
-/react:generate-component Button
+/bear-react:generate-component Button
 
 # Generate custom hook
-/react:generate-hook useAuth
+/bear-react:generate-hook useAuth
 
 # Check accessibility
-/react:accessibility-check
+/bear-react:accessibility-check
 ```
 
 ### Component Pattern
@@ -421,13 +421,13 @@ src/
 
 ```bash
 # Generate screen
-/reactnative:generate-screen Profile
+/bear-reactnative:generate-screen Profile
 
 # Native module integration
-/reactnative:native-module Camera
+/bear-reactnative:native-module Camera
 
 # Prepare for store
-/reactnative:store-prepare
+/bear-reactnative:store-prepare
 ```
 
 ### Navigation
@@ -610,7 +610,7 @@ Adapters **never** hold governance state. They execute, heartbeat, report cost, 
 
 ### Commands
 
-See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit commands + `generate-adapter`, `generate-agent-config`, `setup-company`.
+See [`/bear-paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit commands + `generate-adapter`, `generate-agent-config`, `setup-company`.
 
 ### Use this stack when
 
@@ -627,4 +627,4 @@ See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit comma
 
 ## Internal Tooling Note: Svelte 5
 
-> **Note:** Svelte 5 is **not a supported project stack** in Claude Craft. However, the built-in **Kanban SPA** (`claude-craft kanban`) is itself implemented in Svelte 5. This is an internal implementation detail — Svelte is used for Claude Craft tooling, not as a recommendation for user projects. Community-maintained Svelte references are available at `.claude/references/svelte/CLAUDE.md` with a full disclaimer.
+> **Note:** Svelte 5 is **not a supported project stack** in Bear Craft. However, the built-in **Kanban SPA** (`bear-craft kanban`) is itself implemented in Svelte 5. This is an internal implementation detail — Svelte is used for Bear Craft tooling, not as a recommendation for user projects. Community-maintained Svelte references are available at `.claude/references/svelte/CLAUDE.md` with a full disclaimer.

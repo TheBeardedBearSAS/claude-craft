@@ -14,7 +14,7 @@ Argumentos:
 - Descripción del bug o enlace al ticket
 - (Opcional) Archivo o módulo afectado
 
-Ejemplo: `/qa:tdd "Usuario no puede cerrar sesión"` o `/qa:tdd #123`
+Ejemplo: `/bear-qa:tdd "Usuario no puede cerrar sesión"` o `/bear-qa:tdd #123`
 
 ## Modo Plan
 
@@ -393,11 +393,11 @@ Fixes #XXX
 ║                    SIGUIENTE PASO                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-testear después de las correcciones                ║
 ║                                                          ║
 ║  Ver también:                                            ║
-║  • /gate:check commit — Validar antes del commit   ║
+║  • /bear-gate:check commit — Validar antes del commit   ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

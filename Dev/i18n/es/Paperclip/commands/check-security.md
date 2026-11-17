@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /paperclip:check security"
+description: "Obsoleto (se elimina en 10.0): usa /bear-paperclip:check security"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-security` está obsoleto y se eliminará en 10.0. Usa `/paperclip:check security`.
+> ⚠️ `/bear-paperclip:check-security` está obsoleto y se eliminará en 10.0. Usa `/bear-paperclip:check security`.
 
-Ejecuta `/paperclip:check security $ARGUMENTS`: lee `.claude/commands/paperclip/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-paperclip:check security $ARGUMENTS`: lee `.claude/commands/bear-paperclip/check.md` y síguelo con estos argumentos.

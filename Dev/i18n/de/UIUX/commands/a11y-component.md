@@ -14,7 +14,7 @@ Argumente:
 - Komponentenname
 - (Optional) Typ: button, input, modal, dropdown, tabs, accordion, tooltip, etc.
 
-Beispiel: `/uiux:a11y-component Modal` oder `/uiux:a11y-component "Datumsauswahl" type:input`
+Beispiel: `/bear-uiux:a11y-component Modal` oder `/bear-uiux:a11y-component "Datumsauswahl" type:input`
 
 ## Plan-Modus
 

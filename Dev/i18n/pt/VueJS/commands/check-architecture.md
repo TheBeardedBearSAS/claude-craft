@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /vuejs:check architecture"
+description: "Obsoleto (removido na 10.0): use /bear-vuejs:check architecture"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-architecture` está obsoleto e será removido na 10.0. Use `/vuejs:check architecture`.
+> ⚠️ `/bear-vuejs:check-architecture` está obsoleto e será removido na 10.0. Use `/bear-vuejs:check architecture`.
 
-Execute `/vuejs:check architecture $ARGUMENTS`: leia `.claude/commands/vuejs/check.md` e siga-o com estes argumentos.
+Execute `/bear-vuejs:check architecture $ARGUMENTS`: leia `.claude/commands/bear-vuejs/check.md` e siga-o com estes argumentos.

@@ -250,12 +250,12 @@ spec:
 - Dokumentationsumstrukturierung
 - DevEx- / DORA-Metriken
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — CI/CD, IDP-Infrastruktur
 - `.claude/skills/tooling/SKILL.md` — CLI-Muster, Scripting
-- `/common:getting-started` — Generierung von Onboarding-Guides
-- `/team:audit` — mehrdimensionales DevEx-Audit
+- `/bear-common:getting-started` — Generierung von Onboarding-Guides
+- `/bear-team:audit` — mehrdimensionales DevEx-Audit
 
 ## Ressourcen
 

@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Cible : performance, quality, both (defaut : both)
 
-Exemple : `/ansible:optimize target:performance`
+Exemple : `/bear-ansible:optimize target:performance`
 
 ## Plan Mode
 
@@ -159,7 +159,7 @@ PROCHAINES ETAPES
 
 1. [ ] Appliquer l'ajustement ansible.cfg a tous les environnements
 2. [ ] Executer les tests molecule pour valider l'absence de regressions
-3. [ ] Configurer le pipeline CI avec /ansible:deploy-setup
-4. [ ] Auditer la posture de securite avec /ansible:security-audit
+3. [ ] Configurer le pipeline CI avec /bear-ansible:deploy-setup
+4. [ ] Auditer la posture de securite avec /bear-ansible:security-audit
 5. [ ] Surveiller les temps d'execution avec le profilage par callback
 ```

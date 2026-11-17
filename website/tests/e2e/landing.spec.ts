@@ -6,7 +6,7 @@ test.describe('Landing page', () => {
   })
 
   test('has correct title', async ({ page }) => {
-    await expect(page).toHaveTitle(/Claude Craft/)
+    await expect(page).toHaveTitle(/Bear Craft/)
   })
 
   test('has all 6 sections', async ({ page }) => {

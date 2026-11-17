@@ -98,4 +98,4 @@ Avant de commit, vérifier :
 
 **Date de dernière mise à jour :** 2026-04-15
 **Version :** 1.0.0
-**Auteur :** The Bearded CTO
+**Auteur :** The Bearded Bear

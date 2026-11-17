@@ -1,5 +1,5 @@
 ---
-description: "Genera un DESIGN.md en la raíz del proyecto a partir del template de Claude Craft + análisis de fuentes UI existentes (Tailwind, tokens, CSS)."
+description: "Genera un DESIGN.md en la raíz del proyecto a partir del template de Bear Craft + análisis de fuentes UI existentes (Tailwind, tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
@@ -17,16 +17,16 @@ Crea un fichero `DESIGN.md` en la raíz del proyecto para servir como fuente de 
 
 ```bash
 # Copia simple del template (a rellenar manualmente)
-/uiux:generate-design-md
+/bear-uiux:generate-design-md
 
 # Pre-rellenar desde tailwind.config.*
-/uiux:generate-design-md --from-tailwind
+/bear-uiux:generate-design-md --from-tailwind
 
 # Pre-rellenar desde fichero de tokens JSON
-/uiux:generate-design-md --from-tokens=./design-tokens.json
+/bear-uiux:generate-design-md --from-tokens=./design-tokens.json
 
 # Modo interactivo (preguntas dirigidas)
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 ```
 
 ## Proceso
@@ -107,14 +107,14 @@ Checklist post-generación:
 - **Skill `design-md-convention`** — reglas de redacción
 - **Template** `.claude/templates/DESIGN.md.template`
 - **Agentes consumidores**: `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@{react,vue,angular}-reviewer`
-- **Comandos relacionados**: `/uiux:design-tokens`, `/uiux:audit`, `/uiux:a11y-audit`
+- **Comandos relacionados**: `/bear-uiux:design-tokens`, `/bear-uiux:audit`, `/bear-uiux:a11y-audit`
 
 ## Ejemplos
 
 ### Proyecto React + Tailwind
 
 ```bash
-/uiux:generate-design-md --from-tailwind --interactive
+/bear-uiux:generate-design-md --from-tailwind --interactive
 # Preguntas interactivas
 # → DESIGN.md generado con paleta Tailwind + breakpoints + tipografía
 ```
@@ -122,7 +122,7 @@ Checklist post-generación:
 ### Proyecto sin stack UI detectable
 
 ```bash
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 # Copia del template + preguntas
 # → DESIGN.md a completar manualmente
 ```

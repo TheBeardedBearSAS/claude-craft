@@ -87,10 +87,10 @@ Après la phase brainstorm, produire **une page** (max) avec :
 | Skip brainstorm "parce que c'est urgent" | L'urgence coûte 10x le brainstorm évité |
 | Noter les réponses dans sa tête | Écrire = visible, revisitable, versionable |
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
-- **`/workflow:analyze`** — phase d'analyse BMAD commence par ce skill
-- **`/workflow:plan`** — PRD doit répondre aux 5 familles de questions
+- **`/bear-workflow:analyze`** — phase d'analyse BMAD commence par ce skill
+- **`/bear-workflow:plan`** — PRD doit répondre aux 5 familles de questions
 - **Agent `@product-owner`** — peut conduire le brainstorm avec le demandeur
 - **Skill `atomic-tasks`** — l'output du brainstorm se découpe en tâches atomiques
 - **Skill `architect`** — vient APRÈS le brainstorm pour les features architecturales

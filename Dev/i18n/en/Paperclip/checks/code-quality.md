@@ -60,4 +60,4 @@ Run `eslint-plugin-sonarjs` (or equivalent). Flag any function with cognitive co
 
 ## Output
 
-Markdown report with per-section pass/fail, offending files/symbols, severity, and a score /20 for `/paperclip:check all`.
+Markdown report with per-section pass/fail, offending files/symbols, severity, and a score /20 for `/bear-paperclip:check all`.

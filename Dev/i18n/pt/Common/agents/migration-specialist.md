@@ -116,14 +116,14 @@ Você é um **Migration Specialist Sênior** com mais de 12 anos de experiência
 - Reescrita de legado
 - Migração para New Architecture (React Native, Flutter Impeller)
 
-## Integração com Claude Craft
+## Integração com Bear Craft
 
 - `@database-architect` — design do esquema alvo
 - `@devops-engineer` — infra, blue-green, canary
 - `.claude/rules/01-workflow-analysis.md` — análise obrigatória antes da migração
 - Skill `atomic-tasks` — divisão da migração
 - Skill `architect` — design da migração
-- `/symfony:migration-plan`, `/common:architecture-decision`
+- `/bear-symfony:migration-plan`, `/bear-common:architecture-decision`
 
 ## Recursos
 

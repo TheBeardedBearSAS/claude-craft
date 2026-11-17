@@ -14,7 +14,7 @@ Argumente:
 - Bug-Beschreibung oder Ticket-Link
 - (Optional) Betroffene Datei oder Modul
 
-Beispiel: `/qa:tdd "Benutzer kann sich nicht abmelden"` oder `/qa:tdd #123`
+Beispiel: `/bear-qa:tdd "Benutzer kann sich nicht abmelden"` oder `/bear-qa:tdd #123`
 
 ## Plan-Modus
 
@@ -393,11 +393,11 @@ Fixes #XXX
 ║                   NÄCHSTER SCHRITT                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Nach Korrekturen erneut testen                        ║
 ║                                                          ║
 ║  Siehe auch:                                             ║
-║  • /gate:check commit — Vor dem Commit validieren  ║
+║  • /bear-gate:check commit — Vor dem Commit validieren  ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

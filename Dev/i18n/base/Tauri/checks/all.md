@@ -31,7 +31,7 @@ docker compose exec app ls src-tauri/capabilities
 
 ### Step 2: Architecture Audit (25 points)
 
-Execute architecture check: `/tauri:check architecture` or follow `.claude/references/tauri/checks/architecture.md`
+Execute architecture check: `/bear-tauri:check architecture` or follow `.claude/references/tauri/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Project layout: `src/` + `src-tauri/`, thin `main.rs`, `run()` with the mobile entry point (5 pts)
@@ -44,7 +44,7 @@ Execute architecture check: `/tauri:check architecture` or follow `.claude/refer
 
 ### Step 3: Code Quality Audit (25 points)
 
-Execute code quality check: `/tauri:check code-quality` or follow `.claude/references/tauri/checks/code-quality.md`
+Execute code quality check: `/bear-tauri:check code-quality` or follow `.claude/references/tauri/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - Rust lints and formatting: fmt, Clippy `-D warnings`, `unsafe` hygiene (6 pts)
@@ -58,7 +58,7 @@ Execute code quality check: `/tauri:check code-quality` or follow `.claude/refer
 
 ### Step 4: Testing Audit (25 points)
 
-Execute testing check: `/tauri:check testing` or follow `.claude/references/tauri/checks/testing.md`
+Execute testing check: `/bear-tauri:check testing` or follow `.claude/references/tauri/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage, 80% minimum, Rust and frontend (5 pts)
@@ -71,7 +71,7 @@ Execute testing check: `/tauri:check testing` or follow `.claude/references/taur
 
 ### Step 5: Security Audit (25 points)
 
-Execute security check: `/tauri:check security` or follow `.claude/references/tauri/checks/security.md`
+Execute security check: `/bear-tauri:check security` or follow `.claude/references/tauri/checks/security.md`
 
 **Evaluated Criteria**:
 - Capabilities and permissions, least privilege (7 pts)

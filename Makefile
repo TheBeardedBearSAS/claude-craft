@@ -10,7 +10,7 @@
 #   make list                    # Lister les composants disponibles
 #
 # NOTE: Individual technology installation is handled by the CLI:
-#   npx @the-bearded-bear/claude-craft install <path> --tech=<name>
+#   npx @the-bearded-bear/bear-craft install <path> --tech=<name>
 #===============================================================================
 
 .PHONY: help install-all install-common install-project install-infra \
@@ -20,7 +20,7 @@
         config-install config-install-all config-validate config-list config-dry-run \
         config-check config-check-fix check fix-permissions stats \
         migrate-check test-tools test-rtk test-statusline test-agent-teams test-bmad test-bats test-all \
-        plugin-export plugin-export-all
+        plugin-export-all plugin-check
 
 # Configuration
 SHELL := /bin/bash
@@ -60,7 +60,7 @@ help: ## Affiche cette aide
 # Installation des technologies via CLI (recommended)
 install-%: ## Installe les regles pour une techno (ex: make install-symfony)
 	@echo "$(CYAN)Installation via CLI: $* (lang=$(RULES_LANG))...$(NC)"
-	@npx @the-bearded-bear/claude-craft install $(TARGET) --tech=$* --lang=$(RULES_LANG)
+	@npx @the-bearded-bear/bear-craft install $(TARGET) --tech=$* --lang=$(RULES_LANG)
 
 # Installation infra via pattern rule
 install-infra-%: ## Installe les regles infra (ex: make install-infra-docker)
@@ -107,7 +107,7 @@ install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets 
 install-rtk: ## Installe RTK (Rust Token Killer)
 	@bash "$(TOOLS_DIR)/RTK/install-rtk.sh" --lang=$(RULES_LANG)
 
-install-agentteams: ## Installe les scripts AgentTeams (/team:*) dans TARGET (defaut: .)
+install-agentteams: ## Installe les scripts AgentTeams (/bear-team:*) dans TARGET (defaut: .)
 	@bash "$(TOOLS_DIR)/AgentTeams/install-agentteams.sh" "$(TARGET)"
 
 install-completions: ## Installe les completions bash/zsh
@@ -116,7 +116,7 @@ install-completions: ## Installe les completions bash/zsh
 	cp "$(TOOLS_DIR)/MultiAccount/completions/_claude-accounts" ~/.zsh/completions/
 
 install-tools-lib: ## Installe la librairie partagee
-	@mkdir -p ~/.local/lib/claude-craft && cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/claude-craft/
+	@mkdir -p ~/.local/lib/bear-craft && cp "$(TOOLS_DIR)/lib/tools-ui.sh" ~/.local/lib/bear-craft/
 
 #===============================================================================
 # Tests
@@ -154,7 +154,7 @@ test-all: ## Lance tous les tests (vitest + bats)
 
 # Pre-collecte deterministe : decide quelles lentilles d'audit meritent un agent
 # cette semaine. Cout LLM nul. L'audit complet se lance ensuite dans Claude Code
-# via /common:audit-claude-alignment.
+# via /bear-common:audit-claude-alignment.
 audit-claude-signals: ## Collecte les signaux Claude (npm, advisories, empreintes de pages)
 	@node scripts/collect-claude-signals.mjs $(if $(SINCE),--since=$(SINCE))
 
@@ -162,7 +162,7 @@ audit-claude-alignment: ## Rituel hebdo : affiche les lentilles a auditer puis l
 	@node scripts/collect-claude-signals.mjs --dry-run $(if $(SINCE),--since=$(SINCE)) | head -3
 	@echo ""
 	@echo "Lancer ensuite dans Claude Code :"
-	@echo "  /common:audit-claude-alignment$(if $(SINCE), --since=$(SINCE))"
+	@echo "  /bear-common:audit-claude-alignment$(if $(SINCE), --since=$(SINCE))"
 
 #===============================================================================
 # Configuration YAML
@@ -199,13 +199,11 @@ config-check-fix: ## Vérifie et propose de corriger les problèmes
 # Plugin Export
 #===============================================================================
 
-PLUGIN_OUTPUT ?= ./dist/plugins
+plugin-export-all: ## Génère marketplaces/<lang>/plugins/bear-<ns>/ (5 langues) depuis les installeurs
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --all-langs
 
-plugin-export-%: ## Exporte une techno comme plugin (ex: make plugin-export-symfony)
-	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --tech=$* --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
-
-plugin-export-all: ## Exporte toutes les technologies
-	@$(TOOLS_DIR)/PluginExport/export-plugin.sh --all --lang=$(RULES_LANG) $(PLUGIN_OUTPUT)
+plugin-check: ## Vérifie que marketplaces/ est synchronisé avec le générateur (code ≠ 0 en cas de dérive)
+	@docker run --rm -u "$$(id -u):$$(id -g)" -v "$(CURDIR):/app" -w /app $(TEST_IMAGE) node scripts/generate-plugins.mjs --all-langs --check
 
 #===============================================================================
 # Lister les Composants

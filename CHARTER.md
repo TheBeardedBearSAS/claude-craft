@@ -1,4 +1,4 @@
-# Charte de Gouvernance Claude Craft
+# Charte de Gouvernance Bear Craft
 
 **Version :** 1.0.0  
 **Date :** 15 avril 2026  
@@ -6,22 +6,22 @@
 
 ## 1. Préambule
 
-La présente Charte de Gouvernance définit les principes et engagements qui garantissent la pérennité du projet Claude Craft en tant que logiciel libre et la confiance de sa communauté. Elle protège contre toute dérive de type "bait-and-switch" où un projet open-source serait progressivement vidé de ses fonctionnalités au profit d'une version fermée.
+La présente Charte de Gouvernance définit les principes et engagements qui garantissent la pérennité du projet Bear Craft en tant que logiciel libre et la confiance de sa communauté. Elle protège contre toute dérive de type "bait-and-switch" où un projet open-source serait progressivement vidé de ses fonctionnalités au profit d'une version fermée.
 
 ## 2. Garantie MIT Perpétuelle
 
-Claude Craft restera sous **licence MIT à perpétuité**. Cette licence ne sera **jamais révoquée ni remplacée** par une licence plus restrictive. Les contributions passées et futures au dépôt public `claude-craft` sont et resteront sous MIT.
+Bear Craft restera sous **licence MIT à perpétuité**. Cette licence ne sera **jamais révoquée ni remplacée** par une licence plus restrictive. Les contributions passées et futures au dépôt public `bear-craft` sont et resteront sous MIT.
 
 **Engagement ferme :** L'intégralité du projet est et demeurera open-source MIT. Il n'existe **aucune** édition commerciale, enterprise ou propriétaire, et aucune fonctionnalité ne sera jamais retirée de l'open-source au profit d'une telle édition.
 
 ## 3. Périmètre 100 % Open-Source
 
-Claude Craft est un projet **entièrement open-source MIT**, sans modèle open-core ni édition fermée :
+Bear Craft est un projet **entièrement open-source MIT**, sans modèle open-core ni édition fermée :
 
-- **`claude-craft` (MIT, public)** : Framework complet — BMAD, 10 stacks, skills, agents, CLI, QA Recette, plugin system, marketplace public. Tout est inclus.
+- **`bear-craft` (MIT, public)** : Framework complet — BMAD, 10 stacks, skills, agents, CLI, QA Recette, plugin system, marketplace public. Tout est inclus.
 - **Aucune édition propriétaire** : pas de version Enterprise payante, pas de fonctionnalités exclusives derrière une licence commerciale. Toute fonctionnalité développée pour le projet est publiée sous MIT.
 
-**Principe :** un développeur, une équipe ou une entreprise peut utiliser, modifier et redistribuer Claude Craft en production sans aucune restriction ni coût de licence.
+**Principe :** un développeur, une équipe ou une entreprise peut utiliser, modifier et redistribuer Bear Craft en production sans aucune restriction ni coût de licence.
 
 ## 4. Gouvernance du Projet
 
@@ -88,7 +88,7 @@ Les fonds collectés servent à :
 
 ### 7.1 Droit de Fork
 
-Toute personne ou entité peut forker `claude-craft` sous MIT sans restriction. Si un fork atteint une traction significative (≥ 50% des commits du repo original sur 6 mois), les mainteneurs s'engagent à faciliter la transition de gouvernance si la communauté le demande.
+Toute personne ou entité peut forker `bear-craft` sous MIT sans restriction. Si un fork atteint une traction significative (≥ 50% des commits du repo original sur 6 mois), les mainteneurs s'engagent à faciliter la transition de gouvernance si la communauté le demande.
 
 ### 7.2 Succession des Mainteneurs
 
@@ -111,7 +111,7 @@ En cas de désaccord persistant entre mainteneurs ou avec la communauté, un **m
 
 ## 10. Clause de Non-Relicenciement
 
-Les versions publiées de `claude-craft` sous MIT ne peuvent **jamais** être relicenciées rétroactivement. Seules les nouvelles versions futures pourraient théoriquement changer de licence, mais un tel changement requiert le processus de modification de Charte (§8) et serait une **décision stratégique exceptionnelle** soumise à RFC 60 jours.
+Les versions publiées de `bear-craft` sous MIT ne peuvent **jamais** être relicenciées rétroactivement. Seules les nouvelles versions futures pourraient théoriquement changer de licence, mais un tel changement requiert le processus de modification de Charte (§8) et serait une **décision stratégique exceptionnelle** soumise à RFC 60 jours.
 
 ## 11. Contact et Transparence
 

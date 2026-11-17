@@ -14,7 +14,7 @@ Arguments :
 - Chemin vers le composant (ex: `src/components/Button/Button.tsx`)
 - (Optionnel) Template : default, form, layout, complex
 
-Exemple : `/react:storybook-story src/components/Button/Button.tsx`
+Exemple : `/bear-react:storybook-story src/components/Button/Button.tsx`
 
 ## Mode Plan
 

@@ -26,7 +26,7 @@ Preparar el entorno de auditoría:
 
 Ejecutar la verificación completa de arquitectura:
 
-**Comando**: Usar el comando slash `/php:check architecture` o seguir manualmente los pasos de `.claude/references/php/checks/architecture.md`
+**Comando**: Usar el comando slash `/bear-php:check architecture` o seguir manualmente los pasos de `.claude/references/php/checks/architecture.md`
 
 **Criterios Evaluados**:
 - Estructura de Clean Architecture (6 pts)
@@ -42,7 +42,7 @@ Ejecutar la verificación completa de arquitectura:
 
 Ejecutar la verificación de calidad de código:
 
-**Comando**: Usar el comando slash `/php:check code-quality` o seguir manualmente los pasos de `.claude/references/php/checks/code-quality.md`
+**Comando**: Usar el comando slash `/bear-php:check code-quality` o seguir manualmente los pasos de `.claude/references/php/checks/code-quality.md`
 
 **Criterios Evaluados**:
 - Conformidad con PER-CS 3.0 (5 pts)
@@ -58,7 +58,7 @@ Ejecutar la verificación de calidad de código:
 
 Ejecutar la verificación de pruebas:
 
-**Comando**: Usar el comando slash `/php:check testing` o seguir manualmente los pasos de `.claude/references/php/checks/testing.md`
+**Comando**: Usar el comando slash `/bear-php:check testing` o seguir manualmente los pasos de `.claude/references/php/checks/testing.md`
 
 **Criterios Evaluados**:
 - Cobertura de código (7 pts)
@@ -74,7 +74,7 @@ Ejecutar la verificación de pruebas:
 
 Ejecutar la verificación de seguridad:
 
-**Comando**: Usar el comando slash `/php:check security` o seguir manualmente los pasos de `.claude/references/php/checks/security.md`
+**Comando**: Usar el comando slash `/bear-php:check security` o seguir manualmente los pasos de `.claude/references/php/checks/security.md`
 
 **Criterios Evaluados**:
 - Protecciones OWASP Top 10 (6 pts)

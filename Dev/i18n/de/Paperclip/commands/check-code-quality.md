@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /paperclip:check code-quality verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-paperclip:check code-quality verwenden"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-code-quality` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/paperclip:check code-quality`.
+> ⚠️ `/bear-paperclip:check-code-quality` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-paperclip:check code-quality`.
 
-Führen Sie `/paperclip:check code-quality $ARGUMENTS` aus: Lesen Sie `.claude/commands/paperclip/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-paperclip:check code-quality $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-paperclip/check.md` und folgen Sie der Datei mit diesen Argumenten.

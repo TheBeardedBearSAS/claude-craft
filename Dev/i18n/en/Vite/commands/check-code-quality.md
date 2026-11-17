@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /vite:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-vite:check code-quality"
 deprecated: true
-replaced-by: /vite:check
+replaced-by: /bear-vite:check
 ---
 
-> ⚠️ `/vite:check-code-quality` is deprecated and will be removed in 10.0. Use `/vite:check code-quality`.
+> ⚠️ `/bear-vite:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-vite:check code-quality`.
 
-Run `/vite:check code-quality $ARGUMENTS`: read `.claude/commands/vite/check.md` and follow it with these arguments.
+Run `/bear-vite:check code-quality $ARGUMENTS`: read `.claude/commands/bear-vite/check.md` and follow it with these arguments.

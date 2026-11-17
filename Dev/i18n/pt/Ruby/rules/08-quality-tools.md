@@ -373,7 +373,7 @@ pre-commit:
 
 ## Alinhamento com a Pontuação
 
-A auditoria `/ruby:check` associa as ferramentas aos eixos:
+A auditoria `/bear-ruby:check` associa as ferramentas aos eixos:
 
 | Eixo | Evidência das ferramentas |
 |------|---------------------------|

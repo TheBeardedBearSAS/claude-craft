@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /flutter:check security"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-flutter:check security"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-security` est obsolète et sera retirée en 10.0. Utilisez `/flutter:check security`.
+> ⚠️ `/bear-flutter:check-security` est obsolète et sera retirée en 10.0. Utilisez `/bear-flutter:check security`.
 
-Exécutez `/flutter:check security $ARGUMENTS` : lisez `.claude/commands/flutter/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-flutter:check security $ARGUMENTS` : lisez `.claude/commands/bear-flutter/check.md` et suivez-le avec ces arguments.

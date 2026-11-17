@@ -1,10 +1,10 @@
 # Tutorial de flujo de trabajo completo: De la idea a producción
 
-> **¿Para quién es esto?** Para alguien que **nunca** ha usado Claude Code ni Claude Craft. Partimos de cero, construimos una funcionalidad real de principio a fin y explicamos cada término la primera vez que aparece.
+> **¿Para quién es esto?** Para alguien que **nunca** ha usado Claude Code ni Bear Craft. Partimos de cero, construimos una funcionalidad real de principio a fin y explicamos cada término la primera vez que aparece.
 >
 > **Qué construimos:** *TaskFlow* — un SaaS de seguimiento de tareas para equipos pequeños con una API REST (Python / FastAPI) y un cliente web en React. Es lo suficientemente sencillo para seguirlo en una sola sesión, y lo suficientemente real para ejercitar todo el flujo de trabajo.
 >
-> **Claude Craft v8.19.2** · Tiempo estimado de lectura + práctica: 60–90 minutos.
+> **Bear Craft v8.19.2** · Tiempo estimado de lectura + práctica: 60–90 minutos.
 
 ---
 
@@ -12,25 +12,25 @@
 
 ### Qué harás
 
-Llevarás TaskFlow desde una idea de una frase hasta un primer sprint revisado y probado — usando el flujo de trabajo BMAD de Claude Craft. El camino siempre avanza en una dirección, y **cada flecha está protegida por una puerta de calidad** (una verificación bloqueante):
+Llevarás TaskFlow desde una idea de una frase hasta un primer sprint revisado y probado — usando el flujo de trabajo BMAD de Bear Craft. El camino siempre avanza en una dirección, y **cada flecha está protegida por una puerta de calidad** (una verificación bloqueante):
 
 ```
  IDEA
-   │  /workflow:init        ← elige el track
+   │  /bear-workflow:init        ← elige el track
    ▼
- BACKLOG ──/gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
-   │  /workflow:plan            │
+ BACKLOG ──/bear-gate:check backlog──┐  (PRD ≥ 80%, INVEST 6/6)
+   │  /bear-workflow:plan            │
    ▼                            │
- TECH DESIGN ──/gate:check spec──┐  (Tech Spec ≥ 90%)
-   │  /workflow:design           │
+ TECH DESIGN ──/bear-gate:check spec──┐  (Tech Spec ≥ 90%)
+   │  /bear-workflow:design           │
    ▼                             │
- SPRINT PLAN ──/gate:check sprint──┐  (Sprint Ready 100%)
-   │  /workflow:start              │
+ SPRINT PLAN ──/bear-gate:check sprint──┐  (Sprint Ready 100%)
+   │  /bear-workflow:start              │
    ▼                               │
- IMPLEMENTATION (TDD) ──/gate:check story──┐  (Story DoD 100%)
-   │  /workflow:implement                   │
+ IMPLEMENTATION (TDD) ──/bear-gate:check story──┐  (Story DoD 100%)
+   │  /bear-workflow:implement                   │
    ▼                                       │
- REVIEW + RETRO ──/workflow:review, /workflow:retro
+ REVIEW + RETRO ──/bear-workflow:review, /bear-workflow:retro
                                            │
    ▼
  NEXT SPRINT ↺
@@ -45,10 +45,10 @@ Llevarás TaskFlow desde una idea de una frase hasta un primer sprint revisado y
 Lee esto una vez. Volverás a consultarlo.
 
 - **Claude Code** — la CLI donde hablas con Claude en tu terminal (o IDE). Escribes mensajes y *slash-commands*; Claude lee/escribe archivos, ejecuta comandos y responde.
-- **Slash-command** — una instrucción empaquetada que comienza con `/`. Ejemplo: `/workflow:init`. Claude Craft incluye 125 de ellos en 15 espacios de nombres.
+- **Slash-command** — una instrucción empaquetada que comienza con `/`. Ejemplo: `/bear-workflow:init`. Bear Craft incluye 125 de ellos en 15 espacios de nombres.
 - **Agent** — una persona especializada de Claude que invocas con `@`. Ejemplo: `@tdd-coach`, `@symfony-reviewer`. Cada uno tiene experiencia enfocada.
-- **Claude Craft** — el framework que instalaste: reglas, comandos, agentes, habilidades y la capa de gestión de proyectos **BMAD**.
-- **BMAD** — el método ligero estilo SCRUM de Claude Craft (Backlog → sprint → revisión). Escribe su estado en **archivos**, no en la conversación — por eso es seguro limpiar el chat más adelante.
+- **Bear Craft** — el framework que instalaste: reglas, comandos, agentes, habilidades y la capa de gestión de proyectos **BMAD**.
+- **BMAD** — el método ligero estilo SCRUM de Bear Craft (Backlog → sprint → revisión). Escribe su estado en **archivos**, no en la conversación — por eso es seguro limpiar el chat más adelante.
 
 ### Mini-glosario
 
@@ -78,7 +78,7 @@ Hay **dos cosas diferentes llamadas "modo"**. No las confundas.
 | **Normal** | ⚡ | Claude actúa, pero pide permiso antes de acciones arriesgadas. **Por defecto en este tutorial.** |
 | **Auto-accept** | 🤖 | Claude ejecuta sin preguntar. Potente, pero solo cuando confíes en el flujo. |
 
-**(b) El "modo plan" que algunos comandos activan por sí mismos.** Varios comandos de Claude Craft (`/workflow:design`, `/workflow:plan`…) entran deliberadamente en un paso de planificación y esperan tu "adelante" antes de escribir archivos — independientemente del modo Shift-Tab en que estés.
+**(b) El "modo plan" que algunos comandos activan por sí mismos.** Varios comandos de Bear Craft (`/bear-workflow:design`, `/bear-workflow:plan`…) entran deliberadamente en un paso de planificación y esperan tu "adelante" antes de escribir archivos — independientemente del modo Shift-Tab en que estés.
 
 > **Regla sencilla para principiantes:** mantente en **Normal (⚡)**, deja que los comandos activen su propio paso de planificación y aprueba los planes. Usa auto-accept y las banderas `--auto` solo cuando el flujo te resulte familiar.
 
@@ -91,7 +91,7 @@ A lo largo de este tutorial, cada comando muestra el modo que espera:
 
 ## 2. Verificar tu instalación
 
-**Modo: Solo lectura.** Abre Claude Code en la carpeta de tu proyecto y confirma que Claude Craft está presente.
+**Modo: Solo lectura.** Abre Claude Code en la carpeta de tu proyecto y confirma que Bear Craft está presente.
 
 ```bash
 # En tu terminal, dentro del proyecto
@@ -101,23 +101,23 @@ claude
 Luego, dentro de Claude Code:
 
 ```
-/workflow:status
+/bear-workflow:status
 ```
 
-Si ves un informe de estado del flujo de trabajo (aunque sea "no workflow yet"), Claude Craft está instalado. Si el comando es desconocido, (re)instala:
+Si ves un informe de estado del flujo de trabajo (aunque sea "no workflow yet"), Bear Craft está instalado. Si el comando es desconocido, (re)instala:
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --tech=python --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=python --lang=en
 ```
 
-> **Sobre la capa de gestión de proyectos.** Los comandos `/gate:*` y `/project:*` que se usan a continuación provienen de la opción **Project Management commands**, incluida por defecto durante la instalación (el instalador pregunta *"Include Project Management commands? (Y/n)"* → Sí). Si esos comandos faltan, vuelve a ejecutar el instalador y acepta esa opción.
+> **Sobre la capa de gestión de proyectos.** Los comandos `/bear-gate:*` y `/bear-project:*` que se usan a continuación provienen de la opción **Project Management commands**, incluida por defecto durante la instalación (el instalador pregunta *"Include Project Management commands? (Y/n)"* → Sí). Si esos comandos faltan, vuelve a ejecutar el instalador y acepta esa opción.
 
 ### 2.x Ahorrando tokens: contexto y `/clear`
 
 La **ventana de contexto** es la memoria de trabajo de Claude — y tu recurso más preciado. Dos hábitos la mantienen saludable:
 
-- **`/clear`** entre pasos no relacionados. Como BMAD escribe su estado en archivos, **no se pierde nada**: después de `/clear`, ejecuta `/workflow:status` y Claude vuelve a leer dónde estás.
-- **RTK + hooks** para optimización de tokens. Ejecuta `/common:setup-rtk` una vez para configurar el proxy Rust Token Killer y los hooks de optimización (ahorro del 60–90% en la salida de comandos de desarrollo).
+- **`/clear`** entre pasos no relacionados. Como BMAD escribe su estado en archivos, **no se pierde nada**: después de `/clear`, ejecuta `/bear-workflow:status` y Claude vuelve a leer dónde estás.
+- **RTK + hooks** para optimización de tokens. Ejecuta `/bear-common:setup-rtk` una vez para configurar el proxy Rust Token Killer y los hooks de optimización (ahorro del 60–90% en la salida de comandos de desarrollo).
 
 Verás marcadores **"Buen momento para `/clear`"** entre los pasos con letras que siguen.
 
@@ -130,7 +130,7 @@ Verás marcadores **"Buen momento para `/clear`"** entre los pasos con letras qu
 **Modo: Plan requerido.**
 
 ```
-/workflow:init
+/bear-workflow:init
 ```
 
 Claude analiza tu proyecto y recomienda un **track**:
@@ -148,7 +148,7 @@ Elige **Standard** para TaskFlow.
 **Modo: Plan requerido.**
 
 ```
-/workflow:plan
+/bear-workflow:plan
 ```
 
 Claude te entrevista sobre TaskFlow y luego redacta un **PRD** (Product Requirements Document), personas y un **backlog** inicial de epics e historias bajo `project-management/`. Responde con concreción, por ejemplo:
@@ -162,12 +162,12 @@ Claude te entrevista sobre TaskFlow y luego redacta un **PRD** (Product Requirem
 **Modo: Solo lectura.**
 
 ```
-/gate:check backlog
+/bear-gate:check backlog
 ```
 
-Esta puerta verifica el backlog contra **INVEST (6/6)** y la cobertura del PRD (**≥ 80%**). Si falla, te indica exactamente qué historias son demasiado grandes, no testeables o no estimables. Corrígelas (vuelve a ejecutar `/workflow:plan` o edita las historias) hasta que la puerta esté en verde.
+Esta puerta verifica el backlog contra **INVEST (6/6)** y la cobertura del PRD (**≥ 80%**). Si falla, te indica exactamente qué historias son demasiado grandes, no testeables o no estimables. Corrígelas (vuelve a ejecutar `/bear-workflow:plan` o edita las historias) hasta que la puerta esté en verde.
 
-> **Buen momento para `/clear`.** Luego `/workflow:status` para retomar.
+> **Buen momento para `/clear`.** Luego `/bear-workflow:status` para retomar.
 
 ---
 
@@ -178,17 +178,17 @@ Esta puerta verifica el backlog contra **INVEST (6/6)** y la cobertura del PRD (
 **Modo: Plan requerido.**
 
 ```
-/workflow:design
+/bear-workflow:design
 ```
 
-Claude (actuando como arquitecto) produce un **Tech Spec**: decisiones de arquitectura, modelo de datos, contrato de API y las librerías a usar — fundamentado en las referencias de Claude Craft de tu stack (Clean Architecture, patrones FastAPI, etc.).
+Claude (actuando como arquitecto) produce un **Tech Spec**: decisiones de arquitectura, modelo de datos, contrato de API y las librerías a usar — fundamentado en las referencias de Bear Craft de tu stack (Clean Architecture, patrones FastAPI, etc.).
 
 ### B.2 Validar el tech spec
 
 **Modo: Solo lectura.**
 
 ```
-/gate:check spec
+/bear-gate:check spec
 ```
 
 Umbral de la puerta: **Tech Spec ≥ 90%**. Señala el manejo de errores ausente, contratos indefinidos o diseños no testeables.
@@ -198,7 +198,7 @@ Umbral de la puerta: **Tech Spec ≥ 90%**. Señala el manejo de errores ausente
 **Modo: Plan requerido.**
 
 ```
-/workflow:start
+/bear-workflow:start
 ```
 
 Claude propone un **objetivo de sprint** y selecciona las principales historias del backlog que encajan. Para TaskFlow, un primer sprint sensato es un **walking skeleton**: creación de proyectos y tareas a través de la API, mostrada en la lista web.
@@ -208,17 +208,17 @@ Claude propone un **objetivo de sprint** y selecciona las principales historias 
 **Modo: Plan requerido.**
 
 ```
-/workflow:start
+/bear-workflow:start
 ```
 
-Cada historia se divide en **tareas** de ≤ 30 minutos, testeables de forma independiente (escribir el modelo, escribir el endpoint, escribir el test, conectar la UI…). Esto es lo que hace que TDD y `/workflow:implement` fluyan sin problemas.
+Cada historia se divide en **tareas** de ≤ 30 minutos, testeables de forma independiente (escribir el modelo, escribir el endpoint, escribir el test, conectar la UI…). Esto es lo que hace que TDD y `/bear-workflow:implement` fluyan sin problemas.
 
 ### B.5 Validar el sprint
 
 **Modo: Solo lectura.**
 
 ```
-/gate:check sprint
+/bear-gate:check sprint
 ```
 
 Umbral de la puerta: **Sprint Ready 100%** — cada historia estimada, cada tarea definida, dependencias ordenadas. Verde significa que puedes empezar a codificar.
@@ -234,10 +234,10 @@ Umbral de la puerta: **Sprint Ready 100%** — cada historia estimada, cada tare
 **Modo: Normal (⚡).**
 
 ```
-/workflow:implement
+/bear-workflow:implement
 ```
 
-`/workflow:implement` recorre el sprint **tarea por tarea**, guiándote a través del ciclo TDD **Red → Green → Refactor**:
+`/bear-workflow:implement` recorre el sprint **tarea por tarea**, guiándote a través del ciclo TDD **Red → Green → Refactor**:
 
 1. **Red** — escribe un test que falla y fija el comportamiento esperado.
 2. **Green** — escribe el código mínimo para que pase.
@@ -249,17 +249,17 @@ Para cada historia también ejecuta una revisión de código y verifica el **Sto
 
 ### C.2 Alternativas (opcional)
 
-- `/workflow:implement --auto` — ejecuta todo el sprint de forma más autónoma.
-- `/workflow:implement --parallel 3` (`/team:delivery --phase=implementation`) — implementa múltiples historias **en paralelo** usando Agent Teams (avanzado).
+- `/bear-workflow:implement --auto` — ejecuta todo el sprint de forma más autónoma.
+- `/bear-workflow:implement --parallel 3` (`/bear-team:delivery --phase=implementation`) — implementa múltiples historias **en paralelo** usando Agent Teams (avanzado).
 - `@tdd-coach` — invoca al coach a mitad de una tarea para recibir orientación.
 
-Usa `/workflow:implement` en tu primera ejecución.
+Usa `/bear-workflow:implement` en tu primera ejecución.
 
 ### C.3 Gestionarlo día a día
 
-- `/project:backlog next story --claim` — toma la siguiente historia.
-- `/project:backlog move story US-001 in-progress` — mueve una historia por el tablero.
-- `/qa:tdd` — corrige un bug en modo TDD/BDD estricto.
+- `/bear-project:backlog next story --claim` — toma la siguiente historia.
+- `/bear-project:backlog move story US-001 in-progress` — mueve una historia por el tablero.
+- `/bear-qa:tdd` — corrige un bug en modo TDD/BDD estricto.
 
 > **Recordatorio sobre Docker.** Ejecuta tests y comandos a través de Docker para que los resultados no dependan de tu máquina local, por ejemplo `docker compose exec app pytest`.
 
@@ -272,7 +272,7 @@ Usa `/workflow:implement` en tu primera ejecución.
 **Modo: Solo lectura.**
 
 ```
-/workflow:status --board
+/bear-workflow:status --board
 ```
 
 Esto abre un **tablero Kanban** local (sin SaaS, sin dependencias externas) que lee los archivos de estado de BMAD. Las columnas siguen el enrutamiento de estado:
@@ -281,9 +281,9 @@ Esto abre un **tablero Kanban** local (sin SaaS, sin dependencias externas) que 
 backlog → ready-for-dev → in-progress → review → done   (any → blocked)
 ```
 
-Vistas complementarias: `/project:report burndown` (burndown del sprint), `/project:report deps`, `/project:report deps --critical`, `/project:report metrics`.
+Vistas complementarias: `/bear-project:report burndown` (burndown del sprint), `/bear-project:report deps`, `/bear-project:report deps --critical`, `/bear-project:report metrics`.
 
-El tablero también es una herramienta de gestión: desde ese mismo Kanban (`npx @the-bearded-bear/claude-craft kanban`) se pueden crear y editar historias, planificar el backlog en un sprint, y crear, iniciar y cerrar sprints. Los comandos `/workflow:*` y `/project:*` siguen siendo válidos y escriben el mismo archivo, `.bmad/sprint-status.yaml`. Consulta la [referencia de la CLI](../../i18n/es/CLI-REFERENCE.md#comando-kanban).
+El tablero también es una herramienta de gestión: desde ese mismo Kanban (`npx @the-bearded-bear/bear-craft kanban`) se pueden crear y editar historias, planificar el backlog en un sprint, y crear, iniciar y cerrar sprints. Los comandos `/bear-workflow:*` y `/bear-project:*` siguen siendo válidos y escriben el mismo archivo, `.bmad/sprint-status.yaml`. Consulta la [referencia de la CLI](../../i18n/es/CLI-REFERENCE.md#comando-kanban).
 
 ### D.2 Por qué una tarjeta puede negarse a moverse
 
@@ -300,7 +300,7 @@ El tablero aplica las mismas puertas. Una historia no entrará en **done** hasta
 **Modo: Normal (⚡).**
 
 ```
-/workflow:review
+/bear-workflow:review
 ```
 
 Resume lo que se entregó respecto al objetivo del sprint, con una lista de verificación para la demo.
@@ -308,14 +308,14 @@ Resume lo que se entregó respecto al objetivo del sprint, con una lista de veri
 ### E.2 Retrospectiva
 
 ```
-/workflow:retro
+/bear-workflow:retro
 ```
 
 Captura lo que fue bien / lo que mejorar. Persiste los aprendizajes duraderos con `/memory` para que sobrevivan a futuros `/clear`.
 
 ### E.3 Repetir
 
-Ejecuta `/workflow:start` de nuevo para planificar el sprint 2 desde el backlog restante. El ciclo se repite: plan → design → implement → review.
+Ejecuta `/bear-workflow:start` de nuevo para planificar el sprint 2 desde el backlog restante. El ciclo se repite: plan → design → implement → review.
 
 ---
 
@@ -325,33 +325,33 @@ Ejecuta `/workflow:start` de nuevo para planificar el sprint 2 desde el backlog 
 
 ```bash
 # Paso A — Backlog
-/workflow:init                 # elige el track
-/workflow:plan                 # PRD + backlog
-/gate:check backlog            # INVEST 6/6, PRD ≥ 80%
+/bear-workflow:init                 # elige el track
+/bear-workflow:plan                 # PRD + backlog
+/bear-gate:check backlog            # INVEST 6/6, PRD ≥ 80%
 
 # Paso B — Diseño + sprint
-/workflow:design               # tech spec
-/gate:check spec               # Tech Spec ≥ 90%
-/workflow:start                # planifica el sprint
-/workflow:start       # historias → tareas
-/gate:check sprint             # Sprint Ready 100%
+/bear-workflow:design               # tech spec
+/bear-gate:check spec               # Tech Spec ≥ 90%
+/bear-workflow:start                # planifica el sprint
+/bear-workflow:start       # historias → tareas
+/bear-gate:check sprint             # Sprint Ready 100%
 
 # Paso C — Implementar (TDD)
-/workflow:implement                    # tarea por tarea Red/Green/Refactor
-/gate:check story US-001       # Story DoD 100%
+/bear-workflow:implement                    # tarea por tarea Red/Green/Refactor
+/bear-gate:check story US-001       # Story DoD 100%
 
 # Paso D — Seguimiento
-/workflow:status --board                 # Kanban
-/project:report burndown       # burndown
+/bear-workflow:status --board                 # Kanban
+/bear-project:report burndown       # burndown
 
 # Paso E — Cerrar + repetir
-/workflow:review
-/workflow:retro
+/bear-workflow:review
+/bear-workflow:retro
 ```
 
 ### Cuándo usar `/clear`
 
-Después de cada paso con letra (A→B→C→D→E). El estado vive en archivos; `/workflow:status` lo vuelve a leer.
+Después de cada paso con letra (A→B→C→D→E). El estado vive en archivos; `/bear-workflow:status` lo vuelve a leer.
 
 ### Dónde viven los archivos
 
@@ -377,12 +377,12 @@ Después de cada paso con letra (A→B→C→D→E). El estado vive en archivos;
 
 | Síntoma | Solución |
 |---------|----------|
-| `/gate:*` / `/project:*` desconocido | Reinstala y acepta *Project Management commands*. |
-| `/bmad:init` no encontrado | No existe — usa `/workflow:init`. |
+| `/bear-gate:*` / `/bear-project:*` desconocido | Reinstala y acepta *Project Management commands*. |
+| `/bmad:init` no encontrado | No existe — usa `/bear-workflow:init`. |
 | La puerta sigue fallando | Lee su informe; nombra el elemento exacto que falla. |
 | La tarjeta no llega a **done** | Su DoD aún no se cumple — es intencional. |
-| Perdido después de `/clear` | Ejecuta `/workflow:status`. |
-| Contexto > 60% | `/clear`, luego `/workflow:status`. |
+| Perdido después de `/clear` | Ejecuta `/bear-workflow:status`. |
+| Contexto > 60% | `/clear`, luego `/bear-workflow:status`. |
 
 ---
 
@@ -391,7 +391,7 @@ Después de cada paso con letra (A→B→C→D→E). El estado vive en archivos;
 Una vez que te sientas cómodo, automatiza una historia de principio a fin con el bucle continuo:
 
 ```
-/common:ralph-run "Implement US-001 with full DoD validation"
+/bear-common:ralph-run "Implement US-001 with full DoD validation"
 ```
 
 Ralph mantiene a Claude trabajando hasta que pasen los validadores de Definition of Done. Ver [RALPH-GUIDE.md](../../RALPH-GUIDE.md).
@@ -409,14 +409,14 @@ Cómo se mapea a este tutorial:
 
 | Artefacto de diseño | Alimenta |
 |--------------------|----------|
-| Documentos fuente | `/workflow:plan` (entrada para el PRD + backlog) |
-| Decisiones de arquitectura bloqueadas | `/workflow:design` (formalizadas en el Tech Spec) |
+| Documentos fuente | `/bear-workflow:plan` (entrada para el PRD + backlog) |
+| Decisiones de arquitectura bloqueadas | `/bear-workflow:design` (formalizadas en el Tech Spec) |
 | Fases 0 → 7 | La división epics → sprints |
 
 Dos ajustes para multi-stack:
 
 1. **Empieza con el epic de fundación** (Epic 0): monorepo, tokens de diseño compartidos, el contrato OpenAPI y un estilo de mapa **antes** de cualquier componente de UI — un verdadero *walking skeleton*.
-2. **Ejecuta sprints web y móvil en paralelo** con `/team:delivery --phase=implementation` (Agent Teams), cada uno respetando las puertas de su propio stack.
+2. **Ejecuta sprints web y móvil en paralelo** con `/bear-team:delivery --phase=implementation` (Agent Teams), cada uno respetando las puertas de su propio stack.
 
 Todo lo demás — puertas, TDD, el tablero Kanban, la disciplina de `/clear` — es idéntico. El método no cambia con la escala; solo lo hace el número de tracks paralelos.
 

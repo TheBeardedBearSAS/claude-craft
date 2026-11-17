@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /symfony:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-symfony:check code-quality"
 deprecated: true
-replaced-by: /symfony:check
+replaced-by: /bear-symfony:check
 ---
 
-> ⚠️ `/symfony:check-code-quality` is deprecated and will be removed in 10.0. Use `/symfony:check code-quality`.
+> ⚠️ `/bear-symfony:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-symfony:check code-quality`.
 
-Run `/symfony:check code-quality $ARGUMENTS`: read `.claude/commands/symfony/check.md` and follow it with these arguments.
+Run `/bear-symfony:check code-quality $ARGUMENTS`: read `.claude/commands/bear-symfony/check.md` and follow it with these arguments.

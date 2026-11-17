@@ -1,6 +1,6 @@
-# Início Rápido - Claude Craft em 5 Minutos
+# Início Rápido - Bear Craft em 5 Minutos
 
-Comece a usar o Claude Craft em apenas 5 minutos!
+Comece a usar o Bear Craft em apenas 5 minutos!
 
 ---
 
@@ -34,18 +34,18 @@ A forma mais rápida de começar:
 
 ```bash
 # Assistente interativo
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 
 # Ou instalar diretamente em um projeto
-npx @the-bearded-bear/claude-craft install ~/meu-projeto --tech=symfony --lang=pt
+npx @the-bearded-bear/bear-craft install ~/meu-projeto --tech=symfony --lang=pt
 ```
 
 ### Método 2: Clone + Makefile
 
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # 2. Instalar no seu projeto (escolha sua tecnologia)
 make install-symfony TARGET=~/meu-projeto RULES_LANG=pt
@@ -59,14 +59,14 @@ make install-symfony TARGET=~/meu-projeto RULES_LANG=pt
 # 1. Criar um novo diretório de projeto
 mkdir ~/minha-primeira-app && cd ~/minha-primeira-app && git init
 
-# 2. Instalar regras do Claude Craft (exemplo: Symfony + Português)
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=pt
+# 2. Instalar regras do Bear Craft (exemplo: Symfony + Português)
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=pt
 
 # 3. Iniciar o Claude Code
 claude
 ```
 
-É isso! Agora você tem acesso a todas as funcionalidades do Claude Craft.
+É isso! Agora você tem acesso a todas as funcionalidades do Bear Craft.
 
 ---
 
@@ -93,13 +93,13 @@ No Claude Code, tente estes comandos:
 
 ```
 # Verificar a arquitetura do seu projeto
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Obter uma revisão de código
 @symfony-reviewer Revise minha pasta src/
 
 # Gerar uma nova entidade com CRUD
-/symfony:generate-crud Produto
+/bear-symfony:generate-crud Produto
 ```
 
 ---
@@ -136,4 +136,4 @@ No Claude Code, tente estes comandos:
 
 - **FAQ**: Perguntas frequentes → [FAQ.md](../FAQ.md)
 - **Solução de Problemas**: Erros comuns → [TROUBLESHOOTING.md](../TROUBLESHOOTING.md)
-- **GitHub Issues**: [Reportar um bug](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+- **GitHub Issues**: [Reportar um bug](https://github.com/TheBeardedBearSAS/bear-craft/issues)

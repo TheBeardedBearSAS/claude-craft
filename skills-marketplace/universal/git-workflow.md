@@ -1,12 +1,12 @@
 ---
 name: git-workflow
 description: Git workflow with GitHub Flow and conventional commits — branches, commits, PRs, code review
-author: The Bearded CTO / Claude Craft
+author: The Bearded Bear / Bear Craft
 version: 1.0.0
 tags: [git, workflow, commits, pr, review, conventional-commits, github-flow]
 category: devops
 license: MIT
-repository: https://github.com/TheBeardedBearSAS/claude-craft
+repository: https://github.com/TheBeardedBearSAS/bear-craft
 ---
 
 # Git Workflow — GitHub Flow + Conventional Commits
@@ -122,5 +122,5 @@ Universal Git workflow for any project.
 
 ---
 
-**By The Bearded CTO / Claude Craft**
+**By The Bearded Bear / Bear Craft**
 **Framework-agnostic — works with any stack**

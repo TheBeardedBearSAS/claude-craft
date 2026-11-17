@@ -1,6 +1,6 @@
 # Guía de Corrección de Bugs
 
-Esta guía cubre el enfoque sistemático para corregir bugs usando Claude-Craft, desde el diagnóstico hasta la validación.
+Esta guía cubre el enfoque sistemático para corregir bugs usando Bear-Craft, desde el diagnóstico hasta la validación.
 
 ---
 
@@ -98,7 +98,7 @@ Encuentra la causa raíz del bug.
 ### Usar el Comando de Análisis
 
 ```bash
-/common:analyze-bug "Los usuarios no pueden iniciar sesión con las credenciales correctas después de restablecer la contraseña"
+/bear-common:analyze-bug "Los usuarios no pueden iniciar sesión con las credenciales correctas después de restablecer la contraseña"
 ```
 
 Este comando:
@@ -319,15 +319,15 @@ make test
 
 ```bash
 # Calidad del código (según tecnología)
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
 
 # Seguridad (si la corrección toca código sensible)
-/common:security-audit
+/bear-common:security-audit
 
 # Cumplimiento completo
-/symfony:check all
+/bear-symfony:check all
 ```
 
 ### Pruebas Manuales
@@ -470,7 +470,7 @@ git checkout -b hotfix/issue-123-login-failure
 
 # 4. Verificar
 make test
-/symfony:check all
+/bear-symfony:check all
 
 # 5. Commit con mensaje claro
 git commit -m "fix(auth): resolver fallo crítico de inicio de sesión tras restablecimiento de contraseña
@@ -624,7 +624,7 @@ public function calculateTotal(): Money
 make test
 
 # Comprobación de calidad
-/symfony:check all
+/bear-symfony:check all
 # Puntuación: 94/100 ✓
 ```
 
@@ -653,7 +653,7 @@ Tests de regresión añadidos:
 3. **Análisis estático**: Las herramientas encuentran errores comunes
 4. **Tests de integración**: Detectan bugs de interacción
 5. **Monitorear producción**: Detectar problemas a tiempo
-6. **Usar `/loop`**: Configurar comprobaciones de calidad recurrentes (p. ej., `/loop 5m /gate:check commit`)
+6. **Usar `/loop`**: Configurar comprobaciones de calidad recurrentes (p. ej., `/loop 5m /bear-gate:check commit`)
 7. **Guardar aprendizajes**: Usar `/memory` para persistir patrones de bugs entre sesiones
 
 ---

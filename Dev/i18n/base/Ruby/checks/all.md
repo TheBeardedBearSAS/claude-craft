@@ -30,7 +30,7 @@ docker compose exec app bin/rails about
 
 ### Step 2: Architecture Audit (25 points)
 
-Execute architecture check: `/ruby:check architecture` or follow `.claude/references/ruby/checks/architecture.md`
+Execute architecture check: `/bear-ruby:check architecture` or follow `.claude/references/ruby/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Rails conventions and directory layout (5 pts)
@@ -44,7 +44,7 @@ Execute architecture check: `/ruby:check architecture` or follow `.claude/refere
 
 ### Step 3: Code Quality Audit (25 points)
 
-Execute code quality check: `/ruby:check code-quality` or follow `.claude/references/ruby/checks/code-quality.md`
+Execute code quality check: `/bear-ruby:check code-quality` or follow `.claude/references/ruby/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - RuboCop (rubocop-rails-omakase or project config) clean (6 pts)
@@ -58,7 +58,7 @@ Execute code quality check: `/ruby:check code-quality` or follow `.claude/refere
 
 ### Step 4: Testing Audit (25 points)
 
-Execute testing check: `/ruby:check testing` or follow `.claude/references/ruby/checks/testing.md`
+Execute testing check: `/bear-ruby:check testing` or follow `.claude/references/ruby/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage with SimpleCov, 80% minimum (7 pts)
@@ -72,7 +72,7 @@ Execute testing check: `/ruby:check testing` or follow `.claude/references/ruby/
 
 ### Step 5: Security Audit (25 points)
 
-Execute security check: `/ruby:check security` or follow `.claude/references/ruby/checks/security.md`
+Execute security check: `/bear-ruby:check security` or follow `.claude/references/ruby/checks/security.md`
 
 **Evaluated Criteria**:
 - Brakeman static analysis (6 pts)

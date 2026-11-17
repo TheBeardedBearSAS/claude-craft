@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Cible : worker-tuning, opcache, early-hints, mercure, full (par defaut : full)
 
-Exemple : `/frankenphp:optimize target:worker-tuning`
+Exemple : `/bear-frankenphp:optimize target:worker-tuning`
 
 ## Plan Mode
 

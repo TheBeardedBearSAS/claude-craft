@@ -3,20 +3,20 @@
 **Effective Date:** April 15, 2026  
 **Last Updated:** April 15, 2026
 
-This Privacy Policy describes how Claude Craft ("we", "us", or "the Project") collects, uses, and protects your personal data in compliance with the General Data Protection Regulation (GDPR) Articles 13 and 14.
+This Privacy Policy describes how Bear Craft ("we", "us", or "the Project") collects, uses, and protects your personal data in compliance with the General Data Protection Regulation (GDPR) Articles 13 and 14.
 
 ## 1. Data Controller
 
 The Bearded Bear SAS  
-Contact: privacy@the-bearded-bear.com (or open a GitHub issue at https://github.com/TheBeardedBearSAS/claude-craft/issues)
+Contact: privacy@the-bearded-bear.com (or open a GitHub issue at https://github.com/TheBeardedBearSAS/bear-craft/issues)
 
 ## 2. What Data We Collect
 
-Claude Craft is an open-source framework that runs locally on your machine. We collect minimal data:
+Bear Craft is an open-source framework that runs locally on your machine. We collect minimal data:
 
 ### 2.1 Ralph Autonomous Agent Logs (If Used)
 
-- **What**: Command execution logs, error messages, task outcomes when using the Ralph feature (`/common:ralph-run`)
+- **What**: Command execution logs, error messages, task outcomes when using the Ralph feature (`/bear-common:ralph-run`)
 - **Why**: To improve the autonomous agent's reliability and debug failures
 - **How Long**: 90 days
 - **Legal Basis**: Legitimate interest (product improvement), or your explicit consent if opted-in
@@ -26,27 +26,27 @@ Claude Craft is an open-source framework that runs locally on your machine. We c
 - **What**: Stack traces, error types, runtime environment (OS, Node.js version) when the CLI crashes
 - **Why**: To identify and fix bugs
 - **How Long**: 30 days
-- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft telemetry on` — first-run 3-button prompt since v8.2)
+- **Legal Basis**: Explicit consent (you must opt-in via `bear-craft telemetry on` — first-run 3-button prompt since v8.2)
 - **Provider**: Sentry (EU region)
 
 ### 2.3 CLI Usage Analytics (Opt-in Only)
 
-- **What**: Commands executed (e.g., `/team:audit`), frequency, anonymized project identifiers (UUID v4 local)
+- **What**: Commands executed (e.g., `/bear-team:audit`), frequency, anonymized project identifiers (UUID v4 local)
 - **Why**: To understand feature adoption and prioritize development
 - **How Long**: 12 months
-- **Legal Basis**: Explicit consent (you must opt-in via `claude-craft telemetry on` — first-run 3-button prompt since v8.2)
+- **Legal Basis**: Explicit consent (you must opt-in via `bear-craft telemetry on` — first-run 3-button prompt since v8.2)
 - **Provider**: Posthog (EU region: `eu.posthog.com`)
-- **Revocation**: `claude-craft telemetry off` ou variable d'environnement `CLAUDE_CRAFT_TELEMETRY=off`
-- **Purge** (RGPD Art. 17): `claude-craft telemetry purge` envoie une requête d'effacement au provider et supprime les données locales
+- **Revocation**: `bear-craft telemetry off` ou variable d'environnement `BEAR_CRAFT_TELEMETRY=off`
+- **Purge** (RGPD Art. 17): `bear-craft telemetry purge` envoie une requête d'effacement au provider et supprime les données locales
 - **PII scrubbing**: les paths, emails, tokens API et patterns sensibles sont supprimés avant envoi (voir `.claude/telemetry.json.template` → `redaction.patterns`)
-- **Dashboard public**: [stats.claude-craft.dev](https://stats.claude-craft.dev) affiche les métriques agrégées (WAU, top commandes, taux d'erreur, adoption versions)
+- **Dashboard public**: [stats.bear-craft.dev](https://stats.bear-craft.dev) affiche les métriques agrégées (WAU, top commandes, taux d'erreur, adoption versions)
 
 ### 2.4 Data We Do NOT Collect
 
 - Your source code
 - API keys or secrets
 - Personal identifiers (email, name) unless you explicitly provide them in bug reports
-- Browsing history or activity outside Claude Craft
+- Browsing history or activity outside Bear Craft
 - Anthropic API request/response contents (these are subject to Anthropic's Privacy Policy)
 
 ## 3. Legal Basis for Processing (GDPR Art. 6)
@@ -57,7 +57,7 @@ Claude Craft is an open-source framework that runs locally on your machine. We c
 | Crash telemetry | Consent (Art. 6(1)(a)) |
 | CLI analytics | Consent (Art. 6(1)(a)) |
 
-You can withdraw consent at any time by running `claude-craft config set telemetry.enabled=false` or `claude-craft config set analytics.enabled=false`.
+You can withdraw consent at any time by running `bear-craft config set telemetry.enabled=false` or `bear-craft config set analytics.enabled=false`.
 
 ## 4. Data Retention
 
@@ -84,14 +84,14 @@ To exercise these rights, contact us at privacy@the-bearded-bear.com or open a G
 
 ## 6. Third-Party Services
 
-Claude Craft integrates with the following third-party services:
+Bear Craft integrates with the following third-party services:
 
 ### 6.1 Anthropic API
 
 - **What**: Your prompts and code are sent to Anthropic's Claude API when you use Claude Code
 - **Privacy Policy**: https://www.anthropic.com/privacy
 - **Data Location**: Anthropic's infrastructure (see their Privacy Policy for details)
-- **Your Control**: You control what you send to Claude. Claude Craft does not send data to Anthropic without your explicit action.
+- **Your Control**: You control what you send to Claude. Bear Craft does not send data to Anthropic without your explicit action.
 
 ### 6.2 GitHub
 
@@ -109,7 +109,7 @@ If you are located in the European Union:
 
 ## 8. Tenant Isolation (Multi-User Environments)
 
-If you deploy Claude Craft in a multi-tenant or multi-user environment (e.g., shared CI/CD server):
+If you deploy Bear Craft in a multi-tenant or multi-user environment (e.g., shared CI/CD server):
 
 - Ensure that each tenant/user has isolated project directories
 - Ralph logs and telemetry are stored per-project; avoid sharing project directories
@@ -129,24 +129,24 @@ However, no system is 100% secure. If you discover a security vulnerability, ple
 
 ## 10. Children's Privacy
 
-Claude Craft is not intended for use by children under 16. We do not knowingly collect personal data from children. If you believe we have collected data from a child, contact us immediately.
+Bear Craft is not intended for use by children under 16. We do not knowingly collect personal data from children. If you believe we have collected data from a child, contact us immediately.
 
 ## 11. Changes to This Policy
 
 We may update this Privacy Policy from time to time. We will notify you of material changes by:
 
-- Posting a notice in the GitHub repository (https://github.com/TheBeardedBearSAS/claude-craft)
+- Posting a notice in the GitHub repository (https://github.com/TheBeardedBearSAS/bear-craft)
 - Updating the "Last Updated" date above
 - Sending a notification via the CLI (if you have opted into updates)
 
-Your continued use of Claude Craft after changes constitutes acceptance of the updated policy.
+Your continued use of Bear Craft after changes constitutes acceptance of the updated policy.
 
 ## 12. Contact & Data Protection Officer
 
 For privacy-related questions or to exercise your rights:
 
 - **Email**: privacy@the-bearded-bear.com
-- **GitHub Issues**: https://github.com/TheBeardedBearSAS/claude-craft/issues
+- **GitHub Issues**: https://github.com/TheBeardedBearSAS/bear-craft/issues
 - **DPO (if applicable)**: Contact privacy@the-bearded-bear.com to reach our Data Protection Officer
 
 ## 13. Supervisory Authority
@@ -162,4 +162,4 @@ This Privacy Policy is provided in English. Translations to French, Spanish, Ger
 
 ---
 
-**Acknowledgment**: By using Claude Craft, you acknowledge that you have read and understood this Privacy Policy.
+**Acknowledgment**: By using Bear Craft, you acknowledge that you have read and understood this Privacy Policy.

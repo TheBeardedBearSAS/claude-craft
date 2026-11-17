@@ -14,7 +14,7 @@ Arguments :
 - Nom du hook (ex: `useDebounce`, `useLocalStorage`, `useFetch`)
 - (Optionnel) Description du comportement
 
-Exemple : `/react:generate-hook useDebounce` ou `/react:generate-hook useFetch "Hook pour fetch avec cache"`
+Exemple : `/bear-react:generate-hook useDebounce` ou `/bear-react:generate-hook useFetch "Hook pour fetch avec cache"`
 
 ## Mode Plan
 

@@ -231,7 +231,7 @@ if report.as_dict()["metrics"][0]["result"]["dataset_drift"]:
 - A/B testing entre modèles
 - Audit de reproductibilité ML
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@devops-engineer` — infrastructure K8s pour Kubeflow/MLflow
 - `@observability-engineer` — monitoring latence, drift, métriques

@@ -61,7 +61,7 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
       timeout: 30000,
     });
 
-    const namespaces = ['commands/common', 'commands/workflow', 'commands/team', 'commands/qa', 'commands/uiux'];
+    const namespaces = ['commands/bear-common', 'commands/bear-workflow', 'commands/bear-team', 'commands/bear-qa', 'commands/bear-uiux'];
     for (const ns of namespaces) {
       expect(output).toContain(ns);
     }
@@ -78,11 +78,11 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     const countMatches = (pattern) => (output.match(new RegExp(pattern, 'g')) || []).length;
 
     // Expected minimum counts (from v7.0.0 structure)
-    expect(countMatches('Creating:.*commands/common/')).toBeGreaterThanOrEqual(10);
-    expect(countMatches('Creating:.*commands/workflow/')).toBeGreaterThanOrEqual(9);
-    expect(countMatches('Creating:.*commands/team/')).toBeGreaterThanOrEqual(4);
-    expect(countMatches('Creating:.*commands/qa/')).toBeGreaterThanOrEqual(5);
-    expect(countMatches('Creating:.*commands/uiux/')).toBeGreaterThanOrEqual(7);
+    expect(countMatches('Creating:.*commands/bear-common/')).toBeGreaterThanOrEqual(10);
+    expect(countMatches('Creating:.*commands/bear-workflow/')).toBeGreaterThanOrEqual(9);
+    expect(countMatches('Creating:.*commands/bear-team/')).toBeGreaterThanOrEqual(4);
+    expect(countMatches('Creating:.*commands/bear-qa/')).toBeGreaterThanOrEqual(5);
+    expect(countMatches('Creating:.*commands/bear-uiux/')).toBeGreaterThanOrEqual(7);
   });
 
   it('full install creates all namespace directories with correct file counts', () => {
@@ -100,18 +100,18 @@ describe('install-common-rules.sh dry-run integration', { timeout: 60000 }, () =
     const base = path.join(tmpDir, '.claude', 'commands');
 
     // All 5 namespaces exist
-    expect(fs.existsSync(path.join(base, 'common'))).toBe(true);
-    expect(fs.existsSync(path.join(base, 'workflow'))).toBe(true);
-    expect(fs.existsSync(path.join(base, 'team'))).toBe(true);
-    expect(fs.existsSync(path.join(base, 'qa'))).toBe(true);
-    expect(fs.existsSync(path.join(base, 'uiux'))).toBe(true);
+    expect(fs.existsSync(path.join(base, 'bear-common'))).toBe(true);
+    expect(fs.existsSync(path.join(base, 'bear-workflow'))).toBe(true);
+    expect(fs.existsSync(path.join(base, 'bear-team'))).toBe(true);
+    expect(fs.existsSync(path.join(base, 'bear-qa'))).toBe(true);
+    expect(fs.existsSync(path.join(base, 'bear-uiux'))).toBe(true);
 
     // Minimum file counts per namespace
-    expect(countMd(path.join(base, 'common'))).toBeGreaterThanOrEqual(10);
-    expect(countMd(path.join(base, 'workflow'))).toBeGreaterThanOrEqual(9);
-    expect(countMd(path.join(base, 'team'))).toBeGreaterThanOrEqual(4);
-    expect(countMd(path.join(base, 'qa'))).toBeGreaterThanOrEqual(5);
-    expect(countMd(path.join(base, 'uiux'))).toBeGreaterThanOrEqual(7);
+    expect(countMd(path.join(base, 'bear-common'))).toBeGreaterThanOrEqual(10);
+    expect(countMd(path.join(base, 'bear-workflow'))).toBeGreaterThanOrEqual(9);
+    expect(countMd(path.join(base, 'bear-team'))).toBeGreaterThanOrEqual(4);
+    expect(countMd(path.join(base, 'bear-qa'))).toBeGreaterThanOrEqual(5);
+    expect(countMd(path.join(base, 'bear-uiux'))).toBeGreaterThanOrEqual(7);
   });
 
   it('full install creates skills, agents, rules, and checklists', () => {

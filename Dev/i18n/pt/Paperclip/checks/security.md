@@ -76,4 +76,4 @@ Verifique cabeçalhos enviados:
 
 ## Saída
 
-Relatório markdown com passa/falha por seção, severidade (Blocker / Major / Minor), referências CVE onde relevante, e uma pontuação /20 para `/paperclip:check all`.
+Relatório markdown com passa/falha por seção, severidade (Blocker / Major / Minor), referências CVE onde relevante, e uma pontuação /20 para `/bear-paperclip:check all`.

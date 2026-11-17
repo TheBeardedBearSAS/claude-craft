@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /angular:check security"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-angular:check security"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-security` est obsolète et sera retirée en 10.0. Utilisez `/angular:check security`.
+> ⚠️ `/bear-angular:check-security` est obsolète et sera retirée en 10.0. Utilisez `/bear-angular:check security`.
 
-Exécutez `/angular:check security $ARGUMENTS` : lisez `.claude/commands/angular/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-angular:check security $ARGUMENTS` : lisez `.claude/commands/bear-angular/check.md` et suivez-le avec ces arguments.

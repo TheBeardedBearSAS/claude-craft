@@ -1,6 +1,6 @@
 # Makefile Reference
 
-Complete reference for all Makefile targets in Claude Craft.
+Complete reference for all Makefile targets in Bear Craft.
 
 ---
 
@@ -189,13 +189,13 @@ make migrate-check
 
 | Target | Description |
 |--------|-------------|
-| `plugin-export` | Export as Claude Code plugin |
-| `plugin-export-all` | Export all technologies |
+| `plugin-export-all` | Generate `marketplaces/<lang>/plugins/bear-<ns>/` (5 languages: namespaces, stacks, infra, hooks) |
+| `plugin-check` | Fail when `marketplaces/` drifts from the installers |
 
 **Usage:**
 ```bash
-make plugin-export
 make plugin-export-all
+make plugin-check
 ```
 
 ---

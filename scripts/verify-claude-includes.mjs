@@ -108,7 +108,7 @@ async function scanFile(filePath) {
     // Only enforce includes that look like project-relative explicit paths.
     // Bare filenames (e.g. `@CLAUDE.md`, `@REFERENCE.md`) are tutorial
     // placeholders authored for the user's own project root, not the
-    // claude-craft repo. Same for paths that start with `docs/` referenced
+    // bear-craft repo. Same for paths that start with `docs/` referenced
     // from arbitrary tutorial contexts — only follow `.claude/*`,
     // `references/*` or `docs/*` paths actually mounted in this repo.
     const looksLikeProjectPath =

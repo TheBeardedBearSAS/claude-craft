@@ -17,7 +17,7 @@ Effectuer un audit de conformité complet d'un projet Paperclip en orchestrant l
 
 ### Étape 2 : Audit d'architecture (25 points)
 
-Invoquer `/paperclip:check architecture`.
+Invoquer `/bear-paperclip:check architecture`.
 
 Critères évalués :
 - Séparation à deux couches (plan de contrôle vs adaptateurs) — 6 pts
@@ -29,7 +29,7 @@ Critères évalués :
 
 ### Étape 3 : Audit de qualité de code (20 points)
 
-Invoquer `/paperclip:check code-quality`.
+Invoquer `/bear-paperclip:check code-quality`.
 
 Critères évalués :
 - TypeScript strict + `noUncheckedIndexedAccess` — 5 pts
@@ -41,7 +41,7 @@ Critères évalués :
 
 ### Étape 4 : Audit de tests (20 points)
 
-Invoquer `/paperclip:check testing`.
+Invoquer `/bear-paperclip:check testing`.
 
 Critères évalués :
 - Couverture ≥ 80% (lignes, fonctions, instructions) — 6 pts
@@ -52,7 +52,7 @@ Critères évalués :
 
 ### Étape 5 : Audit de sécurité (20 points)
 
-Invoquer `/paperclip:check security`.
+Invoquer `/bear-paperclip:check security`.
 
 Critères évalués :
 - Tous les endpoints scopés par tenant via `companyId` de la session — 4 pts

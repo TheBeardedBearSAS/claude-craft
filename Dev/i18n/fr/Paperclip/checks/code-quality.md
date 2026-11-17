@@ -60,4 +60,4 @@ Exécuter `eslint-plugin-sonarjs` (ou équivalent). Signaler toute fonction avec
 
 ## Sortie
 
-Rapport Markdown avec passe/échoue par section, fichiers/symboles incriminés, sévérité, et un score /20 pour `/paperclip:check all`.
+Rapport Markdown avec passe/échoue par section, fichiers/symboles incriminés, sévérité, et un score /20 pour `/bear-paperclip:check all`.

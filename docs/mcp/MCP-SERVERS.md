@@ -1,16 +1,16 @@
-# Claude Craft MCP Servers Architecture
+# Bear Craft MCP Servers Architecture
 
 > 🚧 **PLANIFIÉ — NON DISPONIBLE.** Ce document est une **spécification de conception**. Les MCP servers décrits ci-dessous (Ralph MCP, RTK MCP, QA Recette MCP, Kanban MCP) **ne sont pas encore livrés**. Pour les intégrations MCP réellement disponibles aujourd'hui, voir [`MCP.md`](../MCP.md).
 
-Spécification technique des MCP servers dédiés aux fonctionnalités killer de Claude Craft.
+Spécification technique des MCP servers dédiés aux fonctionnalités killer de Bear Craft.
 
 ---
 
 ## Vue d'ensemble
 
-Claude Craft expose ses fonctionnalités clés (Ralph, RTK, QA Recette, Kanban) sous forme de **MCP servers** pour permettre leur utilisation dans n'importe quel environnement MCP-compatible (Claude Desktop, autres clients).
+Bear Craft expose ses fonctionnalités clés (Ralph, RTK, QA Recette, Kanban) sous forme de **MCP servers** pour permettre leur utilisation dans n'importe quel environnement MCP-compatible (Claude Desktop, autres clients).
 
-**Package npm** : `@claude-craft/mcp-servers`
+**Package npm** : `@bear-craft/mcp-servers`
 
 **Roadmap** :
 - **v1.0** (mois 7) : Ralph MCP + RTK MCP
@@ -56,7 +56,7 @@ Expose Ralph Wiggum (continuous AI loop) comme service MCP pour orchestrer l'ex�
   "mcpServers": {
     "ralph": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "ralph"],
+      "args": ["-y", "@bear-craft/mcp-servers", "ralph"],
       "env": {
         "RALPH_MAX_ITERATIONS": "10",
         "RALPH_CIRCUIT_BREAKER": "true"
@@ -114,7 +114,7 @@ Expose RTK (Rust Token Killer) pour optimiser la consommation de tokens via filt
   "mcpServers": {
     "rtk": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "rtk"]
+      "args": ["-y", "@bear-craft/mcp-servers", "rtk"]
     }
   }
 }
@@ -168,7 +168,7 @@ Expose QA Recette (automated acceptance testing) pour exécuter des tests d'acce
   "mcpServers": {
     "qa-recette": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "qa-recette"],
+      "args": ["-y", "@bear-craft/mcp-servers", "qa-recette"],
       "env": {
         "CHROME_EXTENSION_ID": "${CHROME_EXTENSION_ID}"
       }
@@ -230,9 +230,9 @@ Expose un système Kanban léger pour la gestion des tâches avec board, status 
   "mcpServers": {
     "kanban": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "kanban"],
+      "args": ["-y", "@bear-craft/mcp-servers", "kanban"],
       "env": {
-        "KANBAN_STORAGE": "${HOME}/.claude-craft/kanban.db"
+        "KANBAN_STORAGE": "${HOME}/.bear-craft/kanban.db"
       }
     }
   }
@@ -261,7 +261,7 @@ await mcp.callTool('kanban_update_status', {
 ### Package npm
 
 ```bash
-npm install -g @claude-craft/mcp-servers
+npm install -g @bear-craft/mcp-servers
 ```
 
 ### Configuration Claude Desktop
@@ -273,22 +273,22 @@ Ajouter dans `~/.claude/mcp.json` :
   "mcpServers": {
     "ralph": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "ralph"]
+      "args": ["-y", "@bear-craft/mcp-servers", "ralph"]
     },
     "rtk": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "rtk"]
+      "args": ["-y", "@bear-craft/mcp-servers", "rtk"]
     },
     "qa-recette": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "qa-recette"],
+      "args": ["-y", "@bear-craft/mcp-servers", "qa-recette"],
       "env": {
         "CHROME_EXTENSION_ID": "${CHROME_EXTENSION_ID}"
       }
     },
     "kanban": {
       "command": "npx",
-      "args": ["-y", "@claude-craft/mcp-servers", "kanban"]
+      "args": ["-y", "@bear-craft/mcp-servers", "kanban"]
     }
   }
 }
@@ -298,16 +298,16 @@ Ajouter dans `~/.claude/mcp.json` :
 
 ```bash
 # Tester Ralph MCP
-npx @claude-craft/mcp-servers ralph --test
+npx @bear-craft/mcp-servers ralph --test
 
 # Tester RTK MCP
-npx @claude-craft/mcp-servers rtk --test
+npx @bear-craft/mcp-servers rtk --test
 
 # Tester QA Recette MCP
-npx @claude-craft/mcp-servers qa-recette --test
+npx @bear-craft/mcp-servers qa-recette --test
 
 # Tester Kanban MCP
-npx @claude-craft/mcp-servers kanban --test
+npx @bear-craft/mcp-servers kanban --test
 ```
 
 ---
@@ -324,7 +324,7 @@ npx @claude-craft/mcp-servers kanban --test
 ### Structure du package
 
 ```
-@claude-craft/mcp-servers/
+@bear-craft/mcp-servers/
 ├── src/
 │   ├── ralph/
 │   │   ├── server.ts          # Ralph MCP server
@@ -374,4 +374,4 @@ npx @claude-craft/mcp-servers kanban --test
 
 **Date de création** : 2026-04-17
 **Version** : 1.0.0
-**Auteur** : The Bearded CTO
+**Auteur** : The Bearded Bear

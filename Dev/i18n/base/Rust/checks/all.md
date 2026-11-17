@@ -31,7 +31,7 @@ docker compose exec app grep -nE "^(edition|rust-version)" Cargo.toml
 
 ### Step 2: Architecture Audit (25 points)
 
-Execute architecture check: `/rust:check architecture` or follow `.claude/references/rust/checks/architecture.md`
+Execute architecture check: `/bear-rust:check architecture` or follow `.claude/references/rust/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Workspace layout and project structure (5 pts)
@@ -45,7 +45,7 @@ Execute architecture check: `/rust:check architecture` or follow `.claude/refere
 
 ### Step 3: Code Quality Audit (25 points)
 
-Execute code quality check: `/rust:check code-quality` or follow `.claude/references/rust/checks/code-quality.md`
+Execute code quality check: `/bear-rust:check code-quality` or follow `.claude/references/rust/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - Clippy (`-D warnings`) and rustfmt clean (6 pts)
@@ -59,7 +59,7 @@ Execute code quality check: `/rust:check code-quality` or follow `.claude/refere
 
 ### Step 4: Testing Audit (25 points)
 
-Execute testing check: `/rust:check testing` or follow `.claude/references/rust/checks/testing.md`
+Execute testing check: `/bear-rust:check testing` or follow `.claude/references/rust/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage with cargo-llvm-cov, 80% minimum (7 pts)
@@ -73,7 +73,7 @@ Execute testing check: `/rust:check testing` or follow `.claude/references/rust/
 
 ### Step 5: Security Audit (25 points)
 
-Execute security check: `/rust:check security` or follow `.claude/references/rust/checks/security.md`
+Execute security check: `/bear-rust:check security` or follow `.claude/references/rust/checks/security.md`
 
 **Evaluated Criteria**:
 - Memory safety and static analysis (`forbid(unsafe_code)`, clippy) (6 pts)

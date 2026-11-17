@@ -14,7 +14,7 @@ Argumentos:
 - Recurso (nombre de la entidad)
 - Operaciones (list, get, post, put, patch, delete)
 
-Ejemplo: `/symfony:api-endpoint Product "list,get,post,patch,delete"`
+Ejemplo: `/bear-symfony:api-endpoint Product "list,get,post,patch,delete"`
 
 ## Modo Plan
 

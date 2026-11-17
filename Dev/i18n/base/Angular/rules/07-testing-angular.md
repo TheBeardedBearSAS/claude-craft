@@ -610,7 +610,7 @@ describe('authInterceptor', () => {
 
 ## E2E Testing with Playwright
 
-> **claude-craft standard:** Playwright is the required E2E tool for all JS/TS projects
+> **bear-craft standard:** Playwright is the required E2E tool for all JS/TS projects
 > (see `.claude/rules/07-testing.md`). Cypress remains compatible for existing legacy projects
 > but should not be adopted for new Angular projects.
 

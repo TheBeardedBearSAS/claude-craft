@@ -14,7 +14,7 @@ Argumentos:
 - Título da decisão
 - (Opcional) Número do ADR
 
-Exemplo: `/common:architecture-decision "Escolha do PostgreSQL para banco de dados principal"`
+Exemplo: `/bear-common:architecture-decision "Escolha do PostgreSQL para banco de dados principal"`
 
 ## Modo Plano
 

@@ -17,7 +17,7 @@ Argumente:
 - Ziel-Workload (z.B. web-application, microservices, database-cluster)
 - Einschränkungen (z.B. Budget, Location, Compliance)
 
-Beispiel: `/hcloud:architecture "E-Commerce-Plattform" workload:web-application location:fsn1 budget:100eur`
+Beispiel: `/bear-hcloud:architecture "E-Commerce-Plattform" workload:web-application location:fsn1 budget:100eur`
 
 ## Plan-Modus
 
@@ -153,8 +153,8 @@ NÄCHSTE SCHRITTE
 ──────────────────────────────────────────────────────────────
 
 1. [ ] Servertypen überprüfen und für Budget anpassen
-2. [ ] Sicherheitslage mit /hcloud:security-audit auditieren
-3. [ ] CI/CD-Pipeline mit /hcloud:deploy-setup konfigurieren
+2. [ ] Sicherheitslage mit /bear-hcloud:security-audit auditieren
+3. [ ] CI/CD-Pipeline mit /bear-hcloud:deploy-setup konfigurieren
 4. [ ] Kosten mit @hcloud-cost optimieren
 5. [ ] Monitoring und Alerting einrichten
 ```

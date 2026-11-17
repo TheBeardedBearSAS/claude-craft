@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /php:check security"
+description: "Obsoleto (se elimina en 10.0): usa /bear-php:check security"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-security` está obsoleto y se eliminará en 10.0. Usa `/php:check security`.
+> ⚠️ `/bear-php:check-security` está obsoleto y se eliminará en 10.0. Usa `/bear-php:check security`.
 
-Ejecuta `/php:check security $ARGUMENTS`: lee `.claude/commands/php/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-php:check security $ARGUMENTS`: lee `.claude/commands/bear-php/check.md` y síguelo con estos argumentos.

@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /reactnative:check security"
+description: "Obsoleto (se elimina en 10.0): usa /bear-reactnative:check security"
 deprecated: true
-replaced-by: /reactnative:check
+replaced-by: /bear-reactnative:check
 ---
 
-> ⚠️ `/reactnative:check-security` está obsoleto y se eliminará en 10.0. Usa `/reactnative:check security`.
+> ⚠️ `/bear-reactnative:check-security` está obsoleto y se eliminará en 10.0. Usa `/bear-reactnative:check security`.
 
-Ejecuta `/reactnative:check security $ARGUMENTS`: lee `.claude/commands/reactnative/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-reactnative:check security $ARGUMENTS`: lee `.claude/commands/bear-reactnative/check.md` y síguelo con estos argumentos.

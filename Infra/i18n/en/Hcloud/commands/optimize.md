@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments:
 - (Optional) Target: cost, performance, both (default: both)
 
-Example: `/hcloud:optimize target:cost`
+Example: `/bear-hcloud:optimize target:cost`
 
 ## Plan Mode
 
@@ -145,5 +145,5 @@ NEXT STEPS
 2. [ ] Test ARM compatibility for identified servers
 3. [ ] Delete unused resources after team confirmation
 4. [ ] Setup snapshot cleanup automation
-5. [ ] Audit security posture with /hcloud:security-audit
+5. [ ] Audit security posture with /bear-hcloud:security-audit
 ```

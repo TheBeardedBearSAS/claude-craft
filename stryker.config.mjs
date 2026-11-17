@@ -1,7 +1,7 @@
 /**
- * Stryker Mutator config — Claude Craft
+ * Stryker Mutator config — Bear Craft
  *
- * Phase 2 audit P2-13. Scope initial : cli/ (CLI principal de claude-craft).
+ * Phase 2 audit P2-13. Scope initial : cli/ (CLI principal de bear-craft).
  * Run plein  : npx stryker run
  * Run PR     : npx stryker run --incremental (mute uniquement les fichiers
  *              changés depuis la dernière exécution → -90 % temps CI).

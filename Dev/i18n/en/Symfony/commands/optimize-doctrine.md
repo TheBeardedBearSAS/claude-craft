@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Chemin vers une entité ou repository spécifique
 
-Exemple : `/symfony:optimize-doctrine` ou `/symfony:optimize-doctrine src/Entity/Order.php`
+Exemple : `/bear-symfony:optimize-doctrine` ou `/bear-symfony:optimize-doctrine src/Entity/Order.php`
 
 ## Plan Mode
 

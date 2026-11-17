@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments:
 - Sprint number
 
-Example: `/workflow:review 5`
+Example: `/bear-workflow:review 5`
 
 ## MISSION
 
@@ -319,12 +319,12 @@ Total duration: 2h
 ║                      NEXT STEP                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /workflow:retro                                       ║
+║  → /bear-workflow:retro                                       ║
 ║    Facilitate the sprint retrospective                   ║
 ║                                                          ║
 ║  See also:                                               ║
-║  • /workflow:status  — Check overall progress            ║
-║  • /workflow:status    — View sprint metrics               ║
+║  • /bear-workflow:status  — Check overall progress            ║
+║  • /bear-workflow:status    — View sprint metrics               ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

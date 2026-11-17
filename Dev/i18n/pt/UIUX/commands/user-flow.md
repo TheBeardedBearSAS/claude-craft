@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Persona-alvo
 - (Opcional) Restrições específicas
 
-Exemplo: `/uiux:user-flow "Cadastro de usuário"` ou `/uiux:user-flow "Checkout" persona:"Usuário mobile" constraint:"< 30 segundos"`
+Exemplo: `/bear-uiux:user-flow "Cadastro de usuário"` ou `/bear-uiux:user-flow "Checkout" persona:"Usuário mobile" constraint:"< 30 segundos"`
 
 ## Modo de Planejamento
 

@@ -1,0 +1,21 @@
+{
+  "name": "bear-react",
+  "displayName": "Bear Craft — React",
+  "description": "React 19.3 + Compiler 1.0: Frontend JS/TS with Hooks, Compiler 1.0, Server Components. Audit and generation commands, reviewer agent and stack skills.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "react"
+  ]
+}

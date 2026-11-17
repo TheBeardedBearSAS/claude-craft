@@ -98,7 +98,7 @@ Les sous-agents (Task tool) ont leur propre fenetre de contexte, evitant de poll
 
 **Agent frontmatter (v2.1.78+):** Les agents personnalises supportent `effort`, `maxTurns`, `disallowedTools` pour optimiser les couts et le scope. `disallowedTools` retire des outils entiers : une entrée `Bash(git push *)` retire tout Bash à l'agent — bloquer une commande via `permissions.deny` (s'applique aussi aux sous-agents).
 
-**Skill `context: fork` (v2.1.105+):** Tout skill de Claude Craft de plus de 60 lignes utilise `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Règle vérifiée par `tests/content/skill-context-fork.test.mjs`.
+**Skill `context: fork` (v2.1.105+):** Tout skill de Bear Craft de plus de 60 lignes utilise `context: fork` pour s'executer dans un contexte isole. Cela evite la pollution du contexte principal sur les sessions longues qui chainent plusieurs skills. Economie estimee : 2 000-5 000 tokens/session pour les skills moyens (60-100 lignes), 8 000-15 000 tokens/session pour les skills lourds (>100 lignes). Règle vérifiée par `tests/content/skill-context-fork.test.mjs`.
 
 ---
 
@@ -311,7 +311,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 
 ## Optimisation des tokens — Quick Setup
 
-> **Commande:** `/common:setup-rtk` pour configurer automatiquement toutes les optimisations.
+> **Commande:** `/bear-common:setup-rtk` pour configurer automatiquement toutes les optimisations.
 
 **RTK (Rust Token Killer):** Proxy CLI qui reduit la consommation de tokens de 60-90% sur les commandes dev. Installation: `rtk init -g`.
 
@@ -416,7 +416,7 @@ Pour les 4 agents `opus` (security-auditor, database-architect, migration-specia
 
 ## Outils tiers de l'écosystème (tokens & contexte)
 
-En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit des outils couvrant des angles non traités nativement. Aucun n'est embarqué dans Claude Craft : ils sont documentés et recommandés.
+En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit des outils couvrant des angles non traités nativement. Aucun n'est embarqué dans Bear Craft : ils sont documentés et recommandés.
 
 | Outil | Licence | Angle | Reco |
 |-------|---------|-------|------|
@@ -444,4 +444,4 @@ En complément de RTK et des hooks natifs, l'écosystème Claude Code fournit de
 
 **Date de derniere mise a jour:** 2026-06
 **Version:** 1.3.0
-**Auteur:** The Bearded CTO
+**Auteur:** The Bearded Bear

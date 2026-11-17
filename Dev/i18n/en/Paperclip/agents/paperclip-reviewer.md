@@ -178,4 +178,4 @@ Stay specific: every finding names a file + line, and every fix is actionable in
 
 ## Non-Goals
 
-I do not rewrite code. I do not touch configuration. I do not propose product features. I flag deviations from the Paperclip contract and from the claude-craft rules in `rules/02…12`.
+I do not rewrite code. I do not touch configuration. I do not propose product features. I flag deviations from the Paperclip contract and from the bear-craft rules in `rules/02…12`.

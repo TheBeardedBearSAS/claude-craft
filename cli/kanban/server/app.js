@@ -144,7 +144,7 @@ export function createApp({
     app.get('/', (c) => c.html(indexHtml));
   } else {
     app.get('/', (c) =>
-      c.text('claude-craft kanban : client not built.\n' + 'Run "npm run kanban:build" to build the UI.\n')
+      c.text('bear-craft kanban : client not built.\n' + 'Run "npm run kanban:build" to build the UI.\n')
     );
   }
 

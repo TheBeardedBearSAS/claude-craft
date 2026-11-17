@@ -1,9 +1,9 @@
 # QA Recette — Automated Acceptance Testing
 
-> **Status:** Integrated in Claude Craft | **Version:** 1.0.36+
+> **Status:** Integrated in Bear Craft | **Version:** 1.0.36+
 > **Future:** Planned extraction to standalone product (see [ARCHITECTURE.md](ARCHITECTURE.md) and [RFC.md](RFC.md))
 
-QA Recette is an automated acceptance testing tool integrated into Claude Craft that leverages Chrome automation to run reproducible tests for user stories and sprints.
+QA Recette is an automated acceptance testing tool integrated into Bear Craft that leverages Chrome automation to run reproducible tests for user stories and sprints.
 
 **Golden Rule:** A fixed bug should NEVER reappear.
 
@@ -57,9 +57,9 @@ QA Recette provides automated acceptance testing capabilities through:
 
 ### Installation
 
-1. **Install Claude Craft**
+1. **Install Bear Craft**
    ```bash
-   npx @the-bearded-bear/claude-craft install . --tech=<your-tech> --lang=en
+   npx @the-bearded-bear/bear-craft install . --tech=<your-tech> --lang=en
    ```
 
 2. **Install Chrome Extension**
@@ -119,7 +119,7 @@ Test acceptance criteria for a single user story.
 
 **Command:**
 ```bash
-/qa:recette --scope=story --id=US-001
+/bear-qa:recette --scope=story --id=US-001
 ```
 
 **Process:**
@@ -143,7 +143,7 @@ Run regression tests for all stories in a sprint.
 
 **Command:**
 ```bash
-/qa:recette --scope=sprint --id=Sprint-3
+/bear-qa:recette --scope=sprint --id=Sprint-3
 ```
 
 **Process:**
@@ -171,7 +171,7 @@ Resume a previously interrupted test session.
 
 **Command:**
 ```bash
-/qa:recette --resume=REC-20260417-143022
+/bear-qa:recette --resume=REC-20260417-143022
 ```
 
 **Process:**
@@ -263,7 +263,7 @@ Resume a previously interrupted test session.
 
 ### Chrome Extension Not Found
 
-**Problem:** `/qa:recette` fails with "Chrome extension not available"
+**Problem:** `/bear-qa:recette` fails with "Chrome extension not available"
 
 **Solution:**
 1. Verify Chrome extension is installed
@@ -310,12 +310,12 @@ For detailed architectural information about QA Recette, see:
 
 ### Current Architecture
 
-QA Recette is currently integrated into Claude Craft:
+QA Recette is currently integrated into Bear Craft:
 
 ```
 Claude Code CLI
-  ↓ /qa:recette command
-.claude/commands/qa/recette.md
+  ↓ /bear-qa:recette command
+.claude/commands/bear-qa/recette.md
   ↓ invoke Chrome extension
 Chrome Extension v1.0.36+
   ↓ browser automation
@@ -327,7 +327,7 @@ Test Execution + Screenshot Capture
 ### Future Standalone Architecture
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone tool — **fully open-source MIT**:
-- **SDK MIT** (`@claude-craft/qa-recette-sdk`)
+- **SDK MIT** (`@bear-craft/qa-recette-sdk`)
 - **Chrome extension MIT**
 - **Self-hostable backend optional** (sync + dashboards)
 
@@ -337,38 +337,38 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the planned standalone tool — **ful
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette --scope=story --id=<ID>` | Test a single story |
-| `/qa:recette --scope=sprint --id=<ID>` | Test all stories in a sprint |
-| `/qa:recette --resume=<SESSION_ID>` | Resume interrupted session |
-| `/qa:status` | Show current test session status |
-| `/qa:status --report` | Generate full test report |
-| `/qa:tdd` | Run TDD workflow for a feature |
-| `/qa:fix` | Fix a failing test |
-| `/qa:regression` | Check for regressions |
+| `/bear-qa:recette --scope=story --id=<ID>` | Test a single story |
+| `/bear-qa:recette --scope=sprint --id=<ID>` | Test all stories in a sprint |
+| `/bear-qa:recette --resume=<SESSION_ID>` | Resume interrupted session |
+| `/bear-qa:status` | Show current test session status |
+| `/bear-qa:status --report` | Generate full test report |
+| `/bear-qa:tdd` | Run TDD workflow for a feature |
+| `/bear-qa:fix` | Fix a failing test |
+| `/bear-qa:regression` | Check for regressions |
 
 For complete command documentation, see:
-- `.claude/commands/qa/recette.md` — Main QA Recette command
-- `.claude/commands/qa/status.md` — Status command
-- `.claude/commands/qa/report.md` — Report generation
-- `.claude/commands/qa/tdd.md` — TDD workflow
-- `.claude/commands/qa/fix.md` — Fix failing tests
-- `.claude/commands/qa/regression.md` — Regression detection
+- `.claude/commands/bear-qa/recette.md` — Main QA Recette command
+- `.claude/commands/bear-qa/status.md` — Status command
+- `.claude/commands/bear-qa/report.md` — Report generation
+- `.claude/commands/bear-qa/tdd.md` — TDD workflow
+- `.claude/commands/bear-qa/fix.md` — Fix failing tests
+- `.claude/commands/bear-qa/regression.md` — Regression detection
 
 ---
 
 ## Contributing
 
-QA Recette is part of Claude Craft. To contribute:
+QA Recette is part of Bear Craft. To contribute:
 
 1. See [CONTRIBUTING.md](../../CONTRIBUTING.md)
-2. Open issues on [GitHub](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+2. Open issues on [GitHub](https://github.com/TheBeardedBearSAS/bear-craft/issues)
 3. Join discussions about the future standalone product in [RFC.md](RFC.md)
 
 ---
 
 ## License
 
-Part of Claude Craft — **MIT License** (see root LICENSE).
+Part of Bear Craft — **MIT License** (see root LICENSE).
 
 A future standalone tool would remain **fully MIT**:
 - **SDK** — MIT License
@@ -379,4 +379,4 @@ A future standalone tool would remain **fully MIT**:
 
 **Last Updated:** 2026-04-17
 **Version:** 1.0.36+
-**Maintainer:** The Bearded CTO
+**Maintainer:** The Bearded Bear

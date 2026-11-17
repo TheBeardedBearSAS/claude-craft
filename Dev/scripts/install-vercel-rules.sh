@@ -16,7 +16,7 @@ DEFAULT_STACK="Vercel Platform (framework-agnostic): vercel.json, Functions, ISR
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(
@@ -47,7 +47,7 @@ HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Ver
     - Analytics / Speed Insights
     - Env vars / Preview Deployments
 
-    NOT covered: Next.js itself (see \`/react:*\`, \`/vuejs:*\`, \`/angular:*\`
+    NOT covered: Next.js itself (see \`/bear-react:*\`, \`/bear-vuejs:*\`, \`/bear-angular:*\`
     for framework-specific patterns) — this stack only documents Vercel's
     own platform primitives, never a framework's routing/rendering.
 
@@ -58,8 +58,8 @@ HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Ver
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:deploy-config\` - Detect project shape and generate/validate a vercel.json"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:deploy-config\` - Detect project shape and generate/validate a vercel.json"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 # Framework-agnostic Vercel platform shapes

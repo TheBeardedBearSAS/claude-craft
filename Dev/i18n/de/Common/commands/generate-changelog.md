@@ -14,7 +14,7 @@ Argumente:
 - Zielversion (z.B. `1.2.0`)
 - Seit (vorheriger Tag, Standard: letzter Tag)
 
-Beispiel: `/common:generate-changelog 1.2.0 v1.1.0`
+Beispiel: `/bear-common:generate-changelog 1.2.0 v1.1.0`
 
 ## MISSION
 

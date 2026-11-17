@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vuejs:check testing verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vuejs:check testing verwenden"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vuejs:check testing`.
+> ⚠️ `/bear-vuejs:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vuejs:check testing`.
 
-Führen Sie `/vuejs:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vuejs:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vuejs/check.md` und folgen Sie der Datei mit diesen Argumenten.

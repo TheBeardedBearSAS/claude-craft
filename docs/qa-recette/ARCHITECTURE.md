@@ -5,10 +5,10 @@
 
 ## Hypothèses explicites (Karpathy §1)
 
-1. **QA Recette actuel** : implémenté dans `.claude/commands/qa/` (recette.md, fix.md, tdd.md, status.md, report.md, regression.md) + Chrome extension v1.0.36+ externe (non versionnée dans ce repo).
+1. **QA Recette actuel** : implémenté dans `.claude/commands/bear-qa/` (recette.md, fix.md, tdd.md, status.md, report.md, regression.md) + Chrome extension v1.0.36+ externe (non versionnée dans ce repo).
 2. **Workflow cible** : local-first (aucun backend obligatoire), cloud optionnel pour sync multi-devices et stockage sessions longues.
-3. **Modèle de distribution** : tout open-source MIT — SDK (`@claude-craft/qa-recette-sdk` sur NPM) + extension Chrome (Chrome Web Store) + backend optionnel self-hostable.
-4. **Repo cible** : `github.com/the-bearded-cto/qa-recette` (séparé de claude-craft pour positionnement produit).
+3. **Modèle de distribution** : tout open-source MIT — SDK (`@bear-craft/qa-recette-sdk` sur NPM) + extension Chrome (Chrome Web Store) + backend optionnel self-hostable.
+4. **Repo cible** : `github.com/TheBeardedBearSAS/qa-recette` (séparé de bear-craft pour positionnement produit).
 5. **Stack** : Node.js 20+, TypeScript 5.9, Vitest 4 (browser mode), Playwright (tests).
 6. **Audience** : dev QA, tech leads, PM ayant besoin de tests d'acceptance reproductibles sans Selenium/Cypress setup complexe.
 
@@ -24,10 +24,10 @@
 ```
 ┌───────────────────────────────────────────────────┐
 │  Utilisateur                                      │
-│    ↓ /qa:recette --scope=story --id=US-001        │
+│    ↓ /bear-qa:recette --scope=story --id=US-001        │
 │  Claude Code (CLI existant)                       │
 │    ↓ invoke SDK                                   │
-│  @claude-craft/qa-recette-sdk (OPEN SOURCE MIT)   │
+│  @bear-craft/qa-recette-sdk (OPEN SOURCE MIT)   │
 │    ├─ createSession({scope, id})                  │
 │    ├─ runTests(config) → Report                   │
 │    ├─ resume(sessionId)                           │
@@ -61,7 +61,7 @@
 Signatures TypeScript — cf. `api-spec.yaml` pour la spec REST cloud.
 
 ```typescript
-import { createSession, runTests, resume, type Session, type Report } from '@claude-craft/qa-recette-sdk';
+import { createSession, runTests, resume, type Session, type Report } from '@bear-craft/qa-recette-sdk';
 
 // Démarrer une session
 const session: Session = await createSession({
@@ -104,7 +104,7 @@ Cf. `RFC.md`.
 
 ## Roadmap extraction
 
-1. **Sprint 1 (2 semaines)** : scaffolding repo `qa-recette/`, migration `.claude/commands/qa/` → package `cli/`.
+1. **Sprint 1 (2 semaines)** : scaffolding repo `qa-recette/`, migration `.claude/commands/bear-qa/` → package `cli/`.
 2. **Sprint 2 (2 semaines)** : SDK API publique + tests Vitest 4.
 3. **Sprint 3 (2 semaines)** : Chrome extension refactor avec SDK.
 4. **Sprint 4 (2 semaines)** : backend self-hostable minimal (Hono + Postgres EU), optionnel.
@@ -120,9 +120,9 @@ Cf. `RFC.md`.
 
 ## DoD extraction
 
-- [ ] Repo `github.com/the-bearded-cto/qa-recette` créé, README clair (tout MIT)
-- [ ] SDK publié NPM `@claude-craft/qa-recette-sdk@1.0.0`
+- [ ] Repo `github.com/TheBeardedBearSAS/qa-recette` créé, README clair (tout MIT)
+- [ ] SDK publié NPM `@bear-craft/qa-recette-sdk@1.0.0`
 - [ ] OpenAPI spec `api-spec.yaml` validée via Redocly CLI
 - [ ] RFC publié GitHub Discussions, ≥5 commentaires communauté
 - [ ] Review `@tech-lead` signée
-- [ ] Intégration rétro-compatible dans `.claude/commands/qa/recette.md` (wrapper appelle SDK)
+- [ ] Intégration rétro-compatible dans `.claude/commands/bear-qa/recette.md` (wrapper appelle SDK)

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /flutter:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-flutter:check all"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/flutter:check all`.
+> ⚠️ `/bear-flutter:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-flutter:check all`.
 
-Exécutez `/flutter:check all $ARGUMENTS` : lisez `.claude/commands/flutter/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-flutter:check all $ARGUMENTS` : lisez `.claude/commands/bear-flutter/check.md` et suivez-le avec ces arguments.

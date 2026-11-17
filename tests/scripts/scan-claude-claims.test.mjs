@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
 /**
- * Garde-fou du scanner d'affirmations Claude de `/common:audit-claude-alignment`.
+ * Garde-fou du scanner d'affirmations Claude de `/bear-common:audit-claude-alignment`.
  *
  * Le run du 2026-11-10 n'avait confronté que ~15 fichiers pivots alors que 160
  * fichiers suivis portent des affirmations Claude (IDs, versions CLI, prix).

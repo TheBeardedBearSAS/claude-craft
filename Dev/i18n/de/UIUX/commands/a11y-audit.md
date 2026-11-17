@@ -15,7 +15,7 @@ Argumente:
 - (Optional) Stufe: AA oder AAA (Standard: AAA)
 - (Optional) Fokus: all, keyboard, contrast, aria
 
-Beispiel: `/uiux:a11y-audit src/pages/Home.tsx AAA` oder `/uiux:a11y-audit src/components/Modal.tsx AA keyboard`
+Beispiel: `/bear-uiux:a11y-audit src/pages/Home.tsx AAA` oder `/bear-uiux:a11y-audit src/components/Modal.tsx AA keyboard`
 
 ## Plan-Modus
 

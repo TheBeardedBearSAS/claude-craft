@@ -7,7 +7,7 @@ files: ["**/tests/**", "**/test/**", "**/__tests__/**", "**/spec/**", "*.test.*"
 
 # Testing - Principes TDD/BDD (2026)
 
-Principes universels de testing pour toutes les technologies du framework Claude-Craft.
+Principes universels de testing pour toutes les technologies du framework Bear-Craft.
 
 ## Principes fondamentaux
 

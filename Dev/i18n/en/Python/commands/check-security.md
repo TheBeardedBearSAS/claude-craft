@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /python:check security"
+description: "Deprecated (removed in 10.0): use /bear-python:check security"
 deprecated: true
-replaced-by: /python:check
+replaced-by: /bear-python:check
 ---
 
-> ⚠️ `/python:check-security` is deprecated and will be removed in 10.0. Use `/python:check security`.
+> ⚠️ `/bear-python:check-security` is deprecated and will be removed in 10.0. Use `/bear-python:check security`.
 
-Run `/python:check security $ARGUMENTS`: read `.claude/commands/python/check.md` and follow it with these arguments.
+Run `/bear-python:check security $ARGUMENTS`: read `.claude/commands/bear-python/check.md` and follow it with these arguments.

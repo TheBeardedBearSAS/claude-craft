@@ -21,8 +21,8 @@ The first argument is the axis; the rest (for example a project path) is passed 
 
 ## MISSION
 
-1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/wordpress:check security wp-content/plugins/my-plugin`) and stop.
+1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/bear-wordpress:check security wp-content/plugins/my-plugin`) and stop.
 2. Read the checklist file of that axis and follow it step by step. In that file, `$ARGUMENTS` stands for the arguments that follow the axis.
 3. Produce the report in the output format the checklist defines.
 
-Examples: `/wordpress:check architecture`, `/wordpress:check testing ./my-plugin`, `/wordpress:check all`.
+Examples: `/bear-wordpress:check architecture`, `/bear-wordpress:check testing ./my-plugin`, `/bear-wordpress:check all`.

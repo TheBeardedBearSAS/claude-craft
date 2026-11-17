@@ -1,10 +1,10 @@
 # {{PROJECT_NAME}}
 
-> Erstellt: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Erstellt: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## Was (Stack & Struktur)
 
-Dieses Projekt verwendet **Claude Craft** Regeln fur KI-gestutzte Entwicklung.
+Dieses Projekt verwendet **Bear Craft** Regeln fur KI-gestutzte Entwicklung.
 
 ### Technologien
 {TECH_LIST}

@@ -392,7 +392,7 @@ Sessao 2: Implementacao (codificar, testar)
 O comando `/loop` permite agendar tarefas recorrentes:
 
 ```bash
-/loop 5m /gate:check commit    # Verificar a cada 5 minutos
+/loop 5m /bear-gate:check commit    # Verificar a cada 5 minutos
 /loop "Monitorar testes CI"           # Auto-cadencia pelo modelo
 ```
 
@@ -781,7 +781,7 @@ Para os 5 agentes `opus` (security-auditor, database-architect, migration-specia
 
 ## Otimização de tokens — Configuração rápida
 
-> **Comando:** `/common:setup-rtk` para configurar automaticamente todas as otimizações.
+> **Comando:** `/bear-common:setup-rtk` para configurar automaticamente todas as otimizações.
 
 **RTK (Rust Token Killer):** Proxy CLI que reduz o consumo de tokens em 60-90 % nos comandos de desenvolvimento. Instalação: `rtk init -g`.
 
@@ -811,7 +811,7 @@ Templates disponíveis em `.claude/templates/hooks/`: `output-filter.json`, `pre
 
 ## Ferramentas de terceiros do ecossistema (tokens e contexto)
 
-Além do RTK e dos hooks nativos, o ecossistema do Claude Code oferece ferramentas que cobrem ângulos não tratados nativamente. Nenhuma é incorporada ao Claude Craft: são documentadas e recomendadas.
+Além do RTK e dos hooks nativos, o ecossistema do Claude Code oferece ferramentas que cobrem ângulos não tratados nativamente. Nenhuma é incorporada ao Bear Craft: são documentadas e recomendadas.
 
 | Ferramenta | Licença | Ângulo | Rec |
 |------------|---------|--------|-----|
@@ -839,4 +839,4 @@ Além do RTK e dos hooks nativos, o ecossistema do Claude Code oferece ferrament
 
 **Ultima atualizacao:** 2026-04
 **Versao:** 1.2.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

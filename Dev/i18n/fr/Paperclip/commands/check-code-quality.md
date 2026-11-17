@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /paperclip:check code-quality"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-paperclip:check code-quality"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/paperclip:check code-quality`.
+> ⚠️ `/bear-paperclip:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/bear-paperclip:check code-quality`.
 
-Exécutez `/paperclip:check code-quality $ARGUMENTS` : lisez `.claude/commands/paperclip/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-paperclip:check code-quality $ARGUMENTS` : lisez `.claude/commands/bear-paperclip/check.md` et suivez-le avec ces arguments.

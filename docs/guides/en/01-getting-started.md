@@ -1,12 +1,12 @@
-# Getting Started with Claude-Craft
+# Getting Started with Bear-Craft
 
-Welcome to Claude-Craft! This guide will help you understand what Claude-Craft is and get your first project up and running in just 5 minutes.
+Welcome to Bear-Craft! This guide will help you understand what Bear-Craft is and get your first project up and running in just 5 minutes.
 
 ---
 
-## What is Claude-Craft?
+## What is Bear-Craft?
 
-Claude-Craft is a comprehensive framework for AI-assisted development with Claude Code. It provides:
+Bear-Craft is a comprehensive framework for AI-assisted development with Claude Code. It provides:
 
 - **125 Slash Commands** - Quick actions across 15 namespaces for code generation, analysis, and quality checks
 - **70 AI Agents (31 specialized + 39 infra on-demand)** - Specialized assistants with optimized effort levels and persistent memory
@@ -87,9 +87,9 @@ All content is available in 5 languages:
 ### Method 1: Makefile (Recommended)
 
 ```bash
-# Clone Claude-Craft
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+# Clone Bear-Craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 
 # Install for a Symfony project (in French)
 make install-symfony TARGET=~/my-project RULES_LANG=fr
@@ -101,8 +101,8 @@ make install-flutter TARGET=~/my-app RULES_LANG=en
 ### Method 2: Direct Script
 
 ```bash
-# Navigate to Claude-Craft
-cd claude-craft
+# Navigate to Bear-Craft
+cd bear-craft
 
 # Run installation script
 ./Dev/scripts/install-symfony-rules.sh --lang=fr ~/my-project
@@ -135,10 +135,10 @@ cd ~/my-api
 git init
 ```
 
-### Step 2: Install Claude-Craft Rules
+### Step 2: Install Bear-Craft Rules
 
 ```bash
-# From the claude-craft directory
+# From the bear-craft directory
 make install-symfony TARGET=~/my-api RULES_LANG=fr
 ```
 
@@ -174,7 +174,7 @@ You can configure the project context interactively or manually:
 ```bash
 cd ~/my-api && claude
 # Then run:
-/common:init --context
+/bear-common:init --context
 ```
 
 **Option B: Manual**
@@ -199,7 +199,7 @@ Now you can use all the installed commands and agents!
 
 ---
 
-## How is Claude Craft structured?
+## How is Bear Craft structured?
 
 ### References (`references/`)
 
@@ -210,7 +210,7 @@ Since v8.7.1, installs place guidance under `references/` (not the old `rules/`)
 | `references/base/` | Universal principles — workflow analysis, SOLID, KISS/DRY/YAGNI, git workflow, documentation, testing, security |
 | `references/{tech}/` | Tech-specific reference — `architecture.md`, `coding-standards.md`, `quality-tools.md`, `testing.md`, `security.md`, and **`project-context.md`** (customize this!) |
 
-> The richer rule taxonomy (workflow, architecture, SOLID, security, DDD, CQRS…) lives in `.claude/rules/` of the **claude-craft repo itself**; a project install receives the distilled `references/` layer.
+> The richer rule taxonomy (workflow, architecture, SOLID, security, DDD, CQRS…) lives in `.claude/rules/` of the **bear-craft repo itself**; a project install receives the distilled `references/` layer.
 
 ### Agents (`agents/`)
 
@@ -229,13 +229,13 @@ Slash commands are quick actions:
 
 ```bash
 # Generate code
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Check quality
-/symfony:check all
+/bear-symfony:check all
 
 # Analyze architecture
-/common:architecture-decision
+/bear-common:architecture-decision
 ```
 
 ### Templates (`templates/`)
@@ -256,11 +256,11 @@ Quality gates for different scenarios:
 
 ---
 
-## What are the key concepts in Claude Craft?
+## What are the key concepts in Bear Craft?
 
 ### 1. TDD Workflow
 
-Claude-Craft enforces Test-Driven Development:
+Bear-Craft enforces Test-Driven Development:
 
 ```
 1. Analyze requirements
@@ -298,7 +298,7 @@ Every feature must pass quality gates:
 
 ## Automatic Optimizations (v8.7)
 
-Claude-Craft now includes optimized defaults out of the box:
+Bear-Craft now includes optimized defaults out of the box:
 
 **Installed automatically:**
 - ✓ `.claudeignore` to reduce context noise
@@ -313,7 +313,7 @@ For maximum CLI output reduction (60-90% savings):
 
 ```bash
 # In Claude Code, run the setup command
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 **Expected savings:** 55-65% overall token reduction with full RTK + optimizations. See the [Setup Guide](08-setup-new-project.md) for details.
@@ -358,10 +358,10 @@ make config-validate CONFIG=file.yaml
 
 | Command | Purpose |
 |---------|---------|
-| `/common:analyze-feature` | Analyze requirements |
+| `/bear-common:analyze-feature` | Analyze requirements |
 | `/{tech}:generate-crud` | Generate CRUD code |
 | `/{tech}:check all` | Full quality audit |
-| `/common:security-audit` | Security review |
+| `/bear-common:security-audit` | Security review |
 
 ---
 

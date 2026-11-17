@@ -31,14 +31,14 @@ make install-rtk RULES_LANG=fr
 ### Via CLI
 
 ```bash
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 # Answer 'y' to "Include Token Optimization (RTK)?"
 ```
 
 ### Via Claude Code Command
 
 ```bash
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### Manual

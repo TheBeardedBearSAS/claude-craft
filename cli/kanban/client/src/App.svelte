@@ -155,7 +155,7 @@
     <div class="brand">
       <div class="brand-mark mono" aria-hidden="true">cc</div>
       <div>
-        <div class="brand-name">claude-craft</div>
+        <div class="brand-name">bear-craft</div>
         <div class="brand-sub">BMAD v6</div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} - WordPress
 
-> Gerado: {{GENERATION_DATE}} | Claude Craft v{{VERSION}}
+> Gerado: {{GENERATION_DATE}} | Bear Craft v{{VERSION}}
 
 ## O Quê (Stack e Estrutura)
 
@@ -69,7 +69,7 @@ docker compose exec app npx playwright test          # E2E
 ```
 
 ### Comandos Disponíveis
-- `/wordpress:check <architecture|code-quality|security|testing|all>` - Auditoria por eixo, ou agregado com pontuação
+- `/bear-wordpress:check <architecture|code-quality|security|testing|all>` - Auditoria por eixo, ou agregado com pontuação
 
 ### Fluxo de Desenvolvimento
 1. **Analisar** - Ler o código, compreender o domínio (`rules/01-workflow-analysis.md`)

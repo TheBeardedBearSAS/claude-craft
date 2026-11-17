@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vercel:check testing verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vercel:check testing verwenden"
 deprecated: true
-replaced-by: /vercel:check
+replaced-by: /bear-vercel:check
 ---
 
-> ⚠️ `/vercel:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vercel:check testing`.
+> ⚠️ `/bear-vercel:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vercel:check testing`.
 
-Führen Sie `/vercel:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/vercel/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vercel:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vercel/check.md` und folgen Sie der Datei mit diesen Argumenten.

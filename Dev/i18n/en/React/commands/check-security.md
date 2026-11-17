@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /react:check security"
+description: "Deprecated (removed in 10.0): use /bear-react:check security"
 deprecated: true
-replaced-by: /react:check
+replaced-by: /bear-react:check
 ---
 
-> ⚠️ `/react:check-security` is deprecated and will be removed in 10.0. Use `/react:check security`.
+> ⚠️ `/bear-react:check-security` is deprecated and will be removed in 10.0. Use `/bear-react:check security`.
 
-Run `/react:check security $ARGUMENTS`: read `.claude/commands/react/check.md` and follow it with these arguments.
+Run `/bear-react:check security $ARGUMENTS`: read `.claude/commands/bear-react/check.md` and follow it with these arguments.

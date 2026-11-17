@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/csharp:check architecture` verwenden oder die Schritte in `.claude/references/csharp/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-csharp:check architecture` verwenden oder die Schritte in `.claude/references/csharp/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Schichtentrennung der Clean Architecture (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/csharp:check code-quality` verwenden oder die Schritte in `.claude/references/csharp/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-csharp:check code-quality` verwenden oder die Schritte in `.claude/references/csharp/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Namenskonventionen (PascalCase, _camelCase) (5 Pkt.)
@@ -58,7 +58,7 @@ Code-Qualitätsprüfung durchführen:
 
 Testprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/csharp:check testing` verwenden oder die Schritte in `.claude/references/csharp/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-csharp:check testing` verwenden oder die Schritte in `.claude/references/csharp/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (7 Pkt.)
@@ -74,7 +74,7 @@ Testprüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/csharp:check security` verwenden oder die Schritte in `.claude/references/csharp/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-csharp:check security` verwenden oder die Schritte in `.claude/references/csharp/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - OWASP-Top-10-Schutzmaßnahmen (6 Pkt.)

@@ -84,7 +84,7 @@ describe('CLI integration tests', { timeout: 60000 }, () => {
 
   it('install with valid tech and nonexistent path exits with error', () => {
     const fakePath = path.join(
-      fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-test-')),
+      fs.mkdtempSync(path.join(os.tmpdir(), 'bear-craft-test-')),
       'does-not-exist',
     );
     // Ensure parent temp dir exists but target subdir does not

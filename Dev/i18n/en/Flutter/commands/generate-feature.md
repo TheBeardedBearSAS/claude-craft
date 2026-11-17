@@ -14,7 +14,7 @@ Arguments :
 - Nom de la feature (ex: `authentication`, `product_catalog`)
 - (Optionnel) State management (bloc, riverpod, cubit)
 
-Exemple : `/flutter:generate-feature authentication riverpod`
+Exemple : `/bear-flutter:generate-feature authentication riverpod`
 
 ## Plan Mode
 

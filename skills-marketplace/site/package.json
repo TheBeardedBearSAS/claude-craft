@@ -1,8 +1,8 @@
 {
-  "name": "@claude-craft/skills-marketplace-site",
+  "name": "@bear-craft/skills-marketplace-site",
   "version": "0.1.0-draft",
   "private": true,
-  "description": "Static site for Claude Craft skills marketplace (skills.claude-craft.dev)",
+  "description": "Static site for Bear Craft skills marketplace (skills.bear-craft.dev)",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

@@ -1,6 +1,6 @@
 # Guide de Développement de Fonctionnalités
 
-Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalités avec Claude-Craft, de l'analyse initiale à la revue finale.
+Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalités avec Bear-Craft, de l'analyse initiale à la revue finale.
 
 ---
 
@@ -20,7 +20,7 @@ Ce guide couvre le workflow complet pour développer de nouvelles fonctionnalit�
 
 ## Vue d'Ensemble du Workflow TDD
 
-Claude-Craft impose un workflow de Développement Piloté par les Tests :
+Bear-Craft impose un workflow de Développement Piloté par les Tests :
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
@@ -49,7 +49,7 @@ Avant d'écrire du code, comprenez ce qui doit être construit.
 ### Utiliser la Commande d'Analyse
 
 ```bash
-/common:analyze-feature "Authentification utilisateur avec tokens JWT et contrôle d'accès basé sur les rôles"
+/bear-common:analyze-feature "Authentification utilisateur avec tokens JWT et contrôle d'accès basé sur les rôles"
 ```
 
 Cette commande va :
@@ -128,7 +128,7 @@ Le concepteur d'API va :
 ### Décision Architecturale
 
 ```bash
-/common:architecture-decision "Comment implémenter le contrôle d'accès basé sur les rôles"
+/bear-common:architecture-decision "Comment implémenter le contrôle d'accès basé sur les rôles"
 ```
 
 Utilisez cette commande pour les choix architecturaux importants. Elle crée un Architecture Decision Record (ADR) documentant :
@@ -233,34 +233,34 @@ Fonctionnalité: Authentification Utilisateur
 
 ```bash
 # Symfony
-/symfony:check testing
+/bear-symfony:check testing
 
 # Flutter
-/flutter:check testing
+/bear-flutter:check testing
 
 # Python
-/python:check testing
+/bear-python:check testing
 
 # React
-/react:check testing
+/bear-react:check testing
 
 # Angular
-/angular:check testing
+/bear-angular:check testing
 
 # Vue.js
-/vuejs:check testing
+/bear-vuejs:check testing
 
 # C# / .NET
-/csharp:check testing
+/bear-csharp:check testing
 
 # Laravel
-/laravel:check testing
+/bear-laravel:check testing
 
 # React Native
-/reactnative:check testing
+/bear-reactnative:check testing
 
 # PHP
-/php:check testing
+/bear-php:check testing
 ```
 
 ### Checklist d'Écriture de Tests
@@ -284,80 +284,80 @@ Maintenant implémentez le code pour faire passer les tests.
 
 ```bash
 # Générer CRUD avec tests
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Générer endpoint API
-/symfony:api-endpoint POST /api/users CreateUserRequest
+/bear-symfony:api-endpoint POST /api/users CreateUserRequest
 
 # Générer commande
-/symfony:generate-command SendWelcomeEmailCommand
+/bear-symfony:generate-command SendWelcomeEmailCommand
 ```
 
 #### Flutter
 
 ```bash
 # Générer BLoC
-/flutter:generate-bloc Authentication
+/bear-flutter:generate-bloc Authentication
 
 # Générer écran
-/flutter:generate-screen LoginScreen
+/bear-flutter:generate-screen LoginScreen
 
 # Générer widget
-/flutter:generate-widget UserAvatar
+/bear-flutter:generate-widget UserAvatar
 ```
 
 #### Python
 
 ```bash
 # Générer endpoint FastAPI
-/python:generate-endpoint POST /users CreateUser
+/bear-python:generate-endpoint POST /users CreateUser
 
 # Générer service
-/python:generate-service UserService
+/bear-python:generate-service UserService
 
 # Générer modèle
-/python:generate-model User
+/bear-python:generate-model User
 ```
 
 #### React
 
 ```bash
 # Générer composant
-/react:generate-component UserProfile
+/bear-react:generate-component UserProfile
 
 # Générer hook
-/react:generate-hook useAuth
+/bear-react:generate-hook useAuth
 
 # Générer contexte
-/react:generate-context AuthContext
+/bear-react:generate-context AuthContext
 ```
 
 #### Angular
 
 ```bash
 # Générer composant standalone
-/angular:generate-component UserProfile
+/bear-angular:generate-component UserProfile
 ```
 
 #### Vue.js
 
 ```bash
 # Générer composant avec TypeScript et tests
-/vuejs:generate-component UserProfile
+/bear-vuejs:generate-component UserProfile
 ```
 
 #### C# / .NET
 
 ```bash
 # Générer feature complète Clean Architecture
-/csharp:generate-feature User
+/bear-csharp:generate-feature User
 ```
 
 #### Laravel
 
 ```bash
 # Générer contrôleur avec bonnes pratiques
-/laravel:generate-controller UserController
+/bear-laravel:generate-controller UserController
 ```
 
 ### Utiliser les Templates
@@ -454,10 +454,10 @@ Vérification qualité finale avant complétion.
 
 ```bash
 # Vérification complète de conformité (retourne un score /100)
-/symfony:check all
-/flutter:check all
-/python:check all
-/react:check all
+/bear-symfony:check all
+/bear-flutter:check all
+/bear-python:check all
+/bear-react:check all
 ```
 
 Cet audit complet vérifie :
@@ -489,7 +489,7 @@ Le reviewer va :
 ### Audit de Sécurité
 
 ```bash
-/common:security-audit
+/bear-common:security-audit
 ```
 
 Ou utilisez l'agent orienté sécurité :
@@ -532,7 +532,7 @@ Parcourons une fonctionnalité complète : Ajouter l'inscription utilisateur.
 ### Étape 1 : Analyser
 
 ```markdown
-/common:analyze-feature "Inscription utilisateur avec vérification email"
+/bear-common:analyze-feature "Inscription utilisateur avec vérification email"
 
 Attendu :
 - L'utilisateur soumet email et mot de passe
@@ -580,8 +580,8 @@ Cas de test :
 ### Étape 5 : Générer le Code
 
 ```bash
-/symfony:generate-crud User --with-api
-/symfony:generate-command SendVerificationEmailCommand
+/bear-symfony:generate-crud User --with-api
+/bear-symfony:generate-command SendVerificationEmailCommand
 ```
 
 ### Étape 6 : Implémenter
@@ -612,7 +612,7 @@ public function register(string $email, string $password): User
 ### Étape 7 : Refactoriser
 
 ```bash
-/symfony:check code-quality
+/bear-symfony:check code-quality
 ```
 
 Corrigez les problèmes identifiés.
@@ -633,7 +633,7 @@ Implémentation complète incluant :
 ### Étape 9 : Vérification Finale
 
 ```bash
-/symfony:check all
+/bear-symfony:check all
 ```
 
 Objectif : Score 90+/100
@@ -661,13 +661,13 @@ Objectif : Score 90+/100
 
 | Phase | Commandes |
 |-------|-----------|
-| Analyse | `/common:analyze-feature` |
-| Conception | `/common:architecture-decision` |
+| Analyse | `/bear-common:analyze-feature` |
+| Conception | `/bear-common:architecture-decision` |
 | Tests | `/{tech}:check testing` |
 | Génération | `/{tech}:generate-*` |
 | Qualité | `/{tech}:check code-quality` |
 | Revue | `/{tech}:check all` |
-| Sécurité | `/common:security-audit` |
+| Sécurité | `/bear-common:security-audit` |
 
 ### Emplacement des Templates
 

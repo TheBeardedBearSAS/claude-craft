@@ -326,5 +326,5 @@ Cuando se activa un timeout:
 ## Relacionado
 
 - `@ralph-conductor` - Agente para la orquestación de Ralph
-- `/qa:tdd` - Corrección de bugs basada en TDD
-- `/workflow:implement` - Desarrollo de sprint con TDD
+- `/bear-qa:tdd` - Corrección de bugs basada en TDD
+- `/bear-workflow:implement` - Desarrollo de sprint con TDD

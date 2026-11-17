@@ -196,7 +196,7 @@ toxiproxy-cli toxic add postgres-slow -t latency -a latency=5000  # 5s Verzöger
 - Einrichten von Circuit Breakers / Retries
 - Disaster-Recovery-Zertifizierung
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — Litmus/Chaos Mesh auf K8s einrichten
 - `@observability-engineer` — Steady-State-Metriken, Chaos-Monitoring

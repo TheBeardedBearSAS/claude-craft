@@ -1,6 +1,6 @@
 # Fullstack SaaS Example
 
-A complete SaaS application with Symfony backend and Flutter mobile app, demonstrating multi-technology coordination with Claude Craft.
+A complete SaaS application with Symfony backend and Flutter mobile app, demonstrating multi-technology coordination with Bear Craft.
 
 ---
 
@@ -49,7 +49,7 @@ This example demonstrates:
 
 ```
 fullstack-saas/
-├── .claude/                    # Root Claude Craft config
+├── .claude/                    # Root Bear Craft config
 ├── .bmad/                      # BMAD configuration
 │   ├── config.yaml
 │   └── backlog/
@@ -100,12 +100,12 @@ cd ~/my-saas
 # Start all services
 docker compose up -d
 
-# Install Claude Craft for each project
+# Install Bear Craft for each project
 cd backend
-npx @the-bearded-bear/claude-craft install . --tech=symfony
+npx @the-bearded-bear/bear-craft install . --tech=symfony
 
 cd ../mobile
-npx @the-bearded-bear/claude-craft install . --tech=flutter
+npx @the-bearded-bear/bear-craft install . --tech=flutter
 ```
 
 ### 2. Run Tests
@@ -125,8 +125,8 @@ docker compose exec e2e npm test
 
 ```bash
 claude
-/workflow:init
-/workflow:status
+/bear-workflow:init
+/bear-workflow:status
 ```
 
 ---
@@ -180,13 +180,13 @@ For cross-technology features, coordinate using BMAD:
 # 1. Start with backend
 cd backend
 claude
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 # Implement API endpoint
 
 # 2. Then frontend
 cd ../mobile
 claude
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 # Implement mobile feature
 
 # 3. E2E testing
@@ -199,13 +199,13 @@ npm test
 ```bash
 # Backend
 cd backend
-/symfony:check architecture
-/symfony:check security
+/bear-symfony:check architecture
+/bear-symfony:check security
 
 # Mobile
 cd ../mobile
-/flutter:check architecture
-/flutter:check testing
+/bear-flutter:check architecture
+/bear-flutter:check testing
 
 # Full audit
 cd ..

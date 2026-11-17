@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /php:check testing verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-php:check testing verwenden"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/php:check testing`.
+> ⚠️ `/bear-php:check-testing` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-php:check testing`.
 
-Führen Sie `/php:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/php/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-php:check testing $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-php/check.md` und folgen Sie der Datei mit diesen Argumenten.

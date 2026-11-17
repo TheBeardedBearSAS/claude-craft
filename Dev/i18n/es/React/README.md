@@ -292,4 +292,4 @@ Para preguntas o sugerencias:
 
 **Última actualización**: 2025-12-03
 **Versión**: 1.0.0
-**Mantenedor**: TheBeardedCTO
+**Mantenedor**: The Bearded Bear

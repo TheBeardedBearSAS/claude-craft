@@ -1,9 +1,9 @@
-# Paperclip — Claude-Craft Integration
+# Paperclip — Bear-Craft Integration
 
 > **Paperclip**: open-source orchestration for zero-human companies.
 > Docs: https://docs.paperclip.ing/ · Repo: https://github.com/paperclipai/paperclip · License: MIT
 
-This directory contains the Claude-Craft rules, commands, skills, and templates for working with Paperclip — both as a **contributor** to a Paperclip codebase and as an **operator** using Paperclip with Claude Code as an adapter.
+This directory contains the Bear-Craft rules, commands, skills, and templates for working with Paperclip — both as a **contributor** to a Paperclip codebase and as an **operator** using Paperclip with Claude Code as an adapter.
 
 ## Stack
 
@@ -35,18 +35,18 @@ Paperclip/
 
 | Command | Purpose |
 |---|---|
-| `/paperclip:check all` | Full audit (Architecture + Quality + Tests + Security + Adapter protocol), score /100 |
-| `/paperclip:check architecture` | Two-layer split + module boundaries + activity log coverage |
-| `/paperclip:check code-quality` | TypeScript strictness, lint, complexity, logging hygiene |
-| `/paperclip:check testing` | Coverage, adapter contract tests, cross-tenant isolation |
-| `/paperclip:check security` | Tenancy, secrets, approvals, budgets, signed adapter channel |
-| `/paperclip:generate-adapter` | Scaffold an adapter (local / process / http) |
-| `/paperclip:generate-agent-config` | Generate an `agent.yaml` with budget + approvals |
-| `/paperclip:setup-company` | Bootstrap a new Paperclip company end-to-end |
+| `/bear-paperclip:check all` | Full audit (Architecture + Quality + Tests + Security + Adapter protocol), score /100 |
+| `/bear-paperclip:check architecture` | Two-layer split + module boundaries + activity log coverage |
+| `/bear-paperclip:check code-quality` | TypeScript strictness, lint, complexity, logging hygiene |
+| `/bear-paperclip:check testing` | Coverage, adapter contract tests, cross-tenant isolation |
+| `/bear-paperclip:check security` | Tenancy, secrets, approvals, budgets, signed adapter channel |
+| `/bear-paperclip:generate-adapter` | Scaffold an adapter (local / process / http) |
+| `/bear-paperclip:generate-agent-config` | Generate an `agent.yaml` with budget + approvals |
+| `/bear-paperclip:setup-company` | Bootstrap a new Paperclip company end-to-end |
 
 ## Install
 
-### Via Makefile (from a claude-craft checkout)
+### Via Makefile (from a bear-craft checkout)
 
 ```bash
 make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
@@ -76,4 +76,4 @@ make install-paperclip TARGET=/path/to/my/paperclip-project RULES_LANG=en
 
 - Paperclip docs: https://docs.paperclip.ing/
 - Paperclip repo: https://github.com/paperclipai/paperclip
-- Claude-Craft: https://github.com/TheBeardedBearSAS/claude-craft
+- Bear-Craft: https://github.com/TheBeardedBearSAS/bear-craft

@@ -1,6 +1,6 @@
 # Tools Reference Guide
 
-This guide covers the utility tools included with Claude-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v8.7).
+This guide covers the utility tools included with Bear-Craft for managing profiles, status display, project configuration, and Claude Code commands and features (v8.7).
 
 ---
 
@@ -39,7 +39,7 @@ Claude Code provides built-in commands for context and session management. These
 
 | Command | Version | Description |
 |---------|---------|-------------|
-| `/loop [interval] [command]` | v2.1.71+ | Run recurring tasks (e.g., `/loop 5m /gate:check commit`) |
+| `/loop [interval] [command]` | v2.1.71+ | Run recurring tasks (e.g., `/loop 5m /bear-gate:check commit`) |
 | `/proactive` | v2.1.105+ | Alias for `/loop` |
 | `/color` | v2.1.94+ | Change terminal color scheme |
 | `/rename` | v2.1.94+ | Rename current session |
@@ -182,7 +182,7 @@ Available for Team plans with admin approval.
 
 ## Hook Templates
 
-Claude-Craft provides ready-to-use hook templates in `.claude/templates/hooks/`:
+Bear-Craft provides ready-to-use hook templates in `.claude/templates/hooks/`:
 
 | Template | Purpose |
 |----------|---------|
@@ -518,7 +518,7 @@ rm /tmp/.ccusage_*
 
 ## ProjectConfig Manager
 
-Manage Claude-Craft project configurations via YAML.
+Manage Bear-Craft project configurations via YAML.
 
 ### Purpose
 

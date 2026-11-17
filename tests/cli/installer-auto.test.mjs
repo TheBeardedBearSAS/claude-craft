@@ -4,6 +4,17 @@ import fs from 'fs';
 import { autoInstall } from '../../cli/lib/installer.js';
 
 // Mock the actual script runner so autoInstall doesn't try to exec bash.
+// The real `claude` binary is never run: plugin step and legacy migration are replaced.
+vi.mock('../../cli/lib/plugin-install.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    ensureClaude: vi.fn(() => '2.1.326'),
+    installPlugins: vi.fn(() => ({ ids: [], claudeVersion: '2.1.326' })),
+  };
+});
+vi.mock('../../cli/lib/migrate-legacy.js', () => ({ migrateLegacyInstall: vi.fn() }));
+
 vi.mock('child_process', () => ({
   spawnSync: vi.fn(() => ({ status: 0, error: null })),
 }));

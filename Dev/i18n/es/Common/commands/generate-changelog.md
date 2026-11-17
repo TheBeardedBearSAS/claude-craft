@@ -14,7 +14,7 @@ Argumentos:
 - Versión objetivo (ej: `1.2.0`)
 - Desde (tag anterior, predeterminado: último tag)
 
-Ejemplo: `/common:generate-changelog 1.2.0 v1.1.0`
+Ejemplo: `/bear-common:generate-changelog 1.2.0 v1.1.0`
 
 ## MISIÓN
 

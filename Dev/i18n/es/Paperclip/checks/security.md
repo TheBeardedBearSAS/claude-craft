@@ -76,4 +76,4 @@ Verificar headers enviados:
 
 ## Output
 
-Reporte Markdown con pasa/falla por sección, severidad (Blocker / Major / Minor), referencias CVE donde sea relevante, y un puntaje /20 para `/paperclip:check all`.
+Reporte Markdown con pasa/falla por sección, severidad (Blocker / Major / Minor), referencias CVE donde sea relevante, y un puntaje /20 para `/bear-paperclip:check all`.

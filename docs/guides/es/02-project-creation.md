@@ -1,6 +1,6 @@
 # Guía de Creación de Proyectos
 
-Esta guía te lleva paso a paso por la configuración de un nuevo proyecto con Claude-Craft, desde la elección de tu stack tecnológico hasta la configuración de tu entorno de desarrollo.
+Esta guía te lleva paso a paso por la configuración de un nuevo proyecto con Bear-Craft, desde la elección de tu stack tecnológico hasta la configuración de tu entorno de desarrollo.
 
 ---
 
@@ -57,7 +57,7 @@ Plataforma de Datos: Python (API) + React (dashboard)
 
 ## Métodos de Instalación
 
-Claude-Craft ofrece múltiples métodos de instalación para adaptarse a diferentes flujos de trabajo.
+Bear-Craft ofrece múltiples métodos de instalación para adaptarse a diferentes flujos de trabajo.
 
 ### Método 1: Makefile (Recomendado)
 
@@ -164,7 +164,7 @@ cd ~/mi-api-symfony
 composer create-project symfony/skeleton .
 git init
 
-# Instalar las reglas de Claude-Craft
+# Instalar las reglas de Bear-Craft
 make install-symfony TARGET=. RULES_LANG=fr
 
 # Verificar instalación
@@ -173,7 +173,7 @@ ls -la .claude/
 
 **Contenido instalado:**
 - 21 reglas específicas de Symfony (Clean Architecture, DDD, CQRS, etc.)
-- 10+ comandos Symfony (`/symfony:generate-crud`, `/symfony:check all`, etc.)
+- 10+ comandos Symfony (`/bear-symfony:generate-crud`, `/bear-symfony:check all`, etc.)
 - Agente revisor de Symfony
 - Plantillas de código (Service, ValueObject, Aggregate, etc.)
 - Listas de verificación de calidad
@@ -186,7 +186,7 @@ flutter create my_flutter_app
 cd my_flutter_app
 git init
 
-# Instalar las reglas de Claude-Craft
+# Instalar las reglas de Bear-Craft
 make install-flutter TARGET=. RULES_LANG=en
 
 # Verificar
@@ -209,7 +209,7 @@ cd ~/mi-api-python
 python -m venv venv
 git init
 
-# Instalar las reglas de Claude-Craft
+# Instalar las reglas de Bear-Craft
 make install-python TARGET=. RULES_LANG=en
 
 # Verificar
@@ -230,7 +230,7 @@ ls -la .claude/
 npx create-react-app my-react-app
 cd my-react-app
 
-# Instalar las reglas de Claude-Craft
+# Instalar las reglas de Bear-Craft
 make install-react TARGET=. RULES_LANG=en
 
 # Verificar
@@ -244,7 +244,7 @@ ls -la .claude/
 npx react-native init MyApp
 cd MyApp
 
-# Instalar las reglas de Claude-Craft
+# Instalar las reglas de Bear-Craft
 make install-reactnative TARGET=. RULES_LANG=en
 
 # Verificar
@@ -275,7 +275,7 @@ mi-plataforma/
 
 settings:
   default_lang: "fr"              # Idioma predeterminado para todos los proyectos
-  claude_craft_path: "~/claude-craft"  # Ruta a claude-craft (opcional)
+  bear_craft_path: "~/bear-craft"  # Ruta a bear-craft (opcional)
 
 projects:
   - name: "mi-plataforma"
@@ -417,7 +417,7 @@ Este es el archivo más importante a personalizar. Le indica a Claude los detall
 
 Ejecuta este comando en Claude Code para autodetectar tu stack y responder preguntas específicas:
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 **Opción B: Configuración Manual**
@@ -506,7 +506,7 @@ Usa esta lista al configurar un nuevo proyecto:
 
 ### Instalación
 
-- [ ] Reglas de Claude-Craft instaladas
+- [ ] Reglas de Bear-Craft instaladas
 - [ ] Instalación verificada (`ls .claude/`)
 - [ ] Sin errores en la salida de instalación
 
@@ -520,14 +520,14 @@ Usa esta lista al configurar un nuevo proyecto:
 ### Verificación
 
 - [ ] Claude Code iniciado en el directorio del proyecto
-- [ ] Comandos disponibles (prueba `/symfony:check all`)
+- [ ] Comandos disponibles (prueba `/bear-symfony:check all`)
 - [ ] Agentes respondiendo (prueba `@symfony-reviewer hello`)
 
 ### Configuración del Equipo
 
 - [ ] Directorio `.claude/` confirmado en git
 - [ ] Miembros del equipo informados sobre los comandos disponibles
-- [ ] README actualizado con información de uso de Claude-Craft
+- [ ] README actualizado con información de uso de Bear-Craft
 
 ---
 
@@ -571,7 +571,7 @@ Después de instalar las reglas, opcionalmente configura RTK para ahorrar tokens
 
 ```bash
 # En sesión de Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 Esto configura el proxy RTK, la optimización del modelo de sub-agente y plantillas de hooks para una reducción total de tokens del 55-65%.
@@ -580,7 +580,7 @@ Esto configura el proxy RTK, la optimización del modelo de sub-agente y plantil
 
 ## Actualizar Reglas
 
-Cuando Claude-Craft publica nuevas versiones:
+Cuando Bear-Craft publica nuevas versiones:
 
 ```bash
 # Actualizar a la última versión (preserva archivos específicos del proyecto)

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /laravel:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-laravel:check code-quality"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-code-quality` is deprecated and will be removed in 10.0. Use `/laravel:check code-quality`.
+> ⚠️ `/bear-laravel:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-laravel:check code-quality`.
 
-Run `/laravel:check code-quality $ARGUMENTS`: read `.claude/commands/laravel/check.md` and follow it with these arguments.
+Run `/bear-laravel:check code-quality $ARGUMENTS`: read `.claude/commands/bear-laravel/check.md` and follow it with these arguments.

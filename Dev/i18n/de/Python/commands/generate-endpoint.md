@@ -14,7 +14,7 @@ Argumente:
 - Ressourcenname (z.B. `user`, `product`, `order`)
 - (Optional) Typ (crud, list, detail, action)
 
-Beispiel: `/python:generate-endpoint user crud`
+Beispiel: `/bear-python:generate-endpoint user crud`
 
 ## Plan-Modus
 

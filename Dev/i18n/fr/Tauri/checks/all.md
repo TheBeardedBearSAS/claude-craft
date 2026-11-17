@@ -27,7 +27,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification d'architecture complète :
 
-**Commande** : Utiliser la slash command `/tauri:check architecture` ou suivre manuellement les étapes de `.claude/references/tauri/checks/architecture.md`
+**Commande** : Utiliser la slash command `/bear-tauri:check architecture` ou suivre manuellement les étapes de `.claude/references/tauri/checks/architecture.md`
 
 **Critères évalués** :
 - Organisation du projet (`src/` / `src-tauri/`, point d'entrée `run()` dans `lib.rs`, point d'entrée mobile) et `main.rs` minimal (5 pts)
@@ -43,7 +43,7 @@ Exécuter la vérification d'architecture complète :
 
 Exécuter la vérification de qualité du code :
 
-**Commande** : Utiliser la slash command `/tauri:check code-quality` ou suivre manuellement les étapes de `.claude/references/tauri/checks/code-quality.md`
+**Commande** : Utiliser la slash command `/bear-tauri:check code-quality` ou suivre manuellement les étapes de `.claude/references/tauri/checks/code-quality.md`
 
 **Critères évalués** :
 - Clippy propre avec `-D warnings` et `cargo fmt --check` (5 pts)
@@ -59,7 +59,7 @@ Exécuter la vérification de qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la slash command `/tauri:check testing` ou suivre manuellement les étapes de `.claude/references/tauri/checks/testing.md`
+**Commande** : Utiliser la slash command `/bear-tauri:check testing` ou suivre manuellement les étapes de `.claude/references/tauri/checks/testing.md`
 
 **Critères évalués** :
 - Couverture de code (cible >= 80 %) sur le cœur Rust et le frontend (7 pts)
@@ -75,7 +75,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la slash command `/tauri:check security` ou suivre manuellement les étapes de `.claude/references/tauri/checks/security.md`
+**Commande** : Utiliser la slash command `/bear-tauri:check security` ou suivre manuellement les étapes de `.claude/references/tauri/checks/security.md`
 
 **Critères évalués** :
 - Capabilities et permissions : une capability par fenêtre/rôle, moindre privilège (6 pts)

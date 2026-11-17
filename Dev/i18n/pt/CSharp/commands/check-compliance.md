@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /csharp:check all"
+description: "Obsoleto (removido na 10.0): use /bear-csharp:check all"
 deprecated: true
-replaced-by: /csharp:check
+replaced-by: /bear-csharp:check
 ---
 
-> ⚠️ `/csharp:check-compliance` está obsoleto e será removido na 10.0. Use `/csharp:check all`.
+> ⚠️ `/bear-csharp:check-compliance` está obsoleto e será removido na 10.0. Use `/bear-csharp:check all`.
 
-Execute `/csharp:check all $ARGUMENTS`: leia `.claude/commands/csharp/check.md` e siga-o com estes argumentos.
+Execute `/bear-csharp:check all $ARGUMENTS`: leia `.claude/commands/bear-csharp/check.md` e siga-o com estes argumentos.

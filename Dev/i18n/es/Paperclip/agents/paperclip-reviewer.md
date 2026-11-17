@@ -178,4 +178,4 @@ Ser específico: cada hallazgo nombra un archivo + línea, y cada fix es acciona
 
 ## No-Objetivos
 
-No reescribo código. No toco configuración. No propongo funcionalidades de producto. Señalo desviaciones del contrato Paperclip y de las reglas claude-craft en `rules/02…12`.
+No reescribo código. No toco configuración. No propongo funcionalidades de producto. Señalo desviaciones del contrato Paperclip y de las reglas bear-craft en `rules/02…12`.

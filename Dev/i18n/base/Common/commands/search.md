@@ -4,23 +4,23 @@ description: Search commands, skills and agents by keyword
 tags: [search, discover, find, help]
 ---
 
-# Search Claude Craft
+# Search Bear Craft
 
-Search commands, skills and agents by keyword across the entire Claude Craft framework.
+Search commands, skills and agents by keyword across the entire Bear Craft framework.
 
 ## Usage
 
 ```bash
-/common:search <keyword>
+/bear-common:search <keyword>
 ```
 
 ## Examples
 
 ```bash
-/common:search testing
-/common:search security
-/common:search react
-/common:search audit
+/bear-common:search testing
+/bear-common:search security
+/bear-common:search react
+/bear-common:search audit
 ```
 
 ## Implementation
@@ -47,9 +47,9 @@ Results are ranked by relevance and display the top 5 matches.
 🔍 Search results for "testing":
 
 Commands:
-  • /qa:tdd - TDD workflow (Red → Green → Refactor)
-  • /symfony:check testing - Check Symfony testing compliance
-  • /react:check testing - Check React testing compliance
+  • /bear-qa:tdd - TDD workflow (Red → Green → Refactor)
+  • /bear-symfony:check testing - Check Symfony testing compliance
+  • /bear-react:check testing - Check React testing compliance
 
 Skills:
   • testing - TDD/BDD testing patterns and best practices
@@ -66,7 +66,7 @@ Rules:
 
 ## Instructions for Claude
 
-When a user invokes `/common:search <keyword>`:
+When a user invokes `/bear-common:search <keyword>`:
 
 1. Search across all commands, skills, agents, and rules
 2. Use Grep tool with case-insensitive search (`-i` flag)
@@ -97,17 +97,17 @@ When a user invokes `/common:search <keyword>`:
 
 | Keyword | Top Results |
 |---------|-------------|
-| `testing` | /qa:tdd, testing skill, @tdd-coach |
-| `security` | /team:security, security skill, @security-auditor |
+| `testing` | /bear-qa:tdd, testing skill, @tdd-coach |
+| `security` | /bear-team:security, security skill, @security-auditor |
 | `architecture` | architecture skill, @database-architect |
-| `react` | /react:* commands, @react-reviewer |
-| `symfony` | /symfony:* commands, @symfony-reviewer |
-| `audit` | /team:audit, /team:security |
-| `claude code` | /common:setup-rtk, .claude/COMPATIBILITY.md |
-| `workflow` | /workflow:* commands, workflow-analysis skill |
+| `react` | /bear-react:* commands, @react-reviewer |
+| `symfony` | /bear-symfony:* commands, @symfony-reviewer |
+| `audit` | /bear-team:audit, /bear-team:security |
+| `claude code` | /bear-common:setup-rtk, .claude/COMPATIBILITY.md |
+| `workflow` | /bear-workflow:* commands, workflow-analysis skill |
 
 ---
 
 **Version:** 1.0.0  
-**Author:** The Bearded CTO  
+**Author:** The Bearded Bear  
 **Date:** 2026-04-17

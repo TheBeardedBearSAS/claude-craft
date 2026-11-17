@@ -16,7 +16,7 @@ Argumentos:
 - Serviços necessários (ex.: postgres, redis, rabbitmq)
 - Restrições (ex.: aws-eks, multi-tenant, high-availability)
 
-Exemplo: `/kubernetes:architecture "API de E-commerce" stack:node services:postgres,redis cloud:aws-eks`
+Exemplo: `/bear-kubernetes:architecture "API de E-commerce" stack:node services:postgres,redis cloud:aws-eks`
 
 ## Plan Mode
 
@@ -174,7 +174,7 @@ PRÓXIMOS PASSOS
 
 1. [ ] Revisar e ajustar resource requests/limits
 2. [ ] Configurar secrets com External Secrets Operator
-3. [ ] Configurar GitOps com /kubernetes:deploy-setup
-4. [ ] Executar auditoria de segurança com /kubernetes:security-audit
+3. [ ] Configurar GitOps com /bear-kubernetes:deploy-setup
+4. [ ] Executar auditoria de segurança com /bear-kubernetes:security-audit
 5. [ ] Configurar monitoramento com @kubernetes-monitoring
 ```

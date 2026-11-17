@@ -236,4 +236,4 @@ El autor del adaptador/plugin **NO DEBE** intentar aplicar estos localmente. Nun
 
 ---
 
-**Última actualización:** 2026-04 | **Versión:** 2.0.0 | **Autor:** The Bearded CTO
+**Última actualización:** 2026-04 | **Versión:** 2.0.0 | **Autor:** The Bearded Bear

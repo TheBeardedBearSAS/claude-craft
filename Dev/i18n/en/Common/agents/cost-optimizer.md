@@ -97,12 +97,12 @@ Prioritize: high savings × low effort × low risk.
 - Reducing Anthropic/OpenAI bill
 - Architecture review from a cost perspective
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@devops-engineer` — infrastructure
 - `@performance-auditor` — performance vs cost trade-off
 - `.claude/rules/12-context-management.md` — Claude Code token optimization
-- `/common:setup-rtk` — RTK 60-90% token savings
+- `/bear-common:setup-rtk` — RTK 60-90% token savings
 - Skill `atomic-tasks` — fresh subagent = fewer tokens
 
 ## Resources

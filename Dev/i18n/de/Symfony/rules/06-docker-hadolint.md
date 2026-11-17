@@ -400,7 +400,7 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 # hadolint ignore=DL3006
 FROM php:8.2-fpm-alpine AS base
 
-LABEL author="The Bearded CTO"
+LABEL author="The Bearded Bear"
 LABEL version="1.0.0"
 LABEL description="Atoll Tourisme - Symfony 8.1 Application"
 
@@ -476,7 +476,7 @@ CMD ["php-fpm"]
 
 FROM php:8.2-fpm-alpine
 
-LABEL author="The Bearded CTO"
+LABEL author="The Bearded Bear"
 LABEL version="1.0.0-dev"
 LABEL description="Atoll Tourisme - Dev Environment"
 
@@ -765,4 +765,4 @@ make shell  # dann psql
 
 **Datum der letzten Aktualisierung:** 2025-01-26
 **Version:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

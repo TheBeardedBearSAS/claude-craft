@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /angular:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-angular:check code-quality"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-code-quality` is deprecated and will be removed in 10.0. Use `/angular:check code-quality`.
+> ⚠️ `/bear-angular:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-angular:check code-quality`.
 
-Run `/angular:check code-quality $ARGUMENTS`: read `.claude/commands/angular/check.md` and follow it with these arguments.
+Run `/bear-angular:check code-quality $ARGUMENTS`: read `.claude/commands/bear-angular/check.md` and follow it with these arguments.

@@ -16,7 +16,7 @@ DEFAULT_STACK="Angular 17+, TypeScript 5+, RxJS, NgRx, Angular Material"
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(
@@ -51,8 +51,8 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:generate-component\` - Generate Angular component"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:generate-component\` - Generate Angular component"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 src/app/

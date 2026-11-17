@@ -1,5 +1,5 @@
 ---
-description: "Gera um DESIGN.md na raíz do projeto a partir do template do Claude Craft + análise de fontes UI existentes (Tailwind, tokens, CSS)."
+description: "Gera um DESIGN.md na raíz do projeto a partir do template do Bear Craft + análise de fontes UI existentes (Tailwind, tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
@@ -17,16 +17,16 @@ Cria um ficheiro `DESIGN.md` na raíz do projeto para servir de fonte de verdade
 
 ```bash
 # Cópia simples do template (a preencher manualmente)
-/uiux:generate-design-md
+/bear-uiux:generate-design-md
 
 # Pré-preencher a partir de tailwind.config.*
-/uiux:generate-design-md --from-tailwind
+/bear-uiux:generate-design-md --from-tailwind
 
 # Pré-preencher a partir de ficheiro de tokens JSON
-/uiux:generate-design-md --from-tokens=./design-tokens.json
+/bear-uiux:generate-design-md --from-tokens=./design-tokens.json
 
 # Modo interativo (perguntas dirigidas)
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 ```
 
 ## Processo
@@ -107,14 +107,14 @@ Checklist pós-geração:
 - **Skill `design-md-convention`** — regras de redação
 - **Template** `.claude/templates/DESIGN.md.template`
 - **Agentes consumidores**: `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@{react,vue,angular}-reviewer`
-- **Comandos relacionados**: `/uiux:design-tokens`, `/uiux:audit`, `/uiux:a11y-audit`
+- **Comandos relacionados**: `/bear-uiux:design-tokens`, `/bear-uiux:audit`, `/bear-uiux:a11y-audit`
 
 ## Exemplos
 
 ### Projeto React + Tailwind
 
 ```bash
-/uiux:generate-design-md --from-tailwind --interactive
+/bear-uiux:generate-design-md --from-tailwind --interactive
 # Perguntas interativas
 # → DESIGN.md gerado com paleta Tailwind + breakpoints + tipografia
 ```
@@ -122,7 +122,7 @@ Checklist pós-geração:
 ### Projeto sem stack UI detetável
 
 ```bash
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 # Cópia do template + perguntas
 # → DESIGN.md a preencher manualmente
 ```

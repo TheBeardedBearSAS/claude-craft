@@ -27,7 +27,7 @@ describe('runList', () => {
   let consoleSpy;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-list-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-list-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     process.exitCode = undefined;
   });
@@ -41,19 +41,19 @@ describe('runList', () => {
   it('reports missing installation when .claude/ not found', () => {
     runList(tempDir);
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('No claude-craft installation detected');
+    expect(output).toContain('No bear-craft installation detected');
     expect(process.exitCode).toBe(1);
   });
 
   it('lists components for a full installation structure', () => {
-    mkdirSync(join(tempDir, '.claude', 'commands', 'common'), { recursive: true });
-    mkdirSync(join(tempDir, '.claude', 'commands', 'workflow'), { recursive: true });
+    mkdirSync(join(tempDir, '.claude', 'commands', 'bear-common'), { recursive: true });
+    mkdirSync(join(tempDir, '.claude', 'commands', 'bear-workflow'), { recursive: true });
     mkdirSync(join(tempDir, '.claude', 'agents'), { recursive: true });
     mkdirSync(join(tempDir, '.claude', 'references', 'symfony'), { recursive: true });
     mkdirSync(join(tempDir, '.claude', 'skills', 'architecture'), { recursive: true });
-    writeFileSync(join(tempDir, '.claude', 'commands', 'common', 'a.md'), '#');
-    writeFileSync(join(tempDir, '.claude', 'commands', 'common', 'b.md'), '#');
-    writeFileSync(join(tempDir, '.claude', 'commands', 'workflow', 'c.md'), '#');
+    writeFileSync(join(tempDir, '.claude', 'commands', 'bear-common', 'a.md'), '#');
+    writeFileSync(join(tempDir, '.claude', 'commands', 'bear-common', 'b.md'), '#');
+    writeFileSync(join(tempDir, '.claude', 'commands', 'bear-workflow', 'c.md'), '#');
     writeFileSync(join(tempDir, '.claude', 'agents', 'tdd-coach.md'), '#');
     writeFileSync(join(tempDir, '.claude', 'skills', 'architecture', 'solid.md'), '#');
 
@@ -61,8 +61,8 @@ describe('runList', () => {
     runList(tempDir);
 
     const output = consoleSpy.mock.calls.map((c) => c[0]).join('\n');
-    expect(output).toContain('/common:*');
-    expect(output).toContain('/workflow:*');
+    expect(output).toContain('/bear-common:*');
+    expect(output).toContain('/bear-workflow:*');
     expect(output).toContain('2 command(s)');
     expect(output).toContain('1 command(s)');
     expect(output).toContain('3 commands in 2 namespace(s)');

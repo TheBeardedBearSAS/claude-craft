@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/laravel:check architecture` or manually follow steps in `.claude/references/laravel/checks/architecture.md`
+**Command**: Use slash command `/bear-laravel:check architecture` or manually follow steps in `.claude/references/laravel/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Clean Architecture layer separation (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/laravel:check code-quality` or manually follow steps in `.claude/references/laravel/checks/code-quality.md`
+**Command**: Use slash command `/bear-laravel:check code-quality` or manually follow steps in `.claude/references/laravel/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - PSR-12 and Laravel Pint compliance (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/laravel:check testing` or manually follow steps in `.claude/references/laravel/checks/testing.md`
+**Command**: Use slash command `/bear-laravel:check testing` or manually follow steps in `.claude/references/laravel/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/laravel:check security` or manually follow steps in `.claude/references/laravel/checks/security.md`
+**Command**: Use slash command `/bear-laravel:check security` or manually follow steps in `.claude/references/laravel/checks/security.md`
 
 **Evaluated Criteria**:
 - OWASP Top 10 protections (6 pts)

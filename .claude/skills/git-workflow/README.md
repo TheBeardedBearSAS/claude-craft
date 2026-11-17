@@ -2,7 +2,7 @@
 
 Universal Git workflow guidelines with GitHub Flow and Conventional Commits.
 
-Part of [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) -- AI-assisted development framework for Claude Code.
+Part of [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) -- AI-assisted development framework for Claude Code.
 
 ## Installation
 
@@ -31,4 +31,4 @@ This skill provides universal Git workflow practices applicable to any project r
 
 ## License
 
-MIT -- See [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) for full license.
+MIT -- See [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) for full license.

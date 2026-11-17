@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vuejs:check architecture` verwenden oder die Schritte in `.claude/references/vuejs/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vuejs:check architecture` verwenden oder die Schritte in `.claude/references/vuejs/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Komponenten- und Feature-Organisation (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Codequalitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vuejs:check code-quality` verwenden oder die Schritte in `.claude/references/vuejs/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vuejs:check code-quality` verwenden oder die Schritte in `.claude/references/vuejs/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - TypeScript-Strict-Modus und Typsicherheit (5 Pkt.)
@@ -58,7 +58,7 @@ Codequalitätsprüfung durchführen:
 
 Test-Prüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vuejs:check testing` verwenden oder die Schritte in `.claude/references/vuejs/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vuejs:check testing` verwenden oder die Schritte in `.claude/references/vuejs/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Codeabdeckung (7 Pkt.)
@@ -74,7 +74,7 @@ Test-Prüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vuejs:check security` verwenden oder die Schritte in `.claude/references/vuejs/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vuejs:check security` verwenden oder die Schritte in `.claude/references/vuejs/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - XSS-Prävention (v-html-Verwendung) (6 Pkt.)

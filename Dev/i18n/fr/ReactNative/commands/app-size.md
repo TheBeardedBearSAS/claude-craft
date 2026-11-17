@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Plateforme : ios, android, both
 - (Optionnel) Mode : full, assets, code, native
 
-Exemple : `/reactnative:app-size android` ou `/reactnative:app-size both full`
+Exemple : `/bear-reactnative:app-size android` ou `/bear-reactnative:app-size both full`
 
 ## Mode Plan
 

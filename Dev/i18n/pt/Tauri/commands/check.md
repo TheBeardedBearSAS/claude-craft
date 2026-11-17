@@ -21,8 +21,8 @@ O primeiro argumento é o eixo; o restante (por exemplo, um caminho de projeto) 
 
 ## MISSÃO
 
-1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/tauri:check security src-tauri`) e pare.
+1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/bear-tauri:check security src-tauri`) e pare.
 2. Leia o arquivo de checklist desse eixo e siga-o passo a passo. Nesse arquivo, `$ARGUMENTS` designa os argumentos que vêm depois do eixo.
 3. Produza o relatório no formato de saída definido pela checklist.
 
-Exemplos: `/tauri:check architecture`, `/tauri:check testing ./src-tauri`, `/tauri:check all`.
+Exemplos: `/bear-tauri:check architecture`, `/bear-tauri:check testing ./src-tauri`, `/bear-tauri:check all`.

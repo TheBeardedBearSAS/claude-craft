@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vite:check all verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vite:check all verwenden"
 deprecated: true
-replaced-by: /vite:check
+replaced-by: /bear-vite:check
 ---
 
-> ⚠️ `/vite:check-compliance` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vite:check all`.
+> ⚠️ `/bear-vite:check-compliance` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vite:check all`.
 
-Führen Sie `/vite:check all $ARGUMENTS` aus: Lesen Sie `.claude/commands/vite/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vite:check all $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vite/check.md` und folgen Sie der Datei mit diesen Argumenten.

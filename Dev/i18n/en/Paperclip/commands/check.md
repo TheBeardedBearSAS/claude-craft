@@ -21,8 +21,8 @@ The first argument is the axis; the rest (for example a project path) is passed 
 
 ## MISSION
 
-1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/paperclip:check security src/`) and stop.
+1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/bear-paperclip:check security src/`) and stop.
 2. Read the checklist file of that axis and follow it step by step. In that file, `$ARGUMENTS` stands for the arguments that follow the axis.
 3. Produce the report in the output format the checklist defines.
 
-Examples: `/paperclip:check architecture`, `/paperclip:check testing ./app`, `/paperclip:check all`.
+Examples: `/bear-paperclip:check architecture`, `/bear-paperclip:check testing ./app`, `/bear-paperclip:check all`.

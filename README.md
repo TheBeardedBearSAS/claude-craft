@@ -1,30 +1,30 @@
-# Claude Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
+# Bear Craft — Sprint workflow, multi-stack reviewers, and browser QA for Claude Code teams
 
 > **The AI framework where bugs don't come back.** Sprint workflow, a continuous build loop, browser-based acceptance testing, and token-optimized multi-stack reviewers for tech leads adopting Claude Code with their team. **11 stacks, 5 languages, BMAD v6.**
 
-## Why teams pick Claude Craft
+## Why teams pick Bear Craft
 
 Four things Claude Code + an Anthropic cookbook **won't** give you — they're workflow and orchestration, not prompts:
 
 | Differentiator | What it does |
 |----------------|--------------|
-| 🏆 **QA Recette** (browser-based) | `/qa:recette` drives Chrome to run acceptance tests and auto-generates a regression test for every bug you fix — the Golden Rule: a fixed bug never comes back. No other Claude Code framework does this. |
+| 🏆 **QA Recette** (browser-based) | `/bear-qa:recette` drives Chrome to run acceptance tests and auto-generates a regression test for every bug you fix — the Golden Rule: a fixed bug never comes back. No other Claude Code framework does this. |
 | 🚀 **BMAD v6 sprint workflow** | Analyze → Plan → Design → Implement → QA, executed by Claude Code directly with quality gates. Quick Flow < 5 min, Standard < 15 min, Enterprise < 30 min. |
-| 🔁 **Ralph Wiggum loop** | `/common:ralph-run` runs Claude in a continuous loop until your Definition of Done holds — adaptive circuit breaker, native `/goal` integration, DoD validators. |
+| 🔁 **Ralph Wiggum loop** | `/bear-common:ralph-run` runs Claude in a continuous loop until your Definition of Done holds — adaptive circuit breaker, native `/goal` integration, DoD validators. |
 | ⚡ **RTK token optimization** | Forked sub-agents, `context: fork` on heavy skills, 1h prompt caching, Haiku/Sonnet/Opus routing per task. Target 55-65% token savings vs raw Claude Code. |
 
 Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @python-reviewer…) that enforce SOLID/TDD/Clean Architecture so you don't re-type your conventions every sprint.
 
-> **Why not just Claude Code + a cookbook?** Claude already knows React, Symfony, and Flutter patterns — so Claude Craft's value isn't the prompts, it's the **workflow and orchestration around them**: a sprint lifecycle with gates, a continuous loop with a real DoD, browser-based regression capture, and per-task token routing. Those are the parts a per-stack cookbook doesn't cover.
+> **Why not just Claude Code + a cookbook?** Claude already knows React, Symfony, and Flutter patterns — so Bear Craft's value isn't the prompts, it's the **workflow and orchestration around them**: a sprint lifecycle with gates, a continuous loop with a real DoD, browser-based regression capture, and per-task token routing. Those are the parts a per-stack cookbook doesn't cover.
 
 
 
-[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
-[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/claude-craft)](https://www.npmjs.com/package/@the-bearded-bear/claude-craft)
+[![npm version](https://img.shields.io/npm/v/@the-bearded-bear/bear-craft)](https://www.npmjs.com/package/@the-bearded-bear/bear-craft)
+[![npm downloads](https://img.shields.io/npm/dm/@the-bearded-bear/bear-craft)](https://www.npmjs.com/package/@the-bearded-bear/bear-craft)
 [![Claude Code 2.1.325+](https://img.shields.io/badge/Claude%20Code-2.1.325%2B-blue)](https://code.claude.com)
-[![CI](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/claude-craft/actions/workflows/npm-publish.yml)
+[![CI](https://github.com/TheBeardedBearSAS/bear-craft/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/TheBeardedBearSAS/bear-craft/actions/workflows/npm-publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fclaude-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/claude-craft/main)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTheBeardedBearSAS%2Fbear-craft%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/TheBeardedBearSAS/bear-craft/main)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=coverage)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TheBeardedBearSAS_claude-craft&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TheBeardedBearSAS_claude-craft)
@@ -36,7 +36,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Dernière version 9.x — sécurité Claude Code et hooks fail-closed (2026-11-17, v9.4.0) :**
 
-- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `claude-craft doctor` échoue sous le minimum, et le plugin déclare `engines["claude-code"]: ">=2.1.325"`.
+- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `bear-craft doctor` échoue sous le minimum, et chaque plugin déclare `engines["claude-code"]: ">=2.1.325"`.
 - **Hooks** : les trois gardes de sécurité bloquent l'appel d'outil si leur script manque, plante ou dépasse son timeout (`onFailure: "block"`) ; la réinstallation met à niveau les projets existants.
 - **Annonce** : Claude Craft devient **bear-craft** en 10.0.0 (paquet `@the-bearded-bear/bear-craft`, commande `bear-craft`, alias `claude-craft` conservé en 10.x). Détails : [CHANGELOG](CHANGELOG.md#940---2026-11-17).
 
@@ -44,7 +44,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Kanban en écriture et qualité mesurée (2026-11-16, v9.3.0) :**
 
-- **Kanban** (`claude-craft kanban`) : création, édition et suppression de stories, planification du backlog, création/démarrage/clôture de sprint avec report, limites WIP, vélocité ; écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé, détection de conflit) ; interface en 5 langues, accessibilité vérifiée par axe.
+- **Kanban** (`bear-craft kanban`) : création, édition et suppression de stories, planification du backlog, création/démarrage/clôture de sprint avec report, limites WIP, vélocité ; écriture sûre dans `.bmad/sprint-status.yaml` (verrou partagé, détection de conflit) ; interface en 5 langues, accessibilité vérifiée par axe.
 - **Qualité** : analyse SonarCloud en CI à chaque PR (0 issue, quality gate vert, couverture 95 %), score de mutation Stryker publié sur le dashboard ; badges dans ce README.
 - **Sécurité** : `npm ci --ignore-scripts` dans toute la CI, téléchargements HTTPS uniquement, permissions des workflows au plus juste, expressions régulières sans retour arrière super-linéaire, `hono` mis à jour (GHSA-4m76-xfj5-7975). Détails : [CHANGELOG](CHANGELOG.md#930---2026-11-16).
 
@@ -61,33 +61,33 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Deux nouveaux stacks (2026-11-09, v9.2.0) :** Rust / Axum (15e) et Tauri (16e), Claude Code recommandé : 2.1.319. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
-**Nouveau stack WordPress (2026-11-10) :** `--tech=wordpress` (communautaire) installe WordPress 7.1 pour plugins et thèmes blocs : 6 règles en anglais (architecture plugin/thème, hooks, `block.json`/`render.php`, REST `permission_callback`, WP-CLI, WPCS/PHPStan, wp-env, tests `WP_UnitTestCase` / Playwright), l'agent `@wordpress-reviewer` et `/wordpress:check <axe>` dans les 5 langues. **Modulaire** : WooCommerce 11.2 (HPOS, Store API, blocs Cart/Checkout) est livré comme skill `woocommerce` chargé à la demande, absent du contexte d'un WordPress simple. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
+**Nouveau stack WordPress (2026-11-10) :** `--tech=wordpress` (communautaire) installe WordPress 7.1 pour plugins et thèmes blocs : 6 règles en anglais (architecture plugin/thème, hooks, `block.json`/`render.php`, REST `permission_callback`, WP-CLI, WPCS/PHPStan, wp-env, tests `WP_UnitTestCase` / Playwright), l'agent `@wordpress-reviewer` et `/bear-wordpress:check <axe>` dans les 5 langues. **Modulaire** : WooCommerce 11.2 (HPOS, Store API, blocs Cart/Checkout) est livré comme skill `woocommerce` chargé à la demande, absent du contexte d'un WordPress simple. Détails : [CHANGELOG](CHANGELOG.md#unreleased).
 
-**Nouveau stack Tauri v2 (2026-11-09) :** `--tech=tauri` (communautaire) installe Tauri 2.12 pour applications desktop et mobile (cœur Rust, front web agnostique) : 6 règles en anglais (architecture `src-tauri/`, commands/IPC, capabilities et permissions, CSP, pattern Isolation, updater signé, tests mock runtime / `mockIPC` / WebdriverIO), l'agent `@tauri-reviewer` et `/tauri:check <axe>` dans les 5 langues. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
+**Nouveau stack Tauri v2 (2026-11-09) :** `--tech=tauri` (communautaire) installe Tauri 2.12 pour applications desktop et mobile (cœur Rust, front web agnostique) : 6 règles en anglais (architecture `src-tauri/`, commands/IPC, capabilities et permissions, CSP, pattern Isolation, updater signé, tests mock runtime / `mockIPC` / WebdriverIO), l'agent `@tauri-reviewer` et `/bear-tauri:check <axe>` dans les 5 langues. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
-**Nouveau stack Rust / Axum (2026-11-08) :** `--tech=rust` installe Rust 1.99 (édition 2024) + Axum 0.8 (workspace en couches, Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny) dans les 5 langues : 6 règles, l'agent `@rust-reviewer` et `/rust:check <axe>`. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
+**Nouveau stack Rust / Axum (2026-11-08) :** `--tech=rust` installe Rust 1.99 (édition 2024) + Axum 0.8 (workspace en couches, Tokio, Tower, SQLx, thiserror + RFC 9457, cargo-nextest, Clippy, cargo-deny) dans les 5 langues : 6 règles, l'agent `@rust-reviewer` et `/bear-rust:check <axe>`. Détails : [CHANGELOG](CHANGELOG.md#920---2026-11-09).
 
 ## What's New in v9.1.0
 
-**Nouveau stack Ruby / Rails (2026-11-01, v9.1.0) :** `--tech=ruby` installe Ruby 4.0 + Rails 8.1 (Rails Way, service/form/query objects, Hotwire, Solid Queue, RSpec ou Minitest, RuboCop, Brakeman) dans les 5 langues : 6 règles, l'agent `@ruby-reviewer` et `/ruby:check <axe>`. Claude Code recommandé : 2.1.316. Détails : [CHANGELOG](CHANGELOG.md#910---2026-11-01).
+**Nouveau stack Ruby / Rails (2026-11-01, v9.1.0) :** `--tech=ruby` installe Ruby 4.0 + Rails 8.1 (Rails Way, service/form/query objects, Hotwire, Solid Queue, RSpec ou Minitest, RuboCop, Brakeman) dans les 5 langues : 6 règles, l'agent `@ruby-reviewer` et `/bear-ruby:check <axe>`. Claude Code recommandé : 2.1.316. Détails : [CHANGELOG](CHANGELOG.md#910---2026-11-01).
 
 ## What's New in v9.0.0
 
-**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/common:research-context7`, `/uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `claude-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
+**BREAKING — retrait des commandes dépréciées (2026-10-29, v9.0.0) :** les 54 stubs de redirection (PM, `/bear-common:research-context7`, `/bear-uiux:orchestrator`) et le namespace `/sprint:` sont supprimés ; `bear-craft update` les efface des projets. Table de correspondance : [MIGRATION-v9](docs/MIGRATION-v9.md). Détails : [CHANGELOG](CHANGELOG.md#900---2026-10-29).
 
-**Un seul `/<tech>:check <axe>` par stack (v9.0.0) :** `/react:check architecture|code-quality|security|testing|all` remplace les 5 `check-*` de chaque stack (`all` = audit noté sur 100) ; `/team:sprint` devient `/team:delivery --phase=implementation`. Les anciens noms restent des stubs de redirection jusqu'en 10.0. Table : [MIGRATION-v9](docs/MIGRATION-v9.md).
+**Un seul `/<tech>:check <axe>` par stack (v9.0.0) :** `/bear-react:check architecture|code-quality|security|testing|all` remplace les 5 `check-*` de chaque stack (`all` = audit noté sur 100) ; `/bear-team:sprint` devient `/bear-team:delivery --phase=implementation`. Les anciens noms restent des stubs de redirection jusqu'en 10.0. Table : [MIGRATION-v9](docs/MIGRATION-v9.md).
 
 ## What's New in v8.27.0
 
-**Les commandes `/team:*` sans Agent Teams (2026-10-28, v8.27.0) :** `/team:audit`, `/team:security`, `/team:sprint` et `/team:delivery` délèguent par défaut à des sous-agents (`--engine=subagents`, compatible `claude -p` et CI) ; Agent Teams devient optionnel (`--engine=teams`, repli automatique si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent). `/common:research-context7` et `/uiux:orchestrator` sont dépréciées au profit du MCP context7 / `/deep-research` et de l'agent `@uiux-orchestrator`. Ralph est fiabilisé en mode parallèle (sessions et worktrees isolés). Claude Code recommandé : 2.1.312. Dernière version 8.x avant la 9.0. Détails : [CHANGELOG](CHANGELOG.md#8270---2026-10-28).
+**Les commandes `/bear-team:*` sans Agent Teams (2026-10-28, v8.27.0) :** `/bear-team:audit`, `/bear-team:security`, `/bear-team:sprint` et `/bear-team:delivery` délèguent par défaut à des sous-agents (`--engine=subagents`, compatible `claude -p` et CI) ; Agent Teams devient optionnel (`--engine=teams`, repli automatique si `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` est absent). `/bear-common:research-context7` et `/bear-uiux:orchestrator` sont dépréciées au profit du MCP context7 / `/deep-research` et de l'agent `@uiux-orchestrator`. Ralph est fiabilisé en mode parallèle (sessions et worktrees isolés). Claude Code recommandé : 2.1.312. Dernière version 8.x avant la 9.0. Détails : [CHANGELOG](CHANGELOG.md#8270---2026-10-28).
 
 ## What's New in v8.26.0
 
-**Un parcours principal pour la gestion de projet (2026-10-26, v8.26.0) :** `/workflow:init → plan → design → start → implement → review → retro` (+ `/workflow:status` à tout moment, `/workflow:auto-sprint` de bout en bout). Le namespace `/sprint:` et les générateurs `/project:*` deviennent des stubs de redirection jusqu'en 9.0. Il reste 35 commandes de gestion de projet actives au lieu de 86. Guide : [Quel parcours ?](docs/guides/en/11-which-path.md). Détails : [CHANGELOG](CHANGELOG.md#8260---2026-10-26).
+**Un parcours principal pour la gestion de projet (2026-10-26, v8.26.0) :** `/bear-workflow:init → plan → design → start → implement → review → retro` (+ `/bear-workflow:status` à tout moment, `/bear-workflow:auto-sprint` de bout en bout). Le namespace `/sprint:` et les générateurs `/bear-project:*` deviennent des stubs de redirection jusqu'en 9.0. Il reste 35 commandes de gestion de projet actives au lieu de 86. Guide : [Quel parcours ?](docs/guides/en/11-which-path.md). Détails : [CHANGELOG](CHANGELOG.md#8260---2026-10-26).
 
 ## What's New in v8.25.0
 
-**Fusion des commandes `/project:` et `/gate:` (2026-10-26, v8.25.0) :** 5 commandes `/project:` (`backlog`, `reverse`, `trace`, `report`, `migrate`) et une seule `/gate:check` remplacent 41 commandes ; les anciennes restent des stubs de redirection jusqu'en 9.0. Détails : [CHANGELOG](CHANGELOG.md#8250---2026-10-26).
+**Fusion des commandes `/project:` et `/gate:` (2026-10-26, v8.25.0) :** 5 commandes `/project:` (`backlog`, `reverse`, `trace`, `report`, `migrate`) et une seule `/bear-gate:check` remplacent 41 commandes ; les anciennes restent des stubs de redirection jusqu'en 9.0. Détails : [CHANGELOG](CHANGELOG.md#8250---2026-10-26).
 
 ## What's New in v8.24.0
 
@@ -95,7 +95,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v8.23.4
 
-**Cohérence des commandes de gestion de projet (2026-10-26, v8.23.4) :** 65 références vers des commandes inexistantes corrigées dans les 5 langues (nouveau garde-fou CI `command-refs.test.mjs`) ; gates alignées sur `project-management/` ; arborescence de sprint unique (`board.md` + `tasks/TASK-*.md`) ; `/workflow:init` crée `.bmad/sprint-status.yaml` ; `/workflow:auto-sprint` démarre un sprint inexistant. Détails : [CHANGELOG](CHANGELOG.md#8234---2026-10-26).
+**Cohérence des commandes de gestion de projet (2026-10-26, v8.23.4) :** 65 références vers des commandes inexistantes corrigées dans les 5 langues (nouveau garde-fou CI `command-refs.test.mjs`) ; gates alignées sur `project-management/` ; arborescence de sprint unique (`board.md` + `tasks/TASK-*.md`) ; `/bear-workflow:init` crée `.bmad/sprint-status.yaml` ; `/bear-workflow:auto-sprint` démarre un sprint inexistant. Détails : [CHANGELOG](CHANGELOG.md#8234---2026-10-26).
 
 ## What's New in v8.23.3
 
@@ -114,7 +114,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 - **Installation adaptée à la stack** : `--tech=a,b,c` rend le `CLAUDE.md` racine, `AGENTS.md` et `.claude/settings.json` selon les technos réellement installées ; `install-project-commands.sh` n'écrase plus les fichiers existants ; `@tech-lead` agnostique de la stack ; `make config-*` et `check-config.sh` réparés.
 - **Kanban** : lecture des backlogs générés depuis les templates (métadonnées en liste Markdown), plus de documents dupliqués, retrait complet des commentaires HTML imbriqués (alerte CodeQL).
-- **Workflow** : `/workflow:start` crée `.bmad/sprint-status.yaml`, `/gate:check sprint` fonctionne sans lui. Dépendances et GitHub Actions à jour. Détails : [CHANGELOG](CHANGELOG.md#8231---2026-10-22).
+- **Workflow** : `/bear-workflow:start` crée `.bmad/sprint-status.yaml`, `/bear-gate:check sprint` fonctionne sans lui. Dépendances et GitHub Actions à jour. Détails : [CHANGELOG](CHANGELOG.md#8231---2026-10-22).
 
 ## What's New in v8.23.0
 
@@ -126,9 +126,9 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ## What's New in v8.18.0
 
-**Nouvelle commande `/workflow:auto-sprint` (2026-06-27, v8.18.0) :**
+**Nouvelle commande `/bear-workflow:auto-sprint` (2026-06-27, v8.18.0) :**
 
-- **Orchestrateur de sprint de bout en bout** : une seule commande joue le rôle Product Owner / Scrum Master et enchaîne `start → decompose → validate → implement → PR → CI watch → review → retro → merge`. Chaque cérémonie tourne dans un **sous-agent au contexte isolé** — l'isolation remplace le `/clear` manuel entre étapes ; la phase d'implémentation assume le rôle conductor **inline** (réutilise `/team:sprint`).
+- **Orchestrateur de sprint de bout en bout** : une seule commande joue le rôle Product Owner / Scrum Master et enchaîne `start → decompose → validate → implement → PR → CI watch → review → retro → merge`. Chaque cérémonie tourne dans un **sous-agent au contexte isolé** — l'isolation remplace le `/clear` manuel entre étapes ; la phase d'implémentation assume le rôle conductor **inline** (réutilise `/bear-team:sprint`).
 - **PR + CI + merge intégrés** (`gh`) : `--auto-merge` opt-in (défaut : pause + GO humain) ; échec de gate (validate KO / CI rouge / DoD miss) → **auto-fix loop** borné (`--max-fix-attempts`).
 - **5 langues** (`Dev/i18n/{en,fr,es,de,pt}`) ; compteurs réalignés **126 core / 220 total** commandes.
 
@@ -137,7 +137,7 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 **Revue documentation (2026-06-26, v8.17.2) :**
 
 - **Nouveau tutoriel phare** : `docs/guides/*/10-complete-workflow.md` réécrit en walkthrough narré de bout en bout (idée → backlog → sprint → livraison) pour grands débutants — glossaire, modes d'exécution, gates, discipline `/clear`, exemple *TaskFlow* + annexe multi-stack. Disponible en 5 langues, lié depuis le README et `guides/index.md`.
-- **Fraîcheur** : compteurs et versions réalignés sur le SSOT (125 core / 219 total commandes, 70 agents, 55 skills, 11 stacks ; versions Claude Code min/recommandée ; Flutter 3.44, RN 0.85, Symfony 8.1). Suppression de `/bmad:init` (→ `/workflow:init`).
+- **Fraîcheur** : compteurs et versions réalignés sur le SSOT (125 core / 219 total commandes, 70 agents, 55 skills, 11 stacks ; versions Claude Code min/recommandée ; Flutter 3.44, RN 0.85, Symfony 8.1). Suppression de `/bmad:init` (→ `/bear-workflow:init`).
 - **Sans doublon** : index des guides de migration, en-têtes « narré vs full » (COMMANDS/AGENTS), bannière PLANNED sur MCP-SERVERS, cross-links entre docs concurrentielles, stub `docs/SECURITY.md` supprimé.
 
 ## What's New in v8.17.1
@@ -177,12 +177,12 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Corrections de l'interface web Kanban (v8.13.1) :**
 
-- **Dashboard Kanban réparé** : 4 bugs corrigés en TDD sur le SPA Svelte 5 (`claude-craft kanban`) — vue Backlog vide (stories à `epic_id` inconnu désormais regroupées au lieu d'être perdues), raccourcis clavier inopérants (synchronisation focus + reducer pur), détails de carte inaccessibles (modale au clic/Entrée), et feedback visible (toast) au lieu d'un échec silencieux sur les cartes read-only `sprint-status.yaml`.
+- **Dashboard Kanban réparé** : 4 bugs corrigés en TDD sur le SPA Svelte 5 (`bear-craft kanban`) — vue Backlog vide (stories à `epic_id` inconnu désormais regroupées au lieu d'être perdues), raccourcis clavier inopérants (synchronisation focus + reducer pur), détails de carte inaccessibles (modale au clic/Entrée), et feedback visible (toast) au lieu d'un échec silencieux sur les cartes read-only `sprint-status.yaml`.
 
 **Fiabilité BMAD + distribution AgentTeams (v8.13.0) :**
 
-- **`/gate:*` réparé** : `((var++))` sous `set -e` avortait les scripts de gate/hook après le 1er check (post-incrément = exit 1 quand le compteur vaut 0). 68 occurrences corrigées sur 6 fichiers + tests de non-régression (`make test-bmad`).
-- **Scripts AgentTeams livrés** : `Tools/AgentTeams/lib/*.sh` désormais installés automatiquement avec les commandes `/team:*` (fini le warning « scripts MISSING » ; dashboard coût et `--ralph-mode` disponibles out-of-the-box). Install/refresh manuel : `make install-agentteams TARGET=.`.
+- **`/bear-gate:*` réparé** : `((var++))` sous `set -e` avortait les scripts de gate/hook après le 1er check (post-incrément = exit 1 quand le compteur vaut 0). 68 occurrences corrigées sur 6 fichiers + tests de non-régression (`make test-bmad`).
+- **Scripts AgentTeams livrés** : `Tools/AgentTeams/lib/*.sh` désormais installés automatiquement avec les commandes `/bear-team:*` (fini le warning « scripts MISSING » ; dashboard coût et `--ralph-mode` disponibles out-of-the-box). Install/refresh manuel : `make install-agentteams TARGET=.`.
 
 **Audit exhaustif + durcissement (v8.12.0) :**
 
@@ -197,10 +197,10 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 **Releases 8.8.x → 8.10.x :**
 
-- **MIT-only strict (v8.8.0)** -- Claude Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
+- **MIT-only strict (v8.8.0)** -- Bear Craft est 100 % open-source MIT, aucune licence commerciale ou enterprise. Stratégie open-core abandonnée.
 - **Parité i18n stricte (v8.8.2)** -- la CI bloque désormais si un fichier traduit est à < 80 % de la taille de l'anglais. Dette i18n résorbée (gap 101 → 0).
 - **Branding the-bearded-bear.com (v8.10.1)** -- migration complète des domaines vers `the-bearded-bear.com`, normalisation de l'organisation GitHub.
-- **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
+- **126 commandes sur 15 namespaces (v8.10.x)** (220 total avec infra/projet) -- namespace `/bear-paperclip:*` (8 commandes) ajouté, 55 skills disponibles.
 - **Claude Code 2.1.326** -- version recommandée (minimum sécurité 2.1.325 ; Opus 5.5 / Sonnet 5.5 / Haiku 5.5, MCP 2026-07-28, hooks `onFailure: "block"`).
 
 > ← Versions antérieures (v8.0 → v8.7) : voir le [CHANGELOG](CHANGELOG.md) et [.claude/COMPATIBILITY.md](.claude/COMPATIBILITY.md).
@@ -209,34 +209,34 @@ A comprehensive framework for AI-assisted development with [Claude Code](https:/
 
 ```bash
 # Install to your project (picks your tech stack interactively)
-npx @the-bearded-bear/claude-craft
+npx @the-bearded-bear/bear-craft
 
 # Or install directly
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=react --lang=en
 
 # Zero-prompt install (auto-detects your stack + locale, target < 2 min)
-npx @the-bearded-bear/claude-craft install --auto
+npx @the-bearded-bear/bear-craft install --auto
 
 # Install from a team config URL (Gist or internal endpoint)
-npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+npx @the-bearded-bear/bear-craft install --from=https://org.example/cc-team.json
 
-# Add a community skill from npm (claude-craft-skill-* convention)
-npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+# Add a community skill from npm (bear-craft-skill-* convention)
+npx @the-bearded-bear/bear-craft skill add bear-craft-skill-foo
 
 # Open Claude Code and run your first audit
 claude
-/team:audit
+/bear-team:audit
 ```
 
 That's it. You get an architecture, security, and quality audit of your project in minutes.
 
-**New to Claude Craft?** Run `/common:getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Bear Craft?** Run `/bear-common:getting-started` in Claude Code for a 10-minute guided tour that shows you the 3 most valuable commands for YOUR project.
 
 > See [Quickstart](docs/QUICKSTART.md) for a step-by-step walkthrough with expected output at each stage.
 
-## Why Claude Craft?
+## Why Bear Craft?
 
-Claude Code is powerful on its own. Claude Craft makes it **consistent and team-ready**:
+Claude Code is powerful on its own. Bear Craft makes it **consistent and team-ready**:
 
 - **Standardized rules** -- SOLID, Clean Architecture, TDD enforced across your team, not just suggested
 - **33 default agents + 39 infra agents on-demand** -- reviewers, architects, coaches that know your stack deeply (72 total potentially installable)
@@ -282,7 +282,7 @@ See [Technologies](docs/TECHNOLOGIES.md) for full details.
 | Category | Count | Examples |
 |----------|-------|---------|
 | **Agents** | 31 default (+ 39 infra on-demand) | `@tdd-coach`, `@api-designer`, `@symfony-reviewer`, `@kubernetes-architect`, `@hcloud-architect` |
-| **Commands** | 143 across 18 namespaces (201 total with infra/project, including 66 redirect stubs kept until 10.0) | `/workflow:init`, `/team:audit`, `/react:generate-component` |
+| **Commands** | 143 across 18 namespaces (201 total with infra/project, including 66 redirect stubs kept until 10.0) | `/bear-workflow:init`, `/bear-team:audit`, `/bear-react:generate-component` |
 | **Skills** | 55 | Architecture, testing, security, DDD best practices |
 | **Templates** | 21 | Code generation patterns, BMAD project templates |
 | **Checklists** | 10 | Commit, feature, release quality gates |
@@ -291,7 +291,7 @@ See [Agents](docs/AGENTS.md) | [Commands](docs/COMMANDS.md) | [Skills](docs/SKIL
 
 ## Workflow Tracks
 
-Claude Craft adapts to your project complexity with three development tracks:
+Bear Craft adapts to your project complexity with three development tracks:
 
 | Track | Setup | Phases | Best For |
 |-------|-------|--------|----------|
@@ -300,9 +300,9 @@ Claude Craft adapts to your project complexity with three development tracks:
 | **Enterprise** | < 30 min | Analyze > Plan > Design > Implement | Platforms, migrations |
 
 ```bash
-/workflow:init              # Auto-detects complexity
-/workflow:init --quick      # Bug fix mode
-/workflow:init --enterprise # Full methodology
+/bear-workflow:init              # Auto-detects complexity
+/bear-workflow:init --quick      # Bug fix mode
+/bear-workflow:init --enterprise # Full methodology
 ```
 
 See [BMAD Practical Guide](docs/BMAD-PRACTICAL-GUIDE.md) for the complete project management framework.
@@ -313,16 +313,16 @@ These are the commands you'll use most:
 
 | Command | What It Does |
 |---------|-------------|
-| `/workflow:init` | Start a development workflow (auto-detects track) |
-| `/team:audit` | Full project audit (architecture, security, quality) |
-| `/gate:check commit` | Validate before committing |
-| `/project:backlog next story` | Get next story ready for development |
-| `/qa:tdd` | Test-Driven Development flow |
-| `/gate:check story` | Check story meets Definition of Done |
+| `/bear-workflow:init` | Start a development workflow (auto-detects track) |
+| `/bear-team:audit` | Full project audit (architecture, security, quality) |
+| `/bear-gate:check commit` | Validate before committing |
+| `/bear-project:backlog next story` | Get next story ready for development |
+| `/bear-qa:tdd` | Test-Driven Development flow |
+| `/bear-gate:check story` | Check story meets Definition of Done |
 | `/{tech}:check <axis>` | Audit architecture, code-quality, security, testing, or all (scored) |
 | `/{tech}:generate-*` | Generate code following project patterns |
-| `/common:ralph-run "task"` | Run Claude in continuous loop until task is done |
-| `/qa:recette` | Automated acceptance testing via Chrome |
+| `/bear-common:ralph-run "task"` | Run Claude in continuous loop until task is done |
+| `/bear-qa:recette` | Automated acceptance testing via Chrome |
 
 See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namespaces (201 total including infra, project management and the redirect stubs kept until 10.0).
 
@@ -333,14 +333,41 @@ See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namesp
 ### NPX (Recommended)
 
 ```bash
-npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=en
+npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
 ```
+
+### What `bear-craft install` does (10.0)
+
+It installs the `bear-*` plugins **in project scope through Claude Code** (so `claude` must be installed: no fallback) and copies only what plugins cannot carry — `.claude/rules`, `.claude/references`, `CLAUDE.md`, `AGENTS.md`, `settings*.json`, `.github/`, `Tools/AgentTeams/lib`, `project-management/`. The marketplace of your language is copied to `.bear-craft/marketplace/` (versioned with your project, works offline) and recorded in `.bear-craft/install.json`, under a marketplace name unique to the project (`bear-craft-<8 hex>`) so projects on the same machine never share plugins. Commands, agents and skills therefore have the same names (`/bear-react:check`, `bear-common:tdd-coach`) whether you install through the CLI or the plugin marketplace. After a `git clone`, run `bear-craft sync` once per machine. Community skills added with `bear-craft skill add` are plain copies under `.claude/skills/community/` and are **not** `bear-` prefixed.
+
+```bash
+bear-craft install ~/my-project --tech=react,symfony --infra=docker,kubernetes --lang=fr --hooks=full
+bear-craft sync      # after a clone: re-register the marketplace and plugins on this machine
+bear-craft update    # new version: refresh the marketplace, rules and plugins; migrate old copies
+```
+
+### Claude Code plugin
+
+One plugin per command namespace and per stack, each prefixed with `bear-` so commands never clash with project commands or other plugins (`/bear-react:check`, `/bear-workflow:init`):
+
+```
+/plugin marketplace add TheBeardedBearSAS/bear-craft
+/plugin install bear-common@bear-craft      # shared agents, skills, rules and checklists
+/plugin install bear-hooks@bear-craft       # default safety hooks (also: bear-hooks-full, bear-hooks-memory)
+/plugin install bear-docker@bear-craft      # infrastructure (also: bear-coolify, bear-kubernetes, bear-opentofu, bear-ansible, bear-hcloud, bear-pgbouncer, bear-frankenphp)
+/plugin install bear-workflow@bear-craft    # BMAD sprint workflow (also: bear-team, bear-qa, bear-uiux, bear-gate, bear-project)
+/plugin install bear-react@bear-craft       # a stack: bear-react, bear-symfony, bear-flutter, bear-python, …
+```
+
+Plugins live in [`marketplaces/<lang>/plugins/`](marketplaces/) — one marketplace per language (`en`, `fr`, `es`, `de`, `pt`; same plugin names, marketplaces `bear-craft`, `bear-craft-fr`, …) — and are generated from the installers (`npm run plugins:generate`). The repository root marketplace is the English one.
+**Pick a single channel for hooks:** the `bear-hooks*` plugins *or* hooks merged into `settings.json` by the CLI — using both runs every
+guard twice ([docs/HOOKS.md](docs/HOOKS.md#shipping-the-hooks-as-plugins)).
 
 ### Clone + Makefile
 
 ```bash
-git clone https://github.com/TheBeardedBearSAS/claude-craft.git
-cd claude-craft
+git clone https://github.com/TheBeardedBearSAS/bear-craft.git
+cd bear-craft
 make install-symfony TARGET=~/my-project RULES_LANG=en
 ```
 
@@ -365,16 +392,16 @@ make config-install PROJECT=my-monorepo
 
 See [Installation Guide](docs/INSTALLATION.md) | [Configuration](docs/CONFIGURATION.md)
 
-## Use Claude Craft Without Claude Code
+## Use Bear Craft Without Claude Code
 
-Claude Craft's principles and rules are available as pre-built bundles for other AI surfaces. No installation required — paste and go.
+Bear Craft's principles and rules are available as pre-built bundles for other AI surfaces. No installation required — paste and go.
 
 | Surface | Bundle | Doc |
 |---------|--------|-----|
-| ChatGPT / GPT-5 | `bundles/chatgpt/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Claude.ai (Web) / Claude Projects | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Gemini / Cursor / Windsurf | `bundles/gemini/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
-| Codex CLI / other agents | `bundles/claude/claude-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| ChatGPT / GPT-5 | `bundles/chatgpt/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Claude.ai (Web) / Claude Projects | `bundles/claude/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Gemini / Cursor / Windsurf | `bundles/gemini/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
+| Codex CLI / other agents | `bundles/claude/bear-craft-bundle.md` | [Multi-IDE Guide](docs/guides/MULTI-IDE.md) |
 
 See [`bundles/README.md`](bundles/README.md) for platform-specific installation instructions and token budgets.
 
@@ -440,7 +467,7 @@ Step-by-step tutorials available in 5 languages:
 
 ## Project Governance & Sustainability
 
-Claude Craft is maintained by [The Bearded CTO](https://the-bearded-bear.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
+Bear Craft is maintained by [The Bearded Bear](https://the-bearded-bear.com), a solo founder with deep involvement in the AFUP and Symfony French ecosystem.
 
 | Item | Status |
 |------|--------|
@@ -448,10 +475,10 @@ Claude Craft is maintained by [The Bearded CTO](https://the-bearded-bear.com), a
 | **Maintenance commitment** | Active development since 2026-01. Targeting weekly minor releases, monthly minor versions. |
 | **Bus factor** | Currently 1 (solo maintainer). [Co-maintainer search open](CHARTER.md) — looking for one tech lead from the AFUP / Symfony / Flutter / React community. |
 | **Succession plan** | Documented in [CHARTER.md](CHARTER.md). MIT license guarantees indefinite community fork rights if maintainer disappears. |
-| **Roadmap visibility** | [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues) + [CHANGELOG.md](CHANGELOG.md) + recurring `audit/YYYY-MM-DD-*` reports |
+| **Roadmap visibility** | [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues) + [CHANGELOG.md](CHANGELOG.md) + recurring `audit/YYYY-MM-DD-*` reports |
 | **Decision process** | RFC via GitHub Discussions for breaking changes. ADRs in `docs/adr/` for architectural choices. |
 | **Security disclosure** | See [SECURITY.md](SECURITY.md). 90-day disclosure timeline, GPG-signed advisories. |
-| **License** | MIT (free, perpetual). Claude Craft is and remains 100% open-source — no commercial, enterprise, or proprietary tier. See [CHARTER.md](CHARTER.md). |
+| **License** | MIT (free, perpetual). Bear Craft is and remains 100% open-source — no commercial, enterprise, or proprietary tier. See [CHARTER.md](CHARTER.md). |
 
 ## Contributing
 

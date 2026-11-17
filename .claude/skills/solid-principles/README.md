@@ -2,7 +2,7 @@
 
 Universal SOLID principles guidelines for object-oriented code quality and architecture review.
 
-Part of [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) -- AI-assisted development framework for Claude Code.
+Part of [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) -- AI-assisted development framework for Claude Code.
 
 ## Installation
 
@@ -31,4 +31,4 @@ This skill applies to any object-oriented language: C#, Java, TypeScript, Python
 
 ## License
 
-MIT -- See [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) for full license.
+MIT -- See [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) for full license.

@@ -97,12 +97,12 @@ Prioriser : économie élevée × effort faible × risque faible.
 - Réduction facture Anthropic/OpenAI
 - Review architecture sous angle coût
 
-## Intégration Claude Craft
+## Intégration Bear Craft
 
 - `@devops-engineer` — infrastructure
 - `@performance-auditor` — performance vs coût trade-off
 - `.claude/rules/12-context-management.md` — optimisation tokens Claude Code
-- `/common:setup-rtk` — RTK 60-90% économies tokens
+- `/bear-common:setup-rtk` — RTK 60-90% économies tokens
 - Skill `atomic-tasks` — subagent frais = moins de tokens
 
 ## Ressources

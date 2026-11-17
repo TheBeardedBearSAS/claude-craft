@@ -2,6 +2,17 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { interactiveInstall } from '../../cli/lib/installer.js';
 
 // Mock child_process.spawnSync
+// The real `claude` binary is never run: plugin step and legacy migration are replaced.
+vi.mock('../../cli/lib/plugin-install.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    ensureClaude: vi.fn(() => '2.1.326'),
+    installPlugins: vi.fn(() => ({ ids: [], claudeVersion: '2.1.326' })),
+  };
+});
+vi.mock('../../cli/lib/migrate-legacy.js', () => ({ migrateLegacyInstall: vi.fn() }));
+
 vi.mock('child_process', () => ({
   spawnSync: vi.fn(() => ({ status: 0, error: null })),
 }));

@@ -4,15 +4,15 @@ This guide takes you from zero to a working audit of your project. Every step in
 
 ---
 
-## First 10 Minutes with Claude Craft
+## First 10 Minutes with Bear Craft
 
-**New to Claude Craft?** Follow Steps 1-2 below to install, then run the personalized guided tour that shows you the 3 most valuable commands for YOUR project.
+**New to Bear Craft?** Follow Steps 1-2 below to install, then run the personalized guided tour that shows you the 3 most valuable commands for YOUR project.
 
 After installation (Step 1), open Claude Code in your project and run:
 
 ```bash
 # Inside Claude Code — run AFTER installation
-/common:getting-started
+/bear-common:getting-started
 ```
 
 This interactive wizard will:
@@ -26,9 +26,9 @@ This interactive wizard will:
 After completing the wizard, you can either:
 - Continue with the full installation steps below for team setup
 - Jump to [What's Next](#whats-next) to explore workflows and agents
-- Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/claude-craft/discussions) to ask questions (Discord community planned for Q3 2026)
+- Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/bear-craft/discussions) to ask questions (Discord community planned for Q3 2026)
 
-> See `.claude/commands/common/getting-started.md` for the full wizard reference.
+> See `.claude/commands/bear-common/getting-started.md` for the full wizard reference.
 
 ---
 
@@ -46,13 +46,13 @@ Missing something? See [Prerequisites Guide](PREREQUISITES.md) for installation 
 
 ---
 
-## Step 1: Install Claude Craft (2 minutes)
+## Step 1: Install Bear Craft (2 minutes)
 
 Navigate to your existing project (or create one) and install:
 
 ```bash
 cd ~/my-project
-npx @the-bearded-bear/claude-craft install . --tech=react --lang=en
+npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 ```
 
 Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`, `vuejs`, `reactnative`, `csharp`, `laravel`, `php`, `paperclip`.
@@ -60,7 +60,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **What you should see:**
 
 ```
-  Claude Craft v8.19.2 - AI Development Framework
+  Bear Craft v8.19.2 - AI Development Framework
 
   Installing react rules to /home/user/my-project...
   [OK] Common rules installed
@@ -72,7 +72,7 @@ Replace `react` with your technology: `symfony`, `flutter`, `python`, `angular`,
 **Checkpoint:** Verify the installation:
 
 ```bash
-npx @the-bearded-bear/claude-craft check .
+npx @the-bearded-bear/bear-craft check .
 ```
 
 This shows installed commands, agents, skills, and references. You should see your technology listed alongside common rules.
@@ -90,7 +90,7 @@ claude
 Inside Claude Code, type:
 
 ```
-/team:audit
+/bear-team:audit
 ```
 
 **What you should see:**
@@ -103,7 +103,7 @@ A typical output includes:
 - Performance hotspots
 - Code quality metrics (duplication, complexity)
 
-**Checkpoint:** You see a summary with scores and actionable findings. If the command is not recognized, verify installation with `npx @the-bearded-bear/claude-craft check .`
+**Checkpoint:** You see a summary with scores and actionable findings. If the command is not recognized, verify installation with `npx @the-bearded-bear/bear-craft check .`
 
 ---
 
@@ -112,7 +112,7 @@ A typical output includes:
 Pick one finding from the audit (for example, a missing test or an architecture violation) and use TDD to fix it:
 
 ```
-/qa:tdd
+/bear-qa:tdd
 ```
 
 Describe the issue and the agent guides you through:
@@ -138,20 +138,20 @@ You can also ask the TDD coach agent directly:
 | I want to... | Command / Agent |
 |--------------|----------------|
 | Review my code | `@{tech}-reviewer Review my src/ folder` |
-| Start a feature with full workflow | `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (`/workflow:status` anytime) |
-| Run a whole sprint unattended | `/workflow:auto-sprint 1` (`--from-prd` to start from the PRD) |
+| Start a feature with full workflow | `/bear-workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (`/bear-workflow:status` anytime) |
+| Run a whole sprint unattended | `/bear-workflow:auto-sprint 1` (`--from-prd` to start from the PRD) |
 | Generate code following project patterns | `/{tech}:generate-*` |
-| Validate before committing | `/gate:check commit` |
-| Run acceptance tests in Chrome | `/qa:recette --scope=story --id=US-001` |
-| Run Claude in a continuous loop | `/common:ralph-run "implement feature X"` |
+| Validate before committing | `/bear-gate:check commit` |
+| Run acceptance tests in Chrome | `/bear-qa:recette --scope=story --id=US-001` |
+| Run Claude in a continuous loop | `/bear-common:ralph-run "implement feature X"` |
 
 ### By role
 
-**Backend developer:** Start with `/workflow:init`, use `@api-designer` for API design, `@database-architect` for schema work.
+**Backend developer:** Start with `/bear-workflow:init`, use `@api-designer` for API design, `@database-architect` for schema work.
 
 **Frontend developer:** Use `@uiux-orchestrator` for design system coordination, `/{tech}:generate-component` for scaffolding.
 
-**Team lead:** Run `/team:audit` regularly, use `/workflow:status` (`--board`, `--gates`) for progress tracking, `/gate:check all` for quality metrics.
+**Team lead:** Run `/bear-team:audit` regularly, use `/bear-workflow:status` (`--board`, `--gates`) for progress tracking, `/bear-gate:check all` for quality metrics.
 
 ### Learn more
 
@@ -172,15 +172,15 @@ You can also ask the TDD coach agent directly:
 
 ```
 INSTALLATION
-  npx @the-bearded-bear/claude-craft install . --tech=X --lang=en
-  npx @the-bearded-bear/claude-craft check .
-  npx @the-bearded-bear/claude-craft doctor .
+  npx @the-bearded-bear/bear-craft install . --tech=X --lang=en
+  npx @the-bearded-bear/bear-craft check .
+  npx @the-bearded-bear/bear-craft doctor .
 
 COMMON COMMANDS
-  /team:audit                Full project audit
-  /workflow:init             Start development workflow
-  /gate:check commit         Validate before commit
-  /qa:tdd                    TDD flow
+  /bear-team:audit                Full project audit
+  /bear-workflow:init             Start development workflow
+  /bear-gate:check commit         Validate before commit
+  /bear-qa:tdd                    TDD flow
 
 USEFUL AGENTS
   @tdd-coach                 TDD guidance

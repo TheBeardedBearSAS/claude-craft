@@ -15,7 +15,7 @@ Arguments :
 - Charge de travail cible (ex : web-application, api-only, real-time)
 - Contraintes (ex : worker-mode, classic-mode, behind-proxy)
 
-Exemple : `/frankenphp:architecture "Plateforme e-commerce" workload:web-application framework:symfony`
+Exemple : `/bear-frankenphp:architecture "Plateforme e-commerce" workload:web-application framework:symfony`
 
 ## Plan Mode
 
@@ -130,8 +130,8 @@ PROCHAINES ETAPES
 ──────────────────────────────────────────────────────────────
 
 1. [ ] Verifier le Caddyfile et le dimensionnement des threads
-2. [ ] Deployer avec /frankenphp:deploy-setup
-3. [ ] Auditer la securite avec /frankenphp:security-audit
-4. [ ] Optimiser la performance avec /frankenphp:optimize
+2. [ ] Deployer avec /bear-frankenphp:deploy-setup
+3. [ ] Auditer la securite avec /bear-frankenphp:security-audit
+4. [ ] Optimiser la performance avec /bear-frankenphp:optimize
 5. [ ] Benchmarker avec wrk ou k6
 ```

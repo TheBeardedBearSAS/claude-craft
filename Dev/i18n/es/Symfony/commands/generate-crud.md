@@ -14,7 +14,7 @@ Argumentos:
 - Nombre de la entidad (ej: `Product`, `BlogPost`)
 - (Opcional) Campos en formato `nombre:tipo` separados por comas
 
-Ejemplo: `/symfony:generate-crud Product name:string,price:decimal,description:text`
+Ejemplo: `/bear-symfony:generate-crud Product name:string,price:decimal,description:text`
 
 ## Modo Plan
 

@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Niveau WCAG : A, AA, AAA
 - (Optionnel) Chemin vers un composant spécifique
 
-Exemple : `/react:accessibility-check AA` ou `/react:accessibility-check AA src/components/`
+Exemple : `/bear-react:accessibility-check AA` ou `/bear-react:accessibility-check AA src/components/`
 
 ## Mode Plan
 

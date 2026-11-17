@@ -14,7 +14,7 @@ Argumente:
 - Entscheidungstitel
 - (Optional) ADR-Nummer
 
-Beispiel: `/common:architecture-decision "Wahl von PostgreSQL als Hauptdatenbank"`
+Beispiel: `/bear-common:architecture-decision "Wahl von PostgreSQL als Hauptdatenbank"`
 
 ## Plan-Modus
 

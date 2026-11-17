@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /vercel:check architecture"
+description: "Deprecated (removed in 10.0): use /bear-vercel:check architecture"
 deprecated: true
-replaced-by: /vercel:check
+replaced-by: /bear-vercel:check
 ---
 
-> ⚠️ `/vercel:check-architecture` is deprecated and will be removed in 10.0. Use `/vercel:check architecture`.
+> ⚠️ `/bear-vercel:check-architecture` is deprecated and will be removed in 10.0. Use `/bear-vercel:check architecture`.
 
-Run `/vercel:check architecture $ARGUMENTS`: read `.claude/commands/vercel/check.md` and follow it with these arguments.
+Run `/bear-vercel:check architecture $ARGUMENTS`: read `.claude/commands/bear-vercel/check.md` and follow it with these arguments.

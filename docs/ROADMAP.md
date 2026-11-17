@@ -1,4 +1,4 @@
-# Claude Craft — Roadmap publique
+# Bear Craft — Roadmap publique
 
 > Roadmap vivante. Chaque item correspond à une issue GitHub avec vote via 👍 reactions.
 >
@@ -10,7 +10,7 @@
 - **Vote communautaire** : les reactions 👍 sur les issues de type `enhancement` orientent la priorité.
 - **Cycle trimestriel** : la roadmap est revue à chaque fin de phase (audit `audit/phases/*`).
 
-## Colonnes (GitHub Project "Claude Craft Roadmap")
+## Colonnes (GitHub Project "Bear Craft Roadmap")
 
 | Colonne | Description |
 |---------|-------------|
@@ -43,11 +43,11 @@
 
 **Items issus de l'audit concurrentiel 2026-06-08** (`docs/audit/2026-06-08-comprehensive/`). Ces chantiers stratégiques sont volontairement sur la roadmap (pas implémentés à la hâte) car ils engagent le positionnement produit :
 
-- [ ] **DIFF-01 — Marketplace officielle Anthropic** : `.claude-plugin/marketplace.json` créé (permet `/plugin marketplace add TheBeardedBearSAS/claude-craft`). Reste : valider via `claude plugin validate`, soumettre à `claude-community` via le formulaire in-app ([claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)). Objectif : voie d'entrée `/plugin install claude-craft`.
+- [ ] **DIFF-01 — Marketplace officielle Anthropic** : `.claude-plugin/marketplace.json` créé (permet `/plugin marketplace add TheBeardedBearSAS/bear-craft`). Reste : valider via `claude plugin validate`, soumettre à `claude-community` via le formulaire in-app ([claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit)). Objectif : voie d'entrée `/plugin install bear-craft`.
 - [ ] **DIFF-02 — Multi-harness élargi** : `bundles/{cursor,gemini,chatgpt,claude}` existent déjà (via `scripts/export-multi-ide.sh`). Étendre à OpenCode et GitHub Copilot ; garder les CLAUDE.md comme source de vérité et générer les formats cibles. Prioriser Cursor (part de marché IDE) et Gemini CLI (free tier).
 - [ ] **DIFF-03 — Orchestration multi-modèle** : les Dynamic Workflows (CC 2.1.154+, trigger `ultracode`) couvrent déjà le fan-out multi-agents avec tiering Haiku/Sonnet/Opus. Documenter explicitement le pattern « routing par complexité » dans `rules/12` + comparer à oh-my-claudecode (Claude+Gemini+Codex) dans `docs/ECOSYSTEM.md`.
 - [ ] **DIFF-04 — Mémoire persistante inter-sessions** : évaluer un MCP de mémoire vectorielle légère (SQLite + embeddings) pour la persistance des décisions architecturales entre sessions BMAD ; positionner Ruflo comme moteur complémentaire. Référencer dans `docs/ECOSYSTEM.md`.
-- [ ] **DIFF-05 — Différenciation BMAD & visibilité** : article comparatif « Claude Craft (BMAD intégré + 11 stacks + RTK) vs BMAD standalone vs oh-my-claudecode », tableau comparatif dans le README, soumissions awesome-claude-code / claudemarketplaces.com, démo vidéo Symfony+Flutter.
+- [ ] **DIFF-05 — Différenciation BMAD & visibilité** : article comparatif « Bear Craft (BMAD intégré + 11 stacks + RTK) vs BMAD standalone vs oh-my-claudecode », tableau comparatif dans le README, soumissions awesome-claude-code / claudemarketplaces.com, démo vidéo Symfony+Flutter.
 - [ ] **DIFF-06 — Coûts tokens BMAD documentés** : table des coûts token estimés par track (Quick/Standard/Enterprise) avec/sans RTK dans `docs/FAQ.md` ; envisager un mode `--lean` (templates BMAD allégés) pour les petites features.
 - [ ] **DIFF-07 — i18n 5 langues comme argument commercial** : section « Global Teams » dans le README, landing localisée, ciblage ESN européennes (FR/ES/DE/PT) — différenciateur qu'aucun concurrent n'a.
 - [ ] **DIFF-08 — Suite d'évaluation des skills en CI** (inspiré wshobson/agents) : lint statique des `SKILL.md` (longueur, sections requises, liens valides), test de prompt-injection par skill, scoring qualité. Fichiers : `.github/workflows/`, `scripts/`.
@@ -63,7 +63,7 @@ Résolutions explicites des GAPs concurrentiels de l'audit du 2026-07-03 (vérif
 - **GAP-01 — Manifeste marketplace** : dérive de version corrigée (`marketplace.json` 8.16.1 → 8.19.1). **À faire** : ajouter un gate CI qui échoue si `plugin.json` ↔ `marketplace.json` divergent, puis `claude plugin validate` + soumission (cf. DIFF-01).
 - **GAP-02 — `.mcp.json` pré-configuré** : **décision = opt-in manuel maintenu** (règle 11 : auditer/épingler tout serveur MCP tiers avant usage — l'auto-install par défaut est un anti-pattern supply-chain). Les templates prêts existent (`.claude/templates/mcp/context7-with-tool-search.json`, `github-with-tool-search.json`) et `docs/MCP.md` documente la procédure. Évolution possible : un flag opt-in `--with-mcp` émettant un `.mcp.json` curé/épinglé (à spécifier + tester avant build).
 - **GAP-04 — Skills marketplace** : **décision = parkée** (DRAFT P3-23, non annoncée publiquement, aucun user ne l'attend). Rejoint DIFF-10 (soumission des skills à l'Anthropic Skills Marketplace) plutôt qu'un marketplace maison à maintenir. Statut clarifié dans `skills-marketplace/README.md`.
-- **GAP-06 — Scaffolding `claude-craft new`** : **décision = hors-scope**. Claude Craft est une **couche de configuration/augmentation** de projets existants (identité produit), pas un générateur d'application. Ne pas diluer le flow `install` avec de la génération d'app ; réévaluer seulement sur demande produit explicite.
+- **GAP-06 — Scaffolding `bear-craft new`** : **décision = hors-scope**. Bear Craft est une **couche de configuration/augmentation** de projets existants (identité produit), pas un générateur d'application. Ne pas diluer le flow `install` avec de la génération d'app ; réévaluer seulement sur demande produit explicite.
 
 ### v9.0 (legacy) — Différenciation
 
@@ -75,7 +75,7 @@ Issue de `audit/phases/phase-4-domination.md` — à détailler.
 
 ## Comment voter
 
-1. Aller dans [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues?q=is%3Aissue+label%3Aenhancement).
+1. Aller dans [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues?q=is%3Aissue+label%3Aenhancement).
 2. Cliquer sur une feature request qui vous intéresse.
 3. Réagir avec 👍 sur la description de l'issue (pas dans les commentaires).
 4. Optionnel : commenter avec votre use-case précis.
@@ -86,10 +86,10 @@ Les issues passent en colonne **Voting** à partir de 10 votes, en **In Progress
 
 ```bash
 # Créer le project board via gh CLI
-gh project create --owner TheBeardedBearSAS --title "Claude Craft Roadmap"
+gh project create --owner TheBeardedBearSAS --title "Bear Craft Roadmap"
 # Ajouter colonnes via UI : https://github.com/orgs/TheBeardedBearSAS/projects/new
 # Activer Discussions :
-gh api -X PATCH /repos/TheBeardedBearSAS/claude-craft -f has_discussions=true
+gh api -X PATCH /repos/TheBeardedBearSAS/bear-craft -f has_discussions=true
 ```
 
 ## Gouvernance

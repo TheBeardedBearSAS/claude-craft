@@ -107,25 +107,25 @@ Golden Rule Check: 1 VIOLATION DETECTED
 
 ```bash
 # List all regression tests
-/qa:regression --list
+/bear-qa:regression --list
 
 # Show stability score
-/qa:regression --stats
+/bear-qa:regression --stats
 
 # Run regression check (detect Golden Rule violations)
-/qa:regression --check
+/bear-qa:regression --check
 
 # Filter by source story
-/qa:regression --list --source=US-001
+/bear-qa:regression --list --source=US-001
 
 # Filter by status
-/qa:regression --list --status=active
+/bear-qa:regression --list --status=active
 
 # Show historical trend
-/qa:regression --stats --trend
+/bear-qa:regression --stats --trend
 
 # Output as JSON
-/qa:regression --list --format=json
+/bear-qa:regression --list --format=json
 ```
 
 ## Output Structure
@@ -146,18 +146,18 @@ Golden Rule Check: 1 VIOLATION DETECTED
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Execute acceptance tests |
-| `/qa:fix` | Fix bugs from a recette session |
-| `/qa:status` | Show session status |
-| `/qa:status --report` | Generate report |
+| `/bear-qa:recette` | Execute acceptance tests |
+| `/bear-qa:fix` | Fix bugs from a recette session |
+| `/bear-qa:status` | Show session status |
+| `/bear-qa:status --report` | Generate report |
 
 ## Error Messages
 
 | Error | Solution |
 |-------|----------|
-| "Registry not found" | Run `/qa:recette` first to generate a registry |
+| "Registry not found" | Run `/bear-qa:recette` first to generate a registry |
 | "No regression tests" | No errors have been detected in previous runs |
-| "Golden Rule violation" | A bug has reappeared — run `/qa:fix` to fix |
+| "Golden Rule violation" | A bug has reappeared — run `/bear-qa:fix` to fix |
 | "History file missing" | Run at least 2 recette sessions for trend data |
 
 ## Best Practices
@@ -175,7 +175,7 @@ Golden Rule Check: 1 VIOLATION DETECTED
 ║                      NEXT STEP                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Launch a new recette session                          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

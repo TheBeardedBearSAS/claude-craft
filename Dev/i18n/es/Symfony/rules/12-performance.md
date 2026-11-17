@@ -885,4 +885,4 @@ docker-compose exec postgres psql -U atoll -c "SELECT * FROM pg_stat_statements 
 
 **Fecha de última actualización:** 2025-01-26
 **Versión:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

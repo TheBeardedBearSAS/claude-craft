@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /python:check all"
+description: "Deprecated (removed in 10.0): use /bear-python:check all"
 deprecated: true
-replaced-by: /python:check
+replaced-by: /bear-python:check
 ---
 
-> ⚠️ `/python:check-compliance` is deprecated and will be removed in 10.0. Use `/python:check all`.
+> ⚠️ `/bear-python:check-compliance` is deprecated and will be removed in 10.0. Use `/bear-python:check all`.
 
-Run `/python:check all $ARGUMENTS`: read `.claude/commands/python/check.md` and follow it with these arguments.
+Run `/bear-python:check all $ARGUMENTS`: read `.claude/commands/bear-python/check.md` and follow it with these arguments.

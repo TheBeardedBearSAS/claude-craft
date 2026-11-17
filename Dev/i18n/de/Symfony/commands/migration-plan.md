@@ -13,7 +13,7 @@ $ARGUMENTS
 Argumente:
 - Beschreibung der Migration (z.B. "audit_log-Tabelle hinzufügen", "Spalte user.name in full_name umbenennen")
 
-Beispiel: `/symfony:migration-plan "Versionierungssystem für Dokumente hinzufügen"`
+Beispiel: `/bear-symfony:migration-plan "Versionierungssystem für Dokumente hinzufügen"`
 
 ## MISSION
 

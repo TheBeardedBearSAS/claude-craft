@@ -16,8 +16,8 @@ function stripPaths(str) {
   const cwd = process.cwd();
   const escaped = cwd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return str
-    .replace(new RegExp(escaped, 'g'), '/PATH/claude-craft')
-    .replace(/\/[^\s")]+\/claude-craft/g, '/PATH/claude-craft');
+    .replace(new RegExp(escaped, 'g'), '/PATH/bear-craft')
+    .replace(/\/[^\s")]+\/bear-craft/g, '/PATH/bear-craft');
 }
 
 function normalize(str) {

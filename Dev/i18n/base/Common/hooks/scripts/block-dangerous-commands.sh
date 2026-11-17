@@ -2,7 +2,7 @@
 # PreToolUse(Bash) : bloque les commandes système destructrices.
 #   - rm récursif + forcé : BLOCK_RM_RF=dangerous (défaut) ne bloque que les cibles
 #     critiques (/, ~, $HOME, ., .., *, dossiers système) ; BLOCK_RM_RF=all bloque tout
-#     rm -rf (utilisé par le dépôt claude-craft lui-même)
+#     rm -rf (utilisé par le dépôt bear-craft lui-même)
 #   - mkfs, dd of=/dev/<disque>, redirection vers un disque, fork bomb
 #   - sudo / su / doas, chmod 777, chown -R /
 #   - lecture de secrets (cat/less/head/… sur .env, clés, credentials)

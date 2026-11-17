@@ -87,11 +87,11 @@ Für jede Schwachstelle:
 - Neue kritische Abhängigkeit hinzugefügt
 - Design-Review für Authentifizierungs-/Autorisierungsfunktionen
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `.claude/rules/11-security.md` — anwendbare Regeln
 - `.claude/skills/security*` — Stack-spezifische Skills
-- `/team:security` — paralleler Multi-Dimensionen-Audit
+- `/bear-team:security` — paralleler Multi-Dimensionen-Audit
 - `/{tech}:check security` — Stack-spezifischer Audit
 - `@devops-engineer` — SBOM / Sigstore / Infrastruktur-Hardening-Einrichtung
 

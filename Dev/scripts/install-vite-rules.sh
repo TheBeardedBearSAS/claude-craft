@@ -16,7 +16,7 @@ DEFAULT_STACK="Vite 8.x, TypeScript 5+ (vanilla/library/multi-page/Workers-WASM)
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(
@@ -47,15 +47,15 @@ HELP_DESCRIPTION="    TCL-optimized installation covering framework-agnostic Vit
 
     NOT covered: React/Vue/Angular/Svelte's own Vite dev-server config.
     Those stacks document their own Vite integration in their tooling.md
-    (see \`/react:*\`, \`/vuejs:*\`, \`/angular:*\` references) — install
+    (see \`/bear-react:*\`, \`/bear-vuejs:*\`, \`/bear-angular:*\` references) — install
     this stack only for framework-agnostic Vite projects.
 
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:check-library-build\` - Validate build.lib / vite-plugin-dts output
-- \`/${TECH_NAMESPACE}:scaffold-project\` - Wrap \`npm create vite@latest -- --template vanilla-ts|lit-ts\`"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:check-library-build\` - Validate build.lib / vite-plugin-dts output
+- \`/bear-${TECH_NAMESPACE}:scaffold-project\` - Wrap \`npm create vite@latest -- --template vanilla-ts|lit-ts\`"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 # 4 project shapes supported by this stack

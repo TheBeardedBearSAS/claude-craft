@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 # ═══════════════════════════════════════════════════════════════════════════
-# shell-ui.sh — Shared UI functions for Claude-Craft shell scripts
+# shell-ui.sh — Shared UI functions for Bear-Craft shell scripts
 # ═══════════════════════════════════════════════════════════════════════════
 #
 # Provides consistent colors, logging, headers, and section formatting.

@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Ambientes: dev,staging,prod
 - (Opcional) Estratégia de aprovação: manual, auto-dev-manual-prod
 
-Exemplo: `/opentofu:deploy-setup "github-actions" envs:dev,staging,prod approval:manual-prod`
+Exemplo: `/bear-opentofu:deploy-setup "github-actions" envs:dev,staging,prod approval:manual-prod`
 
 ## Modo Plan
 

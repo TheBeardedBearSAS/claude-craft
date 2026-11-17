@@ -42,7 +42,7 @@ describe('runCheck', () => {
   let consoleSpy;
 
   beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'claude-craft-check-'));
+    tempDir = mkdtempSync(join(tmpdir(), 'bear-craft-check-'));
     consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     process.exitCode = 0;
   });

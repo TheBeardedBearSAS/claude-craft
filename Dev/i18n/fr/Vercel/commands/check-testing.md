@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /vercel:check testing"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-vercel:check testing"
 deprecated: true
-replaced-by: /vercel:check
+replaced-by: /bear-vercel:check
 ---
 
-> ⚠️ `/vercel:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/vercel:check testing`.
+> ⚠️ `/bear-vercel:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/bear-vercel:check testing`.
 
-Exécutez `/vercel:check testing $ARGUMENTS` : lisez `.claude/commands/vercel/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-vercel:check testing $ARGUMENTS` : lisez `.claude/commands/bear-vercel/check.md` et suivez-le avec ces arguments.

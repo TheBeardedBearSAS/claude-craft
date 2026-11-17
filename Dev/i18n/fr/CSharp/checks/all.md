@@ -26,7 +26,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification complète de l'architecture :
 
-**Commande** : Utiliser la commande slash `/csharp:check architecture` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/architecture.md`
+**Commande** : Utiliser la commande slash `/bear-csharp:check architecture` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/architecture.md`
 
 **Critères évalués** :
 - Séparation des couches Clean Architecture (6 pts)
@@ -42,7 +42,7 @@ Exécuter la vérification complète de l'architecture :
 
 Exécuter la vérification de la qualité du code :
 
-**Commande** : Utiliser la commande slash `/csharp:check code-quality` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/code-quality.md`
+**Commande** : Utiliser la commande slash `/bear-csharp:check code-quality` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/code-quality.md`
 
 **Critères évalués** :
 - Conventions de nommage (PascalCase, _camelCase) (5 pts)
@@ -58,7 +58,7 @@ Exécuter la vérification de la qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la commande slash `/csharp:check testing` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/testing.md`
+**Commande** : Utiliser la commande slash `/bear-csharp:check testing` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/testing.md`
 
 **Critères évalués** :
 - Couverture du code (7 pts)
@@ -74,7 +74,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la commande slash `/csharp:check security` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/security.md`
+**Commande** : Utiliser la commande slash `/bear-csharp:check security` ou suivre manuellement les étapes dans `.claude/references/csharp/checks/security.md`
 
 **Critères évalués** :
 - Protections OWASP Top 10 (6 pts)

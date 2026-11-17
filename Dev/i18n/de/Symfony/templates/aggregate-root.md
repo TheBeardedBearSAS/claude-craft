@@ -782,4 +782,4 @@ public function getParticipants(): array
 
 **Erstellungsdatum:** 2025-11-26
 **Version:** 1.0.0
-**Autor:** The Bearded CTO
+**Autor:** The Bearded Bear

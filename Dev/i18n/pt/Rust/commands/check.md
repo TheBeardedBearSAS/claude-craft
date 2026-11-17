@@ -21,8 +21,8 @@ O primeiro argumento é o eixo; o restante (por exemplo, o caminho de um projeto
 
 ## MISSÃO
 
-1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/rust:check security crates/api`) e pare.
+1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/bear-rust:check security crates/api`) e pare.
 2. Leia o arquivo de checklist desse eixo e siga-o passo a passo. Nesse arquivo, `$ARGUMENTS` designa os argumentos que vêm depois do eixo.
 3. Produza o relatório no formato de saída definido pela checklist.
 
-Exemplos: `/rust:check architecture`, `/rust:check testing ./crates/api`, `/rust:check all`.
+Exemplos: `/bear-rust:check architecture`, `/bear-rust:check testing ./crates/api`, `/bear-rust:check all`.

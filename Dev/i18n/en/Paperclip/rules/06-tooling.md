@@ -218,4 +218,4 @@ Paperclip ships a Dockerfile (see `docs.paperclip.ing/deployment/docker`). For c
 
 ---
 
-**Last updated:** 2026-04 | **Version:** 1.0.0 | **Author:** The Bearded CTO
+**Last updated:** 2026-04 | **Version:** 1.0.0 | **Author:** The Bearded Bear

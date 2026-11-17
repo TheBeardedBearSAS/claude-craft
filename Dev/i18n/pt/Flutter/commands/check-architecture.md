@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /flutter:check architecture"
+description: "Obsoleto (removido na 10.0): use /bear-flutter:check architecture"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-architecture` está obsoleto e será removido na 10.0. Use `/flutter:check architecture`.
+> ⚠️ `/bear-flutter:check-architecture` está obsoleto e será removido na 10.0. Use `/bear-flutter:check architecture`.
 
-Execute `/flutter:check architecture $ARGUMENTS`: leia `.claude/commands/flutter/check.md` e siga-o com estes argumentos.
+Execute `/bear-flutter:check architecture $ARGUMENTS`: leia `.claude/commands/bear-flutter/check.md` e siga-o com estes argumentos.

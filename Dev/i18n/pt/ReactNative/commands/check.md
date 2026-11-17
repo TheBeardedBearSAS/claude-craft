@@ -21,8 +21,8 @@ O primeiro argumento é o eixo; o restante (por exemplo, o caminho de um projeto
 
 ## MISSÃO
 
-1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/reactnative:check security src/`) e pare.
+1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/bear-reactnative:check security src/`) e pare.
 2. Leia o arquivo de checklist desse eixo e siga-o passo a passo. Nesse arquivo, `$ARGUMENTS` designa os argumentos que vêm depois do eixo.
 3. Produza o relatório no formato de saída definido pela checklist.
 
-Exemplos: `/reactnative:check architecture`, `/reactnative:check testing ./app`, `/reactnative:check all`.
+Exemplos: `/bear-reactnative:check architecture`, `/bear-reactnative:check testing ./app`, `/bear-reactnative:check all`.

@@ -15,7 +15,7 @@ Arguments :
 - (Optionnel) Nom du playbook
 - (Optionnel) Hote ou groupe cible
 
-Exemple : `/ansible:debug "fatal: UNREACHABLE on web servers" playbook:site.yml`
+Exemple : `/bear-ansible:debug "fatal: UNREACHABLE on web servers" playbook:site.yml`
 
 ## Plan Mode
 

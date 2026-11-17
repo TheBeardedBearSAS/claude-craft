@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /csharp:check code-quality"
+description: "Obsoleto (removido na 10.0): use /bear-csharp:check code-quality"
 deprecated: true
-replaced-by: /csharp:check
+replaced-by: /bear-csharp:check
 ---
 
-> ⚠️ `/csharp:check-code-quality` está obsoleto e será removido na 10.0. Use `/csharp:check code-quality`.
+> ⚠️ `/bear-csharp:check-code-quality` está obsoleto e será removido na 10.0. Use `/bear-csharp:check code-quality`.
 
-Execute `/csharp:check code-quality $ARGUMENTS`: leia `.claude/commands/csharp/check.md` e siga-o com estes argumentos.
+Execute `/bear-csharp:check code-quality $ARGUMENTS`: leia `.claude/commands/bear-csharp/check.md` e siga-o com estes argumentos.

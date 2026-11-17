@@ -4,7 +4,7 @@
 set -uo pipefail
 
 PORT="${PORT:-4173}"
-BASE="http://localhost:${PORT}/claude-craft"
+BASE="http://localhost:${PORT}/bear-craft"
 PRESET="${PRESET:-desktop}"
 URLS_FILE="${URLS_FILE:-/site/tests/lighthouse/urls.txt}"
 OUT_DIR="${OUT_DIR:-/site/tests/lighthouse/reports}"

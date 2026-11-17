@@ -13,7 +13,7 @@ $ARGUMENTS
 Argumentos:
 - (Opcional) Enfoque: rendering, memory, network, all
 
-Ejemplo: `/flutter:analyze-performance rendering`
+Ejemplo: `/bear-flutter:analyze-performance rendering`
 
 ## Modo Plan
 

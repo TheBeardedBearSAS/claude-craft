@@ -14,7 +14,7 @@ Argumente:
 - Name des Befehls (z.B. `app:users:import`, `app:cache:warmup`)
 - (Optional) Kurzbeschreibung
 
-Beispiel: `/symfony:generate-command app:users:import "Benutzer aus CSV-Datei importieren"`
+Beispiel: `/bear-symfony:generate-command app:users:import "Benutzer aus CSV-Datei importieren"`
 
 ## Plan-Modus
 

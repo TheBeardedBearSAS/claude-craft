@@ -1,5 +1,5 @@
 ---
-description: "Generiert eine DESIGN.md im Projektstamm aus dem Claude Craft Template + Analyse vorhandener UI-Quellen (Tailwind, Tokens, CSS)."
+description: "Generiert eine DESIGN.md im Projektstamm aus dem Bear Craft Template + Analyse vorhandener UI-Quellen (Tailwind, Tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
@@ -17,16 +17,16 @@ Erstellt eine `DESIGN.md`-Datei im Projektstamm als zentrale Wahrheitsquelle des
 
 ```bash
 # Einfache Template-Kopie (manuell auszufüllen)
-/uiux:generate-design-md
+/bear-uiux:generate-design-md
 
 # Aus tailwind.config.* vorausfüllen
-/uiux:generate-design-md --from-tailwind
+/bear-uiux:generate-design-md --from-tailwind
 
 # Aus JSON-Token-Datei vorausfüllen
-/uiux:generate-design-md --from-tokens=./design-tokens.json
+/bear-uiux:generate-design-md --from-tokens=./design-tokens.json
 
 # Interaktiver Modus (gezielte Fragen)
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 ```
 
 ## Prozess
@@ -107,14 +107,14 @@ Checkliste nach der Generierung:
 - **Skill `design-md-convention`** — Schreibregeln
 - **Template** `.claude/templates/DESIGN.md.template`
 - **Konsumierende Agenten**: `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@{react,vue,angular}-reviewer`
-- **Verwandte Befehle**: `/uiux:design-tokens`, `/uiux:audit`, `/uiux:a11y-audit`
+- **Verwandte Befehle**: `/bear-uiux:design-tokens`, `/bear-uiux:audit`, `/bear-uiux:a11y-audit`
 
 ## Beispiele
 
 ### React + Tailwind Projekt
 
 ```bash
-/uiux:generate-design-md --from-tailwind --interactive
+/bear-uiux:generate-design-md --from-tailwind --interactive
 # Interaktive Fragen
 # → DESIGN.md generiert mit Tailwind-Palette + Breakpoints + Typografie
 ```
@@ -122,7 +122,7 @@ Checkliste nach der Generierung:
 ### Projekt ohne erkennbaren UI-Stack
 
 ```bash
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 # Template-Kopie + Fragen
 # → DESIGN.md manuell auszufüllen
 ```

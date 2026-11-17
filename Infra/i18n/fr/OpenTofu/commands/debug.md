@@ -15,7 +15,7 @@ Arguments :
 - (Optionnel) Message d'erreur
 - (Optionnel) Adresse de la ressource
 
-Exemple : `/opentofu:debug "conflit de verrou d'etat sur l'environnement de prod"`
+Exemple : `/bear-opentofu:debug "conflit de verrou d'etat sur l'environnement de prod"`
 
 ## Plan Mode
 

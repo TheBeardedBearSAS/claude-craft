@@ -50,7 +50,7 @@ describe('install-project-commands.sh — stack-aware CLAUDE.md', { timeout: 600
 
     expect(claudeMd).not.toContain('{{');
     expect(claudeMd).not.toMatch(/Symfony|Flutter/);
-    expect(claudeMd).toContain('/project:generate-tech-spec');
+    expect(claudeMd).toContain('/bear-project:generate-tech-spec');
   });
 
   it('ignores the project pseudo-tech and duplicates', () => {

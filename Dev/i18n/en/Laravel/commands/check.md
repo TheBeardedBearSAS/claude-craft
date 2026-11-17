@@ -21,8 +21,8 @@ The first argument is the axis; the rest (for example a project path) is passed 
 
 ## MISSION
 
-1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/laravel:check security src/`) and stop.
+1. Read the first argument. If it is not one of the 5 axes above, list them with an example (`/bear-laravel:check security src/`) and stop.
 2. Read the checklist file of that axis and follow it step by step. In that file, `$ARGUMENTS` stands for the arguments that follow the axis.
 3. Produce the report in the output format the checklist defines.
 
-Examples: `/laravel:check architecture`, `/laravel:check testing ./app`, `/laravel:check all`.
+Examples: `/bear-laravel:check architecture`, `/bear-laravel:check testing ./app`, `/bear-laravel:check all`.

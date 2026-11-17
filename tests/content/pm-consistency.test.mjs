@@ -45,7 +45,7 @@ describe('PM commands share one file layout', () => {
 
   it.each(LANGS)('gates default to project-management/ documents (lang=%s)', (lang) => {
     expect(hits(lang, /(?<!project-management\/)docs\/(prd|tech-spec)\.md/)).toEqual([]);
-    // 8.25.0: the document gates live in /gate:check
+    // 8.25.0: the document gates live in /bear-gate:check
     const check = read('Project/i18n', lang, 'Gate/commands/check.md');
     expect(check).toContain('project-management/prd.md');
     expect(check).toContain('project-management/tech-spec.md');
@@ -53,7 +53,7 @@ describe('PM commands share one file layout', () => {
 
   it.each(LANGS)('one board (board.md) and one file per task (TASK-*.md) (lang=%s)', (lang) => {
     expect(hits(lang, /task-board\.md|US-XXX-tasks\.md|sprint-backlog\.md/)).toEqual([]);
-    // 8.26.0: /project:decompose-tasks is a stub of /workflow:start
+    // 8.26.0: /bear-project:decompose-tasks is a stub of /bear-workflow:start
     const decompose = read('Dev/i18n', lang, 'Workflow/commands/start.md');
     expect(decompose).toContain('board.md');
     expect(decompose).toMatch(/TASK-/);
@@ -64,11 +64,11 @@ describe('PM commands share one file layout', () => {
   });
 });
 
-describe('/workflow:init bootstraps the BMAD status file', () => {
+describe('/bear-workflow:init bootstraps the BMAD status file', () => {
   it.each(LANGS)('creates .bmad/sprint-status.yaml with routing (lang=%s)', (lang) => {
     const init = read('Dev/i18n', lang, 'Workflow/commands/init.md');
     expect(init).toContain('.bmad/sprint-status.yaml');
-    expect(init).toContain('/workflow:auto-sprint');
+    expect(init).toContain('/bear-workflow:auto-sprint');
     const block = init.match(/```yaml\n(# \.bmad\/sprint-status\.yaml[\s\S]*?)```/);
     expect(block).not.toBeNull();
     const doc = yaml.load(block[1]);
@@ -77,7 +77,7 @@ describe('/workflow:init bootstraps the BMAD status file', () => {
   });
 });
 
-describe('/workflow:auto-sprint can start a sprint that does not exist yet', () => {
+describe('/bear-workflow:auto-sprint can start a sprint that does not exist yet', () => {
   it.each(LANGS)('phase 0 delegates creation to phase 1 instead of aborting (lang=%s)', (lang) => {
     const phase0 = read('Dev/i18n', lang, 'Workflow/commands/auto-sprint.md')
       .split(/\n### /)
@@ -90,24 +90,24 @@ describe('/workflow:auto-sprint can start a sprint that does not exist yet', () 
   });
 });
 
-describe('/qa:fix points to the command that creates sprint-status.yaml', () => {
-  it.each(LANGS)('sprint-status.yaml missing -> /workflow:init (lang=%s)', (lang) => {
+describe('/bear-qa:fix points to the command that creates sprint-status.yaml', () => {
+  it.each(LANGS)('sprint-status.yaml missing -> /bear-workflow:init (lang=%s)', (lang) => {
     const row = read('Dev/i18n', lang, 'QA/commands/fix.md')
       .split('\n')
       .find((l) => /^\| "/.test(l) && /sprint-status\.yaml/i.test(l));
-    expect(row).toContain('/workflow:init');
+    expect(row).toContain('/bear-workflow:init');
     expect(read('Dev/i18n', lang, 'Workflow/commands/init.md')).toContain('.bmad/sprint-status.yaml');
   });
 });
 
-describe('/workflow:plan --only=backlog keeps PRD traceability', () => {
+describe('/bear-workflow:plan --only=backlog keeps PRD traceability', () => {
   it.each(LANGS)('reads prd.md and writes Implements: from the user-story template (lang=%s)', (lang) => {
-    // 8.26.0: /project:generate-backlog is a stub of /workflow:plan --only=backlog
+    // 8.26.0: /bear-project:generate-backlog is a stub of /bear-workflow:plan --only=backlog
     const cmd = read('Dev/i18n', lang, 'Workflow/commands/plan.md');
     expect(cmd).toContain('project-management/prd.md');
     expect(cmd).toContain('.claude/templates/project/user-story.md');
     expect(cmd).toContain('Implements');
-    // /project:trace greps the literal key in every language.
+    // /bear-project:trace greps the literal key in every language.
     expect(read('Project/i18n', lang, 'templates/user-story.md')).toContain('- **Implements**:');
   });
 });

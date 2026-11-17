@@ -28,8 +28,8 @@ const files = Object.entries(STACKS).flatMap(([ns, dir]) => [
 describe('/<tech>:check all delegates to the 4 axis checklists', () => {
   it.each(files)('%s: %s', (ns, rel) => {
     const raw = fs.readFileSync(path.join(PROJECT_ROOT, rel), 'utf8');
-    const missing = AXES.filter((a) => !raw.includes(`/${ns}:check ${a}`));
-    expect(missing, `${rel} does not delegate to /${ns}:check <axis>`).toEqual([]);
+    const missing = AXES.filter((a) => !raw.includes(`/bear-${ns}:check ${a}`));
+    expect(missing, `${rel} does not delegate to /bear-${ns}:check <axis>`).toEqual([]);
     // Only the preparation step keeps a checklist; the axes' items live in check-<axis>.
     expect((raw.match(/^\s*- \[ \]/gm) || []).length, `${rel} copies checklists`).toBeLessThanOrEqual(25);
   });

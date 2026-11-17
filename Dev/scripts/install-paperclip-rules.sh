@@ -20,7 +20,7 @@ DEFAULT_STACK="Node.js 24.11+, TypeScript 5+, React 18+, Vitest, pnpm 9.15+, Pos
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings (source in Paperclip/rules/  ->  destination in references/paperclip/) ---
 TECH_RULE_MAPPINGS=(
@@ -54,10 +54,10 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~80K to ~4K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:generate-adapter\` - Scaffold a custom adapter (HTTP / Process / Local)
-- \`/${TECH_NAMESPACE}:generate-agent-config\` - Generate an agent.yaml configuration
-- \`/${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:generate-adapter\` - Scaffold a custom adapter (HTTP / Process / Local)
+- \`/bear-${TECH_NAMESPACE}:generate-agent-config\` - Generate an agent.yaml configuration
+- \`/bear-${TECH_NAMESPACE}:setup-company\` - Bootstrap a new Paperclip company"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 Paperclip monorepo (v2026.1106.0+)

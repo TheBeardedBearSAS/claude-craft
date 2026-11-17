@@ -1,5 +1,5 @@
 {
-  "description": "Block downloads piped into an interpreter (curl|sh, wget|python, <(curl ...)) via the tested script installed by claude-craft.",
+  "description": "Block downloads piped into an interpreter (curl|sh, wget|python, <(curl ...)) via the tested script installed by bear-craft.",
   "hooks": {
     "PreToolUse": [
       {

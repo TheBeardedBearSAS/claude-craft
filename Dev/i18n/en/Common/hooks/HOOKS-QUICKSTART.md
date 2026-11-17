@@ -1,13 +1,13 @@
 # Hooks Quick Start Guide
 
-Claude Code hooks for automated quality control and safety, installed in your project by claude-craft.
+Claude Code hooks for automated quality control and safety, installed in your project by bear-craft.
 
 ## Setup
 
 1. **Install with the installer** (copies the scripts to `.claude/hooks/` and merges the hooks into `.claude/settings.json` without overwriting yours):
    ```bash
    bash Dev/scripts/install-common-rules.sh --hooks=default /path/to/project
-   # or through the CLI: npx @the-bearded-bear/claude-craft install . --hooks=default
+   # or through the CLI: npx @the-bearded-bear/bear-craft install . --hooks=default
    ```
    - `--hooks=default` (default): safety guards, secrets check, output hints, context re-injection after compaction.
    - `--hooks=full`: `default` plus the Stop test gate, post-edit lint, Slack notification, session init/end metrics and tool-failure hints.
@@ -15,7 +15,7 @@ Claude Code hooks for automated quality control and safety, installed in your pr
 
 2. **Customize as needed**: edit the scripts in `.claude/hooks/` to match your tooling. Re-running the installer never removes or rewrites your own hooks.
 
-3. **Merge by hand** if you prefer: the fragments are `hooks.default.json`, `hooks.full.json` and `hooks.memory.json` (`node <claude-craft>/Dev/scripts/lib/merge-hooks.mjs add --settings .claude/settings.json --fragment <fragment>`). Ready-to-adapt examples are copied to `.claude/templates/hooks/`.
+3. **Merge by hand** if you prefer: the fragments are `hooks.default.json`, `hooks.full.json` and `hooks.memory.json` (`node <bear-craft>/Dev/scripts/lib/merge-hooks.mjs add --settings .claude/settings.json --fragment <fragment>`). Ready-to-adapt examples are copied to `.claude/templates/hooks/`.
 
 ## Available Hooks
 

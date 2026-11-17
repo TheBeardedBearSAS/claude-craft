@@ -15,7 +15,7 @@ Arguments:
 - (Optional) Database name
 - (Optional) Pool mode
 
-Example: `/pgbouncer:debug "clients waiting for connections, cl_waiting=50"`
+Example: `/bear-pgbouncer:debug "clients waiting for connections, cl_waiting=50"`
 
 ## Plan Mode
 

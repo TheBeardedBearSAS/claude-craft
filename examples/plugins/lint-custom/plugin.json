@@ -1,6 +1,6 @@
 {
-  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
-  "name": "claude-craft-plugin-lint-custom",
+  "$schema": "https://bear-craft.dev/schema/plugin-v1.json",
+  "name": "bear-craft-plugin-lint-custom",
   "version": "0.1.0-draft",
   "displayName": "Custom Lint Rules",
   "description": "Enforce custom lint rules (business-specific) during audit and pre-commit",

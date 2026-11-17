@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/ruby:check architecture` or manually follow steps in `.claude/references/ruby/checks/architecture.md`
+**Command**: Use slash command `/bear-ruby:check architecture` or manually follow steps in `.claude/references/ruby/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Rails conventions and `app/` layout (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/ruby:check code-quality` or manually follow steps in `.claude/references/ruby/checks/code-quality.md`
+**Command**: Use slash command `/bear-ruby:check code-quality` or manually follow steps in `.claude/references/ruby/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - RuboCop compliance (rubocop-rails-omakase or project config) (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/ruby:check testing` or manually follow steps in `.claude/references/ruby/checks/testing.md`
+**Command**: Use slash command `/bear-ruby:check testing` or manually follow steps in `.claude/references/ruby/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (SimpleCov, target >= 80%) (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/ruby:check security` or manually follow steps in `.claude/references/ruby/checks/security.md`
+**Command**: Use slash command `/bear-ruby:check security` or manually follow steps in `.claude/references/ruby/checks/security.md`
 
 **Evaluated Criteria**:
 - OWASP Top 10:2025 protections (6 pts)

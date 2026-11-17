@@ -1,5 +1,5 @@
 ---
-description: "Generate a DESIGN.md at the project root from the Claude Craft template + analysis of existing UI sources (Tailwind, tokens, CSS)."
+description: "Generate a DESIGN.md at the project root from the Bear Craft template + analysis of existing UI sources (Tailwind, tokens, CSS)."
 argument-hint: "[--from-tailwind] [--from-tokens=<path>] [--interactive]"
 ---
 
@@ -17,16 +17,16 @@ Creates a `DESIGN.md` file at the project root to serve as the design system sou
 
 ```bash
 # Simple template copy (to be filled in manually)
-/uiux:generate-design-md
+/bear-uiux:generate-design-md
 
 # Pre-fill from tailwind.config.*
-/uiux:generate-design-md --from-tailwind
+/bear-uiux:generate-design-md --from-tailwind
 
 # Pre-fill from JSON token file
-/uiux:generate-design-md --from-tokens=./design-tokens.json
+/bear-uiux:generate-design-md --from-tokens=./design-tokens.json
 
 # Interactive mode (targeted questions)
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 ```
 
 ## Process
@@ -107,14 +107,14 @@ Post-generation checklist:
 - **`design-md-convention` skill** — writing rules
 - **Template** `.claude/templates/DESIGN.md.template`
 - **Consumer agents**: `@ui-designer`, `@ux-ergonome`, `@accessibility-expert`, `@{react,vue,angular}-reviewer`
-- **Related commands**: `/uiux:design-tokens`, `/uiux:audit`, `/uiux:a11y-audit`
+- **Related commands**: `/bear-uiux:design-tokens`, `/bear-uiux:audit`, `/bear-uiux:a11y-audit`
 
 ## Examples
 
 ### React + Tailwind project
 
 ```bash
-/uiux:generate-design-md --from-tailwind --interactive
+/bear-uiux:generate-design-md --from-tailwind --interactive
 # Interactive questions
 # → DESIGN.md generated with Tailwind palette + breakpoints + typography
 ```
@@ -122,7 +122,7 @@ Post-generation checklist:
 ### Project without detectable UI stack
 
 ```bash
-/uiux:generate-design-md --interactive
+/bear-uiux:generate-design-md --interactive
 # Template copy + questions
 # → DESIGN.md to be filled in manually
 ```

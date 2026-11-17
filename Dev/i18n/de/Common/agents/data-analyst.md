@@ -99,12 +99,12 @@ Vor jeder Abfrage: Welche Entscheidung wird mit diesem Ergebnis getroffen?
 - Anomalie-Untersuchung (Conversion-Einbruch, Fehler-Spike)
 - Auswahl des richtigen BI-Werkzeugs
 
-## Claude-Craft-Integration
+## Bear-Craft-Integration
 
 - `@database-architect` — Schema-Design
 - `@performance-auditor` — Systemmetriken
 - `.claude/rules/14-multitenant.md` — Datenisolierung pro Tenant
-- `/workflow:status --standup` — Dateneingabe für das Standup
+- `/bear-workflow:status --standup` — Dateneingabe für das Standup
 - Observability-Infrastruktur über `@devops-engineer`
 
 ## Ressourcen

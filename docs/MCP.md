@@ -223,7 +223,7 @@ and the rest of the ecosystem: [`docs/ECOSYSTEM.md`](ECOSYSTEM.md).
 ### code-review-graph
 
 Tree-sitter/AST code graph (in SQLite) that lets the model read only the blast radius of a change —
-reported ~63× median per-question token reduction (6.65× against a realistic grep baseline). Pairs with `/qa:*`, `@security-auditor` and the
+reported ~63× median per-question token reduction (6.65× against a realistic grep baseline). Pairs with `/bear-qa:*`, `@security-auditor` and the
 `@{tech}-reviewer` agents.
 
 ```json
@@ -543,7 +543,7 @@ Configure MCP tool permissions in `settings.json`:
 | CVE-2026-86063 | High | v2.1.179 | Plugin commit SHA pin bypass installs attacker-controlled code (GHSA-pq7j-f95f-qfcv) |
 | CVE-2026-103435 | High | v2.1.129 | Arbitrary file write via symlink following, TOCTOU (GHSA-5j29-h97v-84ch) |
 
-**Recommendation:** Always run Claude Code v2.1.325+ (claude-craft security minimum) when using MCP servers with hooks. Since v2.1.292 local stdio MCP servers negotiate protocol 2026-07-28 by default (opt out: `MCP_PROTOCOL_NEGOTIATION=legacy`); since v2.1.296 tool descriptions sent up front are capped at 4,096 characters (`CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH`).
+**Recommendation:** Always run Claude Code v2.1.325+ (bear-craft security minimum) when using MCP servers with hooks. Since v2.1.292 local stdio MCP servers negotiate protocol 2026-07-28 by default (opt out: `MCP_PROTOCOL_NEGOTIATION=legacy`); since v2.1.296 tool descriptions sent up front are capped at 4,096 characters (`CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH`).
 
 ### MCP Buffer Leak Fix (v2.1.97+)
 

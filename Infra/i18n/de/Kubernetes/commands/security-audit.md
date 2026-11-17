@@ -14,7 +14,7 @@ Argumente:
 - (Optional) Zu prufender Namespace (Standard: alle Namespaces)
 - (Optional) Umfang: rbac, network, pods, secrets, images, full (Standard: full)
 
-Beispiel: `/kubernetes:security-audit namespace:app-prod scope:full`
+Beispiel: `/bear-kubernetes:security-audit namespace:app-prod scope:full`
 
 ## Plan-Modus
 

@@ -1,16 +1,16 @@
-# Showcases — Claude Craft in Production
+# Showcases — Bear Craft in Production
 
-> Études de cas réelles de projets utilisant Claude Craft en environnement de production.
+> Études de cas réelles de projets utilisant Bear Craft en environnement de production.
 
 ## Objectif
 
-Démontrer la valeur concrète de Claude Craft avec des métriques mesurables : Time To First Value, coverage, velocity, réduction de bugs, economies de tokens.
+Démontrer la valeur concrète de Bear Craft avec des métriques mesurables : Time To First Value, coverage, velocity, réduction de bugs, economies de tokens.
 
 ## Critères d'acceptation d'un showcase
 
 Pour figurer dans cette liste, un projet doit :
 
-- ✅ Utiliser Claude Craft en production depuis ≥ 3 mois.
+- ✅ Utiliser Bear Craft en production depuis ≥ 3 mois.
 - ✅ Fournir au moins **3 métriques quantifiables** (avant/après ou vs baseline).
 - ✅ Avoir l'accord écrit du porteur de projet pour la publication.
 - ✅ Respecter le template `case-study-TEMPLATE.md`.
@@ -25,7 +25,7 @@ _Aucun showcase publié à ce jour. Voir `case-study-TEMPLATE.md` pour contribue
 2. Remplir toutes les sections (métriques obligatoires).
 3. Obtenir validation écrite du porteur (email archivé hors repo).
 4. Ouvrir une PR avec label `showcase`.
-5. Review par l'équipe Claude Craft (anonymisation si besoin).
+5. Review par l'équipe Bear Craft (anonymisation si besoin).
 
 ## Témoignages éclair
 

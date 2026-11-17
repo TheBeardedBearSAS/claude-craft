@@ -88,4 +88,4 @@ Erstelle einen Bericht mit:
 
 ---
 
-**Hinweis**: Dieser Bericht konzentriert sich ausschließlich auf die Architektur. Für ein vollständiges Audit verwenden Sie `/flutter:check all`.
+**Hinweis**: Dieser Bericht konzentriert sich ausschließlich auf die Architektur. Für ein vollständiges Audit verwenden Sie `/bear-flutter:check all`.

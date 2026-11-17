@@ -10,7 +10,7 @@ arguments:
     required: false
 ---
 
-# /workflow:init
+# /bear-workflow:init
 
 ## Mission
 
@@ -118,8 +118,8 @@ Based on track, show the workflow:
 ║ No documentation required. Direct to coding.              ║
 ║                                                           ║
 ║ Commands:                                                 ║
-║ • /qa:tdd    - Fix with TDD                   ║
-║ • /project:backlog add task      - Track the work                 ║
+║ • /bear-qa:tdd    - Fix with TDD                   ║
+║ • /bear-project:backlog add task      - Track the work                 ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -137,16 +137,16 @@ Based on track, show the workflow:
 ║   Start here                                              ║
 ║                                                           ║
 ║ Phase 1 - Planning:                                       ║
-║ • /workflow:plan --only=prd    - Create/update PRD            ║
-║ • /workflow:plan --only=backlog - Create user stories         ║
+║ • /bear-workflow:plan --only=prd    - Create/update PRD            ║
+║ • /bear-workflow:plan --only=backlog - Create user stories         ║
 ║                                                           ║
 ║ Phase 2 - Design:                                         ║
-║ • /workflow:design - Technical design          ║
+║ • /bear-workflow:design - Technical design          ║
 ║                                                           ║
 ║ Phase 3 - Implementation:                                 ║
-║ • /workflow:start N      - Sprint setup           ║
-║ • /workflow:implement    - TDD/BDD development    ║
-║ • /workflow:auto-sprint N - End-to-end sprint     ║
+║ • /bear-workflow:start N      - Sprint setup           ║
+║ • /bear-workflow:implement    - TDD/BDD development    ║
+║ • /bear-workflow:auto-sprint N - End-to-end sprint     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -164,20 +164,20 @@ Based on track, show the workflow:
 ║   Start here                                              ║
 ║                                                           ║
 ║ Phase 1 - Analysis:                                       ║
-║ • /workflow:plan --research        - Research & exploration       ║
+║ • /bear-workflow:plan --research        - Research & exploration       ║
 ║                                                           ║
 ║ Phase 2 - Planning:                                       ║
-║ • /workflow:plan --only=prd    - Full PRD                     ║
-║ • /workflow:plan --only=backlog - Complete backlog            ║
+║ • /bear-workflow:plan --only=prd    - Full PRD                     ║
+║ • /bear-workflow:plan --only=backlog - Complete backlog            ║
 ║                                                           ║
 ║ Phase 3 - Design:                                         ║
-║ • /workflow:design - Full tech spec            ║
-║ • /common:architecture-decision - ADRs                    ║
+║ • /bear-workflow:design - Full tech spec            ║
+║ • /bear-common:architecture-decision - ADRs                    ║
 ║                                                           ║
 ║ Phase 4 - Implementation:                                 ║
-║ • /workflow:start N      - Sprint setup           ║
-║ • /workflow:implement    - TDD/BDD development    ║
-║ • /workflow:auto-sprint N - End-to-end sprint     ║
+║ • /bear-workflow:start N      - Sprint setup           ║
+║ • /bear-workflow:implement    - TDD/BDD development    ║
+║ • /bear-workflow:auto-sprint N - End-to-end sprint     ║
 ║                                                           ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -212,10 +212,10 @@ phases:
     status: pending
 
 next_action: "Generate or update PRD"
-next_command: "/workflow:plan --only=prd"
+next_command: "/bear-workflow:plan --only=prd"
 ```
 
-Create the BMAD status skeleton (single source of truth for story status, read by `/gate:*`, `/workflow:auto-sprint` and the Kanban). Skip if `.bmad/sprint-status.yaml` already exists; `/workflow:start` fills `metadata` and `stories` later:
+Create the BMAD status skeleton (single source of truth for story status, read by `/bear-gate:*`, `/bear-workflow:auto-sprint` and the Kanban). Skip if `.bmad/sprint-status.yaml` already exists; `/bear-workflow:start` fills `metadata` and `stories` later:
 
 ```yaml
 # .bmad/sprint-status.yaml
@@ -249,13 +249,13 @@ routing:
 ║ NEXT STEP: Planning Phase                                 ║
 ║ ─────────────────────────────────────────────────────────║
 ║                                                           ║
-║ Start with: /workflow:plan                                ║
+║ Start with: /bear-workflow:plan                                ║
 ║                                                           ║
 ║ Or jump to specific tasks:                                ║
-║ • /workflow:plan --only=prd     - Create requirements doc     ║
-║ • /workflow:plan --only=backlog - Create user stories         ║
+║ • /bear-workflow:plan --only=prd     - Create requirements doc     ║
+║ • /bear-workflow:plan --only=backlog - Create user stories         ║
 ║                                                           ║
-║ Check progress anytime: /workflow:status                  ║
+║ Check progress anytime: /bear-workflow:status                  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
@@ -263,23 +263,23 @@ routing:
 
 ```bash
 # Force specific track
-/workflow:init --quick          # Force Quick Flow
-/workflow:init --standard       # Force Standard
-/workflow:init --enterprise     # Force Enterprise
+/bear-workflow:init --quick          # Force Quick Flow
+/bear-workflow:init --standard       # Force Standard
+/bear-workflow:init --enterprise     # Force Enterprise
 
 # Provide scope hint
-/workflow:init bug              # Hint: this is a bug fix
-/workflow:init feature          # Hint: new feature
-/workflow:init platform         # Hint: platform work
+/bear-workflow:init bug              # Hint: this is a bug fix
+/bear-workflow:init feature          # Hint: new feature
+/bear-workflow:init platform         # Hint: platform work
 ```
 
 ## Related Commands
 
-- `/workflow:status` - Check current workflow progress
-- `/workflow:plan` - Start planning phase
-- `/workflow:design` - Start design phase
-- `/workflow:implement` - Start implementation phase
-- `/workflow:auto-sprint` - Run a whole sprint end to end (start → merge)
-- `/workflow:plan --research` - Start analysis phase (Enterprise only)
+- `/bear-workflow:status` - Check current workflow progress
+- `/bear-workflow:plan` - Start planning phase
+- `/bear-workflow:design` - Start design phase
+- `/bear-workflow:implement` - Start implementation phase
+- `/bear-workflow:auto-sprint` - Run a whole sprint end to end (start → merge)
+- `/bear-workflow:plan --research` - Start analysis phase (Enterprise only)
 
-> Not sure which path to take? See the decision page: https://github.com/TheBeardedBearSAS/claude-craft/blob/main/docs/guides/en/11-which-path.md
+> Not sure which path to take? See the decision page: https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/en/11-which-path.md

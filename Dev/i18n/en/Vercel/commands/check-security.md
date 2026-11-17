@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /vercel:check security"
+description: "Deprecated (removed in 10.0): use /bear-vercel:check security"
 deprecated: true
-replaced-by: /vercel:check
+replaced-by: /bear-vercel:check
 ---
 
-> ⚠️ `/vercel:check-security` is deprecated and will be removed in 10.0. Use `/vercel:check security`.
+> ⚠️ `/bear-vercel:check-security` is deprecated and will be removed in 10.0. Use `/bear-vercel:check security`.
 
-Run `/vercel:check security $ARGUMENTS`: read `.claude/commands/vercel/check.md` and follow it with these arguments.
+Run `/bear-vercel:check security $ARGUMENTS`: read `.claude/commands/bear-vercel/check.md` and follow it with these arguments.

@@ -60,4 +60,4 @@ Greppen und reporten:
 
 ## Ausgabe
 
-Markdown-Report mit per-Section Pass/Fail, betroffenen Dateien/Symbolen, Schweregrad und einem Score /20 für `/paperclip:check all`.
+Markdown-Report mit per-Section Pass/Fail, betroffenen Dateien/Symbolen, Schweregrad und einem Score /20 für `/bear-paperclip:check all`.

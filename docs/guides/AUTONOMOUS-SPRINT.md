@@ -6,7 +6,7 @@ Guide complet pour utiliser le mode Autonomous Sprint : user story → code + te
 
 ## Concept
 
-**Autonomous Sprint** permet à Claude Craft d'implémenter une user story **end-to-end** en autonomie, avec des checkpoints humains aux **quality gates** BMAD v6.
+**Autonomous Sprint** permet à Bear Craft d'implémenter une user story **end-to-end** en autonomie, avec des checkpoints humains aux **quality gates** BMAD v6.
 
 **Workflow** :
 ```
@@ -25,7 +25,7 @@ Analyze → Plan → Design → Implement → Test → PR
 
 ### Framework
 
-- ✅ BMAD v6 initialisé (`/workflow:init`)
+- ✅ BMAD v6 initialisé (`/bear-workflow:init`)
 - ✅ Ralph Wiggum configuré (`ralph.yml`)
 - ✅ Agent Teams activés (PM, BA, Architect, Dev, QA)
 - ✅ TDD workflow configuré
@@ -427,7 +427,7 @@ Implements user authentication via email/password.
 
 ---
 
-Generated with Claude Craft Autonomous Sprint Mode
+Generated with Bear Craft Autonomous Sprint Mode
 ```
 
 ---
@@ -490,36 +490,36 @@ Generated with Claude Craft Autonomous Sprint Mode
 
 ```bash
 # Depuis Claude Code
-/workflow:auto-sprint 5
+/bear-workflow:auto-sprint 5
 
 # Ou via CLI
-npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
+npx @the-bearded-bear/bear-craft autonomous-sprint --story=US-001
 ```
 
 ### Options avancées
 
 ```bash
 # Merge automatique une fois la CI verte (par défaut : pause en attente d'un GO humain)
-/workflow:auto-sprint 5 --auto-merge
+/bear-workflow:auto-sprint 5 --auto-merge
 
 # Backlog généré depuis le PRD avant le sprint
-/workflow:auto-sprint 5 --from-prd
+/bear-workflow:auto-sprint 5 --from-prd
 
 # Dry-run (simulation, aucune écriture)
-/workflow:auto-sprint 5 --dry-run
+/bear-workflow:auto-sprint 5 --dry-run
 
 # Mode nuit (borné, s'arrête à 6h)
-/workflow:auto-sprint 5 --overnight
+/bear-workflow:auto-sprint 5 --overnight
 ```
 
 ### Monitoring
 
 ```bash
 # Status en temps réel
-/workflow:status
+/bear-workflow:status
 
 # Détail des stories et du Kanban
-/workflow:status --board
+/bear-workflow:status --board
 ```
 
 ---
@@ -530,7 +530,7 @@ npx @the-bearded-bear/claude-craft autonomous-sprint --story=US-001
 
 **Input** :
 ```
-/workflow:auto-sprint 5
+/bear-workflow:auto-sprint 5
 ```
 
 **Output** :
@@ -550,7 +550,7 @@ Waiting for code review...
 
 **Input** :
 ```
-/workflow:auto-sprint 6
+/bear-workflow:auto-sprint 6
 ```
 
 **Output** :
@@ -611,7 +611,7 @@ Approve? [y/n]
 
 **A:** Vérifier l'état du sprint :
 ```bash
-/workflow:status --board
+/bear-workflow:status --board
 ```
 
 Circuit breaker a peut-être déclenché (> 10 itérations). Décomposer la story.
@@ -631,7 +631,7 @@ auto_proceed_threshold:
 **A:** Autonomous Sprint a committé du code cassé. Rollback :
 ```bash
 git reset --hard HEAD~1
-/workflow:auto-sprint 5
+/bear-workflow:auto-sprint 5
 ```
 
 ---
@@ -662,5 +662,5 @@ git reset --hard HEAD~1
 
 **Date de création** : 2026-04-17  
 **Version** : 1.0.0  
-**Auteur** : The Bearded CTO  
+**Auteur** : The Bearded Bear  
 **Status** : Beta (OPP-02)

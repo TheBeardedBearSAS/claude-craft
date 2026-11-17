@@ -16,7 +16,7 @@ Argumentos:
 - Servicios requeridos (p. ej., compute, database, networking, storage)
 - Restricciones (p. ej., multi-env, compliance, migration-from-terraform)
 
-Ejemplo: `/opentofu:architecture "Plataforma E-commerce" cloud:aws services:ecs,rds,redis compliance:soc2`
+Ejemplo: `/bear-opentofu:architecture "Plataforma E-commerce" cloud:aws services:ecs,rds,redis compliance:soc2`
 
 ## Plan Mode
 
@@ -180,7 +180,7 @@ PRÓXIMOS PASOS
 
 1. [ ] Revisar y ajustar dimensionamiento de recursos por entorno
 2. [ ] Configurar frase de cifrado de estado/clave KMS
-3. [ ] Configurar CI/CD con /opentofu:deploy-setup
-4. [ ] Ejecutar auditoría de seguridad con /opentofu:security-audit
-5. [ ] Estimar costos con /opentofu:optimize
+3. [ ] Configurar CI/CD con /bear-opentofu:deploy-setup
+4. [ ] Ejecutar auditoría de seguridad con /bear-opentofu:security-audit
+5. [ ] Estimar costos con /bear-opentofu:optimize
 ```

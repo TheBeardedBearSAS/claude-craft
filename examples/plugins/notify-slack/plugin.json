@@ -1,6 +1,6 @@
 {
-  "$schema": "https://claude-craft.dev/schema/plugin-v1.json",
-  "name": "claude-craft-plugin-notify-slack",
+  "$schema": "https://bear-craft.dev/schema/plugin-v1.json",
+  "name": "bear-craft-plugin-notify-slack",
   "version": "0.1.0-draft",
   "displayName": "Slack Notifications",
   "description": "Send Slack notifications on audit completion, release events, and command errors",

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /php:check architecture"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-php:check architecture"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/php:check architecture`.
+> ⚠️ `/bear-php:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/bear-php:check architecture`.
 
-Exécutez `/php:check architecture $ARGUMENTS` : lisez `.claude/commands/php/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-php:check architecture $ARGUMENTS` : lisez `.claude/commands/bear-php/check.md` et suivez-le avec ces arguments.

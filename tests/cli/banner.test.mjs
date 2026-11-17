@@ -23,7 +23,7 @@ describe('printBanner', () => {
     expect(logSpy).toHaveBeenCalledOnce();
     const output = logSpy.mock.calls[0][0];
     expect(output).toContain('1.2.3');
-    expect(output).toContain('Claude');
+    expect(output).toContain('Bear');
   });
 
   it('handles long version strings without crashing', () => {
@@ -67,6 +67,6 @@ describe('printSuccess', () => {
     expect(output).toContain('Installation Complete');
     expect(output).toContain('/home/user/project');
     expect(output).toContain('Next Steps');
-    expect(output).toContain('/workflow:init');
+    expect(output).toContain('/bear-workflow:init');
   });
 });

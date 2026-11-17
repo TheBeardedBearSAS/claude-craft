@@ -62,7 +62,7 @@ describe('Ralph lib modules', { timeout: 30000 }, () => {
 
   it.each(STANDALONE_MODULES)('%s can be sourced without error', (mod) => {
     const fullPath = path.join(RALPH_LIB, mod);
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-craft-test-'));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bear-craft-test-'));
     const wrapperPath = path.join(tmpDir, 'source-test.sh');
 
     // Create a minimal wrapper that sources the module

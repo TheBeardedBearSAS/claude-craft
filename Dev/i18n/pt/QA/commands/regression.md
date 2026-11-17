@@ -107,25 +107,25 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 
 ```bash
 # Listar todos os testes de regressao
-/qa:regression --list
+/bear-qa:regression --list
 
 # Mostrar pontuacao de estabilidade
-/qa:regression --stats
+/bear-qa:regression --stats
 
 # Executar verificacao de regressao (detectar violacoes)
-/qa:regression --check
+/bear-qa:regression --check
 
 # Filtrar por story de origem
-/qa:regression --list --source=US-001
+/bear-qa:regression --list --source=US-001
 
 # Filtrar por status
-/qa:regression --list --status=active
+/bear-qa:regression --list --status=active
 
 # Mostrar tendencia historica
-/qa:regression --stats --trend
+/bear-qa:regression --stats --trend
 
 # Saida em JSON
-/qa:regression --list --format=json
+/bear-qa:regression --list --format=json
 ```
 
 ## Estrutura de Saida
@@ -146,18 +146,18 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 
 | Comando | Descricao |
 |---------|-----------|
-| `/qa:recette` | Executar testes de aceitacao |
-| `/qa:fix` | Corrigir bugs de uma sessao |
-| `/qa:status` | Mostrar status da sessao |
-| `/qa:status --report` | Gerar relatorio |
+| `/bear-qa:recette` | Executar testes de aceitacao |
+| `/bear-qa:fix` | Corrigir bugs de uma sessao |
+| `/bear-qa:status` | Mostrar status da sessao |
+| `/bear-qa:status --report` | Gerar relatorio |
 
 ## Mensagens de Erro
 
 | Erro | Solucao |
 |------|---------|
-| "Registro nao encontrado" | Execute `/qa:recette` primeiro para gerar um registro |
+| "Registro nao encontrado" | Execute `/bear-qa:recette` primeiro para gerar um registro |
 | "Sem testes de regressao" | Nenhum erro detectado em execucoes anteriores |
-| "Violacao da Regra de Ouro" | Um bug reapareceu — execute `/qa:fix` |
+| "Violacao da Regra de Ouro" | Um bug reapareceu — execute `/bear-qa:fix` |
 | "Arquivo historico ausente" | Execute ao menos 2 sessoes recette para tendencias |
 
 ## Melhores Praticas
@@ -175,7 +175,7 @@ Verificacao Regra de Ouro: 1 VIOLACAO DETECTADA
 ║                    PRÓXIMO PASSO                         ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Lançar uma nova sessão de recette                     ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

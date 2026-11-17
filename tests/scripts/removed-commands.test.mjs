@@ -78,7 +78,7 @@ describe('config/removed-commands.yaml', () => {
     expect(removed()).toEqual(expect.arrayContaining(['common/research-context7.md', 'uiux/orchestrator.md']));
   });
 
-  // Lot 7 (9.0): /<tech>:check-<axis> -> /<tech>:check <axis>, /team:sprint -> /team:delivery.
+  // Lot 7 (9.0): /<tech>:check-<axis> -> /<tech>:check <axis>, /bear-team:sprint -> /bear-team:delivery.
   it('schedules the tech check-* stubs and team:sprint for removal in 10.0', () => {
     const stacks = ['angular', 'csharp', 'flutter', 'laravel', 'paperclip', 'php', 'python', 'react', 'reactnative'];
     stacks.push('symfony', 'vercel', 'vite', 'vuejs');
@@ -102,18 +102,18 @@ describe('config/removed-commands.yaml', () => {
 
 // `<ns>/<cmd>.md` offered by each shell completion script.
 const COMPLETIONS = {
-  'completions/claude-craft.bash': (src) =>
+  'completions/bear-craft.bash': (src) =>
     [...src.matchAll(/local ([a-z]+)_commands="([^"]*)"/g)].flatMap(([, ns, cmds]) =>
       cmds
         .split(/\s+/)
         .filter(Boolean)
         .map((c) => `${ns}/${c}.md`)
     ),
-  'completions/_claude-craft': (src) =>
+  'completions/_bear-craft': (src) =>
     [...src.matchAll(/([a-z]+)_commands=\(\n([\s\S]*?)\n\s*\)/g)].flatMap(([, ns, body]) =>
       [...body.matchAll(/'([a-z0-9-]+):/g)].map(([, c]) => `${ns}/${c}.md`)
     ),
-  'completions/claude-craft.fish': (src) =>
+  'completions/bear-craft.fish': (src) =>
     [...src.matchAll(/__fish_seen_subcommand_from ([a-z]+)" -a "([a-z0-9-]+)"/g)].map(([, ns, c]) => `${ns}/${c}.md`),
 };
 
@@ -161,10 +161,13 @@ describe('prune-removed-commands.sh', () => {
     fs.rmSync(target, { recursive: true, force: true });
   });
 
-  it.each(['Project/install-project-commands.sh', 'Dev/scripts/install-common-rules.sh', 'cli/lib/update.js'])(
-    'is called by %s',
-    (file) => {
-      expect(fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8')).toContain('prune-removed-commands.sh');
-    }
-  );
+  it.each(['Project/install-project-commands.sh', 'Dev/scripts/install-common-rules.sh'])('is called by %s', (file) => {
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8')).toContain('prune-removed-commands.sh');
+  });
+
+  // The CLI no longer copies commands: its migration reads the same manifest (removed and scheduled commands).
+  it('is read by the plugin migration of install and update', () => {
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, 'cli/lib/migrate-legacy.js'), 'utf8')).toContain('removed-commands.yaml');
+    expect(fs.readFileSync(path.join(PROJECT_ROOT, 'cli/lib/update.js'), 'utf8')).toContain('migrateLegacyInstall');
+  });
 });

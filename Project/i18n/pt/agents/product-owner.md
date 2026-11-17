@@ -143,7 +143,7 @@ ENTÃO [resultado observável e mensurável]
 
 ## Comandos que Posso Executar
 
-### /workflow:plan --only=backlog
+### /bear-workflow:plan --only=backlog
 Gera backlog completo com:
 - Personas (mín 3)
 - Definition of Done
@@ -152,7 +152,7 @@ Gera backlog completo com:
 - Sprints (Walking Skeleton no Sprint 1)
 - Matriz de dependências
 
-### /gate:check backlog
+### /bear-gate:check backlog
 Verifica conformidade SCRUM:
 - INVEST para cada US
 - 3C para cada US
@@ -211,9 +211,9 @@ Quando solicitado a ajudar com o backlog:
 → Proponho ordem com justificativa MoSCoW
 
 **"Meu backlog está conforme SCRUM?"**
-→ Executo /gate:check backlog
+→ Executo /bear-gate:check backlog
 → Gero relatório com score e ações corretivas
 
 **"Quero criar backlog para meu projeto"**
-→ Executo /workflow:plan --only=backlog
+→ Executo /bear-workflow:plan --only=backlog
 → Crio estrutura completa: personas, DoD, epics, US, sprints

@@ -3,7 +3,7 @@ description: "Informes analíticos del proyecto: burndown del sprint, panel de m
 argument-hint: "<burndown|metrics|deps> [--critical] [--sprint=Sprint-N] [--type=points|stories|tasks] [--format=...] [--velocity=N] [--output=path]"
 ---
 
-# /project:report
+# /bear-project:report
 
 ## Misión
 
@@ -13,10 +13,10 @@ Punto de entrada único para los análisis del proyecto de solo lectura. Cada su
 
 | Invocación | Qué hace | Reemplaza |
 |------------|----------|-----------|
-| `/project:report burndown` | Gráfico burndown Mermaid + desviación y proyección | `/project:report burndown` |
-| `/project:report metrics` | Panel de velocidad, cobertura de specs, gates, salud y regresión | `/project:report metrics` |
-| `/project:report deps` | Grafo de dependencias de historias, cuellos de botella, grupos paralelos | `/project:report deps` |
-| `/project:report deps --critical` | Ruta crítica, holgura y plan de ejecución en paralelo | `/project:report deps --critical` |
+| `/bear-project:report burndown` | Gráfico burndown Mermaid + desviación y proyección | `/bear-project:report burndown` |
+| `/bear-project:report metrics` | Panel de velocidad, cobertura de specs, gates, salud y regresión | `/bear-project:report metrics` |
+| `/bear-project:report deps` | Grafo de dependencias de historias, cuellos de botella, grupos paralelos | `/bear-project:report deps` |
+| `/bear-project:report deps --critical` | Ruta crítica, holgura y plan de ejecución en paralelo | `/bear-project:report deps --critical` |
 
 ## Argumentos
 
@@ -77,13 +77,13 @@ Requisitos: `.bmad/sprint-status.yaml`; `project-management/backlog/` con histor
 | Categoría | Métricas (fuente) |
 |-----------|-------------------|
 | Velocidad | Puntos completados por sprint, media móvil (últimos 3), ratio de compromiso (completados / comprometidos, objetivo > 80%), arrastre (`sprint-status.yaml`, historial de métricas) |
-| Cobertura de specs | % de FR-xxx cubiertos por historias, % de historias con referencias al código, % de AC con tests, % de cadenas completas FR→US→Code→Test (PRD, historias, `/project:trace`) |
-| Quality gates | Gate PRD (>= 80%), DoD de historias, tasa de éxito sprint ready, tasa de éxito a la primera (historial de gates de `/gate:check`) |
+| Cobertura de specs | % de FR-xxx cubiertos por historias, % de historias con referencias al código, % de AC con tests, % de cadenas completas FR→US→Code→Test (PRD, historias, `/bear-project:trace`) |
+| Quality gates | Gate PRD (>= 80%), DoD de historias, tasa de éxito sprint ready, tasa de éxito a la primera (historial de gates de `/bear-gate:check`) |
 | Salud del sprint | Historias y tareas terminadas / total, historias bloqueadas, cumplimiento TDD (`sprint-status.yaml`) |
 | Regresión | Bugs encontrados / corregidos por sprint, tasa de regresión, tasa de escape (sesiones QA recette, registro de regresión) |
 
 Proceso:
-1. **Recopilar**: leer `.bmad/sprint-status.yaml`, `.bmad/metrics/`, los datos de trazabilidad (`/project:trace`), el historial de gates y las sesiones QA recette (si existen).
+1. **Recopilar**: leer `.bmad/sprint-status.yaml`, `.bmad/metrics/`, los datos de trazabilidad (`/bear-project:trace`), el historial de gates y las sesiones QA recette (si existen).
 2. **Calcular**: las cinco categorías y las tendencias respecto al sprint anterior (sube / baja / igual).
 3. **Panel** (una línea por métrica con iconos de estado, umbrales como arriba):
 
@@ -142,7 +142,7 @@ Holgura: US-003 5pts | US-004 2pts (vigilar) | US-006, US-007 8pts
 ## Ejemplo
 
 ```
-User: /project:report deps --critical --sprint=Sprint-3 --velocity=21
+User: /bear-project:report deps --critical --sprint=Sprint-3 --velocity=21
 
 Claude: Ruta crítica: US-001 -> US-002 -> US-005 (13 pts), cabe en 1 sprint.
 Riesgo: un retraso de 2 o más días en US-001 pone en peligro todo el sprint.
@@ -150,7 +150,7 @@ Riesgo: un retraso de 2 o más días en US-001 pone en peligro todo el sprint.
 
 ## Comandos relacionados
 
-- `/project:trace` — Matriz de trazabilidad y cobertura
-- `/workflow:status` — Resumen del estado del sprint
-- `/project:backlog next story` — Siguiente historia (considera las dependencias)
-- `/workflow:retro` — Retrospectiva del sprint (usa las métricas)
+- `/bear-project:trace` — Matriz de trazabilidad y cobertura
+- `/bear-workflow:status` — Resumen del estado del sprint
+- `/bear-project:backlog next story` — Siguiente historia (considera las dependencias)
+- `/bear-workflow:retro` — Retrospectiva del sprint (usa las métricas)

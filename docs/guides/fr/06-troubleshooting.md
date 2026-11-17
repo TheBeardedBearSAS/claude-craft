@@ -1,6 +1,6 @@
 # Guide de Dépannage
 
-Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation de Claude-Craft.
+Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation de Bear-Craft.
 
 ---
 
@@ -21,7 +21,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 ### Commandes Non Reconnues Après Installation
 
 **Symptômes :**
-- Les commandes slash comme `/symfony:check all` ne fonctionnent pas
+- Les commandes slash comme `/bear-symfony:check all` ne fonctionnent pas
 - Claude ne reconnaît pas les commandes installées
 
 **Solutions :**
@@ -43,7 +43,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 3. **Vérifier le format des fichiers de commandes**
    ```bash
-   head -5 .claude/commands/symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check-compliance.md
    # Devrait commencer par un en-tête markdown correct
    ```
 
@@ -55,9 +55,9 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 **Solutions :**
 
-1. **Vérifier le chemin Claude-Craft**
+1. **Vérifier le chemin Bear-Craft**
    ```bash
-   # Vérifier que vous êtes dans le répertoire claude-craft
+   # Vérifier que vous êtes dans le répertoire bear-craft
    pwd
    ls -la Dev/scripts/
    ```
@@ -222,14 +222,14 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 ### Commande Non Trouvée
 
 **Symptômes :**
-- `/symfony:generate-crud` retourne "commande inconnue"
+- `/bear-symfony:generate-crud` retourne "commande inconnue"
 - Les suggestions de commandes n'apparaissent pas
 
 **Solutions :**
 
 1. **Vérifier le répertoire des commandes**
    ```bash
-   ls .claude/commands/symfony/
+   ls .claude/commands/bear-symfony/
    # Devrait inclure generate-crud.md
    ```
 
@@ -261,17 +261,17 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 2. **Examiner le fichier de commande**
    ```bash
-   cat .claude/commands/symfony/generate-crud.md
+   cat .claude/commands/bear-symfony/generate-crud.md
    # Comprendre ce que la commande attend
    ```
 
 3. **Fournir les paramètres requis**
    ```bash
    # Au lieu de
-   /symfony:generate-crud
+   /bear-symfony:generate-crud
 
    # Utilisez
-   /symfony:generate-crud User --with-api --with-tests
+   /bear-symfony:generate-crud User --with-api --with-tests
    ```
 
 ### Sortie de Commande Incorrecte
@@ -610,7 +610,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 
 6. **Configurer RTK pour réduire les tokens**
    ```
-   /common:setup-rtk
+   /bear-common:setup-rtk
    ```
    RTK réduit la consommation de tokens de 55-65% sur les commandes CLI.
 
@@ -647,7 +647,7 @@ Ce guide couvre les problèmes courants et leurs solutions lors de l'utilisation
 Si vous rencontrez des bugs :
 
 1. Collecter les informations :
-   - Version Claude-Craft
+   - Version Bear-Craft
    - Système d'exploitation
    - Étapes pour reproduire
    - Messages d'erreur
@@ -663,7 +663,7 @@ Si vous rencontrez des bugs :
 
 Environnement :
 - OS : [votre OS]
-- Version Claude-Craft : [version]
+- Version Bear-Craft : [version]
 - Technologie : [symfony/flutter/etc.]
 
 Ce que j'ai essayé :

@@ -26,7 +26,7 @@ Preparar o ambiente de auditoria:
 
 Executar a verificação completa de arquitetura:
 
-**Comando**: Usar o slash command `/flutter:check architecture` ou seguir manualmente as etapas em `.claude/references/flutter/checks/architecture.md`
+**Comando**: Usar o slash command `/bear-flutter:check architecture` ou seguir manualmente as etapas em `.claude/references/flutter/checks/architecture.md`
 
 **Critérios Avaliados**:
 - Organização das camadas de Clean Architecture (6 pts)
@@ -42,7 +42,7 @@ Executar a verificação completa de arquitetura:
 
 Executar a verificação de qualidade de código:
 
-**Comando**: Usar o slash command `/flutter:check code-quality` ou seguir manualmente as etapas em `.claude/references/flutter/checks/code-quality.md`
+**Comando**: Usar o slash command `/bear-flutter:check code-quality` ou seguir manualmente as etapas em `.claude/references/flutter/checks/code-quality.md`
 
 **Critérios Avaliados**:
 - Convenções Effective Dart (5 pts)
@@ -58,7 +58,7 @@ Executar a verificação de qualidade de código:
 
 Executar a verificação de testes:
 
-**Comando**: Usar o slash command `/flutter:check testing` ou seguir manualmente as etapas em `.claude/references/flutter/checks/testing.md`
+**Comando**: Usar o slash command `/bear-flutter:check testing` ou seguir manualmente as etapas em `.claude/references/flutter/checks/testing.md`
 
 **Critérios Avaliados**:
 - Cobertura de código (7 pts)
@@ -74,7 +74,7 @@ Executar a verificação de testes:
 
 Executar a verificação de segurança:
 
-**Comando**: Usar o slash command `/flutter:check security` ou seguir manualmente as etapas em `.claude/references/flutter/checks/security.md`
+**Comando**: Usar o slash command `/bear-flutter:check security` ou seguir manualmente as etapas em `.claude/references/flutter/checks/security.md`
 
 **Critérios Avaliados**:
 - Segredos e credenciais hardcoded (6 pts)

@@ -87,11 +87,11 @@ Para cada vulnerabilidade:
 - Nova dependência crítica adicionada
 - Design review de funcionalidade de autenticação/autorização
 
-## Integração com o Claude Craft
+## Integração com o Bear Craft
 
 - `.claude/rules/11-security.md` — regras aplicáveis
 - `.claude/skills/security*` — skills por stack
-- `/team:security` — auditoria multi-dimensão em paralelo
+- `/bear-team:security` — auditoria multi-dimensão em paralelo
 - `/{tech}:check security` — auditoria por stack
 - `@devops-engineer` — configuração de SBOM / Sigstore / hardening de infraestrutura
 

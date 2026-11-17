@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Perimetre : auth, tls, access, admin, network, full (par defaut : full)
 
-Exemple : `/pgbouncer:security-audit scope:full`
+Exemple : `/bear-pgbouncer:security-audit scope:full`
 
 ## Plan Mode
 

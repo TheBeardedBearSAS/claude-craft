@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /paperclip:check architecture"
+description: "Deprecated (removed in 10.0): use /bear-paperclip:check architecture"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-architecture` is deprecated and will be removed in 10.0. Use `/paperclip:check architecture`.
+> ⚠️ `/bear-paperclip:check-architecture` is deprecated and will be removed in 10.0. Use `/bear-paperclip:check architecture`.
 
-Run `/paperclip:check architecture $ARGUMENTS`: read `.claude/commands/paperclip/check.md` and follow it with these arguments.
+Run `/bear-paperclip:check architecture $ARGUMENTS`: read `.claude/commands/bear-paperclip/check.md` and follow it with these arguments.

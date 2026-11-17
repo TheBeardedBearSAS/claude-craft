@@ -16,7 +16,7 @@ DEFAULT_STACK="WordPress 7.1 (PHP 7.4+ minimum, 8.3+ recommended), plugins + blo
 
 # --- TCL version ---
 source "${SCRIPT_DIR}/tcl-common.sh"
-VERSION=$(get_claude_craft_version)
+VERSION=$(get_bear_craft_version)
 
 # --- Rule mappings ---
 TECH_RULE_MAPPINGS=(
@@ -51,7 +51,7 @@ HELP_DESCRIPTION="    TCL-optimized installation for WordPress plugins and block
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 my-plugin/

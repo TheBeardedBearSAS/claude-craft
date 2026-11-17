@@ -25,7 +25,7 @@ Préparer l'environnement d'audit :
 
 ### Étape 2 : Audit de l'architecture (25 points)
 
-**Commande** : Utiliser la slash command `/wordpress:check architecture` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/architecture.md`
+**Commande** : Utiliser la slash command `/bear-wordpress:check architecture` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/architecture.md`
 
 **Critères évalués** :
 - En-tête du plugin, fichier de bootstrap, garde ABSPATH, autoload Composer (5 pts)
@@ -38,7 +38,7 @@ Préparer l'environnement d'audit :
 
 ### Étape 3 : Audit de la qualité du code (25 points)
 
-**Commande** : Utiliser la slash command `/wordpress:check code-quality` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/code-quality.md`
+**Commande** : Utiliser la slash command `/bear-wordpress:check code-quality` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/code-quality.md`
 
 **Critères évalués** :
 - WPCS (PHPCS) passe (7 pts)
@@ -51,7 +51,7 @@ Préparer l'environnement d'audit :
 
 ### Étape 4 : Audit des tests (25 points)
 
-**Commande** : Utiliser la slash command `/wordpress:check testing` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/testing.md`
+**Commande** : Utiliser la slash command `/bear-wordpress:check testing` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/testing.md`
 
 **Critères évalués** :
 - Couverture de code (cible >= 80 %) en PHP et en JS (7 pts)
@@ -65,7 +65,7 @@ Préparer l'environnement d'audit :
 
 ### Étape 5 : Audit de la sécurité (25 points)
 
-**Commande** : Utiliser la slash command `/wordpress:check security` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/security.md`
+**Commande** : Utiliser la slash command `/bear-wordpress:check security` ou suivre manuellement les étapes de `.claude/references/wordpress/checks/security.md`
 
 **Critères évalués** :
 - Vérifications de capabilities et nonces sur chaque changement d'état (6 pts)

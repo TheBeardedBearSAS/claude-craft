@@ -14,7 +14,7 @@ Argumente:
 - Name der Entity (z.B. `Product`, `BlogPost`)
 - (Optional) Felder im Format `name:typ`, getrennt durch Kommas
 
-Beispiel: `/symfony:generate-crud Product name:string,price:decimal,description:text`
+Beispiel: `/bear-symfony:generate-crud Product name:string,price:decimal,description:text`
 
 ## Plan-Modus
 

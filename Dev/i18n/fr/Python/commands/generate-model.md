@@ -14,7 +14,7 @@ Arguments :
 - Nom du model (ex: `User`, `Product`, `Order`)
 - (Optionnel) Champs au format field:type (ex: `name:str email:str:unique`)
 
-Exemple : `/python:generate-model Product name:str price:decimal category_id:uuid:fk`
+Exemple : `/bear-python:generate-model Product name:str price:decimal category_id:uuid:fk`
 
 ## Mode Plan
 

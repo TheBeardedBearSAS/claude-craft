@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /csharp:check security"
+description: "Obsoleto (se elimina en 10.0): usa /bear-csharp:check security"
 deprecated: true
-replaced-by: /csharp:check
+replaced-by: /bear-csharp:check
 ---
 
-> ⚠️ `/csharp:check-security` está obsoleto y se eliminará en 10.0. Usa `/csharp:check security`.
+> ⚠️ `/bear-csharp:check-security` está obsoleto y se eliminará en 10.0. Usa `/bear-csharp:check security`.
 
-Ejecuta `/csharp:check security $ARGUMENTS`: lee `.claude/commands/csharp/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-csharp:check security $ARGUMENTS`: lee `.claude/commands/bear-csharp/check.md` y síguelo con estos argumentos.

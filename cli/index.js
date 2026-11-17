@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Claude-Craft CLI
+ * Bear-Craft CLI
  * Interactive installer for Claude Code rules, agents, and commands.
  *
  * This is a thin orchestrator that dispatches to focused modules:
@@ -10,7 +10,7 @@
  * - installer.js: Interactive and non-interactive installation
  * - ralph.js: Ralph Wiggum continuous loop launcher
  *
- * Usage: npx @the-bearded-bear/claude-craft [command] [options]
+ * Usage: npx @the-bearded-bear/bear-craft [command] [options]
  *
  * @module cli/index
  */
@@ -38,11 +38,14 @@ import { runCheck } from './lib/check.js';
 import { runList } from './lib/list.js';
 import { runDoctor } from './lib/doctor.js';
 import { runUpdate } from './lib/update.js';
+import { runSync } from './lib/sync.js';
+import { INFRA_PLUGINS } from './lib/plugin-install.js';
 import { runInstallFromUrl } from './lib/install-from-url.js';
 import { runSkillAdd, runSkillList, runSkillRemove } from './lib/skill.js';
 // Flattener module
 import { flatten as flattenCodebaseFn } from './lib/flattener.js';
 import { assertSafeTarget } from './lib/path-safety.js';
+import { legacyNameNotice } from './lib/legacy-name.js';
 
 // CLI package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -51,7 +54,7 @@ const CLI_ROOT = path.resolve(__dirname, '..');
 // Package version
 const { version: VERSION } = JSON.parse(fs.readFileSync(path.join(CLI_ROOT, 'package.json'), 'utf8'));
 
-class ClaudeCraftCLI {
+class BearCraftCLI {
   /**
    * Initialize the CLI with default configuration.
    */
@@ -149,13 +152,26 @@ class ClaudeCraftCLI {
       this.config.language = options.lang;
     }
     if (options.tech) {
-      if (!TECHNOLOGIES[options.tech]) {
-        console.error(
-          `${c.red}Error: Unknown technology '${options.tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`
-        );
-        process.exit(1);
+      const techs = String(options.tech).split(',').filter(Boolean);
+      for (const tech of techs) {
+        if (!TECHNOLOGIES[tech]) {
+          console.error(
+            `${c.red}Error: Unknown technology '${tech}'. Available: ${Object.keys(TECHNOLOGIES).join(', ')}${c.reset}`
+          );
+          process.exit(1);
+        }
       }
-      this.config.technologies = [options.tech];
+      this.config.technologies = techs;
+    }
+    if (options.infra) {
+      const infra = options.infra === true ? ['docker'] : String(options.infra).split(',').filter(Boolean);
+      for (const name of infra) {
+        if (!INFRA_PLUGINS.includes(name)) {
+          console.error(`${c.red}Error: Unknown infra '${name}'. Available: ${INFRA_PLUGINS.join(', ')}${c.reset}`);
+          process.exit(1);
+        }
+      }
+      this.config.infra = infra;
     }
     if (options.hooks) this.config.hooks = options.hooks;
     this.config.targetPath = path.resolve(targetPath || this.config.targetPath);
@@ -168,7 +184,7 @@ class ClaudeCraftCLI {
           await runInstallFromUrl(options.from, this, ctx);
         } else if (options.auto) {
           await autoInstall(this, ctx);
-        } else if (targetPath && options.tech) {
+        } else if (targetPath && (options.tech || options.infra || options.yes)) {
           // Non-interactive install
           await runInstallation(this, ctx);
         } else {
@@ -186,7 +202,7 @@ class ClaudeCraftCLI {
         const skillTarget = path.resolve(options.target || process.cwd());
         if (sub === 'add') {
           if (!arg) {
-            console.error(`${c.red}Usage: claude-craft skill add <package>${c.reset}`);
+            console.error(`${c.red}Usage: bear-craft skill add <package>${c.reset}`);
             process.exit(1);
           }
           runSkillAdd(arg, skillTarget);
@@ -194,7 +210,7 @@ class ClaudeCraftCLI {
           runSkillList(skillTarget);
         } else if (sub === 'remove' || sub === 'rm') {
           if (!arg) {
-            console.error(`${c.red}Usage: claude-craft skill remove <short-name>${c.reset}`);
+            console.error(`${c.red}Usage: bear-craft skill remove <short-name>${c.reset}`);
             process.exit(1);
           }
           runSkillRemove(arg, skillTarget);
@@ -216,6 +232,11 @@ class ClaudeCraftCLI {
         runList(this.config.targetPath);
         break;
 
+      case 'sync':
+        printBanner(VERSION);
+        runSync(this.config.targetPath);
+        break;
+
       case 'doctor':
         printBanner(VERSION);
         runDoctor(this.config.targetPath);
@@ -229,7 +250,7 @@ class ClaudeCraftCLI {
       case 'init':
         printBanner(VERSION);
         console.log(`${c.cyan}Workflow initialization is available after installation.${c.reset}`);
-        console.log(`Run ${c.bold}/workflow:init${c.reset} in Claude Code.\n`);
+        console.log(`Run ${c.bold}/bear-workflow:init${c.reset} in Claude Code.\n`);
         break;
 
       case 'flatten':
@@ -289,14 +310,16 @@ class ClaudeCraftCLI {
   }
 }
 
-// Export class for testing
-export { ClaudeCraftCLI };
+// Export class for testing. `ClaudeCraftCLI` : alias déprécié, retiré en 11.0.
+export { BearCraftCLI, BearCraftCLI as ClaudeCraftCLI };
 
 // Run CLI only when executed directly (not imported by tests)
 const isDirectRun =
   process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
 if (isDirectRun) {
-  const cli = new ClaudeCraftCLI();
+  const notice = legacyNameNotice(process.argv[1]);
+  if (notice) console.error(`${colors.yellow}${notice}${colors.reset}`);
+  const cli = new BearCraftCLI();
   cli.run().catch((error) => {
     console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
     process.exit(1);

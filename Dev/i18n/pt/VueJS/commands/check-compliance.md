@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /vuejs:check all"
+description: "Obsoleto (removido na 10.0): use /bear-vuejs:check all"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-compliance` está obsoleto e será removido na 10.0. Use `/vuejs:check all`.
+> ⚠️ `/bear-vuejs:check-compliance` está obsoleto e será removido na 10.0. Use `/bear-vuejs:check all`.
 
-Execute `/vuejs:check all $ARGUMENTS`: leia `.claude/commands/vuejs/check.md` e siga-o com estes argumentos.
+Execute `/bear-vuejs:check all $ARGUMENTS`: leia `.claude/commands/bear-vuejs/check.md` e siga-o com estes argumentos.

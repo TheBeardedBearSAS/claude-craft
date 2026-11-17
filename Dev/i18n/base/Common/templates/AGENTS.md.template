@@ -1,6 +1,6 @@
 # Agents disponibles pour ce projet
 
-> Ce fichier liste les agents Claude Code installes via claude-craft.
+> Ce fichier liste les agents Claude Code installes via bear-craft.
 > Format compatible avec le standard emergent AGENTS.md (https://agents.md).
 
 ## Comment utiliser
@@ -89,4 +89,4 @@ context: fork                # isoler le contexte (skills lourds)
 
 - Documentation complete : [docs/AGENTS.md](docs/AGENTS.md)
 - Standard AGENTS.md : https://agents.md
-- claude-craft : https://github.com/TheBeardedBearSAS/claude-craft
+- bear-craft : https://github.com/TheBeardedBearSAS/bear-craft

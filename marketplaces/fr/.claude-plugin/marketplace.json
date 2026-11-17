@@ -1,0 +1,469 @@
+{
+  "$schema": "https://claude.ai/schemas/marketplace.json",
+  "name": "bear-craft-fr",
+  "owner": {
+    "name": "The Bearded Bear",
+    "email": "flavien.metivier@gmail.com",
+    "url": "https://the-bearded-bear.com"
+  },
+  "metadata": {
+    "description": "Bear Craft — multi-stack framework for Claude Code teams (11 stacks, BMAD v6, QA Recette, Kanban, RTK token optimization)."
+  },
+  "plugins": [
+    {
+      "name": "bear-angular",
+      "source": "./plugins/bear-angular",
+      "description": "Angular 22: Frontend TS with Signals, Zoneless, httpResource, Signal Forms. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "angular"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-ansible",
+      "source": "./plugins/bear-ansible",
+      "description": "Ansible: automation architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "ansible"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-common",
+      "source": "./plugins/bear-common",
+      "description": "Shared agents, skills, rules, checklists and token/CI/ADR utilities (hooks live in bear-hooks).",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "common"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-coolify",
+      "source": "./plugins/bear-coolify",
+      "description": "Coolify: self-hosted PaaS setup, deployment, backups and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "coolify"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-csharp",
+      "source": "./plugins/bear-csharp",
+      "description": "C# / .NET 10 LTS / C# 14: Backend with Clean Architecture, CQRS, MediatR, EF Core. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "csharp"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-docker",
+      "source": "./plugins/bear-docker",
+      "description": "Docker: Dockerfile, Compose, CI/CD image pipelines and debugging, with specialist agents.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "docker"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-flutter",
+      "source": "./plugins/bear-flutter",
+      "description": "Flutter / Dart 3.47 / Dart 3.13: Mobile Dart with BLoC v9, Riverpod 3, Material 3, Impeller. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "flutter"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-frankenphp",
+      "source": "./plugins/bear-frankenphp",
+      "description": "FrankenPHP: PHP application server architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "frankenphp"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-gate",
+      "source": "./plugins/bear-gate",
+      "description": "Quality gates: PRD, tech spec, backlog, sprint, story, alignment, commit, merge and release.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "gate"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hcloud",
+      "source": "./plugins/bear-hcloud",
+      "description": "Hetzner Cloud (hcloud): architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hcloud"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks",
+      "source": "./plugins/bear-hooks",
+      "description": "Default safety hooks: network guard, dangerous-command blocker, sensitive-file protection, pre-commit check and output-size hint (guards fail closed).",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks-full",
+      "source": "./plugins/bear-hooks-full",
+      "description": "Extra hooks of the full profile: quality gate on stop, post-edit lint, tool-failure log, session init/end and Slack notifications. Install it next to bear-hooks.",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks-full"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks-memory",
+      "source": "./plugins/bear-hooks-memory",
+      "description": "Cross-session memory hooks backed by SQLite (session start, prompt submit, post-tool, pre-compact, session end).",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks-memory"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-kubernetes",
+      "source": "./plugins/bear-kubernetes",
+      "description": "Kubernetes: architecture, deployment setup, security audit and troubleshooting.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "kubernetes"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-laravel",
+      "source": "./plugins/bear-laravel",
+      "description": "Laravel 13.x / PHP 8.3+: PHP backend with Actions, Pest 5, Sanctum, AI SDK, Passkey. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "laravel"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-opentofu",
+      "source": "./plugins/bear-opentofu",
+      "description": "OpenTofu: infrastructure-as-code architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "opentofu"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-paperclip",
+      "source": "./plugins/bear-paperclip",
+      "description": "Paperclip 2026.1106.0: Governance-first integration platform (control plane + adapters). Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "paperclip"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-pgbouncer",
+      "source": "./plugins/bear-pgbouncer",
+      "description": "PgBouncer: connection pooling architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "pgbouncer"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-php",
+      "source": "./plugins/bear-php",
+      "description": "PHP 8.5: Backend PHP 8.5 with PSR-12, PHPStan, Pest PHP. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "php"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-project",
+      "source": "./plugins/bear-project",
+      "description": "Project management: epics, stories, tasks, backlog and sprint tracking with product-owner and tech-lead agents.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "project"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-python",
+      "source": "./plugins/bear-python",
+      "description": "Python 3.15 / 3.14+: Backend with FastAPI, Pydantic, free-threading, JIT. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "python"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-qa",
+      "source": "./plugins/bear-qa",
+      "description": "Browser acceptance testing (QA Recette) with regression registry and TDD bug fixing.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "qa"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-react",
+      "source": "./plugins/bear-react",
+      "description": "React 19.3 + Compiler 1.0: Frontend JS/TS with Hooks, Compiler 1.0, Server Components. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "react"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-reactnative",
+      "source": "./plugins/bear-reactnative",
+      "description": "React Native 0.88: Mobile JS/TS New Architecture (JSI, TurboModules, Fabric). Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "react-native"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-ruby",
+      "source": "./plugins/bear-ruby",
+      "description": "Ruby / Rails 8.1 / Ruby 4.0: Backend Ruby 4.0 with Rails 8.1, Hotwire, Solid Queue, RSpec/Minitest. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "ruby"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-rust",
+      "source": "./plugins/bear-rust",
+      "description": "Rust / Axum 0.8 / Rust 1.99: Backend Rust 1.99 (edition 2024) with Axum 0.8, Tokio, SQLx, cargo-nextest. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "rust"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-symfony",
+      "source": "./plugins/bear-symfony",
+      "description": "Symfony / PHP 8.1 / PHP 8.4+: PHP backend with Clean Architecture, DDD, API Platform. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "symfony"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-tauri",
+      "source": "./plugins/bear-tauri",
+      "description": "Tauri 2.12: Desktop & mobile apps: Rust core + web frontend, capabilities/permissions, plugins, signed updater. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "tauri"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-team",
+      "source": "./plugins/bear-team",
+      "description": "Parallel multi-agent teams: audit, security review and sprint delivery.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "team"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-uiux",
+      "source": "./plugins/bear-uiux",
+      "description": "UI/UX/accessibility audits, component specs, design tokens, user flows and DESIGN.md.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "uiux"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-vercel",
+      "source": "./plugins/bear-vercel",
+      "description": "Vercel 65.14.0: Framework-agnostic deployment platform: vercel.json, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "vercel"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-vite",
+      "source": "./plugins/bear-vite",
+      "description": "Vite 8.3: Framework-agnostic build tool: vanilla JS/TS, library authoring, multi-page apps. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "vite"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-vuejs",
+      "source": "./plugins/bear-vuejs",
+      "description": "Vue.js 3.5+: Frontend JS/TS with Composition API, Pinia, Vitest. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "vuejs"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-wordpress",
+      "source": "./plugins/bear-wordpress",
+      "description": "WordPress 7.1: Plugins & block themes: blocks (block.json), REST API, WP-CLI, WPCS/PHPStan, wp-env; WooCommerce as opt-in skill. Audit and generation commands, reviewer agent and stack skills.",
+      "version": "9.4.0",
+      "category": "technology-stack",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "wordpress"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-workflow",
+      "source": "./plugins/bear-workflow",
+      "description": "BMAD v6 sprint workflow: init, plan, design, start, implement, review, retro and status.",
+      "version": "9.4.0",
+      "category": "development-framework",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "workflow"
+      ],
+      "license": "MIT"
+    }
+  ]
+}

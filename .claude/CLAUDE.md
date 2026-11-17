@@ -1,4 +1,4 @@
-# Claude-Craft - Multi-Technology Framework
+# Bear-Craft - Multi-Technology Framework
 
 **Version:** 9.4.0 | **Languages:** en, fr, es, de, pt
 
@@ -32,19 +32,19 @@ A comprehensive AI-assisted development framework for Claude Code with 17 techno
 
 | Technology | Reference | Commands |
 |------------|-----------|----------|
-| C# / .NET | `@.claude/references/csharp/` | `/csharp:*` |
-| Symfony / PHP | `@.claude/references/symfony/CLAUDE.md` | `/symfony:*` |
-| Flutter / Dart | `@.claude/references/flutter/CLAUDE.md` | `/flutter:*` |
-| React | `@.claude/references/react/` | `/react:*` |
-| React Native | `@.claude/references/reactnative/CLAUDE.md` | `/reactnative:*` |
-| Angular | `@.claude/references/angular/CLAUDE.md` | `/angular:*` |
-| Vue.js | `@.claude/references/vuejs/CLAUDE.md` | `/vuejs:*` |
-| Vite _(community)_ | `@.claude/references/vite/CLAUDE.md` | `/vite:*` |
-| Vercel _(community)_ | `@.claude/references/vercel/CLAUDE.md` | `/vercel:*` |
-| Laravel | `@.claude/references/laravel/` | `/laravel:*` |
-| Python | `@.claude/references/python/` | `/python:*` |
-| PHP | `@.claude/references/php/` | `/php:*` |
-| Paperclip | `@.claude/references/paperclip/` | `/paperclip:*` |
+| C# / .NET | `@.claude/references/csharp/` | `/bear-csharp:*` |
+| Symfony / PHP | `@.claude/references/symfony/CLAUDE.md` | `/bear-symfony:*` |
+| Flutter / Dart | `@.claude/references/flutter/CLAUDE.md` | `/bear-flutter:*` |
+| React | `@.claude/references/react/` | `/bear-react:*` |
+| React Native | `@.claude/references/reactnative/CLAUDE.md` | `/bear-reactnative:*` |
+| Angular | `@.claude/references/angular/CLAUDE.md` | `/bear-angular:*` |
+| Vue.js | `@.claude/references/vuejs/CLAUDE.md` | `/bear-vuejs:*` |
+| Vite _(community)_ | `@.claude/references/vite/CLAUDE.md` | `/bear-vite:*` |
+| Vercel _(community)_ | `@.claude/references/vercel/CLAUDE.md` | `/bear-vercel:*` |
+| Laravel | `@.claude/references/laravel/` | `/bear-laravel:*` |
+| Python | `@.claude/references/python/` | `/bear-python:*` |
+| PHP | `@.claude/references/php/` | `/bear-php:*` |
+| Paperclip | `@.claude/references/paperclip/` | `/bear-paperclip:*` |
 | **Svelte** _(community)_ | `@.claude/references/svelte/CLAUDE.md` | — |
 
 > **Note:** Svelte/SvelteKit is **community-maintained** and hors-scope officiel. Voir `.claude/references/svelte/CLAUDE.md` pour le disclaimer complet.
@@ -59,7 +59,7 @@ See `@.claude/INDEX.md` for condensed checklists and patterns.
 
 ## Available Commands (18 namespaces, 143 commands)
 
-Core: `/common:*`, `/workflow:*`, `/team:*`, `/qa:*`, `/uiux:*` | Tech: `/symfony:*`, `/react:*`, `/flutter:*`, `/python:*`, `/angular:*`, `/vuejs:*`, `/laravel:*`, `/reactnative:*`, `/csharp:*`, `/php:*` _(et `/paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.3, Coolify v4.7.5, K8s 1.37.2, OpenTofu 1.13.9, Ansible 2.22.0, FrankenPHP 1.13.5, PgBouncer 1.26.1 | Project: `/gate:*`, `/project:*`
+Core: `/bear-common:*`, `/bear-workflow:*`, `/bear-team:*`, `/bear-qa:*`, `/bear-uiux:*` | Tech: `/bear-symfony:*`, `/bear-react:*`, `/bear-flutter:*`, `/bear-python:*`, `/bear-angular:*`, `/bear-vuejs:*`, `/bear-laravel:*`, `/bear-reactnative:*`, `/bear-csharp:*`, `/bear-php:*` _(et `/bear-paperclip:*` via `--tech=paperclip`)_ | Infra (via `@devops-engineer`): Docker 29.9.3, Coolify v4.7.5, K8s 1.37.2, OpenTofu 1.13.9, Ansible 2.22.0, FrankenPHP 1.13.5, PgBouncer 1.26.1 | Project: `/bear-gate:*`, `/bear-project:*`
 
 Full reference: [Commands](../docs/COMMANDS.md) | [CLI Reference](../docs/CLI-REFERENCE.md)
 
@@ -91,7 +91,7 @@ Full reference: [Agents](../docs/AGENTS.md)
 
 ## Ralph Wiggum
 
-Continuous AI loop that runs Claude until task completion: `/common:ralph-run "task"`
+Continuous AI loop that runs Claude until task completion: `/bear-common:ralph-run "task"`
 
 **DoD Validators:** `command` | `output_contains` | `file_changed` | `hook` | `human`
 
@@ -100,9 +100,9 @@ Continuous AI loop that runs Claude until task completion: `/common:ralph-run "t
 Automated acceptance testing via Chrome. **Golden Rule:** A fixed bug should NEVER reappear.
 
 ```bash
-/qa:recette --scope=story --id=US-001      # Test a story
-/qa:recette --scope=sprint --id=Sprint-3    # Test a sprint
-/qa:recette --resume=REC-20260130-143022    # Resume session
+/bear-qa:recette --scope=story --id=US-001      # Test a story
+/bear-qa:recette --scope=sprint --id=Sprint-3    # Test a sprint
+/bear-qa:recette --resume=REC-20260130-143022    # Resume session
 ```
 
 **Prerequisites:** Chrome extension v1.0.36+ | Claude Code with `--chrome` or `/chrome`
@@ -154,20 +154,20 @@ Projects with UI should include a root `DESIGN.md` file (template: `.claude/temp
 ## Quick Start
 
 ```bash
-# Install Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=symfony --lang=en
+# Install Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 
 # Or with Makefile
 make install-symfony TARGET=. RULES_LANG=en
 
 # Start workflow
-/workflow:init
+/bear-workflow:init
 
 # Use an agent
 @tdd-coach Guide me through TDD for this feature
 
 # Run audit
-/team:audit --sequential
+/bear-team:audit --sequential
 ```
 
 ---
@@ -193,7 +193,7 @@ See `.claude/rules/12-context-management.md` for detailed guidance.
 | **Hooks** | CLAUDE.md = suggestions. Hooks = requirements |
 | **`/memory`** | Persistent session learnings across conversations (v2.1.59+) |
 | **Pointers over copies** | Reference files instead of copying code; `@path` imports still load at launch — plain paths or `paths:` rules load on demand |
-| **Token optimization** | Use `/common:setup-rtk` for 55-65% token savings |
+| **Token optimization** | Use `/bear-common:setup-rtk` for 55-65% token savings |
 | **Sub-agent model** | Set `CLAUDE_CODE_SUBAGENT_MODEL=claude-sonnet-5-5` for cost savings |
 
 See `Dev/i18n/base/Common/hooks/templates/examples/` for ready-to-use hook templates.

@@ -15,7 +15,7 @@ Arguments:
 - Target workload (e.g., web-application, microservices, multi-tenant)
 - Constraints (e.g., pool-mode, max-connections, ha-required)
 
-Example: `/pgbouncer:architecture "E-commerce platform" workload:web-application pg-max-conn:100`
+Example: `/bear-pgbouncer:architecture "E-commerce platform" workload:web-application pg-max-conn:100`
 
 ## Plan Mode
 
@@ -131,8 +131,8 @@ PROXIMOS PASOS
 ──────────────────────────────────────────────────────────────
 
 1. [ ] Revisar dimensionamiento del pool contra trafico real
-2. [ ] Desplegar con /pgbouncer:deploy-setup
-3. [ ] Auditar seguridad con /pgbouncer:security-audit
+2. [ ] Desplegar con /bear-pgbouncer:deploy-setup
+3. [ ] Auditar seguridad con /bear-pgbouncer:security-audit
 4. [ ] Configurar monitoreo con @pgbouncer-monitoring
 5. [ ] Prueba de carga para validar dimensionamiento del pool
 ```

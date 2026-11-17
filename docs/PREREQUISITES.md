@@ -1,6 +1,6 @@
 # Prerequisites
 
-Complete guide to all dependencies required for Claude Craft.
+Complete guide to all dependencies required for Bear Craft.
 
 ---
 
@@ -156,7 +156,9 @@ make --version
 
 ## Claude Code
 
-Claude Craft is designed to work with [Claude Code](https://claude.ai/code), Anthropic's official CLI.
+Bear Craft is designed to work with [Claude Code](https://claude.ai/code), Anthropic's official CLI.
+
+> **Required at install time (10.0+):** `bear-craft install`, `update` and `sync` install the `bear-*` plugins through the `claude` command (project scope), so `claude` must be in your `PATH` and at least at the minimum version below. There is no fallback: without it the command stops with instructions. Run `bear-craft doctor` to check.
 
 > **Important:** The `npm install -g` method is deprecated. Use native installers below.
 
@@ -169,7 +171,7 @@ curl https://install.claude.com | bash
 irm https://install.claude.com/windows | iex
 ```
 
-> ⚠️ **Security Note:** The official Claude Code installation methods above use `curl | bash` patterns as recommended by Anthropic. While Claude Craft implements checksum verification for RTK installation, these third-party tools (Claude Code, NVM below) follow their publishers' official installation methods. We recommend:
+> ⚠️ **Security Note:** The official Claude Code installation methods above use `curl | bash` patterns as recommended by Anthropic. While Bear Craft implements checksum verification for RTK installation, these third-party tools (Claude Code, NVM below) follow their publishers' official installation methods. We recommend:
 > - Reviewing the installer script manually before running: `curl https://install.claude.com | less`
 > - Using package managers when available (Homebrew, winget)
 > - Checking the official documentation for security best practices
@@ -198,7 +200,7 @@ Run this script to verify all prerequisites:
 #!/bin/bash
 # Save as check-prerequisites.sh and run: bash check-prerequisites.sh
 
-echo "Checking Claude Craft prerequisites..."
+echo "Checking Bear Craft prerequisites..."
 echo ""
 
 check() {
@@ -348,7 +350,7 @@ nvm use 22
 
 ## RTK Installation Security
 
-When using `/common:setup-rtk` or `Tools/RTK/install-rtk.sh`, the RTK installer is verified with SHA256 checksum before execution.
+When using `/bear-common:setup-rtk` or `Tools/RTK/install-rtk.sh`, the RTK installer is verified with SHA256 checksum before execution.
 
 ### Checksum Verification
 

@@ -1,6 +1,6 @@
 # Flutter App Example
 
-A complete mobile application built with Flutter 3.44, BLoC pattern, and Riverpod, demonstrating Claude Craft best practices.
+A complete mobile application built with Flutter 3.44, BLoC pattern, and Riverpod, demonstrating Bear Craft best practices.
 
 ---
 
@@ -12,7 +12,7 @@ This example demonstrates:
 - **BLoC Pattern** - State management
 - **Riverpod** - Dependency injection
 - **Widget Testing** - Unit and golden tests
-- **BMAD** - Project management with Claude Craft
+- **BMAD** - Project management with Bear Craft
 
 ---
 
@@ -33,7 +33,7 @@ This example demonstrates:
 
 ```
 flutter-app/
-├── .claude/                    # Claude Craft configuration
+├── .claude/                    # Bear Craft configuration
 ├── .bmad/                      # BMAD configuration
 ├── docs/
 │   ├── prd.md
@@ -69,8 +69,8 @@ flutter-app/
 cp -r docs/examples/flutter-app ~/my-app
 cd ~/my-app
 
-# Install Claude Craft
-npx @the-bearded-bear/claude-craft install . --tech=flutter --lang=en
+# Install Bear Craft
+npx @the-bearded-bear/bear-craft install . --tech=flutter --lang=en
 
 # Get dependencies
 flutter pub get
@@ -86,7 +86,7 @@ flutter test
 
 ```bash
 claude
-/workflow:init
+/bear-workflow:init
 ```
 
 ---
@@ -143,35 +143,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 ```bash
 # 1. Get next story
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 
 # 2. Generate feature
-/flutter:generate-feature ShoppingCart
+/bear-flutter:generate-feature ShoppingCart
 
 # 3. Start TDD
 @dev Implement cart feature with TDD
 
 # 4. Validate
-/gate:check story US-003
+/bear-gate:check story US-003
 
 # 5. Complete
-/project:backlog move story US-003 done
+/bear-project:backlog move story US-003 done
 ```
 
 ### Quality Checks
 
 ```bash
 # Architecture
-/flutter:check architecture
+/bear-flutter:check architecture
 
 # Performance
-/flutter:analyze-performance
+/bear-flutter:analyze-performance
 
 # Testing
-/flutter:check testing
+/bear-flutter:check testing
 
 # Golden tests
-/flutter:golden-update
+/bear-flutter:golden-update
 ```
 
 ---

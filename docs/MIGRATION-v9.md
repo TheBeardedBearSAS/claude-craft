@@ -10,7 +10,7 @@
 - 54 deprecated commands are removed (they printed a warning and redirected since 8.25.0 / 8.26.0 / 8.27.0).
 - The `/sprint:` namespace no longer exists: use `/workflow:implement`, `/workflow:status` and `/project:backlog`.
 - `.bmad/sprint-status.yaml` is the single source of truth for story and task status (since 8.24.0); markdown files hold content only.
-- `claude-craft update` and both installers delete the retired files listed in `config/removed-commands.yaml`.
+- `bear-craft update` and both installers delete the retired files listed in `config/removed-commands.yaml`.
 - **Deprecated in 9.0, removed in 10.0:** each stack's 5 `check-*` commands become one `/<tech>:check <axis>`, and `/team:sprint` folds into `/team:delivery --phase=implementation`. The old names stay as redirect stubs until 10.0 (see [Tech checks and team sprint](#tech-checks-and-team-sprint-deprecated-removed-in-100)).
 - Not changed: `/team:delivery` is kept (Agent Teams variant of `/workflow:auto-sprint`).
 
@@ -127,12 +127,12 @@ Stack-specific checks are unchanged: `/vite:check-library-build`, `/python:async
 | Before | After |
 |---|---|
 | `/common:sub-agents-patterns` | skill `sub-agents-patterns` (8.26.0) |
-| `/common:add-technology`, `/common:audit-claude-alignment`, `/common:audit-freshness` | maintainer-only, in a clone of the claude-craft repository (8.24.0) |
+| `/common:add-technology`, `/common:audit-claude-alignment`, `/common:audit-freshness` | maintainer-only, in a clone of the bear-craft repository (8.24.0) |
 
 ---
 
 ## Upgrade steps
 
-1. `npx @the-bearded-bear/claude-craft update` — refreshes the commands, installs the `/<tech>:check` checklists and deletes the retired files.
+1. `npx @the-bearded-bear/bear-craft update` — refreshes the commands, installs the `/<tech>:check` checklists and deletes the retired files.
 2. Replace old invocations in your own scripts, aliases and `CLAUDE.md` using the table above.
 3. Projects with a pre-8.24 backlog: run `/project:migrate --analyze`, then `/project:migrate` to move statuses into `.bmad/sprint-status.yaml`.

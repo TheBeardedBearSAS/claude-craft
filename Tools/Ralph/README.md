@@ -42,33 +42,33 @@ Ralph Wiggum is a methodology and tool for running Claude in a continuous loop u
 
 ```bash
 # Basic usage
-npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 
 # With auto-detection (v2.0)
-npx @the-bearded-bear/claude-craft ralph --auto-detect "Implement user authentication"
+npx @the-bearded-bear/bear-craft ralph --auto-detect "Implement user authentication"
 
 # Interactive configuration (v2.0)
-npx @the-bearded-bear/claude-craft ralph --interactive "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --interactive "Fix the login bug"
 
 # Generate config only (v2.0)
-npx @the-bearded-bear/claude-craft ralph --init "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --init "Fix the login bug"
 
 # With configuration
-npx @the-bearded-bear/claude-craft ralph --config=ralph.yml "Fix the login bug"
+npx @the-bearded-bear/bear-craft ralph --config=ralph.yml "Fix the login bug"
 
 # Resume session
-npx @the-bearded-bear/claude-craft ralph --continue=ralph-1704067200-a1b2
+npx @the-bearded-bear/bear-craft ralph --continue=ralph-1704067200-a1b2
 ```
 
 ### Via Command in Claude Code
 
 ```bash
 # Single task loop
-/common:ralph-run "Implement user authentication"
+/bear-common:ralph-run "Implement user authentication"
 
 # Autonomous sprint (via team-sprint)
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --max-workers=3 --overnight
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --max-workers=3 --overnight
 ```
 
 ### Direct Script
@@ -647,7 +647,7 @@ definition_of_done:
 
 ```bash
 # In sprint workflow
-/workflow:implement 1
+/bear-workflow:implement 1
 # Ralph handles each task until DoD passes
 ```
 
@@ -712,13 +712,13 @@ The ASC enables overnight/unattended sprint execution:
 
 ```bash
 # Overnight sprint
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight
 
 # Parallel processing
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --max-workers=3 --overnight
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --max-workers=3 --overnight
 
 # Supervised mode
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --supervised
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --supervised
 ```
 
 ### Components
@@ -741,11 +741,11 @@ The ASC enables overnight/unattended sprint execution:
 
 ## Related
 
-- `/common:ralph-run` - Command to start Ralph from Claude Code
-- `/team:delivery --phase=implementation --engine=teams --ralph-mode` - Autonomous Sprint Conductor
+- `/bear-common:ralph-run` - Command to start Ralph from Claude Code
+- `/bear-team:delivery --phase=implementation --engine=teams --ralph-mode` - Autonomous Sprint Conductor
 - `@ralph-conductor` - Agent for Ralph orchestration
-- `/qa:tdd` - TDD-based bug fixing
-- `/workflow:implement` - Sprint development with TDD
+- `/bear-qa:tdd` - TDD-based bug fixing
+- `/bear-workflow:implement` - Sprint development with TDD
 
 ## Credits
 

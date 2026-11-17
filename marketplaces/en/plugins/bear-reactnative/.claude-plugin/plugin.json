@@ -1,0 +1,21 @@
+{
+  "name": "bear-reactnative",
+  "displayName": "Bear Craft — React Native",
+  "description": "React Native 0.88: Mobile JS/TS New Architecture (JSI, TurboModules, Fabric). Audit and generation commands, reviewer agent and stack skills.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "react-native"
+  ]
+}

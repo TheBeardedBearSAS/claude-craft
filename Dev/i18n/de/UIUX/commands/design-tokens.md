@@ -15,7 +15,7 @@ Argumente:
 - (Optional) Primäre Basisfarbe: #HEXCODE
 - (Optional) Modus: light, dark, both
 
-Beispiel: `/uiux:design-tokens all #3B82F6 both`
+Beispiel: `/bear-uiux:design-tokens all #3B82F6 both`
 
 ## Plan-Modus
 

@@ -7,7 +7,7 @@ const TEST_TMP_DIR = path.join(PROJECT_ROOT, '.test-tmp', 'adoption-metrics');
 const SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'track-adoption-metrics.mjs');
 
 const NPM_MOCK = {
-  package: '@the-bearded-bear/claude-craft',
+  package: '@the-bearded-bear/bear-craft',
   downloads: 1234,
   start: '2026-05-11',
   end: '2026-05-17',
@@ -71,13 +71,13 @@ describe('track-adoption-metrics', () => {
     expect(result.timestamp).toBe('2026-05-18T14:30:00.000Z');
 
     expect(result.npm).toEqual({
-      package: '@the-bearded-bear/claude-craft',
+      package: '@the-bearded-bear/bear-craft',
       downloads_last_week: 1234,
       period: { start: '2026-05-11', end: '2026-05-17' },
     });
 
     expect(result.github).toEqual({
-      repo: 'TheBeardedBearSAS/claude-craft',
+      repo: 'TheBeardedBearSAS/bear-craft',
       stars: 42,
       forks: 5,
       open_issues: 3,

@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /vercel:check security verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-vercel:check security verwenden"
 deprecated: true
-replaced-by: /vercel:check
+replaced-by: /bear-vercel:check
 ---
 
-> ⚠️ `/vercel:check-security` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/vercel:check security`.
+> ⚠️ `/bear-vercel:check-security` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-vercel:check security`.
 
-Führen Sie `/vercel:check security $ARGUMENTS` aus: Lesen Sie `.claude/commands/vercel/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-vercel:check security $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-vercel/check.md` und folgen Sie der Datei mit diesen Argumenten.

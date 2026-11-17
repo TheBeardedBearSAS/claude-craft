@@ -14,7 +14,7 @@
 ## Traçabilité
 - **Implémente** : NFR exploitation (PRD §6.6)
 - **Dépend de** : —
-- **Spec technique** : à définir (/workflow:design)
+- **Spec technique** : à définir (/bear-workflow:design)
 
 ## User Story
 **En tant que** P-003, **je veux** installer le service, **afin de** l'exploiter seul.

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /php:check testing"
+description: "Deprecated (removed in 10.0): use /bear-php:check testing"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-testing` is deprecated and will be removed in 10.0. Use `/php:check testing`.
+> ⚠️ `/bear-php:check-testing` is deprecated and will be removed in 10.0. Use `/bear-php:check testing`.
 
-Run `/php:check testing $ARGUMENTS`: read `.claude/commands/php/check.md` and follow it with these arguments.
+Run `/bear-php:check testing $ARGUMENTS`: read `.claude/commands/bear-php/check.md` and follow it with these arguments.

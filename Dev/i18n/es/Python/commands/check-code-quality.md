@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /python:check code-quality"
+description: "Obsoleto (se elimina en 10.0): usa /bear-python:check code-quality"
 deprecated: true
-replaced-by: /python:check
+replaced-by: /bear-python:check
 ---
 
-> ⚠️ `/python:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/python:check code-quality`.
+> ⚠️ `/bear-python:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/bear-python:check code-quality`.
 
-Ejecuta `/python:check code-quality $ARGUMENTS`: lee `.claude/commands/python/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-python:check code-quality $ARGUMENTS`: lee `.claude/commands/bear-python/check.md` y síguelo con estos argumentos.

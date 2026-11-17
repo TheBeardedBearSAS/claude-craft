@@ -99,12 +99,12 @@ Before any query: what decision will be made with this result?
 - Anomaly investigation (conversion drop, error spike)
 - Selecting the right BI tool
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `@database-architect` — schema design
 - `@performance-auditor` — system metrics
 - `.claude/rules/14-multitenant.md` — data isolation per tenant
-- `/workflow:status --standup` — data input for standup
+- `/bear-workflow:status --standup` — data input for standup
 - Observability infrastructure via `@devops-engineer`
 
 ## Resources

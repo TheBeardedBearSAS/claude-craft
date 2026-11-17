@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /reactnative:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check all"
 deprecated: true
-replaced-by: /reactnative:check
+replaced-by: /bear-reactnative:check
 ---
 
-> ⚠️ `/reactnative:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/reactnative:check all`.
+> ⚠️ `/bear-reactnative:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-reactnative:check all`.
 
-Exécutez `/reactnative:check all $ARGUMENTS` : lisez `.claude/commands/reactnative/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-reactnative:check all $ARGUMENTS` : lisez `.claude/commands/bear-reactnative/check.md` et suivez-le avec ces arguments.

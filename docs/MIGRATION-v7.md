@@ -104,8 +104,8 @@
 ## Migration Steps
 
 ```bash
-# 1. Update claude-craft
-npx @the-bearded-bear/claude-craft install . --tech=<your-tech> --lang=<your-lang> --force
+# 1. Update bear-craft
+npx @the-bearded-bear/bear-craft install . --tech=<your-tech> --lang=<your-lang> --force
 
 # 2. Find broken references in your project
 grep -rn '/common:\(workflow-\|sprint-retro\|sprint-review\|sprint-start\|team-\|recette\|fix-bug-tdd\|uiux-\|a11y-\|ui-design\|ux-user\|docker-optimize\)' .claude/
@@ -153,5 +153,5 @@ v7.28.0 introduces token optimization and enhanced Claude Code v2.1.63-v2.1.107 
 - All agent names (`@tdd-coach`, `@react-reviewer`, etc.)
 - Tech-specific commands (`/react:*`, `/symfony:*`, etc.)
 - BMAD workflow phases
-- Installation process (`npx @the-bearded-bear/claude-craft install`)
+- Installation process (`npx @the-bearded-bear/bear-craft install`)
 - Skills (`/solid-principles`, `/testing`, etc.)

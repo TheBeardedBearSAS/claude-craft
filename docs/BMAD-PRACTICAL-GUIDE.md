@@ -1,12 +1,12 @@
 # BMAD v6 Practical Guide
 
-A step-by-step guide to using BMAD (Build, Measure, Analyze, Deliver) project management in Claude Craft.
+A step-by-step guide to using BMAD (Build, Measure, Analyze, Deliver) project management in Bear Craft.
 
 ---
 
 ## What is BMAD?
 
-BMAD v6 is Claude Craft's integrated project management framework that brings Agile methodology directly into your AI-assisted development workflow.
+BMAD v6 is Bear Craft's integrated project management framework that brings Agile methodology directly into your AI-assisted development workflow.
 
 ### Key Features
 
@@ -28,7 +28,7 @@ cd ~/my-project
 claude
 
 # Initialize BMAD
-/workflow:init
+/bear-workflow:init
 ```
 
 This creates:
@@ -48,7 +48,7 @@ This creates:
 ### Check Status
 
 ```bash
-/workflow:status
+/bear-workflow:status
 ```
 
 ### The Main Path
@@ -56,17 +56,17 @@ This creates:
 Nine `/workflow:` commands cover the whole lifecycle. `.bmad/sprint-status.yaml` is the single source of truth for status; markdown files only hold content.
 
 ```bash
-/workflow:init            # 1. Detect the track (Quick Flow / Standard / Enterprise)
-/workflow:plan            # 2. PRD + backlog (--research, --only=prd, --only=backlog)
-/workflow:design          # 3. Tech spec (--constitution for the project constitution)
-/workflow:start 1         # 4. Sprint folder, sprint-status.yaml entries, tasks
-/workflow:implement       # 5. TDD/BDD implementation (--story, --epic, --queue, --parallel N)
-/workflow:review          # 6. Sprint review
-/workflow:retro           # 7. Retrospective
-/workflow:status          # Anytime: phase, metrics, next action (--board, --queue, --standup, --gates)
+/bear-workflow:init            # 1. Detect the track (Quick Flow / Standard / Enterprise)
+/bear-workflow:plan            # 2. PRD + backlog (--research, --only=prd, --only=backlog)
+/bear-workflow:design          # 3. Tech spec (--constitution for the project constitution)
+/bear-workflow:start 1         # 4. Sprint folder, sprint-status.yaml entries, tasks
+/bear-workflow:implement       # 5. TDD/BDD implementation (--story, --epic, --queue, --parallel N)
+/bear-workflow:review          # 6. Sprint review
+/bear-workflow:retro           # 7. Retrospective
+/bear-workflow:status          # Anytime: phase, metrics, next action (--board, --queue, --standup, --gates)
 ```
 
-For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --only=backlog`, so the backlog reads the PRD and tech spec. To run a whole sprint unattended: `/workflow:auto-sprint 1` (add `--from-prd` to generate the backlog from `project-management/prd.md` first).
+For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --only=backlog`, so the backlog reads the PRD and tech spec. To run a whole sprint unattended: `/bear-workflow:auto-sprint 1` (add `--from-prd` to generate the backlog from `project-management/prd.md` first).
 
 ---
 
@@ -89,12 +89,12 @@ For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --on
 ```
 
 **Key Commands:**
-- `/workflow:init` - Initialize BMAD and recommend the optimal track (routing)
-- `/workflow:status` - Show workflow progress and next actions
-- `/workflow:start` - Start a sprint phase
-- `/workflow:review` - Sprint review and phase handoff
+- `/bear-workflow:init` - Initialize BMAD and recommend the optimal track (routing)
+- `/bear-workflow:status` - Show workflow progress and next actions
+- `/bear-workflow:start` - Start a sprint phase
+- `/bear-workflow:review` - Sprint review and phase handoff
 
-> Note: BMAD roles (pm, ba, architect, po, sm, dev, qa) are integrated into the `/workflow:*` and `/project:*` commands — there is no standalone `/bmad:*` namespace.
+> Note: BMAD roles (pm, ba, architect, po, sm, dev, qa) are integrated into the `/bear-workflow:*` and `/bear-project:*` commands — there is no standalone `/bmad:*` namespace.
 
 ---
 
@@ -277,12 +277,12 @@ For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --on
 ```
 
 **Key Commands:**
-- `/qa:strategy` - Test strategy
-- `/qa:validate` - Validate AC
-- `/qa:automate` - Automate tests
-- `/qa:explore` - Exploratory testing
-- `/qa:status --report` - Quality report
-- `/qa:bug` - Report bug
+- `/bear-qa:strategy` - Test strategy
+- `/bear-qa:validate` - Validate AC
+- `/bear-qa:automate` - Automate tests
+- `/bear-qa:explore` - Exploratory testing
+- `/bear-qa:status --report` - Quality report
+- `/bear-qa:bug` - Report bug
 
 ---
 
@@ -314,7 +314,7 @@ For Standard/Enterprise tracks run `plan --only=prd` → `design` → `plan --on
 
 ## Quality Gates
 
-Quality gates are validation checkpoints that ensure work meets standards before progressing. They are all run through the single `/gate:check <gate>` command (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, plus the code gates `commit`, `merge`, `release` and `--phase=<phase>` checkpoints). The former validate-* and report gate commands were removed in 9.0 (see [MIGRATION-v9.md](MIGRATION-v9.md)).
+Quality gates are validation checkpoints that ensure work meets standards before progressing. They are all run through the single `/bear-gate:check <gate>` command (`prd`, `spec`, `backlog`, `sprint`, `story`, `alignment`, `all`, plus the code gates `commit`, `merge`, `release` and `--phase=<phase>` checkpoints). The former validate-* and report gate commands were removed in 9.0 (see [MIGRATION-v9.md](MIGRATION-v9.md)).
 
 ### 1. PRD Gate (≥80%)
 
@@ -328,7 +328,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Scope boundaries set
 
 ```bash
-/gate:check prd                 # default: project-management/prd.md
+/bear-gate:check prd                 # default: project-management/prd.md
 ```
 
 ---
@@ -346,7 +346,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Deployment plan created
 
 ```bash
-/gate:check spec docs/tech-spec.md
+/bear-gate:check spec docs/tech-spec.md
 ```
 
 ---
@@ -364,7 +364,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - **T**estable - Has clear acceptance criteria
 
 ```bash
-/gate:check backlog
+/bear-gate:check backlog
 ```
 
 ---
@@ -381,7 +381,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] Team capacity confirmed
 
 ```bash
-/gate:check sprint
+/bear-gate:check sprint
 ```
 
 ---
@@ -399,7 +399,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 - [ ] No blockers
 
 ```bash
-/gate:check story US-005
+/bear-gate:check story US-005
 ```
 
 ---
@@ -407,7 +407,7 @@ Quality gates are validation checkpoints that ensure work meets standards before
 ### Full Gates Report
 
 ```bash
-/gate:check all
+/bear-gate:check all
 ```
 
 ---
@@ -428,21 +428,21 @@ Stories automatically transition through statuses:
 
 ```bash
 # View current status
-/workflow:status
+/bear-workflow:status
 
 # Get next story ready for development
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 
 # Transition a story
-/project:backlog move story US-005 in-progress
-/project:backlog move story US-005 review
-/project:backlog move story US-005 done
+/bear-project:backlog move story US-005 in-progress
+/bear-project:backlog move story US-005 review
+/bear-project:backlog move story US-005 done
 
 # Block a story
-/project:backlog move story US-005 blocked --reason="Waiting for API"
+/bear-project:backlog move story US-005 blocked --reason="Waiting for API"
 
 # Run automatic routing rules
-/project:backlog move story --auto
+/bear-project:backlog move story --auto
 ```
 
 ### TDD Phase Within In-Progress
@@ -470,52 +470,52 @@ Process multiple stories automatically.
 
 ```bash
 # Queue and implement all stories of an epic
-/workflow:implement --epic EPIC-002
+/bear-workflow:implement --epic EPIC-002
 ```
 
 ### Process the Queue
 
 ```bash
 # Process stories in queue
-/workflow:implement --queue
+/bear-workflow:implement --queue
 
 # With parallel processing
-/workflow:implement --queue --parallel 3
+/bear-workflow:implement --queue --parallel 3
 ```
 
 ### Execute Full Sprint
 
 ```bash
 # Run the whole sprint (sequential by default)
-/workflow:implement
+/bear-workflow:implement
 
 # Skip the confirmation prompt
-/workflow:implement --auto
+/bear-workflow:implement --auto
 
 # Resume from the last checkpoint
-/workflow:implement --resume
+/bear-workflow:implement --resume
 
 # Whole sprint unattended: start → implement → PR → review → retro → merge
-/workflow:auto-sprint 1
+/bear-workflow:auto-sprint 1
 ```
 
 ### Check Batch Status
 
 ```bash
-/workflow:status --queue
+/bear-workflow:status --queue
 ```
 
 ---
 
 ## Kanban Board
 
-Claude Craft ships a local Kanban board that visualises your BMAD v6 project without any SaaS dependency.
+Bear Craft ships a local Kanban board that visualises your BMAD v6 project without any SaaS dependency.
 
 ### Launch
 
 ```bash
 # From the project root (where .bmad/ or project-management/ lives)
-npx @the-bearded-bear/claude-craft kanban --open
+npx @the-bearded-bear/bear-craft kanban --open
 ```
 
 The board opens at `http://127.0.0.1:3737` (default port) and binds to localhost only.
@@ -526,8 +526,8 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 | Story source | Mutable via board? | Written by |
 |---|---|---|
-| `project-management/US-*.md` | Yes | `/workflow:plan`, `/workflow:start` |
-| `.bmad/sprint-status.yaml` | No (read-only 🔒) | `/workflow:*`, `/project:backlog` commands |
+| `project-management/US-*.md` | Yes | `/bear-workflow:plan`, `/bear-workflow:start` |
+| `.bmad/sprint-status.yaml` | No (read-only 🔒) | `/bear-workflow:*`, `/bear-project:backlog` commands |
 
 ### Views
 
@@ -539,8 +539,8 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ### Typical BMAD workflow with the board
 
-1. Run `/workflow:init` then `/workflow:start 1` to populate `.bmad/sprint-status.yaml`
-2. Launch `claude-craft kanban --open` to open the board
+1. Run `/bear-workflow:init` then `/bear-workflow:start 1` to populate `.bmad/sprint-status.yaml`
+2. Launch `bear-craft kanban --open` to open the board
 3. Monitor story progress in real time — the board live-reloads on every YAML change
 4. Use the board as a read-only dashboard during sprint ceremonies (stand-up, review)
 
@@ -551,7 +551,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 ### 1. Initialize Project
 
 ```bash
-/workflow:init
+/bear-workflow:init
 @bmad-master Set up BMAD for a new e-commerce platform
 ```
 
@@ -559,7 +559,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @pm Create a PRD for the shopping cart feature
-/gate:check prd                 # default: project-management/prd.md
+/bear-gate:check prd                 # default: project-management/prd.md
 ```
 
 ### 3. Analyze Requirements (BA Phase)
@@ -572,34 +572,34 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ```bash
 @architect Create technical specification from the PRD
-/gate:check spec docs/tech-spec.md
+/bear-gate:check spec docs/tech-spec.md
 ```
 
 ### 5. Prepare Backlog (PO Phase)
 
 ```bash
 @po Create and prioritize user stories
-/gate:check backlog
+/bear-gate:check backlog
 ```
 
 ### 6. Plan Sprint (SM Phase)
 
 ```bash
 @sm Plan sprint 1 with selected stories
-/gate:check sprint
+/bear-gate:check sprint
 ```
 
 ### 7. Implement (Dev Phase)
 
 ```bash
 # Get next story
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 
 # Implement with TDD
 @dev Implement US-001 using TDD
 
 # 🔴 Red - Write failing test
-/project:backlog move story US-001 in-progress
+/bear-project:backlog move story US-001 in-progress
 # Write test...
 
 # 🟢 Green - Implement
@@ -609,20 +609,20 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 # Refactor...
 
 # Move to review
-/project:backlog move story US-001 review
+/bear-project:backlog move story US-001 review
 ```
 
 ### 8. Validate (QA Phase)
 
 ```bash
 @qa Validate acceptance criteria for US-001
-/gate:check story US-001
+/bear-gate:check story US-001
 ```
 
 ### 9. Complete
 
 ```bash
-/project:backlog move story US-001 done
+/bear-project:backlog move story US-001 done
 ```
 
 ---
@@ -631,7 +631,7 @@ When `.bmad/sprint-status.yaml` exists, the board ingests it automatically as a 
 
 ### 1. Start Simple
 
-Begin with `/workflow:init --quick` for bug fixes before using full BMAD.
+Begin with `/bear-workflow:init --quick` for bug fixes before using full BMAD.
 
 ### 2. Use Quality Gates
 
@@ -653,7 +653,7 @@ Update `tdd_phase` in story frontmatter to track progress.
 ```bash
 /sm:velocity
 /sm:burndown
-/workflow:status
+/bear-workflow:status
 ```
 
 ---
@@ -702,14 +702,14 @@ tdd:
 ### "No sprint-status.yaml found"
 
 ```bash
-/workflow:init
+/bear-workflow:init
 ```
 
 ### Quality gate always fails
 
 Check required fields:
 ```bash
-/gate:check all
+/bear-gate:check all
 ```
 
 ### Stories not transitioning

@@ -380,7 +380,7 @@ mcpServers:
 ---
 ```
 
-**Claude Craft use cases:**
+**Bear Craft use cases:**
 
 | Agent | Recommended MCP | Purpose |
 |-------|----------------|---------|
@@ -407,7 +407,7 @@ isolation: "worktree"
 ---
 ```
 
-**Claude Craft use cases:**
+**Bear Craft use cases:**
 
 | Agent | Why isolation helps |
 |-------|---------------------|
@@ -837,7 +837,7 @@ Helps with:
 @docker-architect Review our microservices container strategy
 ```
 
-> **Note:** Docker agents (5), Coolify agents (4), and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/claude-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
+> **Note:** Docker agents (5), Coolify agents (4), and Project agents (2) are bundled in the `Infra/` and `Project/` directories respectively. They are installed into `.claude/agents/` by the CLI during `npx @the-bearded-bear/bear-craft install`. They do not appear in the source repository's `.claude/agents/` directory but are available after installation.
 
 ---
 
@@ -1156,7 +1156,7 @@ Helps with:
 @bmad-master Route this work to the appropriate agent
 ```
 
-**Key Commands**: `/workflow:init`, `/workflow:status`, `/project:backlog move story` (le namespace `/bmad:*` n'existe pas — bmad-master est intégré aux commandes `/workflow:*` et `/project:*`)
+**Key Commands**: `/bear-workflow:init`, `/bear-workflow:status`, `/bear-project:backlog move story` (le namespace `/bmad:*` n'existe pas — bmad-master est intégré aux commandes `/bear-workflow:*` et `/bear-project:*`)
 
 ---
 
@@ -1316,7 +1316,7 @@ Helps with:
 @qa Create automated tests for the login flow
 ```
 
-**Key Commands**: `/qa:strategy`, `/qa:validate`, `/qa:automate`, `/qa:explore`, `/qa:status --report`, `/qa:bug`
+**Key Commands**: `/bear-qa:strategy`, `/bear-qa:validate`, `/bear-qa:automate`, `/bear-qa:explore`, `/bear-qa:status --report`, `/bear-qa:bug`
 
 ---
 
@@ -1340,7 +1340,7 @@ Helps with:
 @qa-recette Generate regression tests for detected errors
 ```
 
-**Key Commands**: `/qa:recette`, `/qa:fix`, `/qa:status`, `/qa:regression`, `/qa:status --report`
+**Key Commands**: `/bear-qa:recette`, `/bear-qa:fix`, `/bear-qa:status`, `/bear-qa:regression`, `/bear-qa:status --report`
 
 **Chrome Capabilities**:
 - Navigation: navigate, back, forward, refresh
@@ -1557,7 +1557,7 @@ This restricts the agent to only spawn `Explore` and `Plan` sub-agents, preventi
 | **BMAD v6** | **0** (roles, not agents) | **10** (YAML roles) |
 | **Total** | **70** (31 specialized + 39 infra) | **350** |
 
-> Les rôles projet `@product-owner` et `@tech-lead` sont des rôles BMAD intégrés aux commandes `/workflow:*` et `/project:*`, pas des fichiers d'agent autonomes — ils ne sont donc pas comptés dans les 70.
+> Les rôles projet `@product-owner` et `@tech-lead` sont des rôles BMAD intégrés aux commandes `/bear-workflow:*` et `/bear-project:*`, pas des fichiers d'agent autonomes — ils ne sont donc pas comptés dans les 70.
 
 ---
 

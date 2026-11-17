@@ -2,7 +2,7 @@
 
 ## Conformity Statement
 
-**claude-craft** is committed to providing an accessible development tool for all users. We target **WCAG 2.2 Level AA** conformance and compliance with the **European Accessibility Act (EAA 2025)**, effective June 2025.
+**bear-craft** is committed to providing an accessible development tool for all users. We target **WCAG 2.2 Level AA** conformance and compliance with the **European Accessibility Act (EAA 2025)**, effective June 2025.
 
 **Current Status:** In Progress
 
@@ -35,10 +35,10 @@ Following the [no-color.org](https://no-color.org/) standard, colors are automat
 
 ```bash
 # Disable colors
-NO_COLOR=1 claude-craft install .
+NO_COLOR=1 bear-craft install .
 
 # Normal usage (colors enabled)
-claude-craft check
+bear-craft check
 ```
 
 **Implementation:**
@@ -194,7 +194,7 @@ npm install -g pa11y
 bash website/tests/kanban/run.sh
 
 # Or point pa11y at a running board
-npx @the-bearded-bear/claude-craft kanban
+npx @the-bearded-bear/bear-craft kanban
 pa11y --standard WCAG2AA http://127.0.0.1:3737
 ```
 
@@ -224,7 +224,7 @@ pa11y --standard WCAG2AA http://127.0.0.1:3737
 
 ## Feedback & Bug Reporting
 
-We welcome feedback on accessibility issues. If you encounter any barriers using claude-craft, please report them:
+We welcome feedback on accessibility issues. If you encounter any barriers using bear-craft, please report them:
 
 ### GitHub Issues
 
@@ -317,8 +317,8 @@ Join our Discord server and post in the `#accessibility` channel:
 
 ## License
 
-This accessibility statement is part of claude-craft, licensed under MIT.
+This accessibility statement is part of bear-craft, licensed under MIT.
 
 **Last Updated:** 2026-04-15
 **Version:** 1.0.0
-**Contact:** [GitHub Issues](https://github.com/TheBeardedBearSAS/claude-craft/issues)
+**Contact:** [GitHub Issues](https://github.com/TheBeardedBearSAS/bear-craft/issues)

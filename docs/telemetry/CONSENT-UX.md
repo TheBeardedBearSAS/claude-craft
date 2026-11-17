@@ -5,16 +5,16 @@
 
 ## Où/Quand demander le consentement
 
-Au **premier run** de `claude-craft` (quelle que soit la commande), si `~/.claude/telemetry.json` n'existe pas OU `consentedAt === null`, afficher :
+Au **premier run** de `bear-craft` (quelle que soit la commande), si `~/.claude/telemetry.json` n'existe pas OU `consentedAt === null`, afficher :
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Claude Craft — Télémétrie optionnelle
+  Bear Craft — Télémétrie optionnelle
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Pour améliorer Claude Craft, nous aimerions collecter :
+Pour améliorer Bear Craft, nous aimerions collecter :
 
-  ✓ Commandes exécutées (ex: /team:audit)
+  ✓ Commandes exécutées (ex: /bear-team:audit)
   ✓ Erreurs (stack traces anonymisées)
   ✓ OS + version Node.js
 
@@ -27,8 +27,8 @@ Nous ne collectons PAS :
 
   → Hébergement : Posthog EU + Sentry EU (résidence UE)
   → Rétention : 12 mois max
-  → Révocable : claude-craft telemetry off
-  → Détails : https://claude-craft.dev/privacy
+  → Révocable : bear-craft telemetry off
+  → Détails : https://bear-craft.dev/privacy
 
 Choisissez :
 
@@ -53,31 +53,31 @@ Votre choix [A/D/R] : _
 
 ```bash
 # Désactivation forcée (CI, utilisateurs réticents)
-export CLAUDE_CRAFT_TELEMETRY=off
+export BEAR_CRAFT_TELEMETRY=off
 
 # Activation forcée (dogfooding interne)
-export CLAUDE_CRAFT_TELEMETRY=on
+export BEAR_CRAFT_TELEMETRY=on
 ```
 
-Quand `CLAUDE_CRAFT_TELEMETRY` est définie, le prompt est **totalement sauté** et la valeur est prioritaire sur `telemetry.json`.
+Quand `BEAR_CRAFT_TELEMETRY` est définie, le prompt est **totalement sauté** et la valeur est prioritaire sur `telemetry.json`.
 
 ## Commandes de gestion
 
 ```bash
 # Statut actuel
-claude-craft telemetry status
+bear-craft telemetry status
 
 # Activer
-claude-craft telemetry on
+bear-craft telemetry on
 
 # Désactiver
-claude-craft telemetry off
+bear-craft telemetry off
 
 # Voir les données envoyées (debug)
-claude-craft telemetry debug
+bear-craft telemetry debug
 
 # Tout effacer (droit à l'oubli RGPD Art. 17)
-claude-craft telemetry purge
+bear-craft telemetry purge
 # → Envoie un signal purge au provider + efface local
 ```
 
@@ -91,7 +91,7 @@ claude-craft telemetry purge
 
 ## Dashboard public
 
-`stats.claude-craft.dev` affiche (WAU = Weekly Active Users) :
+`stats.bear-craft.dev` affiche (WAU = Weekly Active Users) :
 
 - WAU (courbe 90j)
 - Top 10 commands exécutées (anonymisées)
@@ -108,6 +108,6 @@ Site statique regénéré chaque jour depuis Posthog API.
 - [ ] PII scrubbing patterns testés (unit tests)
 - [ ] Posthog EU account provisioned
 - [ ] Sentry EU account provisioned
-- [ ] Dashboard `stats.claude-craft.dev` live
+- [ ] Dashboard `stats.bear-craft.dev` live
 - [ ] `PRIVACY.md` mis à jour section télémétrie
 - [ ] Audit interne "zéro PII envoyée" sur 100 events réels

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /paperclip:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-paperclip:check all"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/paperclip:check all`.
+> ⚠️ `/bear-paperclip:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-paperclip:check all`.
 
-Exécutez `/paperclip:check all $ARGUMENTS` : lisez `.claude/commands/paperclip/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-paperclip:check all $ARGUMENTS` : lisez `.claude/commands/bear-paperclip/check.md` et suivez-le avec ces arguments.

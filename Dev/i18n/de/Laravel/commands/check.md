@@ -21,8 +21,8 @@ Das erste Argument ist die Achse; der Rest (zum Beispiel ein Projektpfad) wird u
 
 ## MISSION
 
-1. Lesen Sie das erste Argument. Entspricht es keiner der 5 Achsen oben, listen Sie diese mit einem Beispiel auf (`/laravel:check security src/`) und brechen Sie ab.
+1. Lesen Sie das erste Argument. Entspricht es keiner der 5 Achsen oben, listen Sie diese mit einem Beispiel auf (`/bear-laravel:check security src/`) und brechen Sie ab.
 2. Lesen Sie die Checklisten-Datei dieser Achse und folgen Sie ihr Schritt für Schritt. In dieser Datei steht `$ARGUMENTS` für die Argumente nach der Achse.
 3. Erstellen Sie den Bericht im Ausgabeformat, das die Checkliste festlegt.
 
-Beispiele: `/laravel:check architecture`, `/laravel:check testing ./app`, `/laravel:check all`.
+Beispiele: `/bear-laravel:check architecture`, `/bear-laravel:check testing ./app`, `/bear-laravel:check all`.

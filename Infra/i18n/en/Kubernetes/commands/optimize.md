@@ -14,7 +14,7 @@ Arguments:
 - (Optional) Namespace to optimize (default: all namespaces)
 - (Optional) Target: resources, autoscaling, costs, full (default: full)
 
-Example: `/kubernetes:optimize namespace:app-prod target:resources`
+Example: `/bear-kubernetes:optimize namespace:app-prod target:resources`
 
 ## Plan Mode
 

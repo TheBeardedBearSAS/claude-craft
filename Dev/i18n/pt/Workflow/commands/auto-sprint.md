@@ -9,13 +9,13 @@ Você age como **Product Owner / Scrum Master** e conduz um sprint completo desd
 em um **único comando**. Cada cerimônia é executada dentro de um **sub-agente isolado**: a própria
 janela de contexto do sub-agente substitui o `/clear` manual entre as etapas, mantendo o contexto
 do orquestrador enxuto. A fase de implementação é executada por **você como maestro** (mesma lógica
-de `/team:delivery --phase=implementation`) para evitar o aninhamento de Agent Teams.
+de `/bear-team:delivery --phase=implementation`) para evitar o aninhamento de Agent Teams.
 
 Isso automatiza o que anteriormente eram seis comandos manuais com `/clear` entre eles:
 
 ```
-/workflow:start N -> /workflow:start N --tasks-only -> /gate:check sprint 00N
--> /workflow:implement N -> /workflow:review N -> /workflow:retro N
+/bear-workflow:start N -> /bear-workflow:start N --tasks-only -> /bear-gate:check sprint 00N
+-> /bear-workflow:implement N -> /bear-workflow:review N -> /bear-workflow:retro N
 ```
 
 …e adiciona: branch, commit, Pull Request, monitoramento de CI e merge.
@@ -25,13 +25,13 @@ Isso automatiza o que anteriormente eram seis comandos manuais com `/clear` entr
 $ARGUMENTS
 
 - `<N>` : Número do sprint (ex: `5`). **Obrigatório.**
-- `--from-prd` : Antes da Fase 1, executa `/workflow:plan --only=backlog` (sub-agente) para gerar o backlog a partir de `project-management/prd.md` e então segue o pipeline normal.
+- `--from-prd` : Antes da Fase 1, executa `/bear-workflow:plan --only=backlog` (sub-agente) para gerar o backlog a partir de `project-management/prd.md` e então segue o pipeline normal.
 - `--auto-merge` : Faz o merge automaticamente quando a CI estiver verde e o DoD aprovado. **Padrão: DESATIVADO** — o
   comando pausa e aguarda um GO humano explícito antes de fazer o merge (respeita "revisão obrigatória",
   regra 09, e o princípio Karpathy "sem auto-merge sem revisão humana").
 - `--max-fix-attempts=2` : Máximo de tentativas de correção automática por gate com falha antes de abortar (padrão: 2).
 - `--max-workers=3` : Máximo de workers de desenvolvimento em paralelo na fase de implementação (padrão: 2, máximo: 3).
-- `--engine=subagents`: Motor da fase de implementação (padrão: `subagents`, delegação pela ferramenta `Agent`). `teams`: Agent Teams experimental, com fallback para `subagents` se indisponível. Ver `/team:delivery --phase=implementation`, seção "Motor de execução"
+- `--engine=subagents`: Motor da fase de implementação (padrão: `subagents`, delegação pela ferramenta `Agent`). `teams`: Agent Teams experimental, com fallback para `subagents` se indisponível. Ver `/bear-team:delivery --phase=implementation`, seção "Motor de execução"
 - `--base=main` : Branch base para o PR (padrão: `main`).
 - `--dry-run` : Exibe as 9 fases planejadas e o contexto do sprint resolvido, depois para. **Nenhuma escrita.**
 - `--overnight` : Repassado para a fase de implementação (limitado, para às 6h).
@@ -42,7 +42,7 @@ $ARGUMENTS
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` definido — apenas com `--engine=teams`
 - CLI `gh` autenticado (criação de PR / verificações / merge)
 - Docker disponível (todos os testes são executados via Docker — veja o CLAUDE.md do projeto)
-- Projeto BMAD v6: `.bmad/sprint-status.yaml` é criado por `/workflow:start` (fase 1) se não existir
+- Projeto BMAD v6: `.bmad/sprint-status.yaml` é criado por `/bear-workflow:start` (fase 1) se não existir
 
 > Se um pré-requisito estiver ausente, aborte imediatamente com uma mensagem clara e acionável. Não pule uma fase silenciosamente.
 
@@ -74,25 +74,25 @@ Resolva a pasta do sprint fazendo glob de `project-management/sprints/sprint-{N}
 
 ### Fase 0b — Backlog a partir do PRD (sub-agente, somente com `--from-prd`)
 
-> "Leia `.claude/commands/workflow/plan.md` e execute `/workflow:plan --only=backlog` (entrada: `project-management/prd.md`). Retorne um resumo conciso e os arquivos criados."
+> "Leia `.claude/commands/bear-workflow/plan.md` e execute `/bear-workflow:plan --only=backlog` (entrada: `project-management/prd.md`). Retorne um resumo conciso e os arquivos criados."
 
 ### Fase 1 — Início (sub-agente)
 
 Inicie um sub-agente isolado:
 
-> "Leia `.claude/commands/workflow/start.md` e execute para o sprint **N**.
+> "Leia `.claude/commands/bear-workflow/start.md` e execute para o sprint **N**.
 > Crie a estrutura de pastas do sprint, `sprint-goal.md` e o checklist pré-sprint.
 > Retorne um resumo conciso (< 50 tokens) e a lista de arquivos criados."
 
 ### Fase 2 — Decomposição (sub-agente)
 
-> "Leia `.claude/commands/workflow/start.md` (`/workflow:start {N} --tasks-only`) e execute para o sprint **N**.
+> "Leia `.claude/commands/bear-workflow/start.md` (`/bear-workflow:start {N} --tasks-only`) e execute para o sprint **N**.
 > Gere os arquivos `tasks/TASK-*.md`, `board.md` e o grafo de dependências.
 > Retorne um resumo conciso e os arquivos criados."
 
 ### Fase 3 — Validação do gate (sub-agente + loop de correção automática)
 
-> "Leia `.claude/commands/gate/check.md` (gate `sprint`) e execute para o sprint **00N**.
+> "Leia `.claude/commands/bear-gate/check.md` (gate `sprint`) e execute para o sprint **00N**.
 > Retorne PASS/FAIL, a pontuação e a lista de critérios com falha."
 
 **Em caso de FAIL → loop de correção automática** (até `--max-fix-attempts`):
@@ -103,11 +103,11 @@ Inicie um sub-agente isolado:
 
 ### Fase 4 — Implementação (você = maestro)
 
-> Equivalente a `/workflow:implement --parallel N` (que delega para `/team:delivery --phase=implementation`).
+> Equivalente a `/bear-workflow:implement --parallel N` (que delega para `/bear-team:delivery --phase=implementation`).
 
-Assuma diretamente o **papel de Lead da fase de implementação de `/team:delivery --phase=implementation`** (**não** inicie um Agent Team aninhado):
+Assuma diretamente o **papel de Lead da fase de implementação de `/bear-team:delivery --phase=implementation`** (**não** inicie um Agent Team aninhado):
 
-**Motor**: com `--engine=subagents` (padrão), na etapa 4 lançar um subagente por story pela ferramenta `Agent` (`isolation: "worktree"`, todos numa mesma mensagem) em vez de `TaskCreate`, e na etapa 5 aguardar seu retorno em vez de consultar `TaskList` (correspondência completa em `/team:delivery --phase=implementation`, seção "Motor de execução"). Com `--engine=teams`, seguir as etapas como estão escritas.
+**Motor**: com `--engine=subagents` (padrão), na etapa 4 lançar um subagente por story pela ferramenta `Agent` (`isolation: "worktree"`, todos numa mesma mensagem) em vez de `TaskCreate`, e na etapa 5 aguardar seu retorno em vez de consultar `TaskList` (correspondência completa em `/bear-team:delivery --phase=implementation`, seção "Motor de execução"). Com `--engine=teams`, seguir as etapas como estão escritas.
 
 1. Leia `.bmad/sprint-status.yaml`; filtre histórias em `ready-for-dev`.
 2. Analise a independência por domínio de arquivo (sinalize sobreposições de `**/Shared/**`, `**/Common/**`, `**/Utils/**`,
@@ -142,12 +142,12 @@ verificações que falharam; após `--max-fix-attempts`, marque a história como
 
 ### Fase 7 — Revisão (sub-agente)
 
-> "Leia `.claude/commands/workflow/review.md` e execute para o sprint **N** (ele usa
+> "Leia `.claude/commands/bear-workflow/review.md` e execute para o sprint **N** (ele usa
 > `git log` / `gh pr` para coletar os dados do sprint). Produza `sprint-review.md`. Retorne um resumo conciso."
 
 ### Fase 8 — Retrospectiva (sub-agente)
 
-> "Leia `.claude/commands/workflow/retro.md` e execute para o sprint **N**.
+> "Leia `.claude/commands/bear-workflow/retro.md` e execute para o sprint **N**.
 > Produza `sprint-retro.md` com itens de ação SMART. Retorne um resumo conciso."
 
 ### Fase 9 — Merge (inline, com gate)
@@ -206,4 +206,4 @@ Fase             | Status | Notas
 - **Auto-merge é opt-in** e intencionalmente protegido por uma flag.
 - **Docker é obrigatório** para os testes (CLAUDE.md do projeto).
 - O isolamento do sub-agente é o que substitui o `/clear` — mantenha cada relatório de sub-agente conciso.
-- Para a variante paralela com Agent Teams que também redige as histórias com revisão cruzada, use `/team:delivery`.
+- Para a variante paralela com Agent Teams que também redige as histórias com revisão cruzada, use `/bear-team:delivery`.

@@ -2,7 +2,7 @@
 
 Universal security guidelines based on OWASP Top 10 and industry best practices.
 
-Part of [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) -- AI-assisted development framework for Claude Code.
+Part of [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) -- AI-assisted development framework for Claude Code.
 
 ## Installation
 
@@ -32,4 +32,4 @@ This skill provides universal security principles applicable to any language, fr
 
 ## License
 
-MIT -- See [Claude-Craft](https://github.com/TheBeardedBearSAS/claude-craft) for full license.
+MIT -- See [Bear-Craft](https://github.com/TheBeardedBearSAS/bear-craft) for full license.

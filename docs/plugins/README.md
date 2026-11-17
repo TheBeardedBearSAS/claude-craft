@@ -1,10 +1,10 @@
-# Claude Craft Plugins
+# Bear Craft Plugins
 
 > **Status** : DRAFT P3-29. API plugin v1.0.0 en cours de validation communautaire.
 
-## Qu'est-ce qu'un plugin Claude Craft ?
+## Qu'est-ce qu'un plugin Bear Craft ?
 
-Un plugin étend Claude Craft sans modifier le core. Il s'accroche à des **hooks de lifecycle** (avant/après commande, audit, release) pour exécuter du code custom.
+Un plugin étend Bear Craft sans modifier le core. Il s'accroche à des **hooks de lifecycle** (avant/après commande, audit, release) pour exécuter du code custom.
 
 **Exemples de cas d'usage** :
 - Notifier Slack à la fin d'un audit
@@ -15,8 +15,8 @@ Un plugin étend Claude Craft sans modifier le core. Il s'accroche à des **hook
 ## Installation rapide
 
 ```bash
-claude-craft plugin install notify-slack
-claude-craft plugin config notify-slack
+bear-craft plugin install notify-slack
+bear-craft plugin config notify-slack
 # → prompt interactif pour SLACK_WEBHOOK_URL
 ```
 
@@ -25,8 +25,8 @@ claude-craft plugin config notify-slack
 ### 1. Scaffold
 
 ```bash
-npx create-claude-craft-plugin my-plugin
-cd claude-craft-plugin-my-plugin
+npx create-bear-craft-plugin my-plugin
+cd bear-craft-plugin-my-plugin
 ```
 
 ### 2. Implémenter un hook
@@ -34,7 +34,7 @@ cd claude-craft-plugin-my-plugin
 `src/hooks/afterAudit.ts` :
 
 ```typescript
-import type { AfterAuditHandler } from 'claude-craft-plugin-api';
+import type { AfterAuditHandler } from 'bear-craft-plugin-api';
 
 export const afterAudit: AfterAuditHandler = async (ctx) => {
   console.log(`Audit ${ctx.scope}: ${ctx.metrics.score}%`);
@@ -45,7 +45,7 @@ export const afterAudit: AfterAuditHandler = async (ctx) => {
 
 ```json
 {
-  "name": "claude-craft-plugin-my-plugin",
+  "name": "bear-craft-plugin-my-plugin",
   "version": "1.0.0",
   "apiVersion": "1.0.0",
   "hooks": ["afterAudit"],
@@ -59,9 +59,9 @@ export const afterAudit: AfterAuditHandler = async (ctx) => {
 
 ```bash
 npm link
-cd ../my-project-using-claude-craft
-npm link claude-craft-plugin-my-plugin
-claude-craft plugin install my-plugin --local
+cd ../my-project-using-bear-craft
+npm link bear-craft-plugin-my-plugin
+bear-craft plugin install my-plugin --local
 ```
 
 ### 5. Publier NPM
@@ -86,6 +86,6 @@ Voir `examples/plugins/` :
 
 ## Contribuer
 
-- Discussion générale : [GitHub Discussions `plugins`](https://github.com/TheBeardedBearSAS/claude-craft/discussions/categories/plugins)
-- Feedback API : commenter le [RFC v1.0](https://github.com/TheBeardedBearSAS/claude-craft/discussions/plugin-rfc-v1)
+- Discussion générale : [GitHub Discussions `plugins`](https://github.com/TheBeardedBearSAS/bear-craft/discussions/categories/plugins)
+- Feedback API : commenter le [RFC v1.0](https://github.com/TheBeardedBearSAS/bear-craft/discussions/plugin-rfc-v1)
 - Bugs : issues GitHub avec label `plugins`

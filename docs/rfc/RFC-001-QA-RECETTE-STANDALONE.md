@@ -2,17 +2,17 @@
 
 **Status**: Draft  
 **Created**: 2026-04-17  
-**Author**: The Bearded CTO  
+**Author**: The Bearded Bear  
 **Phase**: OPP-04 (Innovation & Croissance), R3 (Génération de revenus)
 
 ---
 
 ## Résumé exécutif
 
-QA Recette est le **killer feature** de Claude Craft : automated acceptance testing via Chrome automation avec regression tracking. Actuellement locked dans Claude Craft, ce RFC propose de le séparer en **produit standalone** avec modèle freemium pour générer des revenus récurrents.
+QA Recette est le **killer feature** de Bear Craft : automated acceptance testing via Chrome automation avec regression tracking. Actuellement locked dans Bear Craft, ce RFC propose de le séparer en **produit standalone** avec modèle freemium pour générer des revenus récurrents.
 
 **Objectifs** :
-- Rendre QA Recette accessible hors de Claude Craft
+- Rendre QA Recette accessible hors de Bear Craft
 - Générer des revenus via modèle freemium
 - Élargir l'audience (QA teams, non-Claude Code users)
 - Simplifier l'adoption (SDK npm + Chrome extension)
@@ -23,10 +23,10 @@ QA Recette est le **killer feature** de Claude Craft : automated acceptance test
 
 ### État actuel
 
-QA Recette est intégré dans Claude Craft et nécessite :
+QA Recette est intégré dans Bear Craft et nécessite :
 - Claude Code installé
-- Claude Craft framework complet
-- Commande `/qa:recette` dans Claude Code
+- Bear Craft framework complet
+- Commande `/bear-qa:recette` dans Claude Code
 
 **Limitations** :
 - ❌ Locked-in à Claude Code (friction élevée)
@@ -42,7 +42,7 @@ Cette règle résonne avec toutes les équipes QA. En séparant QA Recette en pr
 - ✅ Toucher un marché plus large (QA teams, non-devs)
 - ✅ Générer des revenus récurrents (freemium)
 - ✅ Simplifier l'onboarding (npm install + Chrome extension)
-- ✅ Garder la puissance de l'intégration Claude Craft pour les power users
+- ✅ Garder la puissance de l'intégration Bear Craft pour les power users
 
 ---
 
@@ -215,13 +215,13 @@ npx qa-recette resume --session=REC-20260417-123456
 
 ## Migration path
 
-### Depuis Claude Craft intégré
+### Depuis Bear Craft intégré
 
 **Étape 1** : Exporter les scénarios
 
 ```bash
-# Dans Claude Craft
-/qa:recette export --format=json --output=scenarios.json
+# Dans Bear Craft
+/bear-qa:recette export --format=json --output=scenarios.json
 ```
 
 **Étape 2** : Importer dans QA Recette Standalone
@@ -243,9 +243,9 @@ npx qa-recette run --scope=story --id=US-001
 
 ### Rétro-compatibilité
 
-Claude Craft continuera à supporter QA Recette intégré via :
-- `/qa:recette` (commande existante, mode legacy)
-- `/qa:recette --cloud` (délégation au service cloud standalone)
+Bear Craft continuera à supporter QA Recette intégré via :
+- `/bear-qa:recette` (commande existante, mode legacy)
+- `/bear-qa:recette --cloud` (délégation au service cloud standalone)
 
 **Dépréciation** :
 - v8.5 : Legacy mode (warning)
@@ -348,15 +348,15 @@ Claude Craft continuera à supporter QA Recette intégré via :
 - Integration avec CI/CD populaires (GitHub Actions)
 - Marketing ciblé (QA communities, Reddit, Twitter)
 
-### Risque 2 : Cannibalisation Claude Craft
+### Risque 2 : Cannibalisation Bear Craft
 
 **Impact** : Faible  
 **Probabilité** : Faible
 
 **Mitigation** :
-- QA Recette Standalone = gateway drug vers Claude Craft
-- Intégration privilégiée pour Claude Craft users (features early access)
-- Cross-promotion (dashboard → Claude Craft)
+- QA Recette Standalone = gateway drug vers Bear Craft
+- Intégration privilégiée pour Bear Craft users (features early access)
+- Cross-promotion (dashboard → Bear Craft)
 
 ### Risque 3 : Concurrence (Playwright, Cypress)
 
@@ -384,16 +384,16 @@ Claude Craft continuera à supporter QA Recette intégré via :
 
 ## Alternatives considérées
 
-### Alternative 1 : QA Recette reste intégré à Claude Craft
+### Alternative 1 : QA Recette reste intégré à Bear Craft
 
 **Pros** :
 - Pas de développement additionnel
-- Cohérence avec l'écosystème Claude Craft
+- Cohérence avec l'écosystème Bear Craft
 
 **Cons** :
 - ❌ Friction élevée (setup complet requis)
 - ❌ Pas de revenus générés
-- ❌ Audience limitée aux Claude Craft users
+- ❌ Audience limitée aux Bear Craft users
 
 **Décision** : Rejetée (opportunité manquée)
 
@@ -431,18 +431,18 @@ Claude Craft continuera à supporter QA Recette intégré via :
 
 - ✅ **Revenus récurrents** : $450 MRR (mois 9) → $4500 MRR (mois 12)
 - ✅ **Élargissement audience** : QA teams, non-Claude Code users
-- ✅ **Gateway drug** : QA Recette Standalone → Claude Craft complet
-- ✅ **Simplification adoption** : npm install + Chrome extension (vs full Claude Craft setup)
+- ✅ **Gateway drug** : QA Recette Standalone → Bear Craft complet
+- ✅ **Simplification adoption** : npm install + Chrome extension (vs full Bear Craft setup)
 
 ### Négatives
 
 - ❌ **Développement additionnel** : SDK npm, API backend, dashboard (effort XL)
-- ❌ **Maintenance** : 2 produits (Claude Craft + QA Recette Standalone)
+- ❌ **Maintenance** : 2 produits (Bear Craft + QA Recette Standalone)
 - ❌ **Infrastructure costs** : Hosting, S3, CDN (mitigé par pricing)
 
 ### Neutres
 
-- 🔄 **Rétro-compatibilité** : Migration path requis pour Claude Craft users
+- 🔄 **Rétro-compatibilité** : Migration path requis pour Bear Craft users
 - 🔄 **Marketing** : Effort marketing pour lancer le produit standalone
 
 ---
@@ -484,5 +484,5 @@ Claude Craft continuera à supporter QA Recette intégré via :
 
 **Date de création** : 2026-04-17  
 **Version** : 1.0.0  
-**Auteur** : The Bearded CTO  
+**Auteur** : The Bearded Bear  
 **Statut** : Draft (en attente validation)

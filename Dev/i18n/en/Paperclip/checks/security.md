@@ -76,4 +76,4 @@ Verify shipped headers:
 
 ## Output
 
-Markdown report with per-section pass/fail, severity (Blocker / Major / Minor), CVE references where relevant, and a score /20 for `/paperclip:check all`.
+Markdown report with per-section pass/fail, severity (Blocker / Major / Minor), CVE references where relevant, and a score /20 for `/bear-paperclip:check all`.

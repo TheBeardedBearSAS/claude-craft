@@ -3,7 +3,7 @@
 #
 # Contrat Claude Code : payload JSON sur stdin ; exit 2 + stderr = blocage ;
 # seul hookSpecificOutput.additionalContext atteint le modèle (systemMessage = UI).
-# jq est utilisé s'il est présent, sinon node (toujours là pour claude-craft).
+# jq est utilisé s'il est présent, sinon node (toujours là pour bear-craft).
 
 HOOK_INPUT=""
 

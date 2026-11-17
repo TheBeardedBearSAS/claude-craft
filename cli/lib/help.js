@@ -41,21 +41,22 @@ const NAMESPACES = [
  */
 export function printHelp() {
   console.log(`
-${c.bold}Usage:${c.reset} npx @the-bearded-bear/claude-craft [command] [options]
+${c.bold}Usage:${c.reset} npx @the-bearded-bear/bear-craft [command] [options]
 
 ${c.bold}Commands:${c.reset}
   ${c.green}install${c.reset}              Interactive installation wizard
   ${c.green}install <path>${c.reset}       Install to specific directory
   ${c.green}install --auto${c.reset}       Zero-prompt install (auto-detect stack + locale)
   ${c.green}install --from=<url>${c.reset} Install from a remote team config JSON URL
-  ${c.green}skill add <pkg>${c.reset}      Install a community skill from npm (claude-craft-skill-*)
+  ${c.green}skill add <pkg>${c.reset}      Install a community skill from npm (bear-craft-skill-*)
   ${c.green}skill list${c.reset}           List installed community skills
   ${c.green}skill remove <name>${c.reset}  Remove a community skill
   ${c.green}init${c.reset}                 Initialize workflow in current project
-  ${c.green}check${c.reset}                Verify claude-craft installation
+  ${c.green}check${c.reset}                Verify bear-craft installation
   ${c.green}list${c.reset}                 List installed components
   ${c.green}doctor${c.reset}               Environment diagnostics
-  ${c.green}update${c.reset}               Refresh existing installation
+  ${c.green}update${c.reset}               Refresh existing installation (plugins, rules, migration)
+  ${c.green}sync${c.reset}                 Re-register the project marketplace and plugins on this machine (after a clone)
   ${c.green}flatten${c.reset}              Generate flattened codebase summary
   ${c.green}ralph${c.reset}                Run Ralph Wiggum continuous loop
   ${c.green}kanban${c.reset}               Launch local Kanban UI for project-management/
@@ -64,7 +65,8 @@ ${c.bold}Commands:${c.reset}
 ${c.bold}Options:${c.reset}
   ${c.yellow}--version, -v${c.reset}        Show version
   ${c.yellow}--lang=XX${c.reset}            Language (en, fr, es, de, pt)
-  ${c.yellow}--tech=NAME${c.reset}          Technology (${Object.keys(TECHNOLOGIES).join(', ')})
+  ${c.yellow}--tech=NAME[,NAME]${c.reset}   Technologies (${Object.keys(TECHNOLOGIES).join(', ')})
+  ${c.yellow}--infra[=NAME,…]${c.reset}     Infra plugins (docker, coolify, kubernetes, opentofu, ansible, hcloud, pgbouncer, frankenphp; bare = docker)
   ${c.yellow}--hooks=MODE${c.reset}         Hooks: default, full, none; add ",memory" for SQLite memory (default: default)
   ${c.yellow}--auto${c.reset}               Zero-prompt install (auto-detect stack + locale)
   ${c.yellow}--from=URL${c.reset}           Install from a remote team config JSON URL
@@ -75,37 +77,37 @@ ${c.bold}Options:${c.reset}
   ${c.yellow}--enterprise${c.reset}         Enterprise track (platforms)
 
 ${c.bold}Available Namespaces:${c.reset}
-${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cyan.length + c.reset.length) + ns.desc).join('\n')}
+${NAMESPACES.map((ns) => `  ${c.cyan}/bear-${ns.prefix}:*${c.reset}`.padEnd(30 + c.cyan.length + c.reset.length) + ns.desc).join('\n')}
 
-  ${c.dim}Example: /common:pre-commit-check, /workflow:init, /team:delivery${c.reset}
+  ${c.dim}Example: /bear-common:pre-commit-check, /bear-workflow:init, /bear-team:delivery${c.reset}
 
 ${c.bold}Examples:${c.reset}
   ${c.dim}# Interactive installation${c.reset}
-  npx @the-bearded-bear/claude-craft install
+  npx @the-bearded-bear/bear-craft install
 
   ${c.dim}# Zero-prompt auto-install (TTFV < 10 min)${c.reset}
-  npx @the-bearded-bear/claude-craft install --auto
+  npx @the-bearded-bear/bear-craft install --auto
 
   ${c.dim}# Install from a team config URL${c.reset}
-  npx @the-bearded-bear/claude-craft install --from=https://org.example/cc-team.json
+  npx @the-bearded-bear/bear-craft install --from=https://org.example/cc-team.json
 
   ${c.dim}# Add a community skill from npm${c.reset}
-  npx @the-bearded-bear/claude-craft skill add claude-craft-skill-foo
+  npx @the-bearded-bear/bear-craft skill add bear-craft-skill-foo
 
   ${c.dim}# Install Symfony rules in French${c.reset}
-  npx @the-bearded-bear/claude-craft install ~/my-project --tech=symfony --lang=fr
+  npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=fr
 
   ${c.dim}# Initialize workflow${c.reset}
-  npx @the-bearded-bear/claude-craft init --standard
+  npx @the-bearded-bear/bear-craft init --standard
 
   ${c.dim}# Flatten codebase for context${c.reset}
-  npx @the-bearded-bear/claude-craft flatten --output=context.md
+  npx @the-bearded-bear/bear-craft flatten --output=context.md
 
   ${c.dim}# Run Ralph continuous loop${c.reset}
-  npx @the-bearded-bear/claude-craft ralph "Implement user authentication"
+  npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 
   ${c.dim}# Launch Kanban UI for the current BMAD project${c.reset}
-  npx @the-bearded-bear/claude-craft kanban --open
+  npx @the-bearded-bear/bear-craft kanban --open
 
 ${c.bold}Technologies:${c.reset}
 ${Object.entries(TECHNOLOGIES)

@@ -1,5 +1,5 @@
 // Template : Entrée de worker de plugin Paperclip
-// Généré par `npm create paperclip-plugin@latest` ou /paperclip:generate-adapter <nom> plugin.
+// Généré par `npm create paperclip-plugin@latest` ou /bear-paperclip:generate-adapter <nom> plugin.
 // Docs : https://docs.paperclip.ing/  SDK : @paperclipai/plugin-sdk
 
 import { definePlugin, runWorker, z } from "@paperclipai/plugin-sdk";

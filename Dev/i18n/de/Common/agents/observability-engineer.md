@@ -160,12 +160,12 @@ def get_users():
 - Audit der bestehenden Observability
 - Konfiguration von Alerting / On-Call-Rotation
 
-## Claude Craft Integration
+## Bear Craft Integration
 
 - `.claude/skills/observability/SKILL.md` — Instrumentierungsmuster
 - `@devops-engineer` — Infrastruktur-Monitoring, Prometheus/Grafana-Einrichtung
 - `@performance-auditor` — durch Traces/Metriken geleitete Optimierung
-- `/team:audit` — paralleler Observability-Audit
+- `/bear-team:audit` — paralleler Observability-Audit
 
 ## Ressourcen
 

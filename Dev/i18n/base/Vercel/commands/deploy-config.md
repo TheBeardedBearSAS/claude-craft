@@ -7,7 +7,7 @@ argument-hint: "[--check] [--force]"
 
 You are an expert Vercel deployment-configuration specialist. Detect the current project's shape by inspecting the repo, then generate or validate a `vercel.json` tailored to that shape.
 
-> Vercel is a **deployment platform**, not a framework. This command only produces platform-level config (`vercel.json` keys). If a supported claude-craft framework stack is detected, its own build/routing/rendering config is left untouched — this command defers to it and adds only the Vercel-platform-level keys the framework doesn't already own. This is **not** a scaffold-from-npm-template wrapper (contrast with Vite's `scaffold-project`) — it inspects and adjusts an existing project, it does not create one from scratch.
+> Vercel is a **deployment platform**, not a framework. This command only produces platform-level config (`vercel.json` keys). If a supported bear-craft framework stack is detected, its own build/routing/rendering config is left untouched — this command defers to it and adds only the Vercel-platform-level keys the framework doesn't already own. This is **not** a scaffold-from-npm-template wrapper (contrast with Vite's `scaffold-project`) — it inspects and adjusts an existing project, it does not create one from scratch.
 
 ## ARGUMENTS
 
@@ -38,7 +38,7 @@ Inspect the repository for these signals:
 | `api/cron/` directory | `Glob api/cron/**/*.{ts,js}` | Cron + Scheduled shape |
 | `middleware.ts` at project root | `Glob middleware.ts` | Middleware present — audit its matcher and logic separately |
 | Existing `vercel.json` | `Glob vercel.json` | Config already present — validate/diff, never blind-overwrite |
-| Framework config files | `next.config.*`, `angular.json`, `vue.config.*`/`vite.config.*` + `vue` dependency, `vite.config.*` + `react`/`@vitejs/plugin-react` dependency | A claude-craft framework stack owns build/routing — defer to its own tooling doc |
+| Framework config files | `next.config.*`, `angular.json`, `vue.config.*`/`vite.config.*` + `vue` dependency, `vite.config.*` + `react`/`@vitejs/plugin-react` dependency | A bear-craft framework stack owns build/routing — defer to its own tooling doc |
 | No `api/`, no framework config | — | Static + Rewrites shape only |
 
 Report the detected shape(s) explicitly before proceeding — a project can combine shapes (e.g. Functions + Cron).
@@ -77,7 +77,7 @@ Never overwrite it silently:
 
 ### Framework Deferral
 
-If a claude-craft framework stack is detected, only add platform-level keys it does not already own:
+If a bear-craft framework stack is detected, only add platform-level keys it does not already own:
 - Do **not** add `rewrites`/`redirects` that duplicate the framework's own router
 - Do **not** add a `functions` entry for a route the framework's adapter already configures
 - Point the user to that stack's own `06-tooling.md` for anything routing/rendering/build related
@@ -99,7 +99,7 @@ VERCEL DEPLOY CONFIG
 🧩 FRAMEWORK DETECTION
 ──────────────────────────────────────────────────────────────
 Detected: React (vite.config.ts + @vitejs/plugin-react)
-Deferred to: /react:* stack's own 06-tooling.md for build/routing config
+Deferred to: /bear-react:* stack's own 06-tooling.md for build/routing config
 Vercel-platform keys added here: functions, crons only
 
 📄 EXISTING vercel.json

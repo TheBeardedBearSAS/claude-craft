@@ -4,7 +4,7 @@ import path from 'node:path';
 import * as yaml from 'js-yaml';
 
 /**
- * Garde-fou du collecteur de `/common:audit-freshness`.
+ * Garde-fou du collecteur de `/bear-common:audit-freshness`.
  *
  * Le collecteur décide, sans modèle, quels stacks méritent un sous-agent : ceux
  * dont la version stable publiée a dépassé la version déclarée dans
@@ -218,7 +218,7 @@ describe('collect-freshness-signals', () => {
       expect(existsSync(file)).toBe(true);
       expect(JSON.parse(readFileSync(file, 'utf8')).date).toBe('2026-11-10');
       expect(result.previous_report).toBe('freshness-2026-10-13.md');
-      expect(result.claude_craft_version).toMatch(/^\d+\.\d+\.\d+/);
+      expect(result.bear_craft_version).toMatch(/^\d+\.\d+\.\d+/);
     });
 
     it("--dry-run n'écrit rien", async () => {
