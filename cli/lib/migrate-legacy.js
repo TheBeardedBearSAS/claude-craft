@@ -149,8 +149,8 @@ function removeEmptyDirs(dir) {
  */
 export function migrateLegacyInstall({ target, lang, cliRoot, log = () => {}, warn = () => {} }) {
   // The project and the language are validated before any read or delete (CWE-22).
-  const root = assertSafeTarget(target);
-  const claude = path.join(root, '.claude');
+  const projectRoot = assertSafeTarget(target);
+  const claude = path.join(projectRoot, '.claude');
   const ours = shippedFiles(cliRoot, assertSafeLang(lang));
   let removed = 0;
   const keptByDir = new Map();
