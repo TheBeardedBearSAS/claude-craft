@@ -1,0 +1,288 @@
+---
+name: workflow-init
+description: Analizar el contexto del proyecto y recomendar el flujo de trabajo de desarrollo optimo
+arguments:
+  - name: scope
+    description: Indicacion de alcance opcional (bug, feature, platform, migration)
+    required: false
+  - name: track
+    description: Forzar un track especifico (--quick, --standard, --enterprise)
+    required: false
+---
+
+# /bear-workflow:init
+
+## Mision
+
+Analizar el contexto actual del proyecto y recomendar el flujo de trabajo de desarrollo optimo. Inicializar el seguimiento del flujo de trabajo y guiar al usuario a traves de las fases apropiadas.
+
+## Flujo de trabajo
+
+### Paso 1: Descubrimiento del contexto
+
+```
+╔══════════════════════════════════════════════════════════╗
+║             INICIALIZACION DEL FLUJO DE TRABAJO           ║
+╠══════════════════════════════════════════════════════════╣
+║ Analizando contexto del proyecto...                       ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+**Analizar:**
+
+1. **Estructura del proyecto**
+   - Verificar directorio `.claude/`
+   - Detectar stack tecnologico desde archivos
+   - Identificar framework (Symfony, Flutter, React, etc.)
+
+2. **Documentacion existente**
+   - `project-management/prd.md` - Existe PRD?
+   - `project-management/tech-spec.md` - Existe Tech Spec?
+   - `project-management/backlog/` - Existe Backlog?
+   - `README.md` - Descripcion del proyecto
+
+3. **Tamano del codebase**
+   - Contar archivos fuente
+   - Estimar complejidad
+   - Identificar componentes/modulos
+
+4. **Contexto Git**
+   - Rama actual
+   - Commits recientes
+   - Cambios pendientes
+
+### Paso 2: Evaluacion de complejidad
+
+**Matriz de puntuacion:**
+
+| Factor | Quick (1) | Standard (2) | Enterprise (3) |
+|--------|-----------|--------------|----------------|
+| Archivos a modificar | 1-5 | 5-50 | 50+ |
+| Nuevas entidades/tablas | 0 | 1-3 | 4+ |
+| Integraciones externas | 0 | 1 | 2+ |
+| User stories estimadas | 1-3 | 3-15 | 15+ |
+| Equipos involucrados | 1 | 1 | 2+ |
+| Implicaciones de seguridad | Bajo | Medio | Alto |
+
+**Calcular puntuacion:**
+- Puntuacion 6-8: Quick Flow
+- Puntuacion 9-14: Standard
+- Puntuacion 15+: Enterprise
+
+### Paso 3: Recomendacion de track
+
+```
+╔══════════════════════════════════════════════════════════╗
+║               ANALISIS DEL PROYECTO COMPLETADO            ║
+╠══════════════════════════════════════════════════════════╣
+║ Proyecto: mi-aplicacion                                   ║
+║ Stack: Symfony 7.x + React 18                             ║
+║ Estado: Proyecto existente con backlog                    ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║ EVALUACION DE COMPLEJIDAD:                                ║
+║ ├── Archivos impactados:    ~25        [Standard]         ║
+║ ├── Nuevas entidades:       2          [Standard]         ║
+║ ├── Integraciones:          1 (Stripe) [Standard]         ║
+║ ├── Stories estimadas:      8          [Standard]         ║
+║ ├── Equipos:                1          [Quick]            ║
+║ └── Seguridad:              Alto       [Enterprise]       ║
+║                                                           ║
+║ ═══════════════════════════════════════════════════════  ║
+║ TRACK RECOMENDADO: STANDARD                               ║
+║ ═══════════════════════════════════════════════════════  ║
+║                                                           ║
+║ Justificacion:                                            ║
+║ • Alcance de la feature requiere planificacion (8 stories)║
+║ • Integracion externa necesita diseno tecnico             ║
+║ • Implicaciones de seguridad requieren arquitectura       ║
+║   cuidadosa                                               ║
+║ • Un solo equipo puede gestionar sin proceso enterprise   ║
+║   completo                                                ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+### Paso 4: Planificacion de fases
+
+Segun el track, mostrar el flujo de trabajo:
+
+**Quick Flow:**
+```
+╔══════════════════════════════════════════════════════════╗
+║              FLUJO QUICK FLOW                             ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  ┌──────────────────┐                                     ║
+║  │  IMPLEMENTACION  │ ← Comenzar aqui                     ║
+║  └──────────────────┘                                     ║
+║                                                           ║
+║ No requiere documentacion. Directo a programar.           ║
+║                                                           ║
+║ Comandos:                                                 ║
+║ • /bear-qa:tdd    - Corregir con TDD               ║
+║ • /bear-project:backlog add task      - Registrar el trabajo            ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+**Standard:**
+```
+╔══════════════════════════════════════════════════════════╗
+║              FLUJO STANDARD                               ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  ┌──────────────┐  ┌──────────┐  ┌──────────────┐        ║
+║  │PLANIFICACION │→ │  DISENO  │→ │IMPLEMENTACION│        ║
+║  └──────────────┘  └──────────┘  └──────────────┘        ║
+║       ↑                                                   ║
+║   Comenzar aqui                                           ║
+║                                                           ║
+║ Fase 1 - Planificacion:                                   ║
+║ • /bear-workflow:plan --only=prd    - Crear/actualizar PRD         ║
+║ • /bear-workflow:plan --only=backlog - Crear user stories          ║
+║                                                           ║
+║ Fase 2 - Diseno:                                          ║
+║ • /bear-workflow:design - Diseno tecnico            ║
+║                                                           ║
+║ Fase 3 - Implementacion:                                  ║
+║ • /bear-workflow:start N      - Preparar sprint        ║
+║ • /bear-workflow:implement    - Desarrollo TDD/BDD     ║
+║ • /bear-workflow:auto-sprint N - Sprint completo       ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+**Enterprise:**
+```
+╔══════════════════════════════════════════════════════════╗
+║              FLUJO ENTERPRISE                             ║
+╠══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  ┌──────────┐ ┌──────────────┐ ┌────────┐ ┌────────────┐ ║
+║  │ ANALISIS │→│PLANIFICACION │→│ DISENO │→│IMPLEMENTAC.│ ║
+║  └──────────┘ └──────────────┘ └────────┘ └────────────┘ ║
+║       ↑                                                   ║
+║   Comenzar aqui                                           ║
+║                                                           ║
+║ Fase 1 - Analisis:                                        ║
+║ • /bear-workflow:plan --research        - Investigacion y exploracion  ║
+║                                                           ║
+║ Fase 2 - Planificacion:                                   ║
+║ • /bear-workflow:plan --only=prd    - PRD completo                 ║
+║ • /bear-workflow:plan --only=backlog - Backlog completo            ║
+║                                                           ║
+║ Fase 3 - Diseno:                                          ║
+║ • /bear-workflow:design - Tech spec completo        ║
+║ • /bear-common:architecture-decision - ADRs                    ║
+║                                                           ║
+║ Fase 4 - Implementacion:                                  ║
+║ • /bear-workflow:start N      - Preparar sprint        ║
+║ • /bear-workflow:implement    - Desarrollo TDD/BDD     ║
+║ • /bear-workflow:auto-sprint N - Sprint completo       ║
+║                                                           ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+### Paso 5: Inicializar seguimiento
+
+Crear archivo de estado del flujo de trabajo:
+
+```yaml
+# project-management/workflow-status.yaml
+project: mi-aplicacion
+track: standard
+initialized_at: 2026-01-07T10:00:00Z
+current_phase: planning
+
+phases:
+  analysis:
+    status: skipped
+    reason: "Standard track - analisis no requerido"
+  planning:
+    status: pending
+    artifacts:
+      prd: pending
+      personas: pending
+      backlog: pending
+  design:
+    status: pending
+    artifacts:
+      tech_spec: pending
+      architecture: pending
+  implementation:
+    status: pending
+
+next_action: "Generar o actualizar PRD"
+next_command: "/bear-workflow:plan --only=prd"
+```
+
+Crear el esqueleto de estado BMAD (fuente única de verdad del estado de las historias, leído por `/bear-gate:*`, `/bear-workflow:auto-sprint` y el Kanban). Omitir si `.bmad/sprint-status.yaml` ya existe; `/bear-workflow:start` completa `metadata` y `stories` más adelante:
+
+```yaml
+# .bmad/sprint-status.yaml
+version: "1.0"
+metadata:
+  sprint_id: "sprint-0"
+  name: "Sin iniciar"
+  start_date: ""
+  end_date: ""
+  goal: ""
+stories: {}
+routing:
+  auto_transitions:
+    enabled: true
+    run_on_session_start: false
+    run_on_task_complete: true
+    rules: []
+```
+
+### Paso 6: Indicar siguiente accion
+
+```
+╔══════════════════════════════════════════════════════════╗
+║                    LISTO PARA COMENZAR                     ║
+╠══════════════════════════════════════════════════════════╣
+║ Flujo inicializado: track STANDARD                        ║
+║ Archivo de estado: project-management/workflow-status.yaml║
+║ Estado del sprint: .bmad/sprint-status.yaml               ║
+║                                                           ║
+║ ─────────────────────────────────────────────────────────║
+║ SIGUIENTE PASO: Fase de planificacion                     ║
+║ ─────────────────────────────────────────────────────────║
+║                                                           ║
+║ Comenzar con: /bear-workflow:plan                              ║
+║                                                           ║
+║ O ir directamente a tareas especificas:                   ║
+║ • /bear-workflow:plan --only=prd     - Crear documento de          ║
+║                                requisitos                  ║
+║ • /bear-workflow:plan --only=backlog - Crear user stories          ║
+║                                                           ║
+║ Verificar progreso en cualquier momento: /bear-workflow:status  ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+## Opciones de sobreescritura
+
+```bash
+# Forzar track especifico
+/bear-workflow:init --quick          # Forzar Quick Flow
+/bear-workflow:init --standard       # Forzar Standard
+/bear-workflow:init --enterprise     # Forzar Enterprise
+
+# Proporcionar indicacion de alcance
+/bear-workflow:init bug              # Indicacion: es una correccion de bug
+/bear-workflow:init feature          # Indicacion: nueva funcionalidad
+/bear-workflow:init platform         # Indicacion: trabajo de plataforma
+```
+
+## Comandos relacionados
+
+- `/bear-workflow:status` - Verificar progreso actual del flujo de trabajo
+- `/bear-workflow:plan` - Iniciar fase de planificacion
+- `/bear-workflow:design` - Iniciar fase de diseno
+- `/bear-workflow:implement` - Iniciar fase de implementacion
+- `/bear-workflow:auto-sprint` - Ejecutar un sprint completo de extremo a extremo (inicio → merge)
+- `/bear-workflow:plan --research` - Iniciar fase de analisis (solo Enterprise)
+
+> ¿No sabes qué camino seguir? Consulta la página de decisión: https://github.com/TheBeardedBearSAS/bear-craft/blob/main/docs/guides/es/11-which-path.md

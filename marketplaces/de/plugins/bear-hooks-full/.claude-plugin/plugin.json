@@ -1,0 +1,21 @@
+{
+  "name": "bear-hooks-full",
+  "displayName": "Bear Craft — Hooks (full)",
+  "description": "Extra hooks of the full profile: quality gate on stop, post-edit lint, tool-failure log, session init/end and Slack notifications. Install it next to bear-hooks.",
+  "version": "9.4.0",
+  "author": {
+    "name": "The Bearded Bear",
+    "url": "https://the-bearded-bear.com"
+  },
+  "repository": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "homepage": "https://github.com/TheBeardedBearSAS/bear-craft",
+  "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.325"
+  },
+  "keywords": [
+    "bear-craft",
+    "claude-code",
+    "hooks-full"
+  ]
+}

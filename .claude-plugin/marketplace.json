@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "bear-angular",
-      "source": "./plugins/bear-angular",
+      "source": "./marketplaces/en/plugins/bear-angular",
       "description": "Angular 22: Frontend TS with Signals, Zoneless, httpResource, Signal Forms. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -24,9 +24,22 @@
       "license": "MIT"
     },
     {
+      "name": "bear-ansible",
+      "source": "./marketplaces/en/plugins/bear-ansible",
+      "description": "Ansible: automation architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "ansible"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-common",
-      "source": "./plugins/bear-common",
-      "description": "Shared agents, skills, rules, checklists and token/CI/ADR utilities, plus the optional safety hooks.",
+      "source": "./marketplaces/en/plugins/bear-common",
+      "description": "Shared agents, skills, rules, checklists and token/CI/ADR utilities (hooks live in bear-hooks).",
       "version": "9.4.0",
       "category": "development-framework",
       "keywords": [
@@ -37,8 +50,21 @@
       "license": "MIT"
     },
     {
+      "name": "bear-coolify",
+      "source": "./marketplaces/en/plugins/bear-coolify",
+      "description": "Coolify: self-hosted PaaS setup, deployment, backups and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "coolify"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-csharp",
-      "source": "./plugins/bear-csharp",
+      "source": "./marketplaces/en/plugins/bear-csharp",
       "description": "C# / .NET 10 LTS / C# 14: Backend with Clean Architecture, CQRS, MediatR, EF Core. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -50,8 +76,21 @@
       "license": "MIT"
     },
     {
+      "name": "bear-docker",
+      "source": "./marketplaces/en/plugins/bear-docker",
+      "description": "Docker: Dockerfile, Compose, CI/CD image pipelines and debugging, with specialist agents.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "docker"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-flutter",
-      "source": "./plugins/bear-flutter",
+      "source": "./marketplaces/en/plugins/bear-flutter",
       "description": "Flutter / Dart 3.47 / Dart 3.13: Mobile Dart with BLoC v9, Riverpod 3, Material 3, Impeller. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -63,8 +102,21 @@
       "license": "MIT"
     },
     {
+      "name": "bear-frankenphp",
+      "source": "./marketplaces/en/plugins/bear-frankenphp",
+      "description": "FrankenPHP: PHP application server architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "frankenphp"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-gate",
-      "source": "./plugins/bear-gate",
+      "source": "./marketplaces/en/plugins/bear-gate",
       "description": "Quality gates: PRD, tech spec, backlog, sprint, story, alignment, commit, merge and release.",
       "version": "9.4.0",
       "category": "development-framework",
@@ -76,8 +128,73 @@
       "license": "MIT"
     },
     {
+      "name": "bear-hcloud",
+      "source": "./marketplaces/en/plugins/bear-hcloud",
+      "description": "Hetzner Cloud (hcloud): architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hcloud"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks",
+      "source": "./marketplaces/en/plugins/bear-hooks",
+      "description": "Default safety hooks: network guard, dangerous-command blocker, sensitive-file protection, pre-commit check and output-size hint (guards fail closed).",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks-full",
+      "source": "./marketplaces/en/plugins/bear-hooks-full",
+      "description": "Extra hooks of the full profile: quality gate on stop, post-edit lint, tool-failure log, session init/end and Slack notifications. Install it next to bear-hooks.",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks-full"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-hooks-memory",
+      "source": "./marketplaces/en/plugins/bear-hooks-memory",
+      "description": "Cross-session memory hooks backed by SQLite (session start, prompt submit, post-tool, pre-compact, session end).",
+      "version": "9.4.0",
+      "category": "safety-hooks",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "hooks-memory"
+      ],
+      "license": "MIT"
+    },
+    {
+      "name": "bear-kubernetes",
+      "source": "./marketplaces/en/plugins/bear-kubernetes",
+      "description": "Kubernetes: architecture, deployment setup, security audit and troubleshooting.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "kubernetes"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-laravel",
-      "source": "./plugins/bear-laravel",
+      "source": "./marketplaces/en/plugins/bear-laravel",
       "description": "Laravel 13.x / PHP 8.3+: PHP backend with Actions, Pest 5, Sanctum, AI SDK, Passkey. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -89,8 +206,21 @@
       "license": "MIT"
     },
     {
+      "name": "bear-opentofu",
+      "source": "./marketplaces/en/plugins/bear-opentofu",
+      "description": "OpenTofu: infrastructure-as-code architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "opentofu"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-paperclip",
-      "source": "./plugins/bear-paperclip",
+      "source": "./marketplaces/en/plugins/bear-paperclip",
       "description": "Paperclip 2026.1106.0: Governance-first integration platform (control plane + adapters). Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -102,8 +232,21 @@
       "license": "MIT"
     },
     {
+      "name": "bear-pgbouncer",
+      "source": "./marketplaces/en/plugins/bear-pgbouncer",
+      "description": "PgBouncer: connection pooling architecture, deployment setup, security audit and debugging.",
+      "version": "9.4.0",
+      "category": "infrastructure",
+      "keywords": [
+        "bear-craft",
+        "claude-code",
+        "pgbouncer"
+      ],
+      "license": "MIT"
+    },
+    {
       "name": "bear-php",
-      "source": "./plugins/bear-php",
+      "source": "./marketplaces/en/plugins/bear-php",
       "description": "PHP 8.5: Backend PHP 8.5 with PSR-12, PHPStan, Pest PHP. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -116,7 +259,7 @@
     },
     {
       "name": "bear-project",
-      "source": "./plugins/bear-project",
+      "source": "./marketplaces/en/plugins/bear-project",
       "description": "Project management: epics, stories, tasks, backlog and sprint tracking with product-owner and tech-lead agents.",
       "version": "9.4.0",
       "category": "development-framework",
@@ -129,7 +272,7 @@
     },
     {
       "name": "bear-python",
-      "source": "./plugins/bear-python",
+      "source": "./marketplaces/en/plugins/bear-python",
       "description": "Python 3.15 / 3.14+: Backend with FastAPI, Pydantic, free-threading, JIT. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -142,7 +285,7 @@
     },
     {
       "name": "bear-qa",
-      "source": "./plugins/bear-qa",
+      "source": "./marketplaces/en/plugins/bear-qa",
       "description": "Browser acceptance testing (QA Recette) with regression registry and TDD bug fixing.",
       "version": "9.4.0",
       "category": "development-framework",
@@ -155,7 +298,7 @@
     },
     {
       "name": "bear-react",
-      "source": "./plugins/bear-react",
+      "source": "./marketplaces/en/plugins/bear-react",
       "description": "React 19.3 + Compiler 1.0: Frontend JS/TS with Hooks, Compiler 1.0, Server Components. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -168,7 +311,7 @@
     },
     {
       "name": "bear-reactnative",
-      "source": "./plugins/bear-reactnative",
+      "source": "./marketplaces/en/plugins/bear-reactnative",
       "description": "React Native 0.88: Mobile JS/TS New Architecture (JSI, TurboModules, Fabric). Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -181,7 +324,7 @@
     },
     {
       "name": "bear-ruby",
-      "source": "./plugins/bear-ruby",
+      "source": "./marketplaces/en/plugins/bear-ruby",
       "description": "Ruby / Rails 8.1 / Ruby 4.0: Backend Ruby 4.0 with Rails 8.1, Hotwire, Solid Queue, RSpec/Minitest. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -194,7 +337,7 @@
     },
     {
       "name": "bear-rust",
-      "source": "./plugins/bear-rust",
+      "source": "./marketplaces/en/plugins/bear-rust",
       "description": "Rust / Axum 0.8 / Rust 1.99: Backend Rust 1.99 (edition 2024) with Axum 0.8, Tokio, SQLx, cargo-nextest. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -207,7 +350,7 @@
     },
     {
       "name": "bear-symfony",
-      "source": "./plugins/bear-symfony",
+      "source": "./marketplaces/en/plugins/bear-symfony",
       "description": "Symfony / PHP 8.1 / PHP 8.4+: PHP backend with Clean Architecture, DDD, API Platform. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -220,7 +363,7 @@
     },
     {
       "name": "bear-tauri",
-      "source": "./plugins/bear-tauri",
+      "source": "./marketplaces/en/plugins/bear-tauri",
       "description": "Tauri 2.12: Desktop & mobile apps: Rust core + web frontend, capabilities/permissions, plugins, signed updater. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -233,7 +376,7 @@
     },
     {
       "name": "bear-team",
-      "source": "./plugins/bear-team",
+      "source": "./marketplaces/en/plugins/bear-team",
       "description": "Parallel multi-agent teams: audit, security review and sprint delivery.",
       "version": "9.4.0",
       "category": "development-framework",
@@ -246,7 +389,7 @@
     },
     {
       "name": "bear-uiux",
-      "source": "./plugins/bear-uiux",
+      "source": "./marketplaces/en/plugins/bear-uiux",
       "description": "UI/UX/accessibility audits, component specs, design tokens, user flows and DESIGN.md.",
       "version": "9.4.0",
       "category": "development-framework",
@@ -259,7 +402,7 @@
     },
     {
       "name": "bear-vercel",
-      "source": "./plugins/bear-vercel",
+      "source": "./marketplaces/en/plugins/bear-vercel",
       "description": "Vercel 65.14.0: Framework-agnostic deployment platform: vercel.json, Functions (Node.js/Fluid Compute), ISR, Cron Jobs, Storage. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -272,7 +415,7 @@
     },
     {
       "name": "bear-vite",
-      "source": "./plugins/bear-vite",
+      "source": "./marketplaces/en/plugins/bear-vite",
       "description": "Vite 8.3: Framework-agnostic build tool: vanilla JS/TS, library authoring, multi-page apps. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -285,7 +428,7 @@
     },
     {
       "name": "bear-vuejs",
-      "source": "./plugins/bear-vuejs",
+      "source": "./marketplaces/en/plugins/bear-vuejs",
       "description": "Vue.js 3.5+: Frontend JS/TS with Composition API, Pinia, Vitest. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -298,7 +441,7 @@
     },
     {
       "name": "bear-wordpress",
-      "source": "./plugins/bear-wordpress",
+      "source": "./marketplaces/en/plugins/bear-wordpress",
       "description": "WordPress 7.1: Plugins & block themes: blocks (block.json), REST API, WP-CLI, WPCS/PHPStan, wp-env; WooCommerce as opt-in skill. Audit and generation commands, reviewer agent and stack skills.",
       "version": "9.4.0",
       "category": "technology-stack",
@@ -311,7 +454,7 @@
     },
     {
       "name": "bear-workflow",
-      "source": "./plugins/bear-workflow",
+      "source": "./marketplaces/en/plugins/bear-workflow",
       "description": "BMAD v6 sprint workflow: init, plan, design, start, implement, review, retro and status.",
       "version": "9.4.0",
       "category": "development-framework",
