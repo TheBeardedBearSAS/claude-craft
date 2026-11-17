@@ -135,6 +135,12 @@ describe('migrateLegacyInstall', { timeout: 120_000 }, () => {
     expect(out.permissions).toEqual(settings.permissions);
   });
 
+  it('drops the hooks key once nothing is left in it', () => {
+    const project = copyInstall('hooks-empty');
+    migrateLegacyInstall({ target: project, lang: 'en', cliRoot: ROOT });
+    expect(JSON.parse(fs.readFileSync(path.join(project, '.claude/settings.json'), 'utf8')).hooks).toBeUndefined();
+  });
+
   it('is a no-op on a project that already uses plugins only', () => {
     const project = path.join(TMP, 'plugins-only');
     fs.mkdirSync(path.join(project, '.claude/rules'), { recursive: true });

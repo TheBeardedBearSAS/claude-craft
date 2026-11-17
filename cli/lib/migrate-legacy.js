@@ -191,6 +191,7 @@ export function migrateLegacyInstall({ target, lang, cliRoot, log = () => {}, wa
           settings = res.settings ?? res;
           hooksRemoved += res.removed ?? 0;
         }
+        if (Object.keys(settings.hooks ?? {}).length === 0) delete settings.hooks;
         fs.writeFileSync(settingsFile, `${JSON.stringify(settings, null, 2)}\n`);
       }
     } catch {
