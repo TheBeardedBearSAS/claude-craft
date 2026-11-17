@@ -13,4 +13,4 @@ How it works: the real installers (`Dev/scripts/install-*-rules.sh`, `Project/in
 scratch project under `.test-tmp/`; their `.claude/` output is reshaped into one plugin per command namespace and per
 stack, deprecated redirect stubs are dropped, and `.claude/<rules|references|templates|checklists|skills|agents>/…`
 references are rewritten to `${CLAUDE_PLUGIN_ROOT}/…` (the referenced files are vendored into the plugin that cites
-them), and `/<ns>:<cmd>` slash references become `/bear-<ns>:<cmd>` (sources keep the unprefixed names for the CLI). Hooks ship only in the `common` plugin. See the README of each plugin for its contents.
+them). The sources already use the `bear-` prefixed slash names (the CLI installs the same `/bear-<ns>:<cmd>` commands). Hooks ship only in the `common` plugin. See the README of each plugin for its contents.
