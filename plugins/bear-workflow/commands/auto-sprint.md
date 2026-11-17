@@ -92,7 +92,7 @@ Spawn one isolated sub-agent:
 
 ### Phase 3 — Validate gate (sub-agent + auto-fix loop)
 
-> "Read `.claude/commands/gate/check.md` (gate `sprint`) and run it for sprint **00N**.
+> "Read `.claude/commands/bear-gate/check.md` (gate `sprint`) and run it for sprint **00N**.
 > Return PASS/FAIL, the score, and the list of failing criteria."
 
 **On FAIL → auto-fix loop** (up to `--max-fix-attempts`):
