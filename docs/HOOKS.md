@@ -262,9 +262,7 @@ Three Claude Code plugins carry the hook profiles (`hooks/hooks.json`, commands 
 | `bear-hooks-full` | only what `full` adds to `default` — install it next to `bear-hooks` | `jq` or `node`, `bash` |
 | `bear-hooks-memory` | `memory` add-on (`memory-lifecycle`) | `sqlite3`, `jq`, `bash` |
 
-> **Pick a single channel: the `bear-hooks*` plugins *or* the CLI installation with hooks (`--hooks=default|full`).** Enabling both
-> registers every guard twice, so each Bash/Edit call runs it two times. To use the plugins, install the CLI with
-> `--hooks=none`; to use the CLI hooks, do not install the `bear-hooks*` plugins. `bear-common` no longer carries hooks.
+> **`bear-craft install --hooks=default|full|none[,memory]` installs these plugins for you** (`default` → `bear-hooks`; `full` → `bear-hooks` + `bear-hooks-full`; `none` → no hook plugin; `,memory` → + `bear-hooks-memory`) and no longer merges hooks into `.claude/settings.json`. `install` and `update` remove the hooks an older copy-based installation had merged (and its `.claude/hooks/` scripts). **Pick a single channel**: the `bear-hooks*` plugins (installed by the CLI or from the marketplace) *or* hooks merged by `make install-*` (full copy mode): enabling both registers every guard twice. `bear-common` no longer carries hooks.
 
 ---
 

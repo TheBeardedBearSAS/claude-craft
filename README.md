@@ -336,6 +336,16 @@ See [CLI Reference](docs/CLI-REFERENCE.md) for all 143 commands across 18 namesp
 npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony --lang=en
 ```
 
+### What `bear-craft install` does (10.0)
+
+It installs the `bear-*` plugins **in project scope through Claude Code** (so `claude` must be installed: no fallback) and copies only what plugins cannot carry — `.claude/rules`, `.claude/references`, `CLAUDE.md`, `AGENTS.md`, `settings*.json`, `.github/`, `Tools/AgentTeams/lib`, `project-management/`. The marketplace of your language is copied to `.bear-craft/marketplace/` (versioned with your project, works offline) and recorded in `.bear-craft/install.json`. Commands, agents and skills therefore have the same names (`/bear-react:check`, `bear-common:tdd-coach`) whether you install through the CLI or the plugin marketplace. After a `git clone`, run `bear-craft sync` once per machine. Community skills added with `bear-craft skill add` are plain copies under `.claude/skills/community/` and are **not** `bear-` prefixed.
+
+```bash
+bear-craft install ~/my-project --tech=react,symfony --infra=docker,kubernetes --lang=fr --hooks=full
+bear-craft sync      # after a clone: re-register the marketplace and plugins on this machine
+bear-craft update    # new version: refresh the marketplace, rules and plugins; migrate old copies
+```
+
 ### Claude Code plugin
 
 One plugin per command namespace and per stack, each prefixed with `bear-` so commands never clash with project commands or other plugins (`/bear-react:check`, `/bear-workflow:init`):

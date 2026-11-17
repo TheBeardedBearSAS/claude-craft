@@ -158,6 +158,8 @@ make --version
 
 Bear Craft is designed to work with [Claude Code](https://claude.ai/code), Anthropic's official CLI.
 
+> **Required at install time (10.0+):** `bear-craft install`, `update` and `sync` install the `bear-*` plugins through the `claude` command (project scope), so `claude` must be in your `PATH` and at least at the minimum version below. There is no fallback: without it the command stops with instructions. Run `bear-craft doctor` to check.
+
 > **Important:** The `npm install -g` method is deprecated. Use native installers below.
 
 **Installation (recommended):**

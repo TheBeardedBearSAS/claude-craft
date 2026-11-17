@@ -23,7 +23,8 @@ npx @the-bearded-bear/bear-craft [command] [options]
 | `check` | Verify bear-craft installation structure |
 | `list` | Detailed component inventory |
 | `doctor` | Environment diagnostics & health check |
-| `update` | Refresh existing installation |
+| `update` | Refresh an installation: copy the marketplace of the current version, refresh rules, migrate copied files (ours removed, yours kept), re-register the plugins |
+| `sync` | Re-register `.bear-craft/marketplace` and re-install the plugins recorded in `.bear-craft/install.json` on this machine (after a clone or a move); idempotent, rules untouched |
 | `help` | Show help message |
 | (no command) | Interactive installation wizard |
 
