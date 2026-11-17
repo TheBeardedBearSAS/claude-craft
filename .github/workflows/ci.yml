@@ -335,7 +335,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # pinned: v7.0.1
 
       - name: Run Trivy vulnerability scanner (filesystem)
-        uses: aquasecurity/trivy-action@8f28faec26515256b6d22074d1d2a8986f4cbd87 # pinned: master @ 2026-06-08
+        uses: aquasecurity/trivy-action@38b337fff0a2f984d5be173c99e3f633438167ec # pinned: master @ 2026-06-08
         with:
           scan-type: 'fs'
           severity: 'CRITICAL,HIGH'
