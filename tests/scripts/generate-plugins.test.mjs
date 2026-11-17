@@ -52,13 +52,13 @@ afterAll(() => fs.rmSync(TMP, { recursive: true, force: true }));
 
 describe('generate-plugins : plugins produits', () => {
   it('produit un plugin par namespace de commandes et par stack', () => {
-    expect(plugins(GEN_A)).toEqual(EXPECTED);
+    expect(plugins(GEN_A)).toEqual(EXPECTED.map((n) => `bear-${n}`));
   });
 
   it('chaque manifeste porte les champs requis (version = package.json, engines = minimum)', () => {
     for (const name of EXPECTED) {
-      const m = readJson(path.join(GEN_A, name, '.claude-plugin/plugin.json'));
-      expect(m.name, name).toBe(name);
+      const m = readJson(path.join(GEN_A, `bear-${name}`, '.claude-plugin/plugin.json'));
+      expect(m.name, name).toBe(`bear-${name}`);
       expect(m.displayName, name).toMatch(/^Bear Craft — /);
       expect(m.description.length, name).toBeGreaterThan(20);
       expect(m.version, name).toBe(pkg.version);
@@ -72,21 +72,21 @@ describe('generate-plugins : plugins produits', () => {
 
   it('chaque plugin a LICENSE, README (installation depuis la marketplace) et icône', () => {
     for (const name of EXPECTED) {
-      const dir = path.join(GEN_A, name);
+      const dir = path.join(GEN_A, `bear-${name}`);
       expect(fs.existsSync(path.join(dir, 'LICENSE')), name).toBe(true);
       expect(fs.existsSync(path.join(dir, '.claude-plugin/icon.png')), name).toBe(true);
       const readme = fs.readFileSync(path.join(dir, 'README.md'), 'utf8');
       expect(readme.split(/\s+/).length, name).toBeGreaterThanOrEqual(40);
       expect(readme).toContain('/plugin marketplace add TheBeardedBearSAS/bear-craft');
-      expect(readme).toContain(`/plugin install ${name}@bear-craft`);
+      expect(readme).toContain(`/plugin install bear-${name}@bear-craft`);
     }
   });
 
   it('les commandes gardent leur nom de namespace (react → /react:check)', () => {
-    expect(fs.existsSync(path.join(GEN_A, 'react/commands/check.md'))).toBe(true);
-    expect(fs.existsSync(path.join(GEN_A, 'workflow/commands/init.md'))).toBe(true);
-    expect(fs.existsSync(path.join(GEN_A, 'react/agents/react-reviewer.md'))).toBe(true);
-    expect(fs.existsSync(path.join(GEN_A, 'common/agents/tdd-coach.md'))).toBe(true);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-react/commands/check.md'))).toBe(true);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-workflow/commands/init.md'))).toBe(true);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-react/agents/react-reviewer.md'))).toBe(true);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-common/agents/tdd-coach.md'))).toBe(true);
   });
 });
 
@@ -94,7 +94,7 @@ describe('generate-plugins : autonomie des plugins', () => {
   it('chaque ${CLAUDE_PLUGIN_ROOT}/<chemin> cité existe dans le même plugin', () => {
     let seen = 0;
     for (const name of EXPECTED) {
-      const dir = path.join(GEN_A, name);
+      const dir = path.join(GEN_A, `bear-${name}`);
       for (const file of walk(dir)) {
         if (/\.(png|ico)$/.test(file)) continue;
         const text = fs.readFileSync(path.join(dir, file), 'utf8');
@@ -110,7 +110,7 @@ describe('generate-plugins : autonomie des plugins', () => {
   it("aucune référence .claude/(rules|references|templates|checklists|skills|agents) résolue n'est laissée telle quelle", () => {
     // Une référence non résolue est tolérée (rapportée), mais jamais une référence dont la cible existe dans le plugin.
     for (const name of EXPECTED) {
-      const dir = path.join(GEN_A, name);
+      const dir = path.join(GEN_A, `bear-${name}`);
       for (const file of walk(dir).filter((f) => f.endsWith('.md'))) {
         const text = fs.readFileSync(path.join(dir, file), 'utf8');
         for (const m of text.matchAll(
@@ -128,7 +128,7 @@ describe('generate-plugins : autonomie des plugins', () => {
     const removed = yaml.load(fs.readFileSync(path.join(ROOT, 'config/removed-commands.yaml'), 'utf8'));
     const listed = new Set([...(removed.removed ?? []), ...Object.keys(removed.scheduled ?? {})]);
     for (const name of EXPECTED) {
-      const cmdDir = path.join(GEN_A, name, 'commands');
+      const cmdDir = path.join(GEN_A, `bear-${name}`, 'commands');
       if (!fs.existsSync(cmdDir)) continue;
       for (const f of fs.readdirSync(cmdDir)) {
         const text = fs.readFileSync(path.join(cmdDir, f), 'utf8');
@@ -136,22 +136,44 @@ describe('generate-plugins : autonomie des plugins', () => {
         expect(listed.has(`${name}/${f}`), `${name}/${f}`).toBe(false);
       }
     }
-    expect(fs.existsSync(path.join(GEN_A, 'react/commands/check-security.md'))).toBe(false);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-react/commands/check-security.md'))).toBe(false);
+  });
+});
+
+describe('generate-plugins : références slash préfixées', () => {
+  const NS = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${EXPECTED.join('|')}):[A-Za-z]`, 'm');
+
+  it("aucune référence /<ns>: non préfixée ne subsiste pour un namespace généré", () => {
+    for (const name of EXPECTED) {
+      const dir = path.join(GEN_A, `bear-${name}`);
+      for (const file of walk(dir).filter((f) => /\.(md|json|ya?ml|txt|template)$/.test(f))) {
+        const text = fs.readFileSync(path.join(dir, file), 'utf8');
+        for (const line of text.split('\n')) expect(line, `${name}/${file}`).not.toMatch(NS);
+      }
+    }
+  });
+
+  it('réécrit les références citées (/workflow:plan → /bear-workflow:plan) sans toucher aux URL', () => {
+    const all = EXPECTED.flatMap((n) => walk(path.join(GEN_A, `bear-${n}`)).map((f) => path.join(GEN_A, `bear-${n}`, f)));
+    const texts = all.filter((f) => f.endsWith('.md')).map((f) => fs.readFileSync(f, 'utf8'));
+    expect(texts.some((t) => t.includes('/bear-workflow:plan'))).toBe(true);
+    expect(texts.some((t) => t.includes('/bear-react:check'))).toBe(true);
+    expect(texts.some((t) => /(^|[\s`'"(\[|>])\/(workflow|react):/m.test(t))).toBe(false);
   });
 });
 
 describe('generate-plugins : hooks (plugin common uniquement)', () => {
   it('common porte hooks.json (enveloppe hooks, onFailure conservé) et les scripts', () => {
-    const hooks = readJson(path.join(GEN_A, 'common/hooks/hooks.json'));
+    const hooks = readJson(path.join(GEN_A, 'bear-common/hooks/hooks.json'));
     const commands = Object.values(hooks.hooks).flatMap((groups) => groups.flatMap((g) => g.hooks));
     expect(commands.some((h) => h.onFailure === 'block')).toBe(true);
     for (const h of commands) expect(h.command).not.toContain('$CLAUDE_PROJECT_DIR/.claude/hooks/');
     expect(JSON.stringify(hooks)).toContain('${CLAUDE_PLUGIN_ROOT}/hooks/scripts/guard-network.sh');
-    expect(fs.existsSync(path.join(GEN_A, 'common/hooks/scripts/lib/hook-io.sh'))).toBe(true);
+    expect(fs.existsSync(path.join(GEN_A, 'bear-common/hooks/scripts/lib/hook-io.sh'))).toBe(true);
   });
 
   it('un script de hook généré bloque une commande destructrice (exécuté depuis le plugin)', () => {
-    const r = spawnSync('bash', [path.join(GEN_A, 'common/hooks/scripts/block-dangerous-commands.sh')], {
+    const r = spawnSync('bash', [path.join(GEN_A, 'bear-common/hooks/scripts/block-dangerous-commands.sh')], {
       input: JSON.stringify({ tool_input: { command: 'rm -rf /' } }),
       encoding: 'utf8',
     });
@@ -161,7 +183,7 @@ describe('generate-plugins : hooks (plugin common uniquement)', () => {
 
   it("aucun autre plugin n'embarque de hooks", () => {
     for (const name of EXPECTED.filter((n) => n !== 'common')) {
-      expect(fs.existsSync(path.join(GEN_A, name, 'hooks')), name).toBe(false);
+      expect(fs.existsSync(path.join(GEN_A, `bear-${name}`, 'hooks')), name).toBe(false);
     }
   });
 });
@@ -175,7 +197,7 @@ describe('generate-plugins : déterminisme et mode --check', () => {
   });
 
   it('vide sa sortie avant de générer (un fichier orphelin disparaît)', () => {
-    const orphan = path.join(GEN_B, 'react', 'orphan.md');
+    const orphan = path.join(GEN_B, 'bear-react', 'orphan.md');
     fs.writeFileSync(orphan, 'x');
     const r = run('--out', GEN_B);
     expect(r.status, r.stderr).toBe(0);
@@ -190,19 +212,19 @@ describe('generate-plugins : déterminisme et mode --check', () => {
   it("--check échoue après modification d'un fichier généré", () => {
     const copy = path.join(TMP, 'drift-modified');
     fs.cpSync(COMMITTED, copy, { recursive: true });
-    fs.appendFileSync(path.join(copy, 'react/commands/check.md'), '\nderive\n');
+    fs.appendFileSync(path.join(copy, 'bear-react/commands/check.md'), '\nderive\n');
     const r = run('--check', '--out', copy);
     expect(r.status).not.toBe(0);
-    expect(r.stderr + r.stdout).toContain('react/commands/check.md');
+    expect(r.stderr + r.stdout).toContain('bear-react/commands/check.md');
   }, 120_000);
 
   it('--check échoue si un fichier en trop existe dans plugins/ (sens inverse)', () => {
     const copy = path.join(TMP, 'drift-extra');
     fs.cpSync(COMMITTED, copy, { recursive: true });
-    fs.writeFileSync(path.join(copy, 'react/commands/extra.md'), 'en trop\n');
+    fs.writeFileSync(path.join(copy, 'bear-bear-react/commands/extra.md'), 'en trop\n');
     const r = run('--check', '--out', copy);
     expect(r.status).not.toBe(0);
-    expect(r.stderr + r.stdout).toContain('react/commands/extra.md');
+    expect(r.stderr + r.stdout).toContain('bear-react/commands/extra.md');
   }, 120_000);
 });
 

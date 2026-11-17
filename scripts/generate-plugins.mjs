@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * generate-plugins.mjs — génère `plugins/<namespace>/` : un plugin Claude Code par
+ * generate-plugins.mjs — génère `plugins/bear-<namespace>/` : un plugin Claude Code par
  * namespace de commandes du CLI (common, workflow, team, qa, uiux, gate, project) et
  * par stack du registre (react, symfony, …).
  *
  * Le contenu vient des VRAIS installeurs (Dev/scripts/install-*-rules.sh,
  * Project/install-project-commands.sh) exécutés dans un projet temporaire ; leur
  * `.claude/` est remodelé au format plugin :
- *   - commands/<ns>/*.md   → plugins/<ns>/commands/ (stubs dépréciés exclus)
+ *   - commands/<ns>/*.md   → plugins/bear-<ns>/commands/ (stubs dépréciés exclus)
  *   - agents, skills       → plugin qui les possède (delta stack vs common)
  *   - rules/references/templates/checklists → uniquement les fichiers référencés
  *     (résolution transitive, vendoring dans le plugin qui les cite)
@@ -34,6 +34,9 @@ const ICON_SRC = path.join(ROOT, 'Tools', 'PluginExport', 'icon.png');
 const HOOKS_SRC = path.join(ROOT, 'Dev', 'i18n', 'base', 'Common', 'hooks');
 const REPO_URL = 'https://github.com/TheBeardedBearSAS/bear-craft';
 const AUTHOR = { name: 'The Bearded Bear', url: 'https://the-bearded-bear.com' };
+
+/** Nom publié d'un plugin : préfixe `bear-` pour éviter les conflits avec les commandes du projet ou d'autres plugins. */
+const pluginName = (ns) => `bear-${ns}`;
 
 const REF_DIRS = ['rules', 'references', 'templates', 'checklists', 'skills', 'agents'];
 
@@ -195,7 +198,19 @@ function universeFor(name, installs) {
     .filter((v, i, a) => a.indexOf(v) === i);
 }
 
-function buildPlugin(name, owned, installs, ctx, unresolved) {
+/**
+ * `/<ns>:<cmd>` → `/bear-<ns>:<cmd>` pour tout namespace dont un plugin est généré. Uniquement après un début de
+ * ligne, un espace ou l'un des caractères ` ' " ( [ | > (jamais dans une URL ou un chemin).
+ */
+function prefixSlash(text, stats) {
+  const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${[...stats.namespaces].join('|')}):(?=[A-Za-z])`, 'gm');
+  return text.replace(re, (_m, before, ns) => {
+    stats.slashRewritten += 1;
+    return `${before}/${pluginName(ns)}:`;
+  });
+}
+
+function buildPlugin(name, owned, installs, ctx, unresolved, stats) {
   const files = new Map(); // chemin plugin → { data: Buffer, mode: 'x'|'' }
   const universe = universeFor(name, installs);
   const queue = [];
@@ -253,7 +268,7 @@ function buildPlugin(name, owned, installs, ctx, unresolved) {
     const p = queue.shift();
     const entry = files.get(p);
     if (!isText(entry.data) || !/\.(md|json|ya?ml|txt|template)$/.test(p)) continue;
-    entry.data = Buffer.from(rewrite(entry.data.toString('utf8'), p), 'utf8');
+    entry.data = Buffer.from(prefixSlash(rewrite(entry.data.toString('utf8'), p), stats), 'utf8');
   }
   return files;
 }
@@ -298,7 +313,7 @@ function keywordsFor(name) {
 function manifestFor(name, ctx) {
   const { display, description } = describe(name);
   return {
-    name,
+    name: pluginName(name),
     displayName: `Bear Craft — ${display}`,
     description,
     version: ctx.version,
@@ -324,7 +339,7 @@ function readmeFor(name, owned, files, ctx) {
     '',
     '```',
     '/plugin marketplace add TheBeardedBearSAS/bear-craft',
-    `/plugin install ${name}@bear-craft`,
+    `/plugin install ${pluginName(name)}@bear-craft`,
     '```',
     ''
   );
@@ -333,7 +348,7 @@ function readmeFor(name, owned, files, ctx) {
   if (cmds.length > 0) {
     lines.push('## Commands', '');
     for (const c of cmds)
-      lines.push(`- \`/${name}:${c.replace(/\.md$/, '')}\` — ${descriptionOf(owned.commands.get(c))}`.trimEnd());
+      lines.push(`- \`/${pluginName(name)}:${c.replace(/\.md$/, '')}\` — ${descriptionOf(owned.commands.get(c))}`.trimEnd());
     lines.push('');
   }
   const agents = [...owned.agents.keys()].map((a) => a.replace(/^agents\/|\.md$/g, '')).sort();
@@ -392,9 +407,10 @@ function generate(work, ctx) {
 
   const owned = collectOwned(installs, names, ctx);
   const unresolved = [];
+  const stats = { slashRewritten: 0, namespaces: new Set(names) };
   const result = new Map(); // nom → Map(chemin → entry)
   for (const name of names) {
-    const files = buildPlugin(name, owned.get(name), installs, ctx, unresolved);
+    const files = buildPlugin(name, owned.get(name), installs, ctx, unresolved, stats);
     if (name === 'common') addHooks(files);
     files.set('.claude-plugin/plugin.json', {
       data: Buffer.from(`${JSON.stringify(manifestFor(name, ctx), null, 2)}\n`),
@@ -402,10 +418,10 @@ function generate(work, ctx) {
     });
     files.set('.claude-plugin/icon.png', { data: fs.readFileSync(ICON_SRC), mode: '' });
     files.set('LICENSE', { data: fs.readFileSync(path.join(ROOT, 'LICENSE')), mode: '' });
-    files.set('README.md', { data: Buffer.from(readmeFor(name, owned.get(name), files, ctx)), mode: '' });
+    files.set('README.md', { data: Buffer.from(prefixSlash(readmeFor(name, owned.get(name), files, ctx), stats)), mode: '' });
     result.set(name, files);
   }
-  return { result, unresolved, owned };
+  return { result, unresolved, owned, stats };
 }
 
 function writeTree(result, out) {
@@ -413,7 +429,7 @@ function writeTree(result, out) {
   for (const name of sortedKeys(result)) {
     const files = result.get(name);
     for (const rel of sortedKeys(files)) {
-      const dest = path.join(out, name, rel);
+      const dest = path.join(out, pluginName(name), rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       fs.writeFileSync(dest, files.get(rel).data);
       fs.chmodSync(dest, files.get(rel).mode === 'x' ? 0o755 : 0o644);
@@ -424,8 +440,8 @@ function writeTree(result, out) {
 function marketplaceWith(result, ctx) {
   const market = JSON.parse(fs.readFileSync(MARKETPLACE, 'utf8'));
   market.plugins = sortedKeys(result).map((name) => ({
-    name,
-    source: `./plugins/${name}`,
+    name: pluginName(name),
+    source: `./plugins/${pluginName(name)}`,
     description: describe(name).description,
     version: ctx.version,
     category: TECH_REGISTRY[name] ? 'technology-stack' : 'development-framework',
@@ -438,7 +454,7 @@ function marketplaceWith(result, ctx) {
 function compare(result, out, market) {
   const diffs = [];
   const expected = new Map();
-  for (const name of result.keys()) for (const [rel, e] of result.get(name)) expected.set(`${name}/${rel}`, e);
+  for (const name of result.keys()) for (const [rel, e] of result.get(name)) expected.set(`${pluginName(name)}/${rel}`, e);
   const actual = new Set(walk(out));
   for (const key of [...expected.keys()].sort()) {
     const file = path.join(out, key);
@@ -453,7 +469,24 @@ function compare(result, out, market) {
   return diffs;
 }
 
-function summarize(result, unresolved, owned) {
+/** Références `@agent` (laissées telles quelles) dans le contenu embarqué. */
+function countAgentRefs(result) {
+  const agents = new Set();
+  for (const files of result.values()) {
+    for (const f of files.keys()) {
+      const m = /^agents\/([^/]+)\.md$/.exec(f);
+      if (m) agents.add(m[1]);
+    }
+  }
+  const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])@(${[...agents].join('|')})(?![\w-])`, 'gm');
+  let n = 0;
+  for (const files of result.values()) {
+    for (const [f, e] of files) if (/\.(md|json|ya?ml|txt|template)$/.test(f)) n += (e.data.toString('utf8').match(re) ?? []).length;
+  }
+  return n;
+}
+
+function summarize(result, unresolved, owned, stats) {
   const lines = ['', 'Plugins :'];
   for (const name of sortedKeys(result)) {
     const files = result.get(name);
@@ -463,6 +496,8 @@ function summarize(result, unresolved, owned) {
       `  ${name.padEnd(12)} commandes=${owned.get(name).commands.size} agents=${count(/^agents\/[^/]+\.md$/)} skills=${new Set([...files.keys()].filter((f) => f.startsWith('skills/')).map((f) => f.split('/')[1])).size} références=${refs}`
     );
   }
+  lines.push('', `Références slash réécrites (/<ns>: → /bear-<ns>:) : ${stats.slashRewritten}`);
+  lines.push(`Références @agent laissées telles quelles : ${countAgentRefs(result)}`);
   const unique = new Map();
   for (const u of unresolved) unique.set(`${u.ref}|${u.cause}`, u);
   lines.push('', `Références non résolues : ${unresolved.length} occurrences, ${unique.size} uniques`);
@@ -484,7 +519,7 @@ function main() {
   const work = fs.mkdtempSync(path.join(tmpBase, 'plugin-gen-'));
   try {
     const ctx = loadContext();
-    const { result, unresolved, owned } = generate(work, ctx);
+    const { result, unresolved, owned, stats } = generate(work, ctx);
     const market = marketplaceWith(result, ctx);
     if (check) {
       const diffs = fs.existsSync(out)
@@ -503,7 +538,7 @@ function main() {
     writeTree(result, out);
     if (out === path.join(ROOT, 'plugins')) fs.writeFileSync(MARKETPLACE, market);
     if (reportFile) fs.writeFileSync(path.resolve(ROOT, reportFile), `${JSON.stringify({ unresolved }, null, 2)}\n`);
-    console.log(summarize(result, unresolved, owned));
+    console.log(summarize(result, unresolved, owned, stats));
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }

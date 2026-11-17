@@ -111,6 +111,8 @@ for (const name of pluginNames) {
     continue;
   }
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  if (manifest.name !== name) errors.push(`${rel} name="${manifest.name}" ≠ dossier "${name}"`);
+  if (!name.startsWith('bear-')) errors.push(`plugins/${name} : les plugins doivent être préfixés "bear-"`);
   if (manifest.version !== pkg.version) {
     errors.push(`${rel} version="${manifest.version}" ≠ package.json version="${pkg.version}"`);
   }
