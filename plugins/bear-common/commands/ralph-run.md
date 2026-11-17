@@ -1,0 +1,330 @@
+---
+description: Run Claude in continuous loop until task completion (Ralph Wiggum v2.0)
+argument-hint: <task-description> [--auto-detect|--init|--interactive]
+---
+
+# Ralph Run - Continuous AI Agent Loop v2.0
+
+Execute Claude in a continuous loop until the task is complete or the Definition of Done (DoD) criteria are met.
+
+## Arguments
+
+**$ARGUMENTS**
+
+- `<task-description>`: The task for Claude to complete
+- `--auto-detect`: Auto-detect project type and configure DoD
+- `--init`: Generate configuration without running
+- `--interactive`: Interactive configuration wizard
+
+## Plan Mode
+
+> **Plan mode is mandatory.** Before executing, Claude activates plan mode to analyze impacted code, propose an implementation plan, and wait for your validation before making any changes.
+
+## v2.0 New Features
+
+| Feature | Description |
+|---------|-------------|
+| **Hooks Integration** | Bidirectional integration with Claude Code 2.1.23+ |
+| **Auto-Detection** | Automatic project type detection (Symfony, Flutter, React, etc.) |
+| **Dashboard** | Real-time terminal display with progress bar |
+| **Metrics Export** | JSON and Prometheus format metrics |
+| **Adaptive Circuit Breaker** | 5 profiles with learning from history |
+| **Health Monitor** | Stall, error spiral, and context bloat detection |
+| **DoD Templates** | Pre-configured templates for 8 technologies |
+
+## Process
+
+### 1. Session Initialization
+
+1. **Check prerequisites**:
+   - Verify Claude is available
+   - Check for `ralph.yml` configuration
+   - Initialize session directory (`.ralph/`)
+
+2. **Auto-detect project** (if `--auto-detect`):
+   - Detect project type (Symfony, Flutter, React, Python, .NET, Go, Rust)
+   - Load appropriate DoD template
+   - Configure test and lint commands
+
+3. **Load configuration**:
+   - Read `ralph.yml` or `.claude/ralph.yml`
+   - Set max iterations, timeouts, DoD criteria
+   - Initialize hooks if enabled
+
+#### Session and parallel worker isolation
+
+- **Explicit Claude session**: each Ralph session pins its own Claude conversation ID — `claude --session-id <uuid>` on the first iteration, then `claude --resume <uuid>`. The UUID is stored in `.ralph/sessions/<session>/claude_session_id`, so `--continue=<session>` resumes the right conversation. Ralph no longer uses `claude --continue`, which resumed "the most recent conversation in the directory" (shared between workers, or even with the user's interactive session).
+- **One git worktree per worker** (parallel mode, `lib/parallel-manager.sh`): each story runs in a dedicated worktree `.ralph/parallel/worktrees/<session>` on branch `ralph/<session>`, with its Ralph state under `.ralph/parallel/sessions/<session>/ralph/`. At the end of the run, leftover changes are committed as `wip(ralph): <story>` on that branch, then the worktree is removed (`git worktree remove`). If that commit fails, the worktree is kept (no data loss) and reported in `output.log`. Collect the work by merging the `ralph/*` branches.
+- **Outside a git repository**: no worktree; the worker runs in the current directory (a warning is printed), Claude session isolation still applies.
+
+### 2. Main Loop with Dashboard
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║  RALPH WIGGUM - Session: ralph-xxx           PHASE: GREEN     ║
+╠═══════════════════════════════════════════════════════════════╣
+║  ITERATION 8/25              ELAPSED: 12:34                   ║
+║  PROGRESS ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  32%  ║
+║                                                               ║
+║  Circuit Breaker: ░░ (0/4)    Context: ████████░░ 78%        ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+### 3. Definition of Done Validation
+
+The DoD system validates completion through multiple criteria:
+
+| Validator | Description |
+|-----------|-------------|
+| `command` | Run shell command (tests, lint, build) |
+| `output_contains` | Check for pattern in Claude output |
+| `file_changed` | Verify files were modified |
+| `hook` | Run existing Claude hook |
+| `human` | Interactive human validation |
+
+#### `command` validator limit → use `type: hook`
+
+`type: command` only runs commands that pass the allowlist in `Tools/Ralph/lib/dod-validator.sh`: letters, digits, space and `_ . / " ' -`. Any command containing `=`, `|`, `&` or `:` (as well as `;`, `>`, `$`, etc.) is rejected with `ERROR: Invalid command`: the criterion is then **never** met and the loop runs until the circuit breaker trips.
+
+| Rejected command | Offending character |
+|------------------|---------------------|
+| `dotnet build /p:TreatWarningsAsErrors=true` | `:` and `=` |
+| `npm test && npm run lint` | `&` |
+| `pytest \| tee out.log` | `\|` |
+
+For these cases, put the command in a script and declare it as `type: hook`:
+
+```yaml
+definition_of_done:
+  checklist:
+    - id: build
+      type: hook
+      script: ".ralph/dod/build.sh"
+      required: true
+```
+
+```bash
+#!/usr/bin/env bash
+# .ralph/dod/build.sh — receives {"cwd": ..., "output": ...} as JSON on stdin
+dotnet build /p:TreatWarningsAsErrors=true || exit 2
+```
+
+The script returns `0` (criterion met) or `2` (criterion failed). Keys read per type: `command` → `command:`, `output_contains` and `file_changed` → `pattern:`, `hook` → `script:`, `human` → `prompt:`.
+
+### 4. Adaptive Circuit Breaker (v2.0)
+
+Automatically selects profile based on task keywords:
+
+| Profile | Keywords | No Changes | Errors | Max Iter |
+|---------|----------|------------|--------|----------|
+| `quick_fix` | fix, bug, typo | 2 | 3 | 10 |
+| `small_feature` | add, implement | 3 | 4 | 15 |
+| `medium_feature` | feature, create | 4 | 6 | 25 |
+| `large_feature` | refactor, migrate | 5 | 8 | 50 |
+| `exploration` | explore, investigate | 10 | 15 | 100 |
+
+### 5. Hooks Integration (Claude Code 2.1.23+)
+
+```
+SessionStart → session-restore.sh → Inject Ralph context + list the DoD (never runs it)
+     ↓
+PreToolUse (Agent|Task) → pre-tool-context.sh → Remind the current sprint task
+     ↓
+Claude works...
+     ↓
+Stop → stop-dod-gate.sh → Block if DoD not satisfied (decision: block)
+```
+
+## /goal (interactive) or Ralph (autonomous/CI)?
+
+`/goal` is a native Claude Code command typed inside a session: it is not a `ralph.sh` option — `ralph.sh` has none for it and never generates a `/goal`. The two tools are complementary:
+
+| Criterion | `/goal` (native) | Ralph (`ralph.sh`) |
+|-----------|------------------|--------------------|
+| Completion check | LLM judgment: a small fast model evaluates, after each turn, what is visible in the conversation — it runs no command and reads no file | Deterministic: commands, patterns and hooks run by `dod-validator.sh` |
+| Iteration cap | No fixed cap: ends when the condition is met or judged impossible, on `/goal clear`, or if Claude answers several turns in a row without tools; a bound can be written into the condition | `max_iterations` + adaptive circuit breaker |
+| Headless / CI | `claude -p "/goal ..."` loops to completion in a single invocation; CI usage not documented | Built for it: autonomous runs (`--autonomous`, `--overnight`), `headless` dashboard |
+| `disableAllHooks: true` | Unavailable: `/goal` wraps a session-scoped Stop hook (same with `allowManagedHooksOnly`) | The loop and the DoD run inside `ralph.sh`; only the hooks integration (`stop-dod-gate.sh`) is disabled |
+| Configuration | None; one goal per session, cleared by `/clear` | `ralph.yml` |
+
+- **Choose `/goal`** for an interactive task whose completion shows up in the conversation (print the test output: the evaluator does not run it).
+- **Choose Ralph** when completion must be proven by commands, with an iteration cap, unattended or in CI.
+
+Reference: [`/goal` documentation](https://code.claude.com/docs/en/goal).
+
+## Quick Start Examples
+
+```bash
+# Basic usage
+ralph.sh "Implement user authentication"
+
+# Auto-detect project and generate config
+ralph.sh --auto-detect --init
+
+# Interactive configuration wizard
+ralph.sh --interactive
+
+# With configuration file
+ralph.sh --config=ralph.yml "Fix the login bug"
+
+# Resume session
+ralph.sh --continue=ralph-1704067200-a1b2
+```
+
+## Configuration (v2.0)
+
+```yaml
+version: "2.0"
+
+# Hooks integration
+hooks:
+  enabled: true
+  mode: "advanced"  # simple or advanced
+
+# Auto-detection
+auto_detect:
+  enabled: true
+  interactive: false
+
+# Real-time dashboard
+dashboard:
+  enabled: true
+  mode: "full"  # simple, full, headless
+
+# Metrics export
+metrics:
+  enabled: true
+  format: "both"  # json, prometheus, both
+
+# Health monitoring
+health_monitor:
+  enabled: true
+  patterns:
+    stall_detection: true
+    error_spiral: true
+    context_bloat: true
+
+# Adaptive circuit breaker
+circuit_breaker:
+  adaptive: true
+  default_profile: "medium_feature"
+  learning:
+    enabled: true
+    min_samples: 5
+
+# Definition of Done
+definition_of_done:
+  checklist:
+    - id: tests
+      type: command
+      command: "docker compose exec app npm test"
+      required: true
+    - id: completion
+      type: output_contains
+      pattern: "<promise>COMPLETE</promise>"
+      required: true
+```
+
+## DoD Templates by Technology
+
+| Technology | Test Command | Lint Command |
+|------------|--------------|--------------|
+| Symfony | `vendor/bin/phpunit` | `vendor/bin/phpstan analyse` |
+| Flutter | `flutter test` | `flutter analyze` |
+| React | `npm test` | `npm run lint` |
+| Python | `pytest` | `ruff check .` |
+| .NET | `dotnet test` | `dotnet build /p:TreatWarningsAsErrors=true` |
+| Go | `go test ./...` | `golangci-lint run` |
+| Rust | `cargo test` | `cargo clippy` |
+
+## Output
+
+```
+╔════════════════════════════════════════════════════════════╗
+║     🔁 Ralph Wiggum - Continuous AI Agent Loop v2.0        ║
+╚════════════════════════════════════════════════════════════╝
+
+✓ Detected: react-typescript (HIGH confidence)
+✓ Session created: ralph-1704067200-a1b2
+✓ Hooks initialized (advanced mode)
+
+ℹ Starting Ralph loop...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Iteration 1 of 25 (Profile: medium_feature)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ℹ Invoking Claude...
+ℹ Checking DoD criteria...
+  ✓ [tests] All tests pass - PASS
+  ✓ [lint] No lint errors - PASS
+  ✓ [completion] Claude signals completion - PASS
+
+  All required criteria passed!
+
+✓ DoD PASSED
+
+╔════════════════════════════════════════════════════════════╗
+║     📊 Session Summary                                      ║
+╚════════════════════════════════════════════════════════════╝
+
+  Session ID:        ralph-1704067200-a1b2
+  Profile:           medium_feature
+  Total iterations:  3
+  Duration:          45s
+  DoD status:        PASSED
+  Exit reason:       dod_complete
+  Metrics exported:  .ralph/sessions/.../metrics-export.json
+```
+
+## Failure Modes & Recovery
+
+### DoD Validator Failures
+
+When DoD validators fail repeatedly, Ralph applies escalating recovery:
+
+| Consecutive Failures | Action |
+|---------------------|--------|
+| 1-2 | Retry with context — Ralph includes previous error output |
+| 3 | Trigger circuit breaker check — evaluate if task is stuck |
+| 4+ | Circuit breaker trips — session stops with `exit_reason: circuit_breaker` |
+
+### Timeout Handling
+
+| Timeout Type | Default | Configuration |
+|-------------|---------|---------------|
+| Per-iteration | 5 min | `circuit_breaker.iteration_timeout` |
+| Total session | 30 min | `circuit_breaker.session_timeout` |
+| DoD command | 60 sec | `definition_of_done.timeout` |
+
+When a timeout fires:
+1. Current iteration is cancelled
+2. Partial progress is preserved in session state
+3. Circuit breaker counter increments
+4. Resume with `--continue=<session-id>` to retry
+
+### Common Exit Reasons
+
+| Exit Reason | Meaning | Recovery |
+|-------------|---------|----------|
+| `dod_complete` | All DoD criteria passed | Success — no action needed |
+| `circuit_breaker` | Too many failures | Review task scope, simplify DoD |
+| `max_iterations` | Iteration limit reached | Increase limit or break into subtasks |
+| `timeout` | Session timeout expired | Resume or increase timeout |
+| `user_abort` | User cancelled (Ctrl+C) | Resume with `--continue` |
+
+## Best Practices
+
+1. **Use auto-detect**: Let Ralph configure DoD for your stack
+2. **Clear task description**: Provide specific, actionable tasks
+3. **Use TDD**: Write tests first, let Ralph implement
+4. **Monitor dashboard**: Watch progress in real-time
+5. **Review metrics**: Analyze session metrics for optimization
+6. **Set realistic timeouts**: Match timeouts to task complexity
+7. **Use circuit breaker profiles**: Match profile to task type (quick_fix vs large_feature)
+
+## Related
+
+- `@ralph-conductor` - Agent for Ralph orchestration
+- `/bear-qa:tdd` - TDD-based bug fixing
+- `/bear-workflow:implement` - Sprint development with TDD

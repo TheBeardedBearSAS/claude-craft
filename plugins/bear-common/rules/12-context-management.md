@@ -1,0 +1,848 @@
+# Context Management
+
+## Overview
+
+The context window is **THE critical resource** in Claude Code. Every token counts. Effective context management is the difference between a productive assistant and one that loses track.
+
+> **Source:** Anthropic Best Practice #1 — "The context window is the single most important resource to manage."
+
+**Principles:**
+- Context is a finite and precious resource
+- CLAUDE.md and rules compete for model attention
+- Use sub-agents for investigations
+- Clean context between tasks
+
+---
+
+## Table of Contents
+
+1. [CLAUDE.md Size Rules](#claudemd-size-rules)
+2. [Context Cleanup](#context-cleanup)
+3. [Sub-agents for Investigations](#sub-agents-for-investigations)
+4. [Context Compaction](#context-compaction)
+5. [Verification Loops](#verification-loops)
+6. [Plan Mode](#plan-mode)
+7. [Token Tracking](#token-tracking)
+8. [Checklist](#checklist)
+9. [Compaction Hints in CLAUDE.md](#compaction-hints-in-claudemd)
+10. [CLAUDE.local.md for Personal Preferences](#claudelocalmd-for-personal-preferences)
+11. [Context Anti-patterns](#context-anti-patterns)
+12. [CLAUDE.md Authoring Best Practices](#claudemd-authoring-best-practices)
+13. [Performance Optimization](#performance-optimization)
+14. [Communication Patterns](#communication-patterns)
+15. [New Context Commands](#new-context-commands)
+16. [Agent Frontmatter](#agent-frontmatter)
+17. [Managed Settings](#managed-settings)
+18. [Monitor and Background Events](#monitor-and-background-events)
+
+---
+
+## CLAUDE.md Size Rules
+
+### Recommended Limit
+
+> **Main CLAUDE.md: under 200 lines (Anthropic target).**
+> Each additional instruction dilutes attention on existing instructions.
+
+### Modularity Strategy
+
+```
+.claude/
+  CLAUDE.md              <- Summary (under 200 lines)
+  rules/                 <- Detailed rules (loaded at launch; on demand if `paths:` frontmatter)
+    01-workflow-analysis.md
+    04-solid-principles.md
+    05-kiss-dry-yagni.md
+    ...
+  references/            <- Technical documentation
+  skills/                <- On-demand capabilities
+```
+
+> **Note:** `.claude/rules/*.md` files without `paths:` frontmatter are loaded at launch with the same priority as `.claude/CLAUDE.md`. Only rules with `paths:` globs are loaded on demand, when Claude works on matching files.
+
+### Best Practices
+
+| Practice | Description |
+|----------|-------------|
+| **Short CLAUDE.md** | Overview, links to rules |
+| **Modular rules** | One file per topic in `.claude/rules/` |
+| **Separate references** | Technical docs in `.claude/references/` |
+| **On-demand skills** | Capabilities loaded only when needed |
+
+### What Goes in CLAUDE.md vs Rules
+
+| Content | Location |
+|---------|----------|
+| Supported technologies | CLAUDE.md |
+| Available commands | CLAUDE.md |
+| Available agents | CLAUDE.md |
+| Claude Code compatibility | CLAUDE.md |
+| Detailed SOLID principles | `${CLAUDE_PLUGIN_ROOT}/rules/04-solid-principles.md` |
+| Security rules | `${CLAUDE_PLUGIN_ROOT}/rules/11-security.md` |
+| Analysis workflow | `${CLAUDE_PLUGIN_ROOT}/rules/01-workflow-analysis.md` |
+
+---
+
+## Context Cleanup
+
+### When to Use `/clear`
+
+```
+Use /clear:
+- Between two UNRELATED tasks
+- After a long investigation
+- When context exceeds 50% of the window
+- Before starting a new feature
+
+DO NOT use /clear:
+- In the middle of an ongoing task
+- If previous context is needed
+- Right after loading relevant files
+```
+
+### Signs of Context Pollution
+
+- Claude repeats previously given information
+- Responses become less accurate
+- Claude confuses elements from different tasks
+- Errors increase despite clear instructions
+
+### Pattern: Investigation then Implementation
+
+```
+Session 1: Investigation
+  -> Read code, understand architecture
+  -> Document findings
+  -> /clear
+
+Session 2: Implementation
+  -> Load only necessary files
+  -> Implement with clean context
+```
+
+---
+
+## Sub-agents for Investigations
+
+### Principle
+
+> **Delegate research to sub-agents to keep the main context clean.**
+
+Sub-agents (Task tool) have their own context window. Using a sub-agent to explore the codebase avoids polluting the main context with hundreds of irrelevant code lines.
+
+### When to Use a Sub-agent
+
+| Situation | Action |
+|-----------|--------|
+| Search for specific file/pattern | Glob/Grep directly |
+| Explore unknown architecture | Explore sub-agent |
+| Multi-file investigation (> 3) | Explore sub-agent |
+| Plan an implementation | Plan sub-agent |
+| Independent parallel task | General-purpose sub-agent |
+
+### Example
+
+```
+# Instead of reading 20 files in the main context:
+
+Task(Explore): "How does authentication work in this project?
+  List the files, patterns, and dependencies."
+
+# The sub-agent explores and returns a summary
+# The main context stays clean
+```
+
+### Agent Frontmatter (v2.1.78+)
+
+Custom agents support frontmatter fields to control their behavior:
+
+```yaml
+---
+effort: low          # Effort level (low/medium/high)
+maxTurns: 10         # Maximum number of turns
+disallowedTools:     # Disallowed tools
+  - Edit
+  - Write
+---
+```
+
+These fields allow optimizing costs and scope of sub-agents.
+
+---
+
+## Context Compaction
+
+### How It Works
+
+Claude Code automatically compacts context when approaching window limits. Older messages are summarized to free space.
+
+> **Append-only history (Opus 5.5, Sonnet 5.5, Haiku 5.5, Fable/Mythos 5.1 and 5.2):** editing an earlier message, rebuilding `system` or `tools`, or summarizing old turns in place invalidates the thinking blocks that follow. Append to the end of the history instead of rewriting it. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
+### Proactive Compaction
+
+At 70% context usage, proactively run `/compact` to avoid uncontrolled automatic compaction.
+
+The `/memory` command (v2.1.59+) lets you save persistent session learnings that survive compactions and new sessions.
+
+### PreCompact Hook
+
+Use the `PreCompact` hook to save critical context before compaction:
+
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [{
+          "type": "command",
+          "command": "cat .claude/context-essentials.md"
+        }]
+      }
+    ]
+  }
+}
+```
+
+### PostCompact Hook
+
+Use the `PostCompact` hook (v2.1.76+) to re-inject critical context after compaction:
+
+```json
+{
+  "hooks": {
+    "PostCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [{
+          "type": "command",
+          "command": "cat .claude/context-essentials.md"
+        }]
+      }
+    ]
+  }
+}
+```
+
+Starting from v2.1.105, the `PreCompact` hook can **block** compaction via exit code 2, allowing you to control when compaction occurs.
+
+### Re-injection Hooks
+
+Use the `SessionStart` hook with the `compact` matcher to re-inject critical context after compaction:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [{
+          "type": "command",
+          "command": "cat .claude/context-essentials.md"
+        }]
+      }
+    ]
+  }
+}
+```
+
+### Prepare Essential Context
+
+Create a `.claude/context-essentials.md` file with:
+- Key architectural decisions
+- Project conventions
+- Current tasks
+- Critical constraints
+
+---
+
+## Verification Loops
+
+### Principle
+
+> **Always provide verification means: tests, screenshots, expected outputs.**
+> Source: "2-3x improvement in final result quality" (Anthropic)
+
+### Pattern: Specification-Implementation-Verification
+
+```
+1. SPECIFICATION
+   -> Define expected behavior
+   -> Provide input/output examples
+   -> Write tests first (TDD)
+
+2. IMPLEMENTATION
+   -> Code the solution
+
+3. VERIFICATION
+   -> Run tests
+   -> Compare with expected outputs
+   -> Fix if needed
+   -> Repeat until satisfied
+```
+
+### Effective Loop Examples
+
+```
+TDD Loop:
+  test (RED) -> code (GREEN) -> refactor -> test (GREEN)
+
+UI Loop:
+  screenshot before -> modification -> screenshot after -> compare
+
+API Loop:
+  OpenAPI spec -> implementation -> curl test -> compare response
+
+CI Loop:
+  modify code -> run tests -> fix failures -> re-run
+```
+
+### Anti-patterns
+
+```
+DO NOT:
+- Implement without tests
+- Assume it works without verifying
+- Ignore test errors
+- Move to next task without verification
+```
+
+---
+
+## Plan Mode
+
+### When to Invest in Planning
+
+| Situation | Action |
+|-----------|--------|
+| Simple bug, 1 file | Fix directly |
+| Simple feature, < 3 files | Implement directly |
+| Complex feature, > 3 files | Plan Mode |
+| Architectural refactoring | Plan Mode |
+| Technology choice | Plan Mode |
+| Uncertain impact | Plan Mode |
+
+### Plan Mode Advantages
+
+- Explore the codebase before acting
+- Identify impacted files
+- Propose an approach before implementing
+- Avoid rework
+
+---
+
+## Token Tracking
+
+### Status Line
+
+The Claude Code status line displays the percentage of context used. Monitor this indicator to anticipate compactions.
+
+### Action Thresholds
+
+| Context Used | Action |
+|-------------|--------|
+| < 30% | Normal, continue |
+| 30-60% | Monitor, avoid unnecessary reads |
+| 60-80% | Delegate to sub-agents, consider /clear |
+| > 80% | Compaction imminent, save critical context |
+
+### /context Command (v2.1.74+)
+
+The `/context` command provides actionable suggestions to optimize context usage. Use regularly to identify sources of waste.
+
+### /effort Command (v2.1.72+)
+
+Adjust the model's effort level based on task complexity:
+
+| Command | Effect | Usage |
+|---------|--------|-------|
+| `/effort low` | Minimal reasoning, fast answers | Simple tasks, lookups, classification |
+| `/effort medium` | Standard depth | Standard implementation |
+| `/effort high` | Deeper reasoning | Complex reasoning, architecture |
+| `/effort xhigh` | Maximum adaptive thinking | Critical decisions, complex migrations, ADR |
+| `/effort ultracode` | Separate toggle (v2.1.284+), Dynamic Workflows | Maximum code throughput — automated pipelines, massive generation |
+
+> **Effort does not switch models:** it sets the reasoning depth of the current model; pick the model with `/model`. Recommended pairs: `low` on Haiku 5.5, `medium` on Sonnet 5.5, `high`/`xhigh` on Opus 5.5.
+
+> **Default effort per model:** medium on Opus 5.5 and Haiku 5.5; high on Sonnet 5.5, Fable 5.2 and legacy models.
+> **Fable 5.2** (`claude-fable-5-2`, $8/$40 per Mtok) is the current Fable model, suitable for creative/narrative agents; Fable 5.1 and Fable 5 remain available (legacy). On Fable 5.2 (as on Mythos 5.2) thinking is always on (adaptive only) and, at `high` effort and above, precedes almost every reply: to reduce it, lower the effort — an "answer directly" instruction is not enough at `medium` and above. **Mythos** is limited availability (Cyber Verification Program only). Cache reads cost 5% of the input price on Opus/Sonnet 5.5 and 2.5% on Fable/Mythos 5.1 and 5.2; 10% on other models, including Fable 5 and Mythos 5 ([pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
+
+> **Default thinking and API migration:** on Sonnet 5.5 and Haiku 5.5 (as on the legacy Opus 5 and Sonnet 5), thinking is on when `thinking` is omitted: select content blocks by `type`, not by position, and leave room in `max_tokens`. It can only be turned off at effort `high` or lower; on Sonnet 5.5 the lowest setting is `between_tools`. `budget_tokens` returns a 400 error since Claude 4.7 (set `effort` instead), and prefilling the last assistant turn is no longer supported since Claude 4.6. Source: [prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
+### Inactivity Alert (v2.1.84+)
+
+After 75+ minutes of inactivity, Claude automatically suggests `/clear` to avoid stale context.
+
+### Multi-session Strategy
+
+For complex tasks, split work into short focused sessions. Each session uses fresh context, reducing token consumption by approximately 55%:
+
+```
+Session 1: Investigation (read, analyze, document)
+  -> /memory to save conclusions
+  -> /clear
+
+Session 2: Implementation (code, test)
+  -> Previous /memory is automatically loaded
+  -> Fresh context, no pollution
+```
+
+### Scheduled Tasks /loop (v2.1.71+)
+
+The `/loop` command allows scheduling recurring tasks:
+
+```bash
+/loop 5m /bear-gate:check commit    # Check every 5 minutes
+/loop "Monitor CI tests"              # Auto-paced by the model
+```
+
+Alias: `/proactive` (v2.1.105+).
+
+---
+
+## Parallel Worktrees
+
+### Principle
+
+> **"Single biggest productivity unlock"** — Boris Cherny (Anthropic)
+
+Use `git worktree` to work on multiple branches simultaneously with independent Claude sessions.
+
+### Setup
+
+Since v2.1.53+, Claude Code supports the native `--worktree` (`-w`) flag to create and work in isolated worktrees:
+
+```bash
+# Native flag (v2.1.53+) — creates an isolated worktree automatically
+claude --worktree "Implement JWT authentication"
+claude -w "Review the authentication code"
+
+# Manual method (all versions)
+git worktree add ../feature-auth feature/auth
+cd ../feature-auth && claude
+
+git worktree add ../review-auth feature/auth
+cd ../review-auth && claude
+```
+
+### Writer/Reviewer Pattern
+
+```
+Terminal 1 (Writer):
+  cd ../feature-auth
+  claude "Implement JWT authentication"
+
+Terminal 2 (Reviewer):
+  cd ../review-auth
+  claude "Review the authentication code"
+  # Fresh context, no author bias
+```
+
+### Cleanup
+
+```bash
+git worktree remove ../feature-auth
+git worktree remove ../review-auth
+```
+
+### Recommendations
+
+- 3-5 worktrees maximum
+- One worktree = one task
+- Remove completed worktrees
+- Do not share sessions between worktrees
+
+---
+
+## Checklist
+
+### Before Each Session
+
+- [ ] CLAUDE.md < 200 lines
+- [ ] Modular rules in `.claude/rules/`
+- [ ] Clean context (no residue from previous tasks)
+
+### During Session
+
+- [ ] Monitor context %
+- [ ] Delegate investigations to sub-agents
+- [ ] `/clear` between unrelated tasks
+- [ ] Provide tests/expected outputs
+
+### For Complex Tasks
+
+- [ ] Use Plan Mode
+- [ ] Break into sub-tasks
+- [ ] Worktrees for parallelism
+- [ ] Verification loops
+
+---
+
+## Compaction Hints in CLAUDE.md
+
+### Principle
+
+> **Tell Claude what to preserve during compaction.**
+
+Add compaction instructions to CLAUDE.md to guide the summary during automatic compaction:
+
+```markdown
+# In CLAUDE.md:
+During compaction, always preserve:
+- The list of modified files
+- Test commands
+- Architecture decisions
+```
+
+### Useful Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_CODE_SUBAGENT_MODEL` | **Default** model for untyped sub-agents (e.g., `sonnet`). **Since Claude Code 2.1.251**, agent frontmatter `model:` takes precedence: the 11 reviewers with `model: haiku` stay on Haiku. **Before 2.1.251 it was the other way round** — this variable overrode the frontmatter. |
+| `CLAUDE_CODE_FORK_SUBAGENT` | `1` to isolate sub-agent contexts (forked subagents, v2.1.117+); on by default in `-p`, the SDK, desktop and VS Code since 2.1.302, `0` to turn it off |
+| `CLAUDE_CODE_SUBAGENT_EFFORT` | Effort level sub-agents run at (v2.1.316+) |
+| `CLAUDE_CODE_DISABLE_NESTED_SESSION_ID` | `1` on a self-hosted runner: `claude -p` run inside a session reuses that session's ID and transcript (pre-v2.1.317 behavior) |
+| `CLAUDE_CODE_DISABLE_FEATURE_FLAGS` | `1` stops feature-flag fetching without turning off telemetry; every flag uses its built-in default (v2.1.319+) |
+| `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` | `1` makes Claude Code wait for an MCP task inside its tool call instead of moving it to the background (v2.1.319+) |
+| `permissions.denyInsteadOfPrompting` (setting) | `true`: a tool call that would wait on a permission prompt is denied and the turn continues — terminal, sub-agents, teammates; honored only from `~/.claude/settings.json` or `--settings`, not from a project file (v2.1.319+) |
+| `ENABLE_PROMPT_CACHING_1H` / `FORCE_PROMPT_CACHING_5M` | Extend/force prompt caching (−40% on repetitive sessions) |
+| `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | Set to `1` to disable automatic memory |
+
+> **Model precedence — valid since Claude Code 2.1.251:** per-invocation `model:` > agent frontmatter `model:` (where `inherit` picks the main conversation's model) > `CLAUDE_CODE_SUBAGENT_MODEL` > session model.
+>
+> **⚠️ Before 2.1.251 the order was reversed:** `CLAUDE_CODE_SUBAGENT_MODEL` came first and overrode both the per-invocation parameter and the frontmatter, including `model: inherit`. On those versions `SUBAGENT_MODEL=sonnet` really did run the `model: haiku` reviewers on Sonnet — the opposite of the intent. Check `claude --version` before relying on this table. Source: [sub-agents docs](https://code.claude.com/docs/en/sub-agents).
+
+---
+
+## CLAUDE.local.md for Personal Preferences
+
+### Principle
+
+Create a `CLAUDE.local.md` file at the project root (gitignored) for personal preferences that should not be shared with the team.
+
+```
+project/
+  .claude/CLAUDE.md      <- Shared (git)
+  CLAUDE.local.md        <- Personal (gitignore)
+```
+
+### Typical Content
+
+- Personal style preferences
+- Local-specific paths
+- Preferred personal tools
+
+### Configuration
+
+Add to `.gitignore`:
+```
+CLAUDE.local.md
+```
+
+---
+
+## Context Anti-patterns
+
+| Anti-pattern | Description | Solution |
+|-------------|-------------|----------|
+| **Kitchen-sink session** | Doing everything in one session | `/clear` between tasks, sub-agents |
+| **Overloaded CLAUDE.md** | > 200 lines dilutes attention | Modularize into `.claude/rules/` |
+| **Over-correcting** | Successive corrections pollute context | After 2 failures, `/clear` and reformulate |
+| **Trust-then-verify gap** | Implementing without verifying | TDD loops, tests before code |
+| **Infinite exploration** | Reading too many files without purpose | Define scope before exploring |
+
+---
+
+## CLAUDE.md Authoring Best Practices
+
+### Prefer Pointers over Copies
+
+Do not copy code into CLAUDE.md — it becomes stale. Note that `@path` imports are loaded at launch together with the importing file: they avoid duplication but do **not** reduce context cost. For on-demand loading, cite the path without `@`, or use a rule with `paths:` frontmatter / a skill:
+
+```markdown
+# In CLAUDE.md:
+See @.claude/references/symfony/CLAUDE.md for Symfony conventions.   # always needed: @ import
+Occasional API documentation: docs/API.md                            # on demand: plain path, no @
+```
+
+### Emphasis for Critical Rules
+
+Use `IMPORTANT`, `YOU MUST`, `NEVER` sparingly, reserved for the few truly non-negotiable constraints — if everything is emphasized, nothing stands out (Anthropic recommendation):
+
+```markdown
+IMPORTANT: Never modify existing migrations.
+YOU MUST run tests before every commit.
+NEVER put secrets in source code.
+```
+
+### CLAUDE.md File Hierarchy
+
+| File | Scope | Usage |
+|------|-------|-------|
+| `~/.claude/CLAUDE.md` | Global (all projects) | Universal personal preferences |
+| `.claude/CLAUDE.md` or `./CLAUDE.md` | Project (git) | Team conventions |
+| `CLAUDE.local.md` | Project (gitignore) | Personal project preferences |
+
+### Regular Maintenance
+
+- Review CLAUDE.md each quarter
+- For each line, ask: "If I remove this line, will Claude make mistakes?"
+- If no, remove the line
+- Treat CLAUDE.md like production code
+
+---
+
+## Performance Optimization
+
+### Native CLI over MCPs
+
+Prefer native CLI tools (Glob, Grep, Read, Edit) over MCP equivalents. MCP servers add persistent tool definitions every turn, consuming context permanently.
+
+| Approach | Context Cost |
+|----------|-------------|
+| Native tool (Glob, Grep) | 0 extra tokens |
+| MCP server | ~500-2000 tokens/tool/turn |
+| External CLI (gh, aws) | One-time, via Bash |
+
+### MCP Tool Search (v2.1.80+)
+
+`ToolSearch` enables lazy loading of MCP tools, reducing context consumption by **95%**:
+
+| Approach | Context Cost |
+|----------|-------------|
+| Classic MCP (all tools loaded) | ~500-2000 tokens/tool/turn |
+| MCP with Tool Search (lazy loading) | ~50 tokens total |
+
+Use `ToolSearch` with `query: "select:tool_name"` to load a tool on demand.
+
+### --bare Flag (v2.1.81+)
+
+For scripted calls with `-p`, use `--bare` to skip hooks, LSP, and plugin synchronization:
+
+```bash
+claude --bare -p "Analyze this file" < input.txt
+```
+
+Significant startup time reduction for automation.
+
+### Monitor Tool (v2.1.98+)
+
+The `Monitor` tool allows streaming events from a background process. Each stdout line is a notification. Use instead of `sleep` + poll to wait for a process to finish.
+
+### Mid-session Model Switching
+
+Use `/model` to switch models based on task complexity:
+
+| Command | Model | Usage |
+|---------|-------|-------|
+| `/model haiku` | Haiku 5.5 | Simple tasks, classification |
+| `/model sonnet` | Sonnet 5.5 | Standard tasks, implementation |
+| `/model opus` | Opus 5.5 | Complex reasoning, architecture |
+| `/model opusplan` | Opus 5.5 (plan) / Sonnet 5.5 (execute) | **Dynamic tiering**: Opus for Plan Mode, Sonnet for execution — optimizes cost/quality ratio on long tasks |
+
+### Output Filtering via Hooks
+
+Use PostToolUse hooks to filter verbose outputs before Claude processes them:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "jq -r '.tool_response.stdout // empty' | grep -A 5 -E '(FAIL|ERROR|WARN)' || echo 'All clear'"
+      }]
+    }]
+  }
+}
+```
+
+> The hook payload arrives as JSON on stdin (`$TOOL_OUTPUT` / `$TOOL_INPUT` are not environment variables); read it with `jq`.
+
+Potential reduction: 90%+ for verbose logs.
+
+### Code Intelligence Plugins
+
+For typed languages, a single `go-to-definition` call replaces multiple grep + file reads:
+
+- PHP: `php-lsp` (Intelephense)
+- TypeScript: `typescript-lsp` (vtsls)
+- Python: `pyright-lsp`
+- Dart: `dart-analyzer`
+- C#: `csharp-lsp`
+
+---
+
+## Communication Patterns
+
+### Interview Pattern
+
+For complex features, ask Claude to interview you before coding:
+
+```
+"I want to implement [description]. Interview me in detail.
+Ask questions about the technical implementation, edge cases,
+constraints and trade-offs. Continue until you have a complete
+picture, then write the specification in SPEC.md."
+```
+
+Result: complete specification before implementation, clean context.
+
+### CIF Structure (Context, Intent, Format)
+
+Structure prompts to maximize precision:
+
+| Element | Description | Example |
+|---------|-------------|---------|
+| **Context** | Current situation | "In the auth module, the JWT token expires after 15min" |
+| **Intent** | Precise objective | "Add refresh token with rotation" |
+| **Format** | Expected output format | "Generate the service + unit tests" |
+
+### Writer/Reviewer Pattern
+
+Use two sessions for better quality (see also [Parallel Worktrees](#parallel-worktrees)):
+
+- **Session A (Writer):** Implements the feature
+- **Session B (Reviewer):** Reviews with fresh context (no author bias)
+- **Session A:** Integrates feedback
+
+---
+
+## Managed Settings (v2.1.83+)
+
+### managed-settings.d/ Directory
+
+The `managed-settings.d/` directory enables modular configuration via alphabetical merging:
+
+```
+.claude/
+  managed-settings.d/
+    00-base.json          <- Base configuration
+    10-security.json      <- Security rules
+    20-team.json          <- Team preferences
+```
+
+Files are merged in alphabetical order, allowing teams to layer configurations without conflicts.
+
+---
+
+## New Commands (v2.1.105+)
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| `/btw` | Quick questions without context switching | Lookups, syntax, clarifications |
+| `/hooks` | Interactive hook management | Enable/disable, test, debug |
+| `/reload-plugins` | Manual plugin reload | After plugin updates |
+| `/reload-skills` (v2.1.157+) | Re-scan skills without restart (distinct from `/reload-plugins`) | After adding/modifying a skill |
+| `/proactive` | Alias for `/loop` | Proactive recurring monitoring |
+
+> **⚠️ Dynamic Workflows trigger renamed (v2.1.160):** The trigger keyword changed from `workflow` to **`ultracode`**. Asking for a workflow "in your own words" still works. The `/effort ultracode` tier (above) remains valid.
+
+> **`MessageDisplay` hook (v2.1.157+):** New event to transform/hide assistant text at display — useful for RTK-style output filtering. `SessionStart` can return `reloadSkills: true` to make skills it installs available in the same session.
+
+---
+
+## Additional Environment Variables (v2.1.105+)
+
+| Variable | Description |
+|----------|-------------|
+| `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Load CLAUDE.md from `--add-dir` |
+| `MAX_THINKING_TOKENS=8000` | Thinking token limit |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Slash command character budget |
+| `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` | PowerShell instead of Bash (Windows, v2.1.84+) |
+| `OTEL_LOG_USER_PROMPTS` | Log prompts in traces (beta) |
+| `OTEL_LOG_TOOL_DETAILS` | Log tool details (beta) |
+| `OTEL_LOG_TOOL_CONTENT` | Log tool content (beta, verbose) |
+
+### `fallbackModel` — automatic fallback (settings.json, v2.1.166+)
+
+**Reliability + cost** setting: up to 3 fallback models tried in order when the primary is overloaded/unavailable (equivalent `--fallback-model` flag, also applies to interactive sessions).
+
+```json
+{ "fallbackModel": ["claude-sonnet-5-5", "claude-haiku-5-5"] }
+```
+
+For the 5 `opus` agents (security-auditor, database-architect, migration-specialist, ralph-conductor, tdd-coach), this `opus → sonnet → haiku` fallback avoids interruptions during Opus peak load without degrading current work. Ready-to-use example in `.claude/settings.local.json.example`.
+
+---
+
+## Advanced Skills (v2.1.105+)
+
+| Frontmatter | Description |
+|-------------|-------------|
+| `context: fork` | Run in isolated context (no pollution). Recommended threshold: **>60 lines**. |
+| `disable-model-invocation: true` | Prevent automatic invocation by Claude |
+| `claudeMdExcludes` (setting) | Exclude specific CLAUDE.md files in monorepos |
+
+**Auto-compaction and skills:** After compaction, skills auto-reload (5K tokens/skill, 25K total max).
+
+**Skills with `context: fork`:** every Bear Craft skill over 60 lines uses it (checked by the framework's internal conformance audit).
+
+---
+
+## Token Optimization — Quick Setup
+
+> **Command:** `/bear-common:setup-rtk` to automatically configure all optimizations.
+
+**RTK (Rust Token Killer):** CLI proxy that reduces token consumption by 60-90% on dev commands. Install: `rtk init -g`.
+
+**Sub-agent model:** `export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-5-5"` — 40-60% cost reduction.
+
+**Optimization hooks:**
+
+| Hook | File | Impact |
+|------|------|--------|
+| **PostToolUse** (Bash) | `~/.claude/hooks/post-tool-filter.sh` | Guides Claude to summarize outputs >10KB |
+| **PostToolUse** (Read) | settings.json built-in | Alerts when a file read exceeds 50KB — prompts extracting only the relevant section |
+| **PreCompact** | `~/.claude/hooks/pre-compact.sh` | Preserves critical context before compaction |
+| **SessionStart** (compact) | Template `context-reinject.json` | Re-injects `context-essentials.md` after compaction |
+
+Templates available in `.claude/templates/hooks/`: `output-filter.json`, `pre-compact.json`, `context-reinject.json`.
+
+| Optimization | Savings |
+|---|---|
+| RTK + ultra-compact | 60-90% on CLI outputs |
+| SUBAGENT_MODEL=claude-sonnet-5-5 | 40-60% sub-agent cost |
+| ENABLE_PROMPT_CACHING_1H | -40% on repetitive sessions (active by default in settings.json) |
+| fallbackModel | Opus reliability — no session interruptions (active by default in settings.json) |
+| PostToolUse hook (Bash+Read) | Reduces context pollution (5K-50K tokens/session on large files) |
+| PreCompact hook | Prevents context loss |
+| `context: fork` skills (>60 lines) | 2K-15K tokens per long session chaining multiple skills |
+| **Combined total** | **60-75% overall reduction** |
+
+> Detailed examples and templates: see `@.claude/references/base/context-management.md`
+
+---
+
+## Third-Party Ecosystem Tools (tokens & context)
+
+Beyond RTK and native hooks, the Claude Code ecosystem offers tools that cover angles not handled natively. None are bundled into Bear Craft — they are documented and recommended.
+
+| Tool | License | Angle | Rec |
+|------|---------|-------|-----|
+| **caveman** | Apache-2.0 | Output (response) compression ~65% | ✅ Integrate |
+| **code-review-graph** | MIT | AST graph, blast-radius reads (~63× median, 6.65× vs grep) | ✅ Integrate |
+| **token-savior** | MIT | Symbol index + Bash compaction (−80% unverified, −45% cost re-measured) | 🔶 Reference (gain not reproducible) |
+| **claude-token-efficient** | MIT | Anti-verbosity CLAUDE.md rules (~63% output) | ✅ Integrate |
+| **context-mode** | ELv2 | Output sandbox, post-compaction continuity | 🔶 Reference (license) |
+| **claude-context** | MIT | Semantic search (vector DB required) | 🔶 Reference (infra) |
+
+> Full catalogue, licenses and activation recipes: `@docs/ECOSYSTEM.md`. Audit and pin any third-party tool before installing (rule 11).
+
+---
+
+## Resources
+
+- **Anthropic Best Practices:** [code.claude.com](https://code.claude.com/docs/en/overview)
+- **Boris Cherny Workflow:** Parallel worktrees + verification loops
+- **Claude Code Context Management:** Context compaction, `/clear`, sub-agents
+- **`/init`:** Automatically generates a CLAUDE.md from project analysis
+- **CLAUDE.md Authoring:** [Builder.io Guide](https://www.builder.io/blog/claude-md-guide), [HumanLayer Blog](https://www.humanlayer.dev/blog/writing-a-good-claude-md)
+- **Cost Optimization:** [Anthropic Costs Docs](https://code.claude.com/docs/en/costs)
+
+---
+
+**Last updated:** 2026-06
+**Version:** 1.3.0
+**Author:** The Bearded Bear
