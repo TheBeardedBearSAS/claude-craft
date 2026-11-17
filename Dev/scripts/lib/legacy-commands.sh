@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # legacy-commands.sh — migrate pre-10.0 command folders to their bear- prefixed names.
 #
 # Since 10.0 commands live in .claude/commands/bear-<ns>/ (prefixed). An installation
