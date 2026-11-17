@@ -203,7 +203,7 @@ function universeFor(name, installs) {
  * ligne, un espace ou l'un des caractères ` ' " ( [ | > (jamais dans une URL ou un chemin).
  */
 function prefixSlash(text, stats) {
-  const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${[...stats.namespaces].join('|')}):(?=[A-Za-z])`, 'gm');
+  const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${[...stats.namespaces].join('|')}):(?=[A-Za-z*])`, 'gm');
   return text.replace(re, (_m, before, ns) => {
     stats.slashRewritten += 1;
     return `${before}/${pluginName(ns)}:`;

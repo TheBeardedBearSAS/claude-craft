@@ -141,7 +141,7 @@ describe('generate-plugins : autonomie des plugins', () => {
 });
 
 describe('generate-plugins : références slash préfixées', () => {
-  const NS = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${EXPECTED.join('|')}):[A-Za-z]`, 'm');
+  const NS = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${EXPECTED.join('|')}):[A-Za-z*]`, 'm');
 
   it("aucune référence /<ns>: non préfixée ne subsiste pour un namespace généré", () => {
     for (const name of EXPECTED) {
@@ -221,7 +221,7 @@ describe('generate-plugins : déterminisme et mode --check', () => {
   it('--check échoue si un fichier en trop existe dans plugins/ (sens inverse)', () => {
     const copy = path.join(TMP, 'drift-extra');
     fs.cpSync(COMMITTED, copy, { recursive: true });
-    fs.writeFileSync(path.join(copy, 'bear-bear-react/commands/extra.md'), 'en trop\n');
+    fs.writeFileSync(path.join(copy, 'bear-react/commands/extra.md'), 'en trop\n');
     const r = run('--check', '--out', copy);
     expect(r.status).not.toBe(0);
     expect(r.stderr + r.stdout).toContain('bear-react/commands/extra.md');
