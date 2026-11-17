@@ -36,7 +36,7 @@ If you're undecided, **start with SuperClaude** to learn how Claude Code persona
 | Quality gates | None | PRD ≥80%, Tech Spec ≥90%, INVEST 6/6, Sprint Ready 100%, Story DoD 100%, Spec Alignment ≥85% |
 | Browser-based acceptance testing | None | QA Recette (Golden Rule: a fixed bug should NEVER reappear) |
 | Local Kanban board | None | Built-in (Svelte + Hono + chokidar, no SaaS) |
-| Continuous loop autonomous mode | None | Ralph Wiggum (`/common:ralph-run`) with adaptive circuit breaker |
+| Continuous loop autonomous mode | None | Ralph Wiggum (`/bear-common:ralph-run`) with adaptive circuit breaker |
 
 ### Stack Coverage
 
@@ -140,7 +140,7 @@ cp -r .claude .claude.superclaude-backup
 npx @the-bearded-bear/bear-craft install . --tech=react --lang=en
 
 # 3. Compare your CLAUDE.md and personas; migrate custom prompts to .claude/rules/
-# 4. Run /workflow:init to bootstrap BMAD v6
+# 4. Run /bear-workflow:init to bootstrap BMAD v6
 ```
 
 ### From Bear Craft to SuperClaude

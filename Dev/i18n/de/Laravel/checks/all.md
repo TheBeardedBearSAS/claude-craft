@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/laravel:check architecture` verwenden oder die Schritte in `.claude/references/laravel/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-laravel:check architecture` verwenden oder die Schritte in `.claude/references/laravel/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Trennung der Clean-Architecture-Schichten (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/laravel:check code-quality` verwenden oder die Schritte in `.claude/references/laravel/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-laravel:check code-quality` verwenden oder die Schritte in `.claude/references/laravel/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - PSR-12- und Laravel-Pint-Konformität (5 Pkt.)
@@ -58,7 +58,7 @@ Code-Qualitätsprüfung durchführen:
 
 Testprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/laravel:check testing` verwenden oder die Schritte in `.claude/references/laravel/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-laravel:check testing` verwenden oder die Schritte in `.claude/references/laravel/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (7 Pkt.)
@@ -74,7 +74,7 @@ Testprüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/laravel:check security` verwenden oder die Schritte in `.claude/references/laravel/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-laravel:check security` verwenden oder die Schritte in `.claude/references/laravel/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - OWASP-Top-10-Schutzmaßnahmen (6 Pkt.)

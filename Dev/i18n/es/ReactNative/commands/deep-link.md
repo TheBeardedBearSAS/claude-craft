@@ -14,7 +14,7 @@ Argumentos:
 - Dominio (p. ej., `example.com`, `app.mysite.com`)
 - (Opcional) Esquema personalizado (p. ej., `myapp`)
 
-Ejemplo: `/reactnative:deep-link example.com myapp`
+Ejemplo: `/bear-reactnative:deep-link example.com myapp`
 
 ## Modo Plan
 

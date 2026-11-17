@@ -93,10 +93,10 @@ Der folgende Ablauf ist mit den Agent-Teams-Primitiven beschrieben. Mit `--engin
 | Bedingung | Team-Delivery verwenden | Alternative |
 |-----------|------------------------|-------------|
 | Vollständiger Zyklus (Plan + Code), 3+ Stories | **Ja (~2,2x Beschleunigung)** | Sequenziell zu langsam |
-| < 3 Stories | Nein | `@product-owner` + `/workflow:implement` |
-| Einzelne Story | Nein | `/common:ralph-run` |
+| < 3 Stories | Nein | `@product-owner` + `/bear-workflow:implement` |
+| Einzelne Story | Nein | `/bear-common:ralph-run` |
 | 5+ unabhängige Stories | **Ja (bester ROI)** | Möglich, aber sequenziell langsam |
-| Nur Implementierung (Stories vorhanden) | `--phase=implementation` verwenden | `/workflow:implement` |
+| Nur Implementierung (Stories vorhanden) | `--phase=implementation` verwenden | `/bear-workflow:implement` |
 | Nur Schreiben (kein Coding nötig) | `--phase=writing` verwenden | `@product-owner` manuell |
 | Sehr budgetbeschränkt | Nein (+30-40% Token-Overhead) | Sequenzieller Workflow |
 | Dateidomänen-Zuordnung benötigt | **Ja (integriert)** | Manuelle Koordination |

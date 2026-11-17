@@ -76,4 +76,4 @@ Vérifier les en-têtes fournis :
 
 ## Sortie
 
-Rapport Markdown avec passe/échoue par section, sévérité (Bloquant / Majeur / Mineur), références CVE si pertinent, et un score /20 pour `/paperclip:check all`.
+Rapport Markdown avec passe/échoue par section, sévérité (Bloquant / Majeur / Mineur), références CVE si pertinent, et un score /20 pour `/bear-paperclip:check all`.

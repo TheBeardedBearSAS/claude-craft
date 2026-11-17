@@ -101,8 +101,8 @@ Avant de passer à la tâche suivante, **vérifier explicitement** que l'objecti
 
 ## Intégration Bear Craft
 
-- **`/workflow:analyze`** — phase d'analyse BMAD doit produire des tâches atomiques
-- **`/common:ralph-run`** — Ralph doit itérer sur des tâches atomiques, une par boucle
+- **`/bear-workflow:analyze`** — phase d'analyse BMAD doit produire des tâches atomiques
+- **`/bear-common:ralph-run`** — Ralph doit itérer sur des tâches atomiques, une par boucle
 - **Agent tool** — chaque tâche complexe déléguée à un subagent frais
 - **Rule 12 (context-management)** — `/clear` obligatoire entre tâches non liées
 - **Rule 23 (karpathy-principles)** — minimal code par tâche
@@ -112,7 +112,7 @@ Avant de passer à la tâche suivante, **vérifier explicitement** que l'objecti
 - [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done)
 - Rule `.claude/rules/01-workflow-analysis.md`
 - Rule `.claude/rules/12-context-management.md`
-- Command `/common:sub-agents-patterns`
+- Command `/bear-common:sub-agents-patterns`
 
 ---
 

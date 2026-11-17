@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) Loja: ios, android, both
 - (Opcional) Tipo: new, update
 
-Exemplo: `/reactnative:store-prepare both new`
+Exemplo: `/bear-reactnative:store-prepare both new`
 
 ## Modo de Planejamento
 

@@ -29,7 +29,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification complète de l'architecture :
 
-**Commande** : Utiliser la commande slash `/vite:check architecture` ou suivre manuellement les étapes dans `.claude/references/vite/checks/architecture.md`
+**Commande** : Utiliser la commande slash `/bear-vite:check architecture` ou suivre manuellement les étapes dans `.claude/references/vite/checks/architecture.md`
 
 **Critères évalués** :
 - Détection de la forme du projet et points d'entrée (index.html à la racine, entrée build.lib, input multi-pages, motif `new URL` Worker/WASM) (6 pts)
@@ -44,7 +44,7 @@ Exécuter la vérification complète de l'architecture :
 
 Exécuter la vérification de la qualité du code :
 
-**Commande** : Utiliser la commande slash `/vite:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vite/checks/code-quality.md`
+**Commande** : Utiliser la commande slash `/bear-vite:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vite/checks/code-quality.md`
 
 **Critères évalués** :
 - Analyse ESLint (no-explicit-any, no-restricted-imports, no-console) (5 pts)
@@ -59,7 +59,7 @@ Exécuter la vérification de la qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la commande slash `/vite:check testing` ou suivre manuellement les étapes dans `.claude/references/vite/checks/testing.md`
+**Commande** : Utiliser la commande slash `/bear-vite:check testing` ou suivre manuellement les étapes dans `.claude/references/vite/checks/testing.md`
 
 **Critères évalués** :
 - Couverture du code avec Vitest (>= 80 % instructions, branches, fonctions, lignes) (7 pts)
@@ -75,7 +75,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la commande slash `/vite:check security` ou suivre manuellement les étapes dans `.claude/references/vite/checks/security.md`
+**Commande** : Utiliser la commande slash `/bear-vite:check security` ou suivre manuellement les étapes dans `.claude/references/vite/checks/security.md`
 
 **Critères évalués** :
 - Fuite de secrets via l'env / `define()` (préfixe VITE_*, secrets codés en dur) (7 pts)
@@ -111,7 +111,7 @@ Produire les recommandations finales :
 - [ ] Proposer un ordre d'implémentation
 - [ ] Suggérer des gains rapides (ratio impact/effort élevé)
 
-> **Projets de bibliothèque** : `/vite:check-library-build` complète cet audit pour les projets de bibliothèque (sortie build.lib, map exports, déclarations de types, tree-shaking). L'exécuter en complément lorsque le projet publie un package.
+> **Projets de bibliothèque** : `/bear-vite:check-library-build` complète cet audit pour les projets de bibliothèque (sortie build.lib, map exports, déclarations de types, tree-shaking). L'exécuter en complément lorsque le projet publie un package.
 
 ## FORMAT DE SORTIE
 
@@ -238,7 +238,7 @@ Refactoring majeur / Refonte nécessaire]
 
 ## NOTES IMPORTANTES
 
-- Cette commande orchestre les 4 audits spécialisés (`/vite:check architecture`, `/vite:check code-quality`, `/vite:check testing`, `/vite:check security`)
+- Cette commande orchestre les 4 audits spécialisés (`/bear-vite:check architecture`, `/bear-vite:check code-quality`, `/bear-vite:check testing`, `/bear-vite:check security`)
 - Utiliser Docker pour tous les outils d'analyse
 - Fournir des exemples concrets avec fichier:ligne pour chaque problème
 - Prioriser les actions selon la matrice Impact/Effort

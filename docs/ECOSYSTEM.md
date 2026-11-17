@@ -64,7 +64,7 @@ Pairs with the verbosity rules already in [`.claude/rules/12-context-management.
 Builds a structural graph of the codebase (Tree-sitter + AST in SQLite) so the model reads only the
 code impacted by a change. Reported median reduction of ~63× per question against the whole corpus
 (6.65× against a realistic grep baseline). Complements Bear Craft's
-review surface (`/qa:*`, `@security-auditor`, the `@{tech}-reviewer` agents).
+review surface (`/bear-qa:*`, `@security-auditor`, the `@{tech}-reviewer` agents).
 
 ```jsonc
 // .mcp.json
@@ -258,11 +258,11 @@ Evaluated at 2026-10-13 — not yet integrated but flagged for the next assessme
 
 | Tool | Status | Integration candidate |
 |------|--------|-----------------------|
-| **claude-health** | Maturing — config health audit | `/team:audit` supplementary check |
+| **claude-health** | Maturing — config health audit | `/bear-team:audit` supplementary check |
 | **claude-context-optimizer**, **capy**, **cxpak**, **llm-router**, **Codeburn**, **context-tax** | New in the awesome-claude-code catalogue (2026-10) — licenses not yet verified | To triage at the 2027-01 review |
 | **claude-subconscious** | Experimental — cross-session memory via MCP | Alternative to `claude-mem` above |
-| **tech-debt-skill** | Stable — tech-debt audit skill | Candidate for `/qa:*` namespace |
-| **[claude-code-security-review](https://github.com/anthropics/claude-code-security-review)** (Anthropic) | Official GitHub Action, MIT, ~6.6k ★ (checked 2026-10-28; last push 2026-02-11) — Claude reviews pull-request diffs for vulnerabilities | CI counterpart of native `/security-review` (diff only); `/team:security` keeps the full-repository audit |
+| **tech-debt-skill** | Stable — tech-debt audit skill | Candidate for `/bear-qa:*` namespace |
+| **[claude-code-security-review](https://github.com/anthropics/claude-code-security-review)** (Anthropic) | Official GitHub Action, MIT, ~6.6k ★ (checked 2026-10-28; last push 2026-02-11) — Claude reviews pull-request diffs for vulnerabilities | CI counterpart of native `/security-review` (diff only); `/bear-team:security` keeps the full-repository audit |
 | **[claude-code-tools](https://github.com/pchalasani/claude-code-tools)** (pchalasani) | MIT, ~2k ★, active (push 2026-10-28) — session continuity: avoid compaction, recover context, Claude Code ↔ Codex CLI handoff | Overlaps Ralph continuation and the PreCompact/PostCompact hooks — compare before adopting |
 | **[localpr](https://github.com/gilles-g/localpr)** (gilles-g) | MIT, 6 ★, new (2026-10) — GitHub-style local review page for uncommitted changes, batched line comments sent back to Claude | Below the >1k ★ graduation bar; review-loop idea worth tracking |
 

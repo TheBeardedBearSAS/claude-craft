@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/rust:check architecture` verwenden oder manuell den Schritten in `.claude/references/rust/checks/architecture.md` folgen
+**Befehl**: Slash-Befehl `/bear-rust:check architecture` verwenden oder manuell den Schritten in `.claude/references/rust/checks/architecture.md` folgen
 
 **Bewertete Kriterien**:
 - Workspace-Layout und Crate-Grenzen (domain frei von axum/sqlx) (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung ausführen:
 
 Codequalitätsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/rust:check code-quality` verwenden oder manuell den Schritten in `.claude/references/rust/checks/code-quality.md` folgen
+**Befehl**: Slash-Befehl `/bear-rust:check code-quality` verwenden oder manuell den Schritten in `.claude/references/rust/checks/code-quality.md` folgen
 
 **Bewertete Kriterien**:
 - Clippy sauber mit `-D warnings` und Workspace-Lints (5 Pkt.)
@@ -58,7 +58,7 @@ Codequalitätsprüfung ausführen:
 
 Testprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/rust:check testing` verwenden oder manuell den Schritten in `.claude/references/rust/checks/testing.md` folgen
+**Befehl**: Slash-Befehl `/bear-rust:check testing` verwenden oder manuell den Schritten in `.claude/references/rust/checks/testing.md` folgen
 
 **Bewertete Kriterien**:
 - Codeabdeckung (cargo-llvm-cov, Ziel >= 80 %) (7 Pkt.)
@@ -74,7 +74,7 @@ Testprüfung ausführen:
 
 Sicherheitsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/rust:check security` verwenden oder manuell den Schritten in `.claude/references/rust/checks/security.md` folgen
+**Befehl**: Slash-Befehl `/bear-rust:check security` verwenden oder manuell den Schritten in `.claude/references/rust/checks/security.md` folgen
 
 **Bewertete Kriterien**:
 - Schutzmaßnahmen gemäß OWASP Top 10:2025 (6 Pkt.)

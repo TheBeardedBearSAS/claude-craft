@@ -119,19 +119,19 @@ Wenn ein Fehler erkannt wird:
 
 ```bash
 # Eine bestimmte Story testen
-/qa:recette --scope=story --id=US-001
+/bear-qa:recette --scope=story --id=US-001
 
 # Alle Stories eines Sprints testen
-/qa:recette --scope=sprint --id=Sprint-3
+/bear-qa:recette --scope=sprint --id=Sprint-3
 
 # Dry Run um Testplan zu sehen
-/qa:recette --scope=story --id=US-001 --dry-run
+/bear-qa:recette --scope=story --id=US-001 --dry-run
 
 # Unterbrochene Sitzung fortsetzen
-/qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
+/bear-qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
 
 # Ausfuehrung als GIF aufzeichnen
-/qa:recette --scope=story --id=US-001 --record-gif
+/bear-qa:recette --scope=story --id=US-001 --record-gif
 ```
 
 ## Sitzungswiederherstellung
@@ -162,7 +162,7 @@ recovery:
 Zum Fortsetzen:
 
 ```bash
-/qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
+/bear-qa:recette --scope=story --id=US-001 --resume=REC-20260130-143022
 ```
 
 ## Regressionsregister
@@ -214,11 +214,11 @@ entries:
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/qa:fix` | Bugs aus einer Recette-Sitzung beheben |
-| `/qa:status` | Sitzungsstatus anzeigen |
-| `/qa:regression` | Regressionstests anzeigen |
-| `/qa:status --report` | Bericht generieren |
-| `/gate:check story` | Story AC validieren |
+| `/bear-qa:fix` | Bugs aus einer Recette-Sitzung beheben |
+| `/bear-qa:status` | Sitzungsstatus anzeigen |
+| `/bear-qa:regression` | Regressionstests anzeigen |
+| `/bear-qa:status --report` | Bericht generieren |
+| `/bear-gate:check story` | Story AC validieren |
 
 ## Chrome-Faehigkeiten
 
@@ -255,15 +255,15 @@ entries:
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
 ║  Wenn Bugs gefunden wurden:                              ║
-║  → /qa:fix                                               ║
+║  → /bear-qa:fix                                               ║
 ║    Automatisierte Fehlerbehebung                         ║
-║  → /qa:tdd                                               ║
+║  → /bear-qa:tdd                                               ║
 ║    Fehlerbehebung mit TDD-Ansatz                         ║
 ║                                                          ║
 ║  Wenn alle Tests bestehen:                               ║
-║  → /qa:status --report                                            ║
+║  → /bear-qa:status --report                                            ║
 ║    Recette-Bericht generieren                            ║
-║  → /project:backlog move story done                               ║
+║  → /bear-project:backlog move story done                               ║
 ║    Story als erledigt markieren                          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

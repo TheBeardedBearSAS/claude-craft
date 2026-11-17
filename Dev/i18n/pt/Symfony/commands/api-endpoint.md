@@ -14,7 +14,7 @@ Arguments :
 - Ressource (nom de the entity)
 - Opérations (list, get, post, put, patch, delete)
 
-Exemple : `/symfony:api-endpoint Product "list,get,post,patch,delete"`
+Exemple : `/bear-symfony:api-endpoint Product "list,get,post,patch,delete"`
 
 ## Modo Plano
 

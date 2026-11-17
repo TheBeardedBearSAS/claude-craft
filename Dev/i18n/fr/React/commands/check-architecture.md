@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /react:check architecture"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-react:check architecture"
 deprecated: true
-replaced-by: /react:check
+replaced-by: /bear-react:check
 ---
 
-> ⚠️ `/react:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/react:check architecture`.
+> ⚠️ `/bear-react:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/bear-react:check architecture`.
 
-Exécutez `/react:check architecture $ARGUMENTS` : lisez `.claude/commands/react/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-react:check architecture $ARGUMENTS` : lisez `.claude/commands/bear-react/check.md` et suivez-le avec ces arguments.

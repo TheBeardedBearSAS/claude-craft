@@ -70,4 +70,4 @@ Relatório markdown com:
 - Passou/falhou por checkbox acima
 - Caminhos de arquivos ofensores (números de linha quando disponíveis)
 - Severidade: Blocker / Major / Minor
-- Pontuação /25 para uso por `/paperclip:check all`
+- Pontuação /25 para uso por `/bear-paperclip:check all`

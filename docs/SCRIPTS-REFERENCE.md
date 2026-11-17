@@ -48,7 +48,7 @@ Installs common/transversal rules, agents, and commands.
 
 **Installs:**
 - Common agents (api-designer, database-architect, tdd-coach, etc.)
-- Common commands (`/common:*`)
+- Common commands (`/bear-common:*`)
 - Base references (SOLID, KISS/DRY/YAGNI, Git workflow)
 - Skills (testing, security, documentation)
 
@@ -69,7 +69,7 @@ Installs Symfony/PHP rules and tooling.
 **Installs:**
 - Symfony-specific references (architecture, DDD, testing)
 - Symfony reviewer agent
-- Symfony commands (`/symfony:*`)
+- Symfony commands (`/bear-symfony:*`)
 - PHP templates
 
 ---
@@ -89,7 +89,7 @@ Installs Flutter/Dart rules and tooling.
 **Installs:**
 - Flutter-specific references (BLoC, Riverpod, Material)
 - Flutter reviewer agent
-- Flutter commands (`/flutter:*`)
+- Flutter commands (`/bear-flutter:*`)
 - Dart templates
 
 ---
@@ -105,7 +105,7 @@ Installs React/TypeScript rules and tooling.
 **Installs:**
 - React references (hooks, state management, a11y)
 - React reviewer agent
-- React commands (`/react:*`)
+- React commands (`/bear-react:*`)
 - TypeScript templates
 
 ---
@@ -121,7 +121,7 @@ Installs React Native rules and tooling.
 **Installs:**
 - React Native references (navigation, native modules)
 - React Native reviewer agent
-- React Native commands (`/reactnative:*`)
+- React Native commands (`/bear-reactnative:*`)
 
 ---
 
@@ -136,7 +136,7 @@ Installs Python rules and tooling.
 **Installs:**
 - Python references (FastAPI, async, typing)
 - Python reviewer agent
-- Python commands (`/python:*`)
+- Python commands (`/bear-python:*`)
 
 ---
 
@@ -151,7 +151,7 @@ Installs Angular rules and tooling.
 **Installs:**
 - Angular references (signals, standalone, RxJS)
 - Angular reviewer agent
-- Angular commands (`/angular:*`)
+- Angular commands (`/bear-angular:*`)
 
 ---
 
@@ -166,7 +166,7 @@ Installs C#/.NET rules and tooling.
 **Installs:**
 - C# references (Clean Architecture, CQRS, EF Core)
 - C# reviewer agent
-- C# commands (`/csharp:*`)
+- C# commands (`/bear-csharp:*`)
 - C# templates
 
 ---
@@ -182,7 +182,7 @@ Installs Laravel rules and tooling.
 **Installs:**
 - Laravel references (Actions, Pest PHP, Sanctum)
 - Laravel reviewer agent
-- Laravel commands (`/laravel:*`)
+- Laravel commands (`/bear-laravel:*`)
 
 ---
 
@@ -197,7 +197,7 @@ Installs Vue.js rules and tooling.
 **Installs:**
 - Vue.js references (Composition API, Pinia)
 - Vue.js reviewer agent
-- Vue.js commands (`/vuejs:*`)
+- Vue.js commands (`/bear-vuejs:*`)
 
 ---
 
@@ -212,7 +212,7 @@ Installs PHP (non-framework) rules and tooling.
 **Installs:**
 - PHP references (PSR-12, PHPStan)
 - PHP reviewer agent
-- PHP commands (`/php:*`)
+- PHP commands (`/bear-php:*`)
 
 ---
 
@@ -341,9 +341,9 @@ Installs project management commands.
 ```
 
 **Installs:**
-- Project commands (`/project:*`)
-- Sprint commands (`/workflow:*`)
-- Gate commands (`/gate:*`)
+- Project commands (`/bear-project:*`)
+- Sprint commands (`/bear-workflow:*`)
+- Gate commands (`/bear-gate:*`)
 - BMAD agents and commands
 - Product Owner and Tech Lead agents
 

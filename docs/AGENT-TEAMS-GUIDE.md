@@ -4,7 +4,7 @@ Agent Teams (Claude Code v2.1.32+ Research Preview) enables multi-agent coordina
 
 ## Prerequisites
 
-> **Engines:** `/team:audit`, `/team:security` and `/team:delivery` default to `--engine=subagents` (plain sub-agent delegation via the `Agent` tool, no prerequisite, works with `claude -p` and in CI). The prerequisites below only apply to `--engine=teams`. If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, `--engine=teams` falls back to `subagents` instead of failing. Agent Teams limits: no `claude -p` / CI, one team per session.
+> **Engines:** `/bear-team:audit`, `/bear-team:security` and `/bear-team:delivery` default to `--engine=subagents` (plain sub-agent delegation via the `Agent` tool, no prerequisite, works with `claude -p` and in CI). The prerequisites below only apply to `--engine=teams`. If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` is missing, `--engine=teams` falls back to `subagents` instead of failing. Agent Teams limits: no `claude -p` / CI, one team per session.
 
 | Requirement | Minimum Version | Check |
 |-------------|-----------------|-------|
@@ -20,7 +20,7 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 
 ## Installation
 
-The `/team:*` commands rely on helper scripts in `Tools/AgentTeams/lib/`
+The `/bear-team:*` commands rely on helper scripts in `Tools/AgentTeams/lib/`
 (`cost-estimator.sh`, `cost-dashboard.sh`, `ralph-teams-adapter.sh`,
 `compatibility-check.sh`, `result-aggregator.sh`).
 
@@ -41,7 +41,7 @@ bash Tools/AgentTeams/install-agentteams.sh /path/to/your/project
 bash Tools/AgentTeams/install-agentteams.sh --check /path/to/your/project
 ```
 
-If the scripts are absent, the `/team:*` commands **degrade gracefully**:
+If the scripts are absent, the `/bear-team:*` commands **degrade gracefully**:
 cost estimation falls back to manual, and `--ralph-mode` is unavailable — the
 commands still run.
 
@@ -66,7 +66,7 @@ Agent Teams adds coordination overhead. Use it only when the parallelization ben
 
 ### Fast Mode Guard (Blocking Confirmation)
 
-All `/team:*` commands include a **mandatory blocking guard** when Fast Mode (`/fast`) is active. The leader agent MUST:
+All `/bear-team:*` commands include a **mandatory blocking guard** when Fast Mode (`/fast`) is active. The leader agent MUST:
 
 1. Detect if Fast Mode is active (lightning bolt indicator)
 2. Display a comparative dashboard (standard vs fast pricing)
@@ -78,14 +78,14 @@ This prevents accidentally running multi-agent operations at 6x cost ($30/M inpu
 
 ### Budget Guard (`--max-cost`)
 
-All `/team:*` commands support `--max-cost=<dollars>` to set a maximum budget:
+All `/bear-team:*` commands support `--max-cost=<dollars>` to set a maximum budget:
 
 ```bash
 # Abort if estimated parallel cost exceeds $2
-/team:audit --max-cost=2.00
+/bear-team:audit --max-cost=2.00
 
 # Budget guard with dry-run preview
-/team:delivery --phase=implementation Sprint-3 --max-cost=5.00 --dry-run
+/bear-team:delivery --phase=implementation Sprint-3 --max-cost=5.00 --dry-run
 ```
 
 If the estimated parallel cost exceeds the budget:
@@ -449,7 +449,7 @@ Agent Teams is a **Research Preview** feature (v2.1.32+). This means:
 
 ### Context Compaction Risk (#23620)
 
-Claude Code's context compaction feature can cause the team leader to lose awareness of team state after compaction. All `/team:*` commands include mitigation instructions:
+Claude Code's context compaction feature can cause the team leader to lose awareness of team state after compaction. All `/bear-team:*` commands include mitigation instructions:
 
 - **Periodic re-read:** The leader re-reads `TaskList` every 5 worker completions to refresh team awareness
 - **Inactivity detection:** If no status updates for >3 minutes, force a full `TaskList` re-read
@@ -488,7 +488,7 @@ Unlike bash subprocesses, there is no way to forcibly terminate a misbehaving ag
 
 ### Single Chrome Browser for Recette
 
-QA Recette (`/qa:recette`) uses a single Chrome browser instance. Parallel test execution is not possible -- only test planning can be parallelized. This is a hard constraint of the Chrome integration architecture.
+QA Recette (`/bear-qa:recette`) uses a single Chrome browser instance. Parallel test execution is not possible -- only test planning can be parallelized. This is a hard constraint of the Chrome integration architecture.
 
 ### Sprint-Status YAML Concurrency
 

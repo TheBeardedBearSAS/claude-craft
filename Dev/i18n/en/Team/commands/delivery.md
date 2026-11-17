@@ -93,10 +93,10 @@ The process below is written with Agent Teams primitives. With `--engine=subagen
 | Condition | Use Team Delivery | Alternative |
 |-----------|------------------|-------------|
 | Full cycle (plan + code), 3+ stories | **Yes (~2.2x speedup)** | Too slow sequentially |
-| < 3 stories | No | `@product-owner` + `/workflow:implement` |
-| Single story | No | `/common:ralph-run` |
+| < 3 stories | No | `@product-owner` + `/bear-workflow:implement` |
+| Single story | No | `/bear-common:ralph-run` |
 | 5+ independent stories | **Yes (best ROI)** | Possible but slow sequentially |
-| Implementation only (stories exist) | Use `--phase=implementation` | `/workflow:implement` |
+| Implementation only (stories exist) | Use `--phase=implementation` | `/bear-workflow:implement` |
 | Writing only (no coding needed) | Use `--phase=writing` | `@product-owner` manually |
 | Budget very constrained | No (+30-40% token overhead) | Sequential workflow |
 | Need file domain mapping | **Yes (built-in)** | Manual coordination |

@@ -107,7 +107,7 @@ install-projectconfig: install-tools-lib ## Installe le gestionnaire de projets 
 install-rtk: ## Installe RTK (Rust Token Killer)
 	@bash "$(TOOLS_DIR)/RTK/install-rtk.sh" --lang=$(RULES_LANG)
 
-install-agentteams: ## Installe les scripts AgentTeams (/team:*) dans TARGET (defaut: .)
+install-agentteams: ## Installe les scripts AgentTeams (/bear-team:*) dans TARGET (defaut: .)
 	@bash "$(TOOLS_DIR)/AgentTeams/install-agentteams.sh" "$(TARGET)"
 
 install-completions: ## Installe les completions bash/zsh
@@ -154,7 +154,7 @@ test-all: ## Lance tous les tests (vitest + bats)
 
 # Pre-collecte deterministe : decide quelles lentilles d'audit meritent un agent
 # cette semaine. Cout LLM nul. L'audit complet se lance ensuite dans Claude Code
-# via /common:audit-claude-alignment.
+# via /bear-common:audit-claude-alignment.
 audit-claude-signals: ## Collecte les signaux Claude (npm, advisories, empreintes de pages)
 	@node scripts/collect-claude-signals.mjs $(if $(SINCE),--since=$(SINCE))
 
@@ -162,7 +162,7 @@ audit-claude-alignment: ## Rituel hebdo : affiche les lentilles a auditer puis l
 	@node scripts/collect-claude-signals.mjs --dry-run $(if $(SINCE),--since=$(SINCE)) | head -3
 	@echo ""
 	@echo "Lancer ensuite dans Claude Code :"
-	@echo "  /common:audit-claude-alignment$(if $(SINCE), --since=$(SINCE))"
+	@echo "  /bear-common:audit-claude-alignment$(if $(SINCE), --since=$(SINCE))"
 
 #===============================================================================
 # Configuration YAML

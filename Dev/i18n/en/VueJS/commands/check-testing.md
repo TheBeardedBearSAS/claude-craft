@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /vuejs:check testing"
+description: "Deprecated (removed in 10.0): use /bear-vuejs:check testing"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-testing` is deprecated and will be removed in 10.0. Use `/vuejs:check testing`.
+> ⚠️ `/bear-vuejs:check-testing` is deprecated and will be removed in 10.0. Use `/bear-vuejs:check testing`.
 
-Run `/vuejs:check testing $ARGUMENTS`: read `.claude/commands/vuejs/check.md` and follow it with these arguments.
+Run `/bear-vuejs:check testing $ARGUMENTS`: read `.claude/commands/bear-vuejs/check.md` and follow it with these arguments.

@@ -68,7 +68,7 @@ Install RTK (Rust Token Killer) to reduce token usage by 60-90%:
 ```bash
 make install-rtk
 # or
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 RTK intercepts terminal commands and compresses their output before it reaches the LLM context window.
@@ -117,7 +117,7 @@ make install-symfony TARGET=~/project OPTIONS="--force --backup"
 
 Edit `.claude/CLAUDE.md` or run:
 ```
-/common:init --context
+/bear-common:init --context
 ```
 
 ### How do I change the documentation language?
@@ -208,7 +208,7 @@ Two distinct commands (v2.1.157+):
 
 > Avant v2.1.157, seul `/reload-plugins` existait. Si `/reload-skills` n'est pas disponible, redémarrer la session Claude Code.
 
-### Why aren't `/gate:*` or `/project:*` commands available?
+### Why aren't `/bear-gate:*` or `/bear-project:*` commands available?
 
 Ces commandes font partie de la couche **Project** qui nécessite une installation séparée :
 
@@ -220,7 +220,7 @@ npx @the-bearded-bear/bear-craft install . --include-project
 
 Sans cette étape, les namespaces `/gate:` et `/project:` n'existent pas (le namespace sprint a été retiré en 9.0 : voir MIGRATION-v9). L'installation par défaut installe uniquement les namespaces `/common:`, `/workflow:`, `/team:`, `/qa:`, `/uiux:` et les namespaces technologiques.
 
-De même, `/bmad:init` n'existe pas — utiliser `/workflow:init` qui est la commande correcte installée.
+De même, `/bmad:init` n'existe pas — utiliser `/bear-workflow:init` qui est la commande correcte installée.
 
 ### What happens when a stream stalls?
 
@@ -280,13 +280,13 @@ BMAD (Build, Measure, Analyze, Deliver) is Bear Craft's project management frame
 
 ```bash
 # Initialize workflow in your project (commande correcte)
-/workflow:init
+/bear-workflow:init
 
 # Check sprint status (nécessite make install-project TARGET=.)
-/workflow:status
+/bear-workflow:status
 ```
 
-> Il n'existe pas de commande `/bmad:init`. La commande correcte est `/workflow:init`. Les commandes `/gate:*` et `/project:*` nécessitent l'installation de la couche Project (voir la question ci-dessus).
+> Il n'existe pas de commande `/bmad:init`. La commande correcte est `/bear-workflow:init`. Les commandes `/bear-gate:*` et `/bear-project:*` nécessitent l'installation de la couche Project (voir la question ci-dessus).
 
 ### How do I use the Kanban Board?
 
@@ -328,7 +328,7 @@ Ralph Wiggum is a continuous AI agent loop that runs Claude iteratively until:
 ### How do I use Ralph?
 
 ```bash
-/common:ralph-run "Implement user authentication"
+/bear-common:ralph-run "Implement user authentication"
 # or
 npx @the-bearded-bear/bear-craft ralph "Fix the login bug"
 ```
@@ -348,7 +348,7 @@ npx @the-bearded-bear/bear-craft ralph "Fix the login bug"
 Yes! Use the team-sprint command with Ralph mode:
 
 ```bash
-/team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight --max-stories 5
+/bear-team:delivery --phase=implementation --engine=teams --ralph-mode "Sprint 3" --overnight --max-stories 5
 ```
 
 This will:
@@ -357,7 +357,7 @@ This will:
 3. Escalate blocking issues
 4. Stop at 6am or when limits are reached
 
-> **Note:** `/common:ralph-sprint` was removed in v6.0. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/bear-common:ralph-sprint` was removed in v6.0. See [Migration Guide](MIGRATION-v6.md).
 
 ---
 
@@ -374,9 +374,9 @@ This will:
 ### How do I start a workflow?
 
 ```
-/workflow:init              # Auto-detect
-/workflow:init --quick      # Bug fix mode
-/workflow:init --enterprise # Full methodology
+/bear-workflow:init              # Auto-detect
+/bear-workflow:init --quick      # Bug fix mode
+/bear-workflow:init --enterprise # Full methodology
 ```
 
 ### What are the workflow phases?
@@ -418,10 +418,10 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 | **Quick Flow** (hotfix, bug) | ~5 000 | ~2 000 | ~$0.01 |
 | **Standard** (nouvelle feature) | ~15 000–25 000 | ~6 000–10 000 | ~$0.04–$0.07 |
 | **Enterprise** (plateforme) | ~40 000–60 000 | ~16 000–24 000 | ~$0.11–$0.16 |
-| `/team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.05–$0.10 |
-| `/qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.02–$0.04 |
+| `/bear-team:audit --sequential` | ~20 000–35 000 | ~8 000–14 000 | ~$0.05–$0.10 |
+| `/bear-qa:recette` (story unique) | ~8 000–15 000 | ~3 000–6 000 | ~$0.02–$0.04 |
 
-**RTK** = `/common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
+**RTK** = `/bear-common:setup-rtk` (55-65% de réduction). Voir `docs/RTK-ANALYSIS.md`.
 
 **Avec Opus 5.5** (recommandé pour les phases de planification et review), multiplier par ~2 le coût par token par rapport à Sonnet 5.5. Utiliser `/model opusplan` pour le tiering dynamique Opus (planning) / Sonnet (exécution).
 
@@ -452,7 +452,7 @@ Use for interactive work (code review, debugging). For batch operations (team-sp
 Use RTK (Rust Token Killer) for 55-65% savings:
 
 ```bash
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 This configures:
@@ -535,20 +535,20 @@ See [Troubleshooting Guide](TROUBLESHOOTING.md) for more solutions.
 ### How do I create a user story?
 
 ```
-/project:backlog add story EPIC-001 "As a user, I want..."
+/bear-project:backlog add story EPIC-001 "As a user, I want..."
 ```
 
 ### How do I track sprint progress?
 
 ```
-/workflow:status
-/workflow:status --board
+/bear-workflow:status
+/bear-workflow:status --board
 ```
 
 ### How do I run a TDD sprint?
 
 ```
-/workflow:implement next
+/bear-workflow:implement next
 ```
 
 ---
@@ -611,16 +611,16 @@ Not recommended. Migrate projects one at a time.
 
 ### What's the recommended workflow for a new feature?
 
-1. Start with `/workflow:init`
+1. Start with `/bear-workflow:init`
 2. Use `@api-designer` for API design
-3. Generate code with `/symfony:generate-crud`
+3. Generate code with `/bear-symfony:generate-crud`
 4. Write tests with `@tdd-coach`
 5. Review with `@symfony-reviewer`
-6. Validate with `/gate:check commit`
+6. Validate with `/bear-gate:check commit`
 
 ### How often should I run audits?
 
-- **Pre-commit**: Always (`/gate:check commit`)
+- **Pre-commit**: Always (`/bear-gate:check commit`)
 - **Full audit**: Weekly or before releases
 - **Security audit**: Before each release
 
@@ -636,7 +636,7 @@ Yes! The `.claude/` folder should be committed to version control so all team me
 
 Use the command:
 ```
-/common:add-technology "nextjs"
+/bear-common:add-technology "nextjs"
 ```
 
 This generates all files for 5 languages. The command is maintainer-only: run it from a clone of the bear-craft repository (it is not installed in projects since 8.24.0).

@@ -75,12 +75,12 @@ dotnet ef database update                # Appliquer migrations
 
 ## Commandes disponibles
 
-- `/csharp:check all` - Audit conformite complet
-- `/csharp:check architecture` - Validation architecture
-- `/csharp:check code-quality` - Analyse qualite code
-- `/csharp:check testing` - Analyse couverture tests
-- `/csharp:check security` - Audit securite (OWASP)
-- `/csharp:generate-feature` - Generer feature CQRS
+- `/bear-csharp:check all` - Audit conformite complet
+- `/bear-csharp:check architecture` - Validation architecture
+- `/bear-csharp:check code-quality` - Analyse qualite code
+- `/bear-csharp:check testing` - Analyse couverture tests
+- `/bear-csharp:check security` - Audit securite (OWASP)
+- `/bear-csharp:generate-feature` - Generer feature CQRS
 
 ## References
 

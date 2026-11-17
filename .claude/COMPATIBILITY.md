@@ -246,7 +246,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 | Opus 4.7 (`claude-opus-4-7`) | Nouveau flagship | Agents architecture, sécurité |
 | `xhigh` effort level | Nouveau palier au-dessus de `high` | Agents complexes (ralph-conductor) |
 | `/effort` slider interactif | Picker effort niveau | Adapté aux tâches complexes |
-| `/ultrareview` | Code review multi-agent parallèle | Complète `/team:audit` |
+| `/ultrareview` | Code review multi-agent parallèle | Complète `/bear-team:audit` |
 | Auto Mode sur Opus 4.7 | Max subscribers | Classifier de permissions |
 
 ### 2.1.113 — Native CLI et sécurité renforcée
@@ -262,7 +262,7 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 | Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
-| Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | **Activé** via `/common:setup-rtk` (audit 2026-05-18 QW-06) |
+| Forked Subagents | `CLAUDE_CODE_FORK_SUBAGENT=1` — contextes isolés | **Activé** via `/bear-common:setup-rtk` (audit 2026-05-18 QW-06) |
 | `/resume` 67% faster | Sessions > 40 MB | Reprise sessions longues |
 | Concurrent MCP connections | Par défaut — démarrage plus rapide | Multi-MCP setups |
 | Native `Glob`/`Grep` (bfs/ugrep) | Embedded binaires | Performance recherche fichiers |
@@ -272,12 +272,12 @@ Détail des features disponibles dans la fenêtre 2.1.105–2.1.117 pour les uti
 
 | Variable / Feature | Description | Usage Bear Craft |
 |---------|-------------|-------------------|
-| `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/common:setup-rtk` |
-| `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 5.5 (cost saving) | Recommandé via `/common:setup-rtk` |
+| `CLAUDE_CODE_FORK_SUBAGENT=1` | Active les sous-agents avec contextes isolés (forked) | Recommandé via `/bear-common:setup-rtk` |
+| `CLAUDE_CODE_SUBAGENT_MODEL=sonnet` | Bascule les sous-agents vers Sonnet 5.5 (cost saving) | Recommandé via `/bear-common:setup-rtk` |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` | Désactive la mémoire automatique inter-sessions | Utile si `/memory` est géré manuellement |
 | `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1` | Charge CLAUDE.md depuis `--add-dir` | Monorepos |
 | `MAX_THINKING_TOKENS=8000` | Limite tokens de reflexion adaptive | Tâches simples → coût réduit |
-| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caractères slash commands | Commands longues (`/team:audit`) |
+| `SLASH_COMMAND_TOOL_CHAR_BUDGET` | Budget caractères slash commands | Commands longues (`/bear-team:audit`) |
 | `CLAUDE_CODE_USE_POWERSHELL_TOOL` | Outil PowerShell (ajouté v2.1.84+) : actif automatiquement sous Windows sans Git Bash, par défaut avec Git Bash pour les comptes claude.ai/Console ; `0` le désactive, `1` l'active ailleurs | WSL2 fallback Windows |
 | `ENABLE_PROMPT_CACHING_1H` | Cache prompt 1 heure | Sessions répétitives, -40% coût |
 | `FORCE_PROMPT_CACHING_5M` | Force cache 5 min | Sessions courtes |
@@ -306,7 +306,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
-| `claude ultrareview [target]` | Sous-commande non-interactive pour CI/scripts (`--json`) | **Documented** in COMPATIBILITY.md — not in `/team:*` commands |
+| `claude ultrareview [target]` | Sous-commande non-interactive pour CI/scripts (`--json`) | **Documented** in COMPATIBILITY.md — not in `/bear-team:*` commands |
 | `${CLAUDE_EFFORT}` dans skills | Skills peuvent référencer le niveau d'effort courant | **Not exploited** — opportunities in adaptive skills |
 | Git for Windows non requis | PowerShell fallback automatique | **N/A** (user env) |
 | `AI_AGENT` env var | Positionné pour les sous-processus | **Not documented** |
@@ -351,7 +351,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 | Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
 | **`/goal` command** | Définir condition de completion — Claude travaille jusqu'à ce qu'elle soit atteinte | **NOT INTEGRATED** — P1 : intégrer dans `ralph-run.md` comme alternative native aux DoD validators |
-| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/team:*` et `/team:delivery` |
+| **`claude agents` command** | Agent View : liste unique de toutes les sessions actives | **NOT DOCUMENTED** — P1 : pertinent pour `/bear-team:*` et `/bear-team:delivery` |
 | `/scroll-speed` | Tuning vitesse scroll souris | **N/A** |
 | `claude plugin details <name>` | Inventaire composants + coût token | **N/A** |
 | Hook `args: string[]` field | Exec form sans shell | **Not documented** |
@@ -379,7 +379,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 | Feature | Description | Adoption Bear Craft |
 |---------|-------------|----------------------|
-| `claude agents --json` | Lister sessions actives comme JSON | **NOT DOCUMENTED** — P1 : utile pour `/team:*` automation |
+| `claude agents --json` | Lister sessions actives comme JSON | **NOT DOCUMENTED** — P1 : utile pour `/bear-team:*` automation |
 | Agent + parent agent IDs dans spans OTEL | Traçabilité multi-agents | **NOT EXPLOITED** — P2 : `@observability-engineer` |
 | Stop/SubagentStop hooks : `background_tasks`, `session_crons` | Champs additionnels dans hook input | **NOT DOCUMENTED** — P2 |
 | `/plugin` Discover/Browse enrichi | Commandes, agents, skills, hooks, MCP/LSP visibles | **N/A** |
@@ -416,7 +416,7 @@ Features available in Claude Code 2.1.119–2.1.145 and their adoption status in
 
 > **Note Opus 4.8 :** L'ID de modèle est `claude-opus-4-8`. Pour les agents critiques (audits sécurité, migrations, décisions schéma, boucles autonomes), `model: opus` + `effort: xhigh` routait alors vers Opus 4.8 — **depuis 2.1.280, l'alias `opus` route vers Opus 5.5** (`claude-opus-5-5`, Opus 4.8 devenu *legacy*). Le `model: sonnet` des reviewers tech reste optimal pour le ratio coût/qualité (routing économe).
 
-> **Note Dynamic Workflows vs `/team:*` :** Les commandes `/team:audit`, `/team:delivery`, `/team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
+> **Note Dynamic Workflows vs `/bear-team:*` :** Les commandes `/bear-team:audit`, `/bear-team:delivery`, `/bear-team:security` restent valides (orchestration documentée déclarative). Dynamic Workflows offre en plus une orchestration **programmatique** (boucles, fan-out conditionnel, pipelines, vérification adversariale) pour les tâches dépassant un seul contexte. À évaluer pour v8.8.
 
 ---
 

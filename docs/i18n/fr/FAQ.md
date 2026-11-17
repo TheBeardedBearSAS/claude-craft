@@ -73,7 +73,7 @@ make install-symfony TARGET=~/projet OPTIONS="--force --backup"
 
 Éditez `.claude/rules/00-project-context.md` ou exécutez :
 ```
-/common:init --context
+/bear-common:init --context
 ```
 
 ### Comment changer la langue de la documentation ?
@@ -184,10 +184,10 @@ BMAD v6 est le framework de gestion de projet de Bear Craft avec :
 
 ```bash
 # Initialiser BMAD dans votre projet
-/workflow:init
+/bear-workflow:init
 
 # Vérifier le statut
-/workflow:status
+/bear-workflow:status
 ```
 
 ### Quels sont les quality gates ?
@@ -216,7 +216,7 @@ Ralph Wiggum est une boucle d'agent IA continue qui exécute Claude de manière 
 ### Comment utiliser Ralph ?
 
 ```bash
-/common:ralph-run "Implémenter l'authentification utilisateur"
+/bear-common:ralph-run "Implémenter l'authentification utilisateur"
 # ou
 npx @the-bearded-bear/bear-craft ralph "Corriger le bug de connexion"
 ```
@@ -248,9 +248,9 @@ Voir [Guide Ralph](../RALPH-GUIDE.md).
 ### Comment démarrer un workflow ?
 
 ```
-/workflow:init              # Auto-détection
-/workflow:init --quick      # Mode correction de bug
-/workflow:init --enterprise # Méthodologie complète
+/bear-workflow:init              # Auto-détection
+/bear-workflow:init --quick      # Mode correction de bug
+/bear-workflow:init --enterprise # Méthodologie complète
 ```
 
 ### Quelles sont les phases du workflow ?
@@ -316,20 +316,20 @@ Voir [Guide de Dépannage](TROUBLESHOOTING.md) pour plus de solutions.
 ### Comment créer une user story ?
 
 ```
-/project:backlog add story EPIC-001 "En tant qu'utilisateur, je veux..."
+/bear-project:backlog add story EPIC-001 "En tant qu'utilisateur, je veux..."
 ```
 
 ### Comment suivre la progression du sprint ?
 
 ```
-/workflow:status
-/workflow:status --board
+/bear-workflow:status
+/bear-workflow:status --board
 ```
 
 ### Comment exécuter un sprint TDD ?
 
 ```
-/workflow:implement next
+/bear-workflow:implement next
 ```
 
 ---
@@ -395,7 +395,7 @@ Non recommandé. Migrez les projets un par un.
 Utilisez la commande intégrée pour configurer automatiquement toutes les optimisations :
 
 ```bash
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 Cela installe **RTK** (Rust Token Killer), un proxy CLI qui réduit la consommation de tokens de 60-90% sur les commandes dev. Combiné avec les hooks et `CLAUDE_CODE_SUBAGENT_MODEL=sonnet`, vous obtenez une réduction globale de 55-65%.
@@ -433,16 +433,16 @@ rtk init -g
 
 ### Quel est le workflow recommandé pour une nouvelle fonctionnalité ?
 
-1. Démarrer avec `/workflow:init`
+1. Démarrer avec `/bear-workflow:init`
 2. Utiliser `@api-designer` pour la conception d'API
-3. Générer le code avec `/symfony:generate-crud`
+3. Générer le code avec `/bear-symfony:generate-crud`
 4. Écrire les tests avec `@tdd-coach`
 5. Faire la revue avec `@symfony-reviewer`
-6. Valider avec `/gate:check commit`
+6. Valider avec `/bear-gate:check commit`
 
 ### À quelle fréquence exécuter les audits ?
 
-- **Pré-commit** : Toujours (`/gate:check commit`)
+- **Pré-commit** : Toujours (`/bear-gate:check commit`)
 - **Audit complet** : Hebdomadaire ou avant les releases
 - **Audit de sécurité** : Avant chaque release
 
@@ -458,7 +458,7 @@ Oui ! Le dossier `.claude/` doit être commité dans le contrôle de version pou
 
 Utilisez la commande :
 ```
-/common:add-technology "nextjs"
+/bear-common:add-technology "nextjs"
 ```
 
 Cela génère tous les fichiers pour 5 langues. Commande réservée aux mainteneurs : lancez-la depuis un clone du dépôt bear-craft (elle n’est plus installée dans les projets depuis la 8.24.0).

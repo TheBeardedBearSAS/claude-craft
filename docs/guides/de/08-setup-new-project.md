@@ -317,7 +317,7 @@ Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen un
 claude
 
 # Einrichtungsbefehl ausführen
-/common:init --context
+/bear-common:init --context
 ```
 
 Der Befehl wird:
@@ -438,7 +438,7 @@ Fragen Sie Claude:
 Liste alle verfügbaren Slash-Befehle für dieses Projekt auf
 ```
 
-Erwartet: Claude sollte Befehle wie `/common:analyze-feature`, `/{tech}:generate-crud`, etc. auflisten.
+Erwartet: Claude sollte Befehle wie `/bear-common:analyze-feature`, `/{tech}:generate-crud`, etc. auflisten.
 
 ### Test 2: Einen Agenten Verwenden
 
@@ -453,7 +453,7 @@ Erwartet: Claude sollte als TDD-Coach-Agent mit Testing-Anleitungen antworten.
 
 Versuchen Sie einen einfachen Befehl:
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Erwartet: Claude sollte eine Pre-Commit-Qualitätsprüfung ausführen (kann keine Änderungen melden, wenn das Projekt leer ist).
@@ -556,10 +556,10 @@ claude
 @{tech}-reviewer   # Code-Review
 
 # Häufige Befehle
-/common:analyze-feature     # Anforderungen analysieren
+/bear-common:analyze-feature     # Anforderungen analysieren
 /{tech}:generate-crud       # CRUD-Code generieren
-/gate:check commit         # Qualitätsprüfung
-/common:security-audit      # Sicherheitsaudit
+/bear-gate:check commit         # Qualitätsprüfung
+/bear-common:security-audit      # Sicherheitsaudit
 ```
 
 ---

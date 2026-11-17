@@ -22,22 +22,22 @@ Tu es un auditeur expert en React Native. Ta mission est de réaliser un audit c
 
 Lance les 4 audits suivants dans l'ordre et collecte leurs résultats :
 
-1. **Architecture** (`/reactnative:check architecture $ARGUMENTS`)
+1. **Architecture** (`/bear-reactnative:check architecture $ARGUMENTS`)
    - Vérifie la structure feature-based
    - Valide l'organisation des dossiers
    - Score sur 25 points
 
-2. **Qualité de Code** (`/reactnative:check code-quality $ARGUMENTS`)
+2. **Qualité de Code** (`/bear-reactnative:check code-quality $ARGUMENTS`)
    - Analyse TypeScript strict mode
    - Vérifie ESLint et Prettier
    - Score sur 25 points
 
-3. **Tests** (`/reactnative:check testing $ARGUMENTS`)
+3. **Tests** (`/bear-reactnative:check testing $ARGUMENTS`)
    - Évalue la couverture de tests
    - Valide Jest, RNTL, Detox
    - Score sur 25 points
 
-4. **Sécurité** (`/reactnative:check security $ARGUMENTS`)
+4. **Sécurité** (`/bear-reactnative:check security $ARGUMENTS`)
    - Audit des pratiques de sécurité
    - Vérifie SecureStore et certificats
    - Score sur 25 points

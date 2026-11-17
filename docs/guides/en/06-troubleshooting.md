@@ -21,7 +21,7 @@ This guide covers common issues and their solutions when using Bear-Craft.
 ### Commands Not Recognized After Installation
 
 **Symptoms:**
-- Slash commands like `/symfony:check all` don't work
+- Slash commands like `/bear-symfony:check all` don't work
 - Claude doesn't recognize installed commands
 
 **Solutions:**
@@ -43,7 +43,7 @@ This guide covers common issues and their solutions when using Bear-Craft.
 
 3. **Check command file format**
    ```bash
-   head -5 .claude/commands/symfony/check-compliance.md
+   head -5 .claude/commands/bear-symfony/check-compliance.md
    # Should start with proper markdown header
    ```
 
@@ -222,14 +222,14 @@ This guide covers common issues and their solutions when using Bear-Craft.
 ### Command Not Found
 
 **Symptoms:**
-- `/symfony:generate-crud` returns "unknown command"
+- `/bear-symfony:generate-crud` returns "unknown command"
 - Command suggestions don't appear
 
 **Solutions:**
 
 1. **Check command directory**
    ```bash
-   ls .claude/commands/symfony/
+   ls .claude/commands/bear-symfony/
    # Should include generate-crud.md
    ```
 
@@ -261,17 +261,17 @@ This guide covers common issues and their solutions when using Bear-Craft.
 
 2. **Review command file**
    ```bash
-   cat .claude/commands/symfony/generate-crud.md
+   cat .claude/commands/bear-symfony/generate-crud.md
    # Understand what the command expects
    ```
 
 3. **Provide required parameters**
    ```bash
    # Instead of
-   /symfony:generate-crud
+   /bear-symfony:generate-crud
 
    # Use
-   /symfony:generate-crud User --with-api --with-tests
+   /bear-symfony:generate-crud User --with-api --with-tests
    ```
 
 ### Command Output Incorrect
@@ -614,7 +614,7 @@ If using MCP servers with hooks, ensure Claude Code v2.1.325+ to avoid known CVE
 
 6. **Set up RTK** for 55-65% token savings
    ```bash
-   /common:setup-rtk
+   /bear-common:setup-rtk
    ```
 
 7. **Use agents for complex tasks**

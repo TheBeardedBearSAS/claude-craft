@@ -98,7 +98,7 @@ Find the root cause of the bug.
 ### Using Analysis Command
 
 ```bash
-/common:analyze-bug "Users cannot login with correct credentials after password reset"
+/bear-common:analyze-bug "Users cannot login with correct credentials after password reset"
 ```
 
 This command will:
@@ -319,15 +319,15 @@ make test
 
 ```bash
 # Code quality (per technology)
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
 
 # Security (if fix touches sensitive code)
-/common:security-audit
+/bear-common:security-audit
 
 # Full compliance
-/symfony:check all
+/bear-symfony:check all
 ```
 
 ### Manual Testing
@@ -468,7 +468,7 @@ git checkout -b hotfix/issue-123-login-failure
 
 # 4. Verify
 make test
-/symfony:check all
+/bear-symfony:check all
 
 # 5. Commit with clear message
 git commit -m "fix(auth): resolve critical login failure after password reset
@@ -622,7 +622,7 @@ public function calculateTotal(): Money
 make test
 
 # Quality check
-/symfony:check all
+/bear-symfony:check all
 # Score: 94/100 ✓
 ```
 
@@ -651,7 +651,7 @@ Regression tests added:
 3. **Static analysis**: Tools find common errors
 4. **Integration tests**: Catch interaction bugs
 5. **Monitor production**: Catch issues early
-6. **Use `/loop`**: Set up recurring quality checks (e.g., `/loop 5m /gate:check commit`)
+6. **Use `/loop`**: Set up recurring quality checks (e.g., `/loop 5m /bear-gate:check commit`)
 7. **Save learnings**: Use `/memory` to persist bug patterns across sessions
 
 ---

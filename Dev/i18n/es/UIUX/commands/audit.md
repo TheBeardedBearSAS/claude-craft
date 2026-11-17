@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) URL o ruta de la página/componente a auditar
 - (Opcional) Nivel WCAG: AA o AAA (por defecto: AAA)
 
-Ejemplo: `/uiux:audit src/pages/Dashboard.tsx AAA`
+Ejemplo: `/bear-uiux:audit src/pages/Dashboard.tsx AAA`
 
 ## Modo Plan
 
@@ -24,7 +24,7 @@ Ejemplo: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ### Paso 1: Auditoría de Accesibilidad (Experto A11y)
 
-Ejecutar `/uiux:a11y-audit {URL o ruta} {nivel}` y trasladar su informe (puntuación, criterios WCAG no conformes, remediaciones) a la síntesis. No repetir aquí la auditoría automatizada ni la checklist WCAG: `/uiux:a11y-audit` es la fuente única.
+Ejecutar `/bear-uiux:a11y-audit {URL o ruta} {nivel}` y trasladar su informe (puntuación, criterios WCAG no conformes, remediaciones) a la síntesis. No repetir aquí la auditoría automatizada ni la checklist WCAG: `/bear-uiux:a11y-audit` es la fuente única.
 
 ### Paso 2: Auditoría UX/Ergonomía (Experto UX)
 

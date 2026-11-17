@@ -70,10 +70,10 @@ All in `@.claude/references/<tech>/`
 **Prerequisites**: Chrome extension v1.0.36+ | Claude Code `--chrome` or `/chrome`
 
 ```bash
-/qa:recette --scope=story --id=US-001        # Test story
-/qa:recette --resume=REC-xxx                 # Resume session
-/qa:fix --session=REC-xxx --severity=critical # Fix critical bugs
-/qa:regression --check                       # Check Golden Rule
+/bear-qa:recette --scope=story --id=US-001        # Test story
+/bear-qa:recette --resume=REC-xxx                 # Resume session
+/bear-qa:fix --session=REC-xxx --severity=critical # Fix critical bugs
+/bear-qa:regression --check                       # Check Golden Rule
 ```
 
 **Golden Rule**: A fixed bug should NEVER reappear → auto-generates regression tests

@@ -61,7 +61,7 @@ Use `/effort low` for simple lookups and `/effort medium` for standard implement
 ### Using the Analysis Command
 
 ```bash
-/common:analyze-feature "User authentication with JWT tokens and role-based access"
+/bear-common:analyze-feature "User authentication with JWT tokens and role-based access"
 ```
 
 This command will:
@@ -136,7 +136,7 @@ The API designer will:
 ### Architecture Decision
 
 ```bash
-/common:architecture-decision "How to implement role-based access control"
+/bear-common:architecture-decision "How to implement role-based access control"
 ```
 
 Use this command for important architectural choices. It creates an Architecture Decision Record (ADR) documenting:
@@ -241,16 +241,16 @@ Feature: User Authentication
 
 ```bash
 # Symfony
-/symfony:check testing
+/bear-symfony:check testing
 
 # Flutter
-/flutter:check testing
+/bear-flutter:check testing
 
 # Python
-/python:check testing
+/bear-python:check testing
 
 # React
-/react:check testing
+/bear-react:check testing
 ```
 
 ### Test Writing Checklist
@@ -274,52 +274,52 @@ Now implement the code to make tests pass.
 
 ```bash
 # Generate CRUD with tests
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Generate API endpoint
-/symfony:api-endpoint POST /api/users CreateUserRequest
+/bear-symfony:api-endpoint POST /api/users CreateUserRequest
 
 # Generate command
-/symfony:generate-command SendWelcomeEmailCommand
+/bear-symfony:generate-command SendWelcomeEmailCommand
 ```
 
 #### Flutter
 
 ```bash
 # Generate BLoC
-/flutter:generate-bloc Authentication
+/bear-flutter:generate-bloc Authentication
 
 # Generate screen
-/flutter:generate-screen LoginScreen
+/bear-flutter:generate-screen LoginScreen
 
 # Generate widget
-/flutter:generate-widget UserAvatar
+/bear-flutter:generate-widget UserAvatar
 ```
 
 #### Python
 
 ```bash
 # Generate FastAPI endpoint
-/python:generate-endpoint POST /users CreateUser
+/bear-python:generate-endpoint POST /users CreateUser
 
 # Generate service
-/python:generate-service UserService
+/bear-python:generate-service UserService
 
 # Generate model
-/python:generate-model User
+/bear-python:generate-model User
 ```
 
 #### React
 
 ```bash
 # Generate component
-/react:generate-component UserProfile
+/bear-react:generate-component UserProfile
 
 # Generate hook
-/react:generate-hook useAuth
+/bear-react:generate-hook useAuth
 
 # Generate context
-/react:generate-context AuthContext
+/bear-react:generate-context AuthContext
 ```
 
 ### Using Templates
@@ -366,14 +366,14 @@ With tests passing, improve the code quality.
 
 ```bash
 # Check code quality
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
-/react:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
+/bear-react:check code-quality
 
 # Check architecture compliance
-/symfony:check architecture
-/flutter:check architecture
+/bear-symfony:check architecture
+/bear-flutter:check architecture
 ```
 
 ### Using Refactoring Specialist
@@ -417,10 +417,10 @@ Final quality check before completion.
 
 ```bash
 # Full compliance check (returns score /100)
-/symfony:check all
-/flutter:check all
-/python:check all
-/react:check all
+/bear-symfony:check all
+/bear-flutter:check all
+/bear-python:check all
+/bear-react:check all
 ```
 
 This comprehensive audit checks:
@@ -452,7 +452,7 @@ The reviewer will:
 ### Security Audit
 
 ```bash
-/common:security-audit
+/bear-common:security-audit
 ```
 
 Or use the security-focused agent:
@@ -495,7 +495,7 @@ Let's walk through a complete feature: Adding user registration.
 ### Step 1: Analyze
 
 ```markdown
-/common:analyze-feature "User registration with email verification"
+/bear-common:analyze-feature "User registration with email verification"
 
 Expected:
 - User submits email and password
@@ -543,8 +543,8 @@ Test cases:
 ### Step 5: Generate Code
 
 ```bash
-/symfony:generate-crud User --with-api
-/symfony:generate-command SendVerificationEmailCommand
+/bear-symfony:generate-crud User --with-api
+/bear-symfony:generate-command SendVerificationEmailCommand
 ```
 
 ### Step 6: Implement
@@ -575,7 +575,7 @@ public function register(string $email, string $password): User
 ### Step 7: Refactor
 
 ```bash
-/symfony:check code-quality
+/bear-symfony:check code-quality
 ```
 
 Fix any issues identified.
@@ -596,7 +596,7 @@ Complete implementation including:
 ### Step 9: Final Check
 
 ```bash
-/symfony:check all
+/bear-symfony:check all
 ```
 
 Target: Score 90+/100
@@ -621,13 +621,13 @@ Target: Score 90+/100
 
 | Phase | Commands |
 |-------|----------|
-| Analysis | `/common:analyze-feature` |
-| Design | `/common:architecture-decision` |
+| Analysis | `/bear-common:analyze-feature` |
+| Design | `/bear-common:architecture-decision` |
 | Testing | `/{tech}:check testing` |
 | Generation | `/{tech}:generate-*` |
 | Quality | `/{tech}:check code-quality` |
 | Review | `/{tech}:check all` |
-| Security | `/common:security-audit` |
+| Security | `/bear-common:security-audit` |
 
 ### Templates Location
 

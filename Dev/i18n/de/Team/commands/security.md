@@ -44,7 +44,7 @@ Der folgende Ablauf ist mit den Agent-Teams-Primitiven beschrieben. Mit `--engin
 
 **Umfang**: `--scope=full|code|deps|infra` gilt für beide Engines (`full` = 3 Reviewer parallel, ein einzelner Umfang = ein einzelner Reviewer).
 
-**Unterschied zum nativen `/security-review`**: Der eingebaute Befehl `/security-review` von Claude Code analysiert nur den Diff (ausstehende Änderungen des aktuellen Branches). `/team:security` prüft das gesamte Repository im gewählten Umfang (Code, Abhängigkeiten, Infrastruktur). `/security-review` vor einem Commit oder PR verwenden, `/team:security` für ein vollständiges Audit.
+**Unterschied zum nativen `/security-review`**: Der eingebaute Befehl `/security-review` von Claude Code analysiert nur den Diff (ausstehende Änderungen des aktuellen Branches). `/bear-team:security` prüft das gesamte Repository im gewählten Umfang (Code, Abhängigkeiten, Infrastruktur). `/security-review` vor einem Commit oder PR verwenden, `/bear-team:security` für ein vollständiges Audit.
 
 ## Voraussetzungen
 

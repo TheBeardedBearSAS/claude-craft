@@ -177,11 +177,11 @@ Summary:
 
 ## Mode de coordination Agent Teams
 
-Lors d'une opération en mode Agent Teams (activé via `--ralph-mode` sur `/team:delivery --phase=implementation --engine=teams`), le conductor endosse le rôle de **chef d'équipe** et coordonne un coéquipier dev via l'API Agent Teams de Claude Code au lieu de la gestion de processus bash.
+Lors d'une opération en mode Agent Teams (activé via `--ralph-mode` sur `/bear-team:delivery --phase=implementation --engine=teams`), le conductor endosse le rôle de **chef d'équipe** et coordonne un coéquipier dev via l'API Agent Teams de Claude Code au lieu de la gestion de processus bash.
 
 ### Prérequis
 
-- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (requis uniquement par `/team:delivery --phase=implementation --engine=teams`)
+- Variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (requis uniquement par `/bear-team:delivery --phase=implementation --engine=teams`)
 - Claude Code v2.1.32+
 - Bibliothèque d'adaptation : `Tools/AgentTeams/lib/ralph-teams-adapter.sh`
 
@@ -218,19 +218,19 @@ Le conductor exécute des vérifications de santé périodiques via `teams_watch
 ### Maintien du mode Bash intact
 
 Toute l'orchestration en mode bash existante reste inchangée. Le mode Agent Teams n'est activé que lorsque :
-1. Le drapeau `--ralph-mode` est passé à `/team:delivery --phase=implementation --engine=teams`
-2. La variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` est définie (requis uniquement par `/team:delivery --phase=implementation --engine=teams`)
+1. Le drapeau `--ralph-mode` est passé à `/bear-team:delivery --phase=implementation --engine=teams`
+2. La variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` est définie (requis uniquement par `/bear-team:delivery --phase=implementation --engine=teams`)
 3. La bibliothèque d'adaptation est disponible
 
 Sans ces conditions, le conductor opère exactement comme avant.
 
 ## Points d'intégration
 
-- Fonctionne avec la commande `/common:ralph-run`
+- Fonctionne avec la commande `/bear-common:ralph-run`
 - S'intègre avec les hooks Claude Code 2.1.23+
-- Compatible avec le workflow `/workflow:implement`
+- Compatible avec le workflow `/bear-workflow:implement`
 - Utilise les principes de `@tdd-coach`
-- Mode Agent Teams via `/team:delivery --phase=implementation --engine=teams --ralph-mode`
+- Mode Agent Teams via `/bear-team:delivery --phase=implementation --engine=teams --ralph-mode`
 
 ## Quand s'arrêter
 

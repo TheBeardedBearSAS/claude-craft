@@ -15,7 +15,7 @@ Arguments:
 - (Optional) Target persona
 - (Optional) Specific constraints
 
-Example: `/uiux:user-flow "User registration"` or `/uiux:user-flow "Checkout" persona:"Mobile user" constraint:"< 30 seconds"`
+Example: `/bear-uiux:user-flow "User registration"` or `/bear-uiux:user-flow "Checkout" persona:"Mobile user" constraint:"< 30 seconds"`
 
 ## Plan Mode
 

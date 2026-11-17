@@ -69,8 +69,8 @@ bear-craft-plugin-notify-slack/
 | `beforeCommand` | Avant exécution d'une slash command | `{ command, args, context }` | `{ proceed: bool, reason?: string }` |
 | `afterCommand` | Après exécution (succès) | `{ command, args, result }` | `void` |
 | `onCommandError` | Après exécution (erreur) | `{ command, args, error }` | `void` |
-| `beforeAudit` | Avant `/team:audit` | `{ scope, focus }` | `{ proceed: bool, reason?: string }` |
-| `afterAudit` | Après `/team:audit` | `{ scope, reports, metrics }` | `void` |
+| `beforeAudit` | Avant `/bear-team:audit` | `{ scope, focus }` | `{ proceed: bool, reason?: string }` |
+| `afterAudit` | Après `/bear-team:audit` | `{ scope, reports, metrics }` | `void` |
 | `beforeRelease` | Avant release | `{ version, changelog }` | `{ proceed: bool, reason?: string }` |
 | `afterRelease` | Après release | `{ version, tag, url }` | `void` |
 | `onReport` | Génération rapport audit | `{ report, format }` | `void \| ModifiedReport` |

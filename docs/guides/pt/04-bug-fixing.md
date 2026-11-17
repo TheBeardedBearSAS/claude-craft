@@ -98,7 +98,7 @@ Encontre a causa raiz do bug.
 ### Usando o Comando de Análise
 
 ```bash
-/common:analyze-bug "Os usuários não conseguem fazer login com credenciais corretas após redefinição de senha"
+/bear-common:analyze-bug "Os usuários não conseguem fazer login com credenciais corretas após redefinição de senha"
 ```
 
 Este comando irá:
@@ -319,15 +319,15 @@ make test
 
 ```bash
 # Qualidade do código (por tecnologia)
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
 
 # Segurança (se a correção toca código sensível)
-/common:security-audit
+/bear-common:security-audit
 
 # Conformidade completa
-/symfony:check all
+/bear-symfony:check all
 ```
 
 ### Testes Manuais
@@ -468,7 +468,7 @@ git checkout -b hotfix/issue-123-login-failure
 
 # 4. Verificar
 make test
-/symfony:check all
+/bear-symfony:check all
 
 # 5. Commitar com mensagem clara
 git commit -m "fix(auth): resolver falha crítica de login após redefinição de senha
@@ -622,7 +622,7 @@ public function calculateTotal(): Money
 make test
 
 # Verificação de qualidade
-/symfony:check all
+/bear-symfony:check all
 # Pontuação: 94/100 ✓
 ```
 
@@ -651,7 +651,7 @@ Testes de regressão adicionados:
 3. **Análise estática**: Ferramentas encontram erros comuns
 4. **Testes de integração**: Capturam bugs de interação
 5. **Monitorar produção**: Detectar problemas mais cedo
-6. **Use `/loop`**: Configure verificações de qualidade recorrentes (ex.: `/loop 5m /gate:check commit`)
+6. **Use `/loop`**: Configure verificações de qualidade recorrentes (ex.: `/loop 5m /bear-gate:check commit`)
 7. **Salve aprendizados**: Use `/memory` para persistir padrões de bugs entre sessões
 
 ---

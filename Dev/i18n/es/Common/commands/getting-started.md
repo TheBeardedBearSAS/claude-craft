@@ -45,58 +45,58 @@ Based on the detected stack, recommend 3 contextualized commands that provide im
 ### Stack to Commands Mapping
 
 **Symfony / PHP:**
-- `/symfony:check architecture` — Verify Clean Architecture + DDD compliance
-- `/symfony:check testing` — Analyze test coverage and quality
-- `/symfony:check security` — OWASP Top 10:2025 security audit
+- `/bear-symfony:check architecture` — Verify Clean Architecture + DDD compliance
+- `/bear-symfony:check testing` — Analyze test coverage and quality
+- `/bear-symfony:check security` — OWASP Top 10:2025 security audit
 
 **React:**
-- `/react:check code-quality` — TypeScript, ESLint, code standards
-- `/react:accessibility-check` — WCAG compliance audit
-- `/react:bundle-analyze` — Identify bundle size issues
+- `/bear-react:check code-quality` — TypeScript, ESLint, code standards
+- `/bear-react:accessibility-check` — WCAG compliance audit
+- `/bear-react:bundle-analyze` — Identify bundle size issues
 
 **Python:**
-- `/python:check code-quality` — Ruff, type hints, PEP 8
-- `/python:check security` — Bandit security scan
-- `/python:type-coverage` — MyPy/Pyright coverage analysis
+- `/bear-python:check code-quality` — Ruff, type hints, PEP 8
+- `/bear-python:check security` — Bandit security scan
+- `/bear-python:type-coverage` — MyPy/Pyright coverage analysis
 
 **Flutter / Dart:**
-- `/flutter:check testing` — Test coverage and golden tests
-- `/flutter:analyze-performance` — Widget rebuild analysis
-- `/flutter:golden-update` — Update visual regression tests
+- `/bear-flutter:check testing` — Test coverage and golden tests
+- `/bear-flutter:analyze-performance` — Widget rebuild analysis
+- `/bear-flutter:golden-update` — Update visual regression tests
 
 **Vue.js:**
-- `/vuejs:check code-quality` — Composition API, TypeScript, ESLint
-- `/vuejs:check architecture` — Feature structure validation
-- `/vuejs:check security` — XSS, CSP, OWASP audit
+- `/bear-vuejs:check code-quality` — Composition API, TypeScript, ESLint
+- `/bear-vuejs:check architecture` — Feature structure validation
+- `/bear-vuejs:check security` — XSS, CSP, OWASP audit
 
 **Laravel:**
-- `/laravel:check code-quality` — PER-CS 3.0, Pest 4/5, coding standards
-- `/laravel:check testing` — Test coverage with Pest
-- `/laravel:check security` — OWASP audit, Sanctum config
+- `/bear-laravel:check code-quality` — PER-CS 3.0, Pest 4/5, coding standards
+- `/bear-laravel:check testing` — Test coverage with Pest
+- `/bear-laravel:check security` — OWASP audit, Sanctum config
 
 **Angular:**
-- `/angular:check code-quality` — Signals, standalone components, ESLint
-- `/angular:check architecture` — Module structure, dependency graph
-- `/angular:check security` — XSS protection, security headers
+- `/bear-angular:check code-quality` — Signals, standalone components, ESLint
+- `/bear-angular:check architecture` — Module structure, dependency graph
+- `/bear-angular:check security` — XSS protection, security headers
 
 **React Native:**
-- `/reactnative:check code-quality` — TypeScript, ESLint, code patterns
-- `/reactnative:check architecture` — Feature structure, navigation
-- `/reactnative:app-size` — Bundle size analysis
+- `/bear-reactnative:check code-quality` — TypeScript, ESLint, code patterns
+- `/bear-reactnative:check architecture` — Feature structure, navigation
+- `/bear-reactnative:app-size` — Bundle size analysis
 
 **C# / .NET:**
-- `/csharp:check architecture` — Clean Architecture + CQRS validation
-- `/csharp:check testing` — xUnit coverage and quality
-- `/csharp:check security` — OWASP audit for .NET
+- `/bear-csharp:check architecture` — Clean Architecture + CQRS validation
+- `/bear-csharp:check testing` — xUnit coverage and quality
+- `/bear-csharp:check security` — OWASP audit for .NET
 
 **PHP (standalone):**
-- `/php:check code-quality` — PSR-12, PHPStan Level 10
-- `/php:check testing` — Pest 5 test coverage
-- `/php:check security` — Security best practices
+- `/bear-php:check code-quality` — PSR-12, PHPStan Level 10
+- `/bear-php:check testing` — Pest 5 test coverage
+- `/bear-php:check security` — Security best practices
 
 **Unknown/Multi-stack:**
-- `/gate:check commit` — Quality gates before commits
-- `/team:audit` — Full project audit (architecture, security, performance)
+- `/bear-gate:check commit` — Quality gates before commits
+- `/bear-team:audit` — Full project audit (architecture, security, performance)
 
 ### Output Format
 
@@ -187,7 +187,7 @@ C. Join the community
 
 ✓ You've completed your first 10 minutes with Bear Craft!
 
-Type /workflow:init when ready to start a feature with full BMAD workflow.
+Type /bear-workflow:init when ready to start a feature with full BMAD workflow.
 ```
 
 ## Example Walkthrough
@@ -209,13 +209,13 @@ Your project uses React 19.x. Bear Craft has 15+ specialized commands for React 
 
 Based on your stack, these 3 commands will give you immediate insights:
 
-1. ✓ /react:check code-quality — Analyze TypeScript types, ESLint config, and coding standards
+1. ✓ /bear-react:check code-quality — Analyze TypeScript types, ESLint config, and coding standards
    Why now? Catches common mistakes early and enforces best practices across your team.
 
-2. ✓ /react:accessibility-check — Audit WCAG 2.2 compliance and keyboard navigation
+2. ✓ /bear-react:accessibility-check — Audit WCAG 2.2 compliance and keyboard navigation
    Why now? 15% of users need accessibility features — find issues before users do.
 
-3. ✓ /react:bundle-analyze — Identify large dependencies bloating your bundle
+3. ✓ /bear-react:bundle-analyze — Identify large dependencies bloating your bundle
    Why now? Every 100KB costs users money and slows load time — quick wins here.
 
 Choose one to run (type the number 1-3), or skip to explore all 220 commands with /help
@@ -225,7 +225,7 @@ Choose one to run (type the number 1-3), or skip to explore all 220 commands wit
 
 **Step 3 Output (Before):**
 ```
-▶ Running /react:check code-quality...
+▶ Running /bear-react:check code-quality...
 
 This command will:
 - Scan your components for TypeScript best practices
@@ -259,8 +259,8 @@ Your TypeScript setup is solid but needs refinement. Start by fixing the 23 miss
 Choose your path:
 
 A. Run another check
-   ℹ /react:accessibility-check — WCAG compliance audit
-   ℹ /react:bundle-analyze — Bundle size analysis
+   ℹ /bear-react:accessibility-check — WCAG compliance audit
+   ℹ /bear-react:bundle-analyze — Bundle size analysis
 
 B. Fix a finding
    → Pick one issue from the report above
@@ -278,7 +278,7 @@ C. Join the community
 
 ✓ You've completed your first 10 minutes with Bear Craft!
 
-Type /workflow:init when ready to start a feature with full BMAD workflow.
+Type /bear-workflow:init when ready to start a feature with full BMAD workflow.
 ```
 
 ## Implementation Notes

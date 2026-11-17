@@ -95,7 +95,7 @@ Les agents suivants lisent `DESIGN.md` par défaut :
 
 ## Génération assistée
 
-Command dédiée (Phase 4) : `/uiux:generate-design-md`
+Command dédiée (Phase 4) : `/bear-uiux:generate-design-md`
 - Analyse `tailwind.config.js` ou tokens existants
 - Pré-remplit les sections
 - Demande validation sur les zones ambiguës

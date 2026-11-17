@@ -21,8 +21,8 @@ Das erste Argument ist die Achse; der Rest (zum Beispiel ein Projektpfad) wird w
 
 ## MISSION
 
-1. Das erste Argument lesen. Ist es keine der 5 oben genannten Achsen, diese mit einem Beispiel auflisten (`/wordpress:check security wp-content/plugins/my-plugin`) und anhalten.
+1. Das erste Argument lesen. Ist es keine der 5 oben genannten Achsen, diese mit einem Beispiel auflisten (`/bear-wordpress:check security wp-content/plugins/my-plugin`) und anhalten.
 2. Die Checklisten-Datei dieser Achse lesen und Schritt für Schritt befolgen. In dieser Datei steht `$ARGUMENTS` für die Argumente, die auf die Achse folgen.
 3. Den Bericht im Ausgabeformat erstellen, das die Checkliste definiert.
 
-Beispiele: `/wordpress:check architecture`, `/wordpress:check testing ./my-plugin`, `/wordpress:check all`.
+Beispiele: `/bear-wordpress:check architecture`, `/bear-wordpress:check testing ./my-plugin`, `/bear-wordpress:check all`.

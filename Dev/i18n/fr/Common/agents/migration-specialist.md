@@ -123,7 +123,7 @@ Tu es un **Migration Specialist Senior** avec 12+ ans d'expérience en migration
 - `.claude/rules/01-workflow-analysis.md` — analyse obligatoire avant migration
 - Skill `atomic-tasks` — découpage de la migration
 - Skill `architect` — design de la migration
-- `/symfony:migration-plan`, `/common:architecture-decision`
+- `/bear-symfony:migration-plan`, `/bear-common:architecture-decision`
 
 ## Ressources
 

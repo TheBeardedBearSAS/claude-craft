@@ -326,5 +326,5 @@ Lorsqu'un timeout se déclenche :
 ## Liens
 
 - `@ralph-conductor` - Agent pour l'orchestration Ralph
-- `/qa:tdd` - Correction de bugs basée sur le TDD
-- `/workflow:implement` - Développement de sprint avec TDD
+- `/bear-qa:tdd` - Correction de bugs basée sur le TDD
+- `/bear-workflow:implement` - Développement de sprint avec TDD

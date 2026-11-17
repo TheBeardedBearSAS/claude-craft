@@ -9,13 +9,13 @@ You act as **Product Owner / Scrum Master** and drive a full sprint from kick-of
 in a **single command**. Each ceremony runs inside an **isolated sub-agent**: the sub-agent's
 own context window replaces the manual `/clear` between steps, so your orchestrator context
 stays lean. The implementation phase is run by **you as conductor** (same logic as
-`/team:delivery --phase=implementation`) to avoid nesting Agent Teams.
+`/bear-team:delivery --phase=implementation`) to avoid nesting Agent Teams.
 
 This automates what was previously six manual commands with a `/clear` in between:
 
 ```
-/workflow:start N -> /workflow:start N --tasks-only -> /gate:check sprint 00N
--> /workflow:implement N -> /workflow:review N -> /workflow:retro N
+/bear-workflow:start N -> /bear-workflow:start N --tasks-only -> /bear-gate:check sprint 00N
+-> /bear-workflow:implement N -> /bear-workflow:review N -> /bear-workflow:retro N
 ```
 
 …and adds: branch, commit, Pull Request, CI watch, and merge.
@@ -25,13 +25,13 @@ This automates what was previously six manual commands with a `/clear` in betwee
 $ARGUMENTS
 
 - `<N>` : Sprint number (e.g. `5`). **Required.**
-- `--from-prd` : Before Phase 1, run `/workflow:plan --only=backlog` (sub-agent) to generate the backlog from `project-management/prd.md`, then continue the normal pipeline.
+- `--from-prd` : Before Phase 1, run `/bear-workflow:plan --only=backlog` (sub-agent) to generate the backlog from `project-management/prd.md`, then continue the normal pipeline.
 - `--auto-merge` : Merge automatically once CI is green and DoD passes. **Default: OFF** — the
   command pauses and waits for an explicit human GO before merging (honors "review obligatoire",
   rule 09, and the Karpathy "no auto-merge without human review" principle).
 - `--max-fix-attempts=2` : Max auto-fix retries per failing gate before aborting (default: 2).
 - `--max-workers=3` : Max parallel dev workers in the implementation phase (default: 2, max: 3).
-- `--engine=subagents`: Engine of the implementation phase (default: `subagents`, delegation via the `Agent` tool). `teams`: experimental Agent Teams, falling back to `subagents` when unavailable. See `/team:delivery --phase=implementation`, "Execution engine" section
+- `--engine=subagents`: Engine of the implementation phase (default: `subagents`, delegation via the `Agent` tool). `teams`: experimental Agent Teams, falling back to `subagents` when unavailable. See `/bear-team:delivery --phase=implementation`, "Execution engine" section
 - `--base=main` : Base branch for the PR (default: `main`).
 - `--dry-run` : Print the planned 9 phases and the resolved sprint context, then stop. **No writes.**
 - `--overnight` : Pass-through to the implementation phase (bounded, stops at 6am).
@@ -42,7 +42,7 @@ $ARGUMENTS
 - `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` set — only with `--engine=teams`
 - `gh` CLI authenticated (PR create / checks / merge)
 - Docker available (all tests run via Docker — see project CLAUDE.md)
-- BMAD v6 project: `.bmad/sprint-status.yaml` is created by `/workflow:start` (phase 1) if missing
+- BMAD v6 project: `.bmad/sprint-status.yaml` is created by `/bear-workflow:start` (phase 1) if missing
 
 > If a prerequisite is missing, abort early with a clear, actionable message. Do not silently skip a phase.
 
@@ -74,25 +74,25 @@ Resolve the sprint folder by globbing `project-management/sprints/sprint-{N}-*/`
 
 ### Phase 0b — Backlog from PRD (sub-agent, only with `--from-prd`)
 
-> "Read `.claude/commands/workflow/plan.md` and execute `/workflow:plan --only=backlog` (input: `project-management/prd.md`). Return a terse summary and the files created."
+> "Read `.claude/commands/bear-workflow/plan.md` and execute `/bear-workflow:plan --only=backlog` (input: `project-management/prd.md`). Return a terse summary and the files created."
 
 ### Phase 1 — Start (sub-agent)
 
 Spawn one isolated sub-agent:
 
-> "Read `.claude/commands/workflow/start.md` and execute it for sprint **N**.
+> "Read `.claude/commands/bear-workflow/start.md` and execute it for sprint **N**.
 > Create the sprint folder structure, `sprint-goal.md`, and the pre-sprint checklist.
 > Return a terse summary (< 50 tokens) and the list of files created."
 
 ### Phase 2 — Decompose (sub-agent)
 
-> "Read `.claude/commands/workflow/start.md` (`/workflow:start {N} --tasks-only`) and execute it for sprint **N**.
+> "Read `.claude/commands/bear-workflow/start.md` (`/bear-workflow:start {N} --tasks-only`) and execute it for sprint **N**.
 > Generate the `tasks/TASK-*.md` files, `board.md`, and the dependency graph.
 > Return a terse summary and the files created."
 
 ### Phase 3 — Validate gate (sub-agent + auto-fix loop)
 
-> "Read `.claude/commands/gate/check.md` (gate `sprint`) and run it for sprint **00N**.
+> "Read `.claude/commands/bear-gate/check.md` (gate `sprint`) and run it for sprint **00N**.
 > Return PASS/FAIL, the score, and the list of failing criteria."
 
 **On FAIL → auto-fix loop** (up to `--max-fix-attempts`):
@@ -103,11 +103,11 @@ Spawn one isolated sub-agent:
 
 ### Phase 4 — Implement (you = conductor)
 
-> Equivalent to `/workflow:implement --parallel N` (which delegates to `/team:delivery --phase=implementation`).
+> Equivalent to `/bear-workflow:implement --parallel N` (which delegates to `/bear-team:delivery --phase=implementation`).
 
-Assume the **`/team:delivery --phase=implementation` Lead role directly** (do **not** spawn a nested Agent Team):
+Assume the **`/bear-team:delivery --phase=implementation` Lead role directly** (do **not** spawn a nested Agent Team):
 
-**Engine**: with `--engine=subagents` (default), in step 4 launch one sub-agent per story via the `Agent` tool (`isolation: "worktree"`, all in a single message) instead of `TaskCreate`, and in step 5 wait for them to return instead of polling `TaskList` (full mapping in `/team:delivery --phase=implementation`, "Execution engine" section). With `--engine=teams`, follow the steps as written.
+**Engine**: with `--engine=subagents` (default), in step 4 launch one sub-agent per story via the `Agent` tool (`isolation: "worktree"`, all in a single message) instead of `TaskCreate`, and in step 5 wait for them to return instead of polling `TaskList` (full mapping in `/bear-team:delivery --phase=implementation`, "Execution engine" section). With `--engine=teams`, follow the steps as written.
 
 1. Read `.bmad/sprint-status.yaml`; filter stories at `ready-for-dev`.
 2. Analyze file-domain independence (flag `**/Shared/**`, `**/Common/**`, `**/Utils/**`,
@@ -142,12 +142,12 @@ failing checks; after `--max-fix-attempts`, mark the story `blocked` and continu
 
 ### Phase 7 — Review (sub-agent)
 
-> "Read `.claude/commands/workflow/review.md` and execute it for sprint **N** (it uses
+> "Read `.claude/commands/bear-workflow/review.md` and execute it for sprint **N** (it uses
 > `git log` / `gh pr` to gather sprint data). Produce `sprint-review.md`. Return a terse summary."
 
 ### Phase 8 — Retro (sub-agent)
 
-> "Read `.claude/commands/workflow/retro.md` and execute it for sprint **N**.
+> "Read `.claude/commands/bear-workflow/retro.md` and execute it for sprint **N**.
 > Produce `sprint-retro.md` with SMART action items. Return a terse summary."
 
 ### Phase 9 — Merge (inline, gated)
@@ -206,4 +206,4 @@ Phase            | Status | Notes
 - **Auto-merge is opt-in** and intentionally gated behind a flag.
 - **Docker is mandatory** for tests (project CLAUDE.md).
 - Sub-agent isolation is what replaces `/clear` — keep each sub-agent report terse.
-- For the parallel Agent Teams variant that also writes the stories with cross-review, use `/team:delivery`.
+- For the parallel Agent Teams variant that also writes the stories with cross-review, use `/bear-team:delivery`.

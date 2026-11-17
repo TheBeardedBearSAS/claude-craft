@@ -18,7 +18,7 @@ Einen wohlgeformten Payload für das Einstellen eines Paperclip-Agents produzier
 ### 1. Eingaben sammeln (interaktiv)
 
 In Reihenfolge fragen:
-- Ziel-`companyId` (muss existieren — siehe `/paperclip:setup-company` oder `paperclipai company list`)
+- Ziel-`companyId` (muss existieren — siehe `/bear-paperclip:setup-company` oder `paperclipai company list`)
 - `adapterType` — einer der registrierten Typen (z.B. `claude_local`, `codex_local`, `gemini_local`, `cursor_local`, `opencode_local`, `pi_local`). Das `agentConfigurationDoc` des gewählten Adapters sagt, welche Sub-Felder akzeptiert werden.
 - Agent-Display-Name (`$1`)
 - Rolle / Titel (z.B. "Senior TypeScript engineer")

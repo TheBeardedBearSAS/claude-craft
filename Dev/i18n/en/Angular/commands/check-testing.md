@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /angular:check testing"
+description: "Deprecated (removed in 10.0): use /bear-angular:check testing"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-testing` is deprecated and will be removed in 10.0. Use `/angular:check testing`.
+> ⚠️ `/bear-angular:check-testing` is deprecated and will be removed in 10.0. Use `/bear-angular:check testing`.
 
-Run `/angular:check testing $ARGUMENTS`: read `.claude/commands/angular/check.md` and follow it with these arguments.
+Run `/bear-angular:check testing $ARGUMENTS`: read `.claude/commands/bear-angular/check.md` and follow it with these arguments.

@@ -336,8 +336,8 @@ run_epic() {
     else
         log_success "Added ${priority} stories to queue"
         echo ""
-        echo "Run '/project:batch-status' to see queue"
-        echo "Run '/project:run-queue' to process"
+        echo "Run '/bear-project:batch-status' to see queue"
+        echo "Run '/bear-project:run-queue' to process"
     fi
 }
 
@@ -770,7 +770,7 @@ run_sprint() {
         process_queue
     else
         echo ""
-        echo "Run '/project:run-queue' to start processing"
+        echo "Run '/bear-project:run-queue' to start processing"
     fi
 }
 

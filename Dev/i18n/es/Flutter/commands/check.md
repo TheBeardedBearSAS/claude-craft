@@ -21,8 +21,8 @@ El primer argumento es el eje; el resto (por ejemplo, la ruta de un proyecto) se
 
 ## MISIÓN
 
-1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/flutter:check security src/`) y detente.
+1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/bear-flutter:check security src/`) y detente.
 2. Lee el archivo de checklist de ese eje y síguelo paso a paso. En ese archivo, `$ARGUMENTS` designa los argumentos que siguen al eje.
 3. Genera el informe en el formato de salida que define la checklist.
 
-Ejemplos: `/flutter:check architecture`, `/flutter:check testing ./app`, `/flutter:check all`.
+Ejemplos: `/bear-flutter:check architecture`, `/bear-flutter:check testing ./app`, `/bear-flutter:check all`.

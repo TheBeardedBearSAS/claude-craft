@@ -398,7 +398,7 @@ Sie haben zwei Optionen zur Konfiguration des Projektkontexts:
 Verwenden Sie den integrierten Befehl, um Ihren Stack automatisch zu erkennen und gezielte Fragen zu beantworten:
 
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 Der Befehl analysiert Ihre vorhandene Codebase, erkennt Technologien und fragt nur nach fehlenden Informationen.
@@ -506,7 +506,7 @@ Fahre fort und implementiere diese Änderung nach TDD:
 Vor dem Commit Qualitätsprüfungen ausführen:
 
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Alle Änderungen überprüfen:
@@ -580,7 +580,7 @@ Eine kurze Anleitung für Teammitglieder erstellen:
 3. Im Projekt starten: `cd project && claude`
 
 ### Schnellbefehle
-- `/gate:check commit` - Vor dem Committen ausführen
+- `/bear-gate:check commit` - Vor dem Committen ausführen
 - `@tdd-coach` - Hilfe bei Tests
 - `@{tech}-reviewer` - Code-Review
 

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /paperclip:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-paperclip:check code-quality"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-code-quality` is deprecated and will be removed in 10.0. Use `/paperclip:check code-quality`.
+> ⚠️ `/bear-paperclip:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-paperclip:check code-quality`.
 
-Run `/paperclip:check code-quality $ARGUMENTS`: read `.claude/commands/paperclip/check.md` and follow it with these arguments.
+Run `/bear-paperclip:check code-quality $ARGUMENTS`: read `.claude/commands/bear-paperclip/check.md` and follow it with these arguments.

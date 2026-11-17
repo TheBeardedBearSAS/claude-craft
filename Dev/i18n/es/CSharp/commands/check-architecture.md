@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /csharp:check architecture"
+description: "Obsoleto (se elimina en 10.0): usa /bear-csharp:check architecture"
 deprecated: true
-replaced-by: /csharp:check
+replaced-by: /bear-csharp:check
 ---
 
-> ⚠️ `/csharp:check-architecture` está obsoleto y se eliminará en 10.0. Usa `/csharp:check architecture`.
+> ⚠️ `/bear-csharp:check-architecture` está obsoleto y se eliminará en 10.0. Usa `/bear-csharp:check architecture`.
 
-Ejecuta `/csharp:check architecture $ARGUMENTS`: lee `.claude/commands/csharp/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-csharp:check architecture $ARGUMENTS`: lee `.claude/commands/bear-csharp/check.md` y síguelo con estos argumentos.

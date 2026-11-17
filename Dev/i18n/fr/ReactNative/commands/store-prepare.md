@@ -14,7 +14,7 @@ Arguments :
 - (Optionnel) Store : ios, android, both
 - (Optionnel) Type : new, update
 
-Exemple : `/reactnative:store-prepare both new`
+Exemple : `/bear-reactnative:store-prepare both new`
 
 ## Mode Plan
 

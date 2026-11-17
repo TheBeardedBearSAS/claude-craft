@@ -168,7 +168,7 @@ Vous pouvez configurer le contexte du projet de manière interactive ou manuelle
 ```bash
 cd ~/mon-api && claude
 # Puis exécutez :
-/common:init --context
+/bear-common:init --context
 ```
 
 **Option B : Manuelle**
@@ -232,13 +232,13 @@ Les commandes slash sont des actions rapides :
 
 ```bash
 # Générer du code
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Vérifier la qualité
-/symfony:check all
+/bear-symfony:check all
 
 # Analyser l'architecture
-/common:architecture-decision
+/bear-common:architecture-decision
 ```
 
 ### Templates (`templates/`)
@@ -337,10 +337,10 @@ make config-validate CONFIG=fichier.yaml
 
 | Commande | Objectif |
 |----------|----------|
-| `/common:analyze-feature` | Analyser les besoins |
+| `/bear-common:analyze-feature` | Analyser les besoins |
 | `/{tech}:generate-crud` | Générer du code CRUD |
 | `/{tech}:check all` | Audit qualité complet |
-| `/common:security-audit` | Revue de sécurité |
+| `/bear-common:security-audit` | Revue de sécurité |
 
 ---
 

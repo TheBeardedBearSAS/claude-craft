@@ -18,69 +18,69 @@ Expert en architecture, décomposition technique et facilitation Scrum.
 
 | Commande | Description |
 |----------|-------------|
-| `/workflow:plan --only=backlog` | Génère le backlog complet |
-| `/workflow:start N` | Décompose le sprint N en tâches |
-| `/project:migrate --analyze` | Analyser le backlog existant |
-| `/project:migrate` | Migrer un backlog existant |
-| `/project:migrate --resync` | Synchroniser l'index du backlog |
+| `/bear-workflow:plan --only=backlog` | Génère le backlog complet |
+| `/bear-workflow:start N` | Décompose le sprint N en tâches |
+| `/bear-project:migrate --analyze` | Analyser le backlog existant |
+| `/bear-project:migrate` | Migrer un backlog existant |
+| `/bear-project:migrate --resync` | Synchroniser l'index du backlog |
 
 ### Gestion des EPICs (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:backlog add epic "Nom"` | Créer un nouvel EPIC |
-| `/project:backlog list epic` | Lister tous les EPICs |
-| `/project:backlog edit epic EPIC-XXX` | Modifier un EPIC |
+| `/bear-project:backlog add epic "Nom"` | Créer un nouvel EPIC |
+| `/bear-project:backlog list epic` | Lister tous les EPICs |
+| `/bear-project:backlog edit epic EPIC-XXX` | Modifier un EPIC |
 
 ### Gestion des User Stories (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:backlog add story EPIC-XXX "Nom"` | Créer une User Story |
-| `/project:backlog list story` | Lister les User Stories |
-| `/project:backlog edit story US-XXX` | Modifier une US |
-| `/project:migrate --stories` | Mettre à jour plusieurs US |
+| `/bear-project:backlog add story EPIC-XXX "Nom"` | Créer une User Story |
+| `/bear-project:backlog list story` | Lister les User Stories |
+| `/bear-project:backlog edit story US-XXX` | Modifier une US |
+| `/bear-project:migrate --stories` | Mettre à jour plusieurs US |
 
 ### Gestion des Tasks (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/project:backlog add task US-XXX "[TYPE] Desc" Xh` | Créer une tâche |
-| `/project:backlog list task` | Lister les tâches |
-| `/project:backlog move task TASK-XXX statut` | Changer le statut |
+| `/bear-project:backlog add task US-XXX "[TYPE] Desc" Xh` | Créer une tâche |
+| `/bear-project:backlog list task` | Lister les tâches |
+| `/bear-project:backlog move task TASK-XXX statut` | Changer le statut |
 
 ### Visualisation & Exécution (`/project:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/workflow:status --board` | Afficher le Kanban du sprint |
-| `/workflow:status --queue` | Statut par lot des éléments |
-| `/workflow:implement N` | Exécuter un sprint complet |
-| `/workflow:implement --epic EPIC-XXX` | Exécuter un EPIC complet |
-| `/workflow:implement --queue` | Exécuter la file d'attente |
-| `/workflow:plan --only=prd` | Générer le PRD |
-| `/workflow:design` | Générer la spécification technique |
+| `/bear-workflow:status --board` | Afficher le Kanban du sprint |
+| `/bear-workflow:status --queue` | Statut par lot des éléments |
+| `/bear-workflow:implement N` | Exécuter un sprint complet |
+| `/bear-workflow:implement --epic EPIC-XXX` | Exécuter un EPIC complet |
+| `/bear-workflow:implement --queue` | Exécuter la file d'attente |
+| `/bear-workflow:plan --only=prd` | Générer le PRD |
+| `/bear-workflow:design` | Générer la spécification technique |
 
 ### Sprint
 
 | Commande | Description |
 |----------|-------------|
-| `/workflow:status` | Métriques détaillées du sprint |
-| `/project:backlog move story US-XXX statut` | Changer statut/sprint d'une US |
-| `/project:backlog next story` | Prochaine story prête pour le dev |
-| `/project:backlog move story --auto` | Routage automatique des stories |
-| `/workflow:implement US-XXX` | Développer une story |
+| `/bear-workflow:status` | Métriques détaillées du sprint |
+| `/bear-project:backlog move story US-XXX statut` | Changer statut/sprint d'une US |
+| `/bear-project:backlog next story` | Prochaine story prête pour le dev |
+| `/bear-project:backlog move story --auto` | Routage automatique des stories |
+| `/bear-workflow:implement US-XXX` | Développer une story |
 
 ### Quality Gates (`/gate:`)
 
 | Commande | Description |
 |----------|-------------|
-| `/gate:check backlog` | Valide la conformité du backlog (score /100) |
-| `/gate:check prd` | Valider le PRD |
-| `/gate:check spec` | Valider la spécification technique |
-| `/gate:check story US-XXX` | Valider une User Story (DoD) |
-| `/gate:check sprint N` | Valider un sprint |
-| `/gate:check all` | Rapport de qualité complet |
+| `/bear-gate:check backlog` | Valide la conformité du backlog (score /100) |
+| `/bear-gate:check prd` | Valider le PRD |
+| `/bear-gate:check spec` | Valider la spécification technique |
+| `/bear-gate:check story US-XXX` | Valider une User Story (DoD) |
+| `/bear-gate:check sprint N` | Valider un sprint |
+| `/bear-gate:check all` | Rapport de qualité complet |
 
 ## Stack technique
 
@@ -150,25 +150,25 @@ project-management/
 
 ```bash
 # 1. Initialiser le backlog
-/workflow:plan --only=backlog
+/bear-workflow:plan --only=backlog
 
 # 2. Valider la conformité
-/gate:check backlog
+/bear-gate:check backlog
 
 # 3. Planifier le sprint 1
-/workflow:start 001
+/bear-workflow:start 001
 
 # 4. Obtenir la prochaine story
-/project:backlog next story
+/bear-project:backlog next story
 
 # 5. Développer une story
-/workflow:implement US-XXX
+/bear-workflow:implement US-XXX
 
 # 6. Suivre le sprint
-/workflow:status
+/bear-workflow:status
 
 # 7. Préparer le sprint suivant
-/workflow:start 002
+/bear-workflow:start 002
 ```
 
 ## Conventions de nommage

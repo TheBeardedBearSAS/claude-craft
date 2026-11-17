@@ -19,7 +19,7 @@ conditions, fan-out). Le script tourne en arrière-plan ; on suit l'exécution v
 | Palier | Outil | Concurrence | Quand |
 |--------|-------|-------------|-------|
 | 1 | **Sub-agent simple** (Task/Agent) | 1 | Une investigation isolée, garder le contexte principal propre |
-| 2 | **Agent Teams** (`/team:audit`, `/team:delivery`, `/team:security`) | 1 leader + ~3 workers | Travail parallèle borné, synchrone, qui tient en un round |
+| 2 | **Agent Teams** (`/bear-team:audit`, `/bear-team:delivery`, `/bear-team:security`) | 1 leader + ~3 workers | Travail parallèle borné, synchrone, qui tient en un round |
 | 3 | **Dynamic Workflows** (`ultracode`) | jusqu'à ~1000 sous-agents (cap concurrent ~16) | La tâche dépasse le contexte d'un agent OU exige >4 workers OU une boucle/pipeline déterministe |
 
 **Heuristique break-even :** dès que tu écrirais « lance N agents, puis pour chacun fais X, puis
@@ -63,7 +63,7 @@ validée. Pour des éditions concurrentes de fichiers, `isolation: 'worktree'`.
 
 ## À ne pas confondre
 
-- **ralph-run** (`/common:ralph-run`) : boucle séquentielle mono-contexte jusqu'à une DoD — pas de
+- **ralph-run** (`/bear-common:ralph-run`) : boucle séquentielle mono-contexte jusqu'à une DoD — pas de
   parallélisme. Pour une tâche qui dépasse ce modèle, basculer sur un Dynamic Workflow.
 - **`/effort ultracode`** : palier d'effort CLI (débit code max sur Opus 5.5) — orthogonal au
   déclencheur `ultracode` des workflows, même si souvent utilisés ensemble.

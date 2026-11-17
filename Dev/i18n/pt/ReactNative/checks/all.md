@@ -13,10 +13,10 @@ $ARGUMENTS
 Você é um especialista em conformidade de projetos React Native. Sua missão é orquestrar uma auditoria completa combinando as auditorias especializadas: arquitetura, qualidade de código, testes e segurança.
 
 Este comando agrega os resultados de:
-1. `/reactnative:check architecture` (25 pontos)
-2. `/reactnative:check code-quality` (25 pontos)
-3. `/reactnative:check testing` (25 pontos)
-4. `/reactnative:check security` (25 pontos)
+1. `/bear-reactnative:check architecture` (25 pontos)
+2. `/bear-reactnative:check code-quality` (25 pontos)
+3. `/bear-reactnative:check testing` (25 pontos)
+4. `/bear-reactnative:check security` (25 pontos)
 
 ### Etapa 1: Executar as 4 auditorias especializadas
 
@@ -24,16 +24,16 @@ Executar sequencialmente (ou exibir os comandos a executar):
 
 ```bash
 # 1. Auditoria de Arquitetura
-/reactnative:check architecture
+/bear-reactnative:check architecture
 
 # 2. Auditoria de Qualidade de Código
-/reactnative:check code-quality
+/bear-reactnative:check code-quality
 
 # 3. Auditoria de Testes
-/reactnative:check testing
+/bear-reactnative:check testing
 
 # 4. Auditoria de Segurança
-/reactnative:check security
+/bear-reactnative:check security
 ```
 
 ### Etapa 2: Agregar resultados

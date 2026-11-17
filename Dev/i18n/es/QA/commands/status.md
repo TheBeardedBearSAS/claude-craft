@@ -17,7 +17,7 @@ Muestra el estado y progreso de las sesiones QA Recette. Consulte los detalles d
 - `--status=<status>` : Filtrar por estado (running, completed, paused, failed)
 - `--format=<type>` : Formato de salida (table, yaml, json) — defecto: table
 - `--watch` : Modo de actualizacion en vivo (cada 5 segundos)
-- `--report`: Modo informe (antiguo `/qa:status --report`): generar un informe a partir de una sesión; requiere `--session=<id>`
+- `--report`: Modo informe (antiguo `/bear-qa:status --report`): generar un informe a partir de una sesión; requiere `--session=<id>`
 - `--format=<type>`: con `--report`: md, html, json (defecto: md)
 - `--output=<path>`: con `--report`: ruta de salida personalizada (defecto: `.recette/reports/`)
 - `--include-screenshots`: con `--report`: incrustar las capturas de pantalla en el informe HTML
@@ -92,9 +92,9 @@ Estado de Correccion: completed (2/2 bugs corregidos)
 
 | Modo / opción | Qué hace | Reemplaza |
 |---|---|---|
-| `/qa:status --all` / `--session=<id>` | Listar las sesiones o mostrar el detalle de una sesión | — |
-| `/qa:status --report --session=<id>` | Generar un informe Markdown/HTML/JSON (`--format`, `--output`, `--include-screenshots`) | `/qa:status --report` |
-| `/qa:status --report --session=<id> --compare=<id>` | Comparar dos sesiones para detectar regresiones | `/qa:status --report --compare` |
+| `/bear-qa:status --all` / `--session=<id>` | Listar las sesiones o mostrar el detalle de una sesión | — |
+| `/bear-qa:status --report --session=<id>` | Generar un informe Markdown/HTML/JSON (`--format`, `--output`, `--include-screenshots`) | `/bear-qa:status --report` |
+| `/bear-qa:status --report --session=<id> --compare=<id>` | Comparar dos sesiones para detectar regresiones | `/bear-qa:status --report --compare` |
 
 ## Modo Informe (--report)
 
@@ -185,19 +185,19 @@ Compara dos ejecuciones: diferencias de métricas, errores resueltos, errores nu
 
 ```bash
 # Generar un informe Markdown (por defecto)
-/qa:status --report --session=REC-20260130-143022
+/bear-qa:status --report --session=REC-20260130-143022
 
 # Generar un informe HTML con capturas de pantalla
-/qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
+/bear-qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Generar un informe JSON para la integración CI
-/qa:status --report --session=REC-20260130-143022 --format=json
+/bear-qa:status --report --session=REC-20260130-143022 --format=json
 
 # Ruta de salida personalizada
-/qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/bear-qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Comparar dos sesiones
-/qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/bear-qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ### Estructura de Salida del Informe
@@ -223,25 +223,25 @@ Compara dos ejecuciones: diferencias de métricas, errores resueltos, errores nu
 
 ```bash
 # Listar todas las sesiones
-/qa:status --all
+/bear-qa:status --all
 
 # Mostrar estado detallado de una sesion
-/qa:status --session=REC-20260130-143022
+/bear-qa:status --session=REC-20260130-143022
 
 # Filtrar sesiones en curso
-/qa:status --all --status=running
+/bear-qa:status --all --status=running
 
 # Filtrar por alcance
-/qa:status --all --scope=sprint
+/bear-qa:status --all --scope=sprint
 
 # Monitoreo en vivo de una sesion
-/qa:status --session=REC-20260130-143022 --watch
+/bear-qa:status --session=REC-20260130-143022 --watch
 
 # Salida en YAML
-/qa:status --session=REC-20260130-143022 --format=yaml
+/bear-qa:status --session=REC-20260130-143022 --format=yaml
 
 # Salida en JSON (para scripting)
-/qa:status --all --format=json
+/bear-qa:status --all --format=json
 ```
 
 ## Estructura de Salida
@@ -264,16 +264,16 @@ Compara dos ejecuciones: diferencias de métricas, errores resueltos, errores nu
 
 | Comando | Descripcion |
 |---------|-------------|
-| `/qa:recette` | Ejecutar pruebas de aceptacion |
-| `/qa:fix` | Corregir bugs de una sesion |
-| `/qa:regression` | Ver tests de regresion |
-| `/qa:status --report` | Generar informe (`--report`) |
+| `/bear-qa:recette` | Ejecutar pruebas de aceptacion |
+| `/bear-qa:fix` | Corregir bugs de una sesion |
+| `/bear-qa:regression` | Ver tests de regresion |
+| `/bear-qa:status --report` | Generar informe (`--report`) |
 
 ## Mensajes de Error
 
 | Error | Solucion |
 |-------|----------|
-| "No se encontraron sesiones" | Ejecute `/qa:recette` primero para crear una sesion |
+| "No se encontraron sesiones" | Ejecute `/bear-qa:recette` primero para crear una sesion |
 | "Sesion no encontrada" | Verifique el ID de sesion en `.recette/sessions/` |
 | "Ninguna sesion coincide con el filtro" | Ajuste los criterios de filtrado |
 
@@ -293,11 +293,11 @@ Compara dos ejecuciones: diferencias de métricas, errores resueltos, errores nu
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
 ║  Si la sesión tiene fallos:                              ║
-║  → /qa:fix                                               ║
+║  → /bear-qa:fix                                               ║
 ║    Corregir los bugs identificados                       ║
 ║                                                          ║
 ║  Si la sesión está completa:                             ║
-║  → /qa:status --report                                   ║
+║  → /bear-qa:status --report                                   ║
 ║    Generar el informe de recette                         ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

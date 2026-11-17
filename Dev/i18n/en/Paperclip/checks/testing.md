@@ -62,4 +62,4 @@ Pick the last 5 `fix:` commits. For each, verify a corresponding test was added 
 
 ## Output
 
-Markdown report with per-section pass/fail, uncovered files, failing adapters, and a score /20 for `/paperclip:check all`.
+Markdown report with per-section pass/fail, uncovered files, failing adapters, and a score /20 for `/bear-paperclip:check all`.

@@ -11,8 +11,8 @@ Tu es un Scrum Master et Tech Lead expérimenté. Tu dois préparer et faciliter
 
 | Invocation | Ce que ça fait | Remplace |
 |------------|----------------|----------|
-| `/workflow:start <N>` | Démarrage complet : prérequis, capacité, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint et stories écrits dans `.bmad/sprint-status.yaml`, tâches enregistrées | anciennes étapes de démarrage de sprint (retirées en 9.0) |
-| `/workflow:start <N> --tasks-only` | Décompose en tâches les stories d'un sprint **existant** (Étapes 7 à 9 uniquement, sauter les Étapes 1 à 6) | `/workflow:start <N>` |
+| `/bear-workflow:start <N>` | Démarrage complet : prérequis, capacité, planning, `project-management/sprints/sprint-{N}-{slug}/` (sprint-goal.md, sprint-dependencies.md, board.md, `tasks/TASK-*.md`), sprint et stories écrits dans `.bmad/sprint-status.yaml`, tâches enregistrées | anciennes étapes de démarrage de sprint (retirées en 9.0) |
+| `/bear-workflow:start <N> --tasks-only` | Décompose en tâches les stories d'un sprint **existant** (Étapes 7 à 9 uniquement, sauter les Étapes 1 à 6) | `/bear-workflow:start <N>` |
 
 ## Arguments
 $ARGUMENTS
@@ -22,7 +22,7 @@ Arguments :
 - (Optionnel) Durée en jours (défaut : 10 jours = 2 semaines)
 - `--tasks-only` : décompose uniquement en tâches les stories d'un sprint existant
 
-Exemples : `/workflow:start 5`, `/workflow:start 5 --tasks-only`
+Exemples : `/bear-workflow:start 5`, `/bear-workflow:start 5 --tasks-only`
 
 > **Le Plan Mode est obligatoire pour la décomposition** (Étape 7) : analyser le code impacté, proposer le découpage en tâches et attendre la validation avant d'écrire des fichiers.
 
@@ -242,13 +242,13 @@ Points |
 
 ### Étape 6 : Synchroniser `.bmad/sprint-status.yaml`
 
-`/gate:check sprint` et `/workflow:implement` lisent le sprint dans `.bmad/sprint-status.yaml`. L'écrire maintenant à partir du `sprint-goal.md` ci-dessus et des fiches US sélectionnées (`project-management/backlog/user-stories/US-*.md`) :
+`/bear-gate:check sprint` et `/bear-workflow:implement` lisent le sprint dans `.bmad/sprint-status.yaml`. L'écrire maintenant à partir du `sprint-goal.md` ci-dessus et des fiches US sélectionnées (`project-management/backlog/user-stories/US-*.md`) :
 
 1. Créer `.bmad/` s'il n'existe pas.
 2. `metadata` : `sprint_id` (`sprint-{N}`), `name`, `start_date`, `end_date`, `goal`, `capacity_points`, repris de `sprint-goal.md`.
 3. `stories` : une entrée par US sélectionnée : `title`, `status: ready-for-dev`, `story_points`, `epic_id`, `priority` (MoSCoW), `dependencies`, `tasks`, `history: []`.
 4. Fichier déjà présent pour le **même** `sprint_id` : conserver les statuts existants (ne jamais faire reculer une story) et n'ajouter que les nouvelles US.
-5. Fichier présent pour un **autre** sprint : déplacer d'abord sous `archived_sprints.<ancien sprint_id>` (`status`, `points`) uniquement les stories **terminées (`done`) de ce sprint précédent** — jamais les stories de backlog enregistrées par `/workflow:plan` —, puis écrire le nouveau sprint. Les stories non terminées restent dans `stories` (avec `sprint_id` mis à jour si cette clé est utilisée).
+5. Fichier présent pour un **autre** sprint : déplacer d'abord sous `archived_sprints.<ancien sprint_id>` (`status`, `points`) uniquement les stories **terminées (`done`) de ce sprint précédent** — jamais les stories de backlog enregistrées par `/bear-workflow:plan` —, puis écrire le nouveau sprint. Les stories non terminées restent dans `stories` (avec `sprint_id` mis à jour si cette clé est utilisée).
 
 ```yaml
 # .bmad/sprint-status.yaml
@@ -297,7 +297,7 @@ Lire `sprint-goal.md`, `sprint-dependencies.md` et chaque US référencée dans 
 
 **Découpage vertical** : chaque US reçoit les tâches DB + API + front + tests + doc + revue selon le besoin. Taille typique : CRUD simple ~15 tâches, fonctionnalité métier ~18, UI seule ~11.
 
-Pour chaque US, créer un `tasks/TASK-{NNN}.md` par tâche à partir de `.claude/templates/project/task.md` (les IDs continuent après le dernier `TASK-*` existant, comme le fait `/project:backlog add task`) avec : type, estimation, `Depends on`, description, fichiers à créer ou modifier, critères de validation. Puis ajouter une section dans `tasks/README.md` :
+Pour chaque US, créer un `tasks/TASK-{NNN}.md` par tâche à partir de `.claude/templates/project/task.md` (les IDs continuent après le dernier `TASK-*` existant, comme le fait `/bear-project:backlog add task`) avec : type, estimation, `Depends on`, description, fichiers à créer ou modifier, critères de validation. Puis ajouter une section dans `tasks/README.md` :
 
 ```markdown
 ## US-XXX : [Titre] (Epic EPIC-XXX, [X] points)
@@ -327,7 +327,7 @@ Créer `board.md` (template `.claude/templates/project/board.md`) :
 ```markdown
 # Task Board - Sprint {N}
 
-> Vue générée : régénérée depuis `.bmad/sprint-status.yaml` par `/workflow:status --board`. Ne pas éditer à la main.
+> Vue générée : régénérée depuis `.bmad/sprint-status.yaml` par `/bear-workflow:status --board`. Ne pas éditer à la main.
 
 ## to-do
 | ID | US | Tâche | Estimation | Assigné |
@@ -347,7 +347,7 @@ Créer `board.md` (template `.claude/templates/project/board.md`) :
 
 Pour chaque tâche créée (tâches d'US et tâches transverses), selon `.claude/templates/project/sprint-status.md` :
 
-1. Créer `.bmad/sprint-status.yaml` depuis le squelette de `/workflow:init` s'il n'existe pas (avec `--tasks-only`, le sprint et les stories existent déjà ; sinon, lancer le `/workflow:start <N>` complet)
+1. Créer `.bmad/sprint-status.yaml` depuis le squelette de `/bear-workflow:init` s'il n'existe pas (avec `--tasks-only`, le sprint et les stories existent déjà ; sinon, lancer le `/bear-workflow:start <N>` complet)
 2. Ajouter les ids TASK à `stories.<US>.tasks.list`
 3. Définir `stories.<US>.tasks.status.<TASK>: to-do`
 4. Mettre à jour `stories.<US>.tasks.total` (`completed` reste le nombre de tâches `done`)
@@ -419,15 +419,15 @@ Pour chaque tâche créée (tâches d'US et tâches transverses), selon `.claude
 ║                   PROCHAINE ÉTAPE                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /gate:check sprint {N}                                ║
+║  → /bear-gate:check sprint {N}                                ║
 ║    Vérifier que le sprint est prêt (gate)                ║
 ║                                                          ║
-║  → /workflow:implement {N}                               ║
+║  → /bear-workflow:implement {N}                               ║
 ║    Démarrer le développement TDD/BDD                     ║
 ║                                                          ║
 ║  Voir aussi :                                            ║
-║  • /project:backlog next story — Prendre la 1re story    ║
-║  • /workflow:status  — Suivre l'avancement du sprint     ║
+║  • /bear-project:backlog next story — Prendre la 1re story    ║
+║  • /bear-workflow:status  — Suivre l'avancement du sprint     ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

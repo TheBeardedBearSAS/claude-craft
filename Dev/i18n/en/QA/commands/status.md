@@ -17,7 +17,7 @@ Display status and progress of QA Recette sessions. View individual session deta
 - `--status=<status>`: Filter by status (running, completed, paused, failed)
 - `--format=<type>`: Output format (table, yaml, json) — default: table
 - `--watch`: Live refresh mode (updates every 5 seconds)
-- `--report`: Report mode (former `/qa:status --report`): generate a report from a session; requires `--session=<id>`
+- `--report`: Report mode (former `/bear-qa:status --report`): generate a report from a session; requires `--session=<id>`
 - `--format=<type>`: with `--report`: md, html, json (default: md)
 - `--output=<path>`: with `--report`: custom output path (default: `.recette/reports/`)
 - `--include-screenshots`: with `--report`: embed screenshots in the HTML report
@@ -96,9 +96,9 @@ Checkpoint:
 
 | Mode / flag | What it does | Replaces |
 |---|---|---|
-| `/qa:status --all` / `--session=<id>` | List sessions or show one session in detail | — |
-| `/qa:status --report --session=<id>` | Generate a Markdown/HTML/JSON report (`--format`, `--output`, `--include-screenshots`) | `/qa:status --report` |
-| `/qa:status --report --session=<id> --compare=<id>` | Compare two sessions to detect regressions | `/qa:status --report --compare` |
+| `/bear-qa:status --all` / `--session=<id>` | List sessions or show one session in detail | — |
+| `/bear-qa:status --report --session=<id>` | Generate a Markdown/HTML/JSON report (`--format`, `--output`, `--include-screenshots`) | `/bear-qa:status --report` |
+| `/bear-qa:status --report --session=<id> --compare=<id>` | Compare two sessions to detect regressions | `/bear-qa:status --report --compare` |
 
 ## Report Mode (--report)
 
@@ -189,19 +189,19 @@ Compares two runs: metric deltas, resolved errors, new errors and Golden Rule vi
 
 ```bash
 # Generate Markdown report (default)
-/qa:status --report --session=REC-20260130-143022
+/bear-qa:status --report --session=REC-20260130-143022
 
 # Generate HTML report with screenshots
-/qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
+/bear-qa:status --report --session=REC-20260130-143022 --format=html --include-screenshots
 
 # Generate JSON report for CI integration
-/qa:status --report --session=REC-20260130-143022 --format=json
+/bear-qa:status --report --session=REC-20260130-143022 --format=json
 
 # Custom output path
-/qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
+/bear-qa:status --report --session=REC-20260130-143022 --output=./reports/sprint-3/
 
 # Compare two sessions
-/qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
+/bear-qa:status --report --session=REC-20260201-140000 --compare=REC-20260130-143022
 ```
 
 ### Report Output Structure
@@ -227,25 +227,25 @@ Compares two runs: metric deltas, resolved errors, new errors and Golden Rule vi
 
 ```bash
 # List all sessions
-/qa:status --all
+/bear-qa:status --all
 
 # Show detailed status for a specific session
-/qa:status --session=REC-20260130-143022
+/bear-qa:status --session=REC-20260130-143022
 
 # Filter running sessions
-/qa:status --all --status=running
+/bear-qa:status --all --status=running
 
 # Filter by scope
-/qa:status --all --scope=sprint
+/bear-qa:status --all --scope=sprint
 
 # Live monitoring of a running session
-/qa:status --session=REC-20260130-143022 --watch
+/bear-qa:status --session=REC-20260130-143022 --watch
 
 # Output as YAML
-/qa:status --session=REC-20260130-143022 --format=yaml
+/bear-qa:status --session=REC-20260130-143022 --format=yaml
 
 # Output as JSON (for scripting)
-/qa:status --all --format=json
+/bear-qa:status --all --format=json
 ```
 
 ## Output Structure
@@ -268,16 +268,16 @@ Compares two runs: metric deltas, resolved errors, new errors and Golden Rule vi
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Execute acceptance tests |
-| `/qa:fix` | Fix bugs from a recette session |
-| `/qa:regression` | View regression test registry |
-| `/qa:status --report` | Generate report (`--report`) |
+| `/bear-qa:recette` | Execute acceptance tests |
+| `/bear-qa:fix` | Fix bugs from a recette session |
+| `/bear-qa:regression` | View regression test registry |
+| `/bear-qa:status --report` | Generate report (`--report`) |
 
 ## Error Messages
 
 | Error | Solution |
 |-------|----------|
-| "No sessions found" | Run `/qa:recette` first to create a session |
+| "No sessions found" | Run `/bear-qa:recette` first to create a session |
 | "Session not found" | Verify session ID in `.recette/sessions/` |
 | "No sessions match filter" | Adjust filter criteria |
 
@@ -297,11 +297,11 @@ Compares two runs: metric deltas, resolved errors, new errors and Golden Rule vi
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
 ║  If session has failures:                                ║
-║  → /qa:fix                                               ║
+║  → /bear-qa:fix                                               ║
 ║    Fix identified bugs                                   ║
 ║                                                          ║
 ║  If session is complete:                                 ║
-║  → /qa:status --report                                   ║
+║  → /bear-qa:status --report                                   ║
 ║    Generate the recette report                           ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

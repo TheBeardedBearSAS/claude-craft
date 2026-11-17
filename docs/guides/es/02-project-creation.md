@@ -173,7 +173,7 @@ ls -la .claude/
 
 **Contenido instalado:**
 - 21 reglas específicas de Symfony (Clean Architecture, DDD, CQRS, etc.)
-- 10+ comandos Symfony (`/symfony:generate-crud`, `/symfony:check all`, etc.)
+- 10+ comandos Symfony (`/bear-symfony:generate-crud`, `/bear-symfony:check all`, etc.)
 - Agente revisor de Symfony
 - Plantillas de código (Service, ValueObject, Aggregate, etc.)
 - Listas de verificación de calidad
@@ -417,7 +417,7 @@ Este es el archivo más importante a personalizar. Le indica a Claude los detall
 
 Ejecuta este comando en Claude Code para autodetectar tu stack y responder preguntas específicas:
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 **Opción B: Configuración Manual**
@@ -520,7 +520,7 @@ Usa esta lista al configurar un nuevo proyecto:
 ### Verificación
 
 - [ ] Claude Code iniciado en el directorio del proyecto
-- [ ] Comandos disponibles (prueba `/symfony:check all`)
+- [ ] Comandos disponibles (prueba `/bear-symfony:check all`)
 - [ ] Agentes respondiendo (prueba `@symfony-reviewer hello`)
 
 ### Configuración del Equipo
@@ -571,7 +571,7 @@ Después de instalar las reglas, opcionalmente configura RTK para ahorrar tokens
 
 ```bash
 # En sesión de Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 Esto configura el proxy RTK, la optimización del modelo de sub-agente y plantillas de hooks para una reducción total de tokens del 55-65%.

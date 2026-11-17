@@ -15,7 +15,7 @@ Argumentos:
 - (Opcional) Persona objetivo
 - (Opcional) Restricciones específicas
 
-Ejemplo: `/uiux:user-flow "Registro de usuario"` o `/uiux:user-flow "Checkout" persona:"Usuario móvil" restriccion:"< 30 segundos"`
+Ejemplo: `/bear-uiux:user-flow "Registro de usuario"` o `/bear-uiux:user-flow "Checkout" persona:"Usuario móvil" restriccion:"< 30 segundos"`
 
 ## Modo Plan
 

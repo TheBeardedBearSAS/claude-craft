@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/symfony:check architecture` or manually follow steps in `.claude/references/symfony/checks/architecture.md`
+**Command**: Use slash command `/bear-symfony:check architecture` or manually follow steps in `.claude/references/symfony/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Clean Architecture structure (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/symfony:check code-quality` or manually follow steps in `.claude/references/symfony/checks/code-quality.md`
+**Command**: Use slash command `/bear-symfony:check code-quality` or manually follow steps in `.claude/references/symfony/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - PSR-12 compliance (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/symfony:check testing` or manually follow steps in `.claude/references/symfony/checks/testing.md`
+**Command**: Use slash command `/bear-symfony:check testing` or manually follow steps in `.claude/references/symfony/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/symfony:check security` or manually follow steps in `.claude/references/symfony/checks/security.md`
+**Command**: Use slash command `/bear-symfony:check security` or manually follow steps in `.claude/references/symfony/checks/security.md`
 
 **Evaluated Criteria**:
 - Symfony Security Bundle configuration (6 pts)

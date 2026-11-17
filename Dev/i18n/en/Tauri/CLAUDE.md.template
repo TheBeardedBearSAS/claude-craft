@@ -68,7 +68,7 @@ docker compose exec app npx vitest run               # Frontend tests (mockIPC)
 > Desktop GUI builds need system WebView libraries; if the container cannot run them, build in CI and keep unit tests container-friendly.
 
 ### Available Commands
-- `/tauri:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
+- `/bear-tauri:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
 
 ### Development Workflow
 1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /laravel:check testing"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-laravel:check testing"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/laravel:check testing`.
+> ⚠️ `/bear-laravel:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/bear-laravel:check testing`.
 
-Exécutez `/laravel:check testing $ARGUMENTS` : lisez `.claude/commands/laravel/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-laravel:check testing $ARGUMENTS` : lisez `.claude/commands/bear-laravel/check.md` et suivez-le avec ces arguments.

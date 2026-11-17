@@ -317,7 +317,7 @@ Usa el comando integrado para auto-detectar tu stack y responder preguntas espec
 claude
 
 # Ejecutar el comando de configuración
-/common:init --context
+/bear-common:init --context
 ```
 
 El comando va a:
@@ -438,7 +438,7 @@ Pregunta a Claude:
 Lista todos los comandos slash disponibles para este proyecto
 ```
 
-Esperado: Claude debería listar comandos como `/common:analyze-feature`, `/{tech}:generate-crud`, etc.
+Esperado: Claude debería listar comandos como `/bear-common:analyze-feature`, `/{tech}:generate-crud`, etc.
 
 ### Prueba 2: Usar un Agente
 
@@ -453,7 +453,7 @@ Esperado: Claude debería responder como el agente TDD Coach con orientación so
 
 Prueba un comando simple:
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Esperado: Claude debería ejecutar una verificación de calidad pre-commit (puede reportar sin cambios si el proyecto está vacío).
@@ -556,10 +556,10 @@ claude
 @{tech}-reviewer   # Revisión de código
 
 # Comandos comunes
-/common:analyze-feature     # Analizar requisitos
+/bear-common:analyze-feature     # Analizar requisitos
 /{tech}:generate-crud       # Generar código CRUD
-/gate:check commit         # Verificación de calidad
-/common:security-audit      # Auditoría de seguridad
+/bear-gate:check commit         # Verificación de calidad
+/bear-common:security-audit      # Auditoría de seguridad
 ```
 
 ---

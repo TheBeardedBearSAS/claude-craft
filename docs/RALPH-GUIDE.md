@@ -20,7 +20,7 @@ Ralph Wiggum is a continuous execution system that runs Claude iteratively until
 
 ```bash
 # In Claude Code
-/common:ralph-run "Implement user authentication"
+/bear-common:ralph-run "Implement user authentication"
 
 # Or via CLI
 npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
@@ -29,7 +29,7 @@ npx @the-bearded-bear/bear-craft ralph "Implement user authentication"
 ### With Full DoD Checks
 
 ```bash
-/common:ralph-run --full "Fix the login bug"
+/bear-common:ralph-run --full "Fix the login bug"
 ```
 
 ---
@@ -400,7 +400,7 @@ Endpoint: `http://localhost:9090/health`
 Combine Ralph with TDD phases:
 
 ```bash
-/common:ralph-run --tdd "Implement user registration"
+/bear-common:ralph-run --tdd "Implement user registration"
 ```
 
 This enforces:
@@ -426,7 +426,7 @@ npx @the-bearded-bear/bear-craft ralph --batch .ralph/queue.txt
 Get prompts between iterations:
 
 ```bash
-/common:ralph-run --interactive "Refactor the payment module"
+/bear-common:ralph-run --interactive "Refactor the payment module"
 ```
 
 ---

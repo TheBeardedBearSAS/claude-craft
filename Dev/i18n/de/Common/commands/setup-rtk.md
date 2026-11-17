@@ -85,7 +85,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-5-5"
 export CLAUDE_CODE_FORK_SUBAGENT=1
 
 # 1-Stunden Prompt-Cache TTL aktivieren (Claude Code 2.1.108+)
-# → -40% Kosten bei wiederholenden Sitzungen (BMAD Sprints, /team:* Schleifen)
+# → -40% Kosten bei wiederholenden Sitzungen (BMAD Sprints, /bear-team:* Schleifen)
 # → Gleicher Prompt-Cache-Schlüssel wird bis zu 1h statt 5min Standard wiederverwendet
 export ENABLE_PROMPT_CACHING_1H=1
 

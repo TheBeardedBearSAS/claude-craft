@@ -13,7 +13,7 @@ $ARGUMENTS
 Arguments :
 - (Optionnel) Chemin vers un module spécifique
 
-Exemple : `/python:async-check app/services/`
+Exemple : `/bear-python:async-check app/services/`
 
 ## Mode Plan
 

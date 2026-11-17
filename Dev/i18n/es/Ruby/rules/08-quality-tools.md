@@ -373,7 +373,7 @@ pre-commit:
 
 ## Alineación con la puntuación
 
-La auditoría `/ruby:check` asigna las herramientas a los ejes:
+La auditoría `/bear-ruby:check` asigna las herramientas a los ejes:
 
 | Eje | Evidencia de herramientas |
 |-----|---------------------------|

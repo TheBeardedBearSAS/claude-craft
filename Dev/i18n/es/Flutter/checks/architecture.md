@@ -88,4 +88,4 @@ Genera un reporte con:
 
 ---
 
-**Nota**: Este reporte se concentra únicamente en la arquitectura. Para una auditoría completa, utiliza `/flutter:check all`.
+**Nota**: Este reporte se concentra únicamente en la arquitectura. Para una auditoría completa, utiliza `/bear-flutter:check all`.

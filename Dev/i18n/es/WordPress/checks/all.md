@@ -25,7 +25,7 @@ Preparar el entorno de auditoría:
 
 ### Paso 2: Auditoría de arquitectura (25 puntos)
 
-**Comando**: Usa el slash command `/wordpress:check architecture` o sigue manualmente los pasos de `.claude/references/wordpress/checks/architecture.md`
+**Comando**: Usa el slash command `/bear-wordpress:check architecture` o sigue manualmente los pasos de `.claude/references/wordpress/checks/architecture.md`
 
 **Criterios evaluados**:
 - Cabecera del plugin, archivo de arranque, guarda ABSPATH, autoload de Composer (5 pts)
@@ -38,7 +38,7 @@ Preparar el entorno de auditoría:
 
 ### Paso 3: Auditoría de calidad de código (25 puntos)
 
-**Comando**: Usa el slash command `/wordpress:check code-quality` o sigue manualmente los pasos de `.claude/references/wordpress/checks/code-quality.md`
+**Comando**: Usa el slash command `/bear-wordpress:check code-quality` o sigue manualmente los pasos de `.claude/references/wordpress/checks/code-quality.md`
 
 **Criterios evaluados**:
 - WPCS (PHPCS) sin errores (7 pts)
@@ -51,7 +51,7 @@ Preparar el entorno de auditoría:
 
 ### Paso 4: Auditoría de testing (25 puntos)
 
-**Comando**: Usa el slash command `/wordpress:check testing` o sigue manualmente los pasos de `.claude/references/wordpress/checks/testing.md`
+**Comando**: Usa el slash command `/bear-wordpress:check testing` o sigue manualmente los pasos de `.claude/references/wordpress/checks/testing.md`
 
 **Criterios evaluados**:
 - Cobertura de código (objetivo >= 80 %) en PHP y JS (7 pts)
@@ -65,7 +65,7 @@ Preparar el entorno de auditoría:
 
 ### Paso 5: Auditoría de seguridad (25 puntos)
 
-**Comando**: Usa el slash command `/wordpress:check security` o sigue manualmente los pasos de `.claude/references/wordpress/checks/security.md`
+**Comando**: Usa el slash command `/bear-wordpress:check security` o sigue manualmente los pasos de `.claude/references/wordpress/checks/security.md`
 
 **Criterios evaluados**:
 - Verificaciones de capabilities y nonces en cada cambio de estado (6 pts)

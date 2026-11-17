@@ -14,7 +14,7 @@ Arguments :
 - Nom du composant (ex: `Button`, `UserCard`, `Modal`)
 - (Optionnel) Type (presentational, container, form, layout)
 
-Exemple : `/react:generate-component UserCard presentational`
+Exemple : `/bear-react:generate-component UserCard presentational`
 
 ## Mode Plan
 

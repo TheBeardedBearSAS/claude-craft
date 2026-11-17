@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /symfony:check testing"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-symfony:check testing"
 deprecated: true
-replaced-by: /symfony:check
+replaced-by: /bear-symfony:check
 ---
 
-> ⚠️ `/symfony:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/symfony:check testing`.
+> ⚠️ `/bear-symfony:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/bear-symfony:check testing`.
 
-Exécutez `/symfony:check testing $ARGUMENTS` : lisez `.claude/commands/symfony/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-symfony:check testing $ARGUMENTS` : lisez `.claude/commands/bear-symfony/check.md` et suivez-le avec ces arguments.

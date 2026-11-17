@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/angular:check architecture` or manually follow steps in `.claude/references/angular/checks/architecture.md`
+**Command**: Use slash command `/bear-angular:check architecture` or manually follow steps in `.claude/references/angular/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Domain-driven module structure (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/angular:check code-quality` or manually follow steps in `.claude/references/angular/checks/code-quality.md`
+**Command**: Use slash command `/bear-angular:check code-quality` or manually follow steps in `.claude/references/angular/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - TypeScript strict mode and type safety (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/angular:check testing` or manually follow steps in `.claude/references/angular/checks/testing.md`
+**Command**: Use slash command `/bear-angular:check testing` or manually follow steps in `.claude/references/angular/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/angular:check security` or manually follow steps in `.claude/references/angular/checks/security.md`
+**Command**: Use slash command `/bear-angular:check security` or manually follow steps in `.claude/references/angular/checks/security.md`
 
 **Evaluated Criteria**:
 - XSS prevention and DomSanitizer (6 pts)

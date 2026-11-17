@@ -40,8 +40,8 @@ BMAD v6 is a project management enhancement framework for bear-craft that provid
 
 If you have an existing backlog:
 ```
-/project:analyze-backlog
-/project:migrate-backlog
+/bear-project:analyze-backlog
+/bear-project:migrate-backlog
 ```
 
 ### 2. Configure Sprint
@@ -92,33 +92,33 @@ Add to your project's `.claude/settings.json`:
 ### Quality Gates
 | Command | Description |
 |---------|-------------|
-| `/gate:validate-prd` | Validate PRD (≥80%) |
-| `/gate:validate-techspec` | Validate Tech Spec (≥90%) |
-| `/gate:validate-backlog` | Validate INVEST compliance |
-| `/gate:validate-story <ID>` | Validate story DoD |
-| `/gate:validate-sprint` | Validate sprint readiness |
-| `/gate:report` | Full gates report |
+| `/bear-gate:validate-prd` | Validate PRD (≥80%) |
+| `/bear-gate:validate-techspec` | Validate Tech Spec (≥90%) |
+| `/bear-gate:validate-backlog` | Validate INVEST compliance |
+| `/bear-gate:validate-story <ID>` | Validate story DoD |
+| `/bear-gate:validate-sprint` | Validate sprint readiness |
+| `/bear-gate:report` | Full gates report |
 
 ### Backlog Migration
 | Command | Description |
 |---------|-------------|
-| `/project:analyze-backlog` | Analyze current backlog |
-| `/project:migrate-backlog` | Convert to BMAD v6 |
-| `/project:update-stories` | Add missing fields |
-| `/project:sync-backlog` | Sync files ↔ YAML |
+| `/bear-project:analyze-backlog` | Analyze current backlog |
+| `/bear-project:migrate-backlog` | Convert to BMAD v6 |
+| `/bear-project:update-stories` | Add missing fields |
+| `/bear-project:sync-backlog` | Sync files ↔ YAML |
 
 ### Batch Processing
 | Command | Description |
 |---------|-------------|
-| `/project:run-epic <ID>` | Queue epic stories |
-| `/project:run-queue` | Process queue |
-| `/project:run-sprint` | Execute full sprint |
-| `/project:batch-status` | View queue status |
+| `/bear-project:run-epic <ID>` | Queue epic stories |
+| `/bear-project:run-queue` | Process queue |
+| `/bear-project:run-sprint` | Execute full sprint |
+| `/bear-project:batch-status` | View queue status |
 
 ### Team Sprint (Ralph Mode)
 | Command | Description |
 |---------|-------------|
-| `/common:team-sprint --ralph-mode` | Run autonomous sprint overnight |
+| `/bear-common:team-sprint --ralph-mode` | Run autonomous sprint overnight |
 | `batch-executor.sh autonomous` | Queue with Ralph integration |
 | `routing-engine.sh auto-claim` | Auto-claim next ready story |
 | `routing-engine.sh tdd-phase` | Update TDD phase with auto-transition |
@@ -151,7 +151,7 @@ backlog → ready-for-dev → in-progress → review → done
 | `po` | Product Owner | `/po:prioritize`, `/po:accept` |
 | `sm` | Scrum Master | `/sm:plan-sprint`, `/sm:retro` |
 | `dev` | Developer | `/dev:implement`, `/dev:tdd` |
-| `qa` | QA Engineer | `/qa:validate`, `/qa:automate` |
+| `qa` | QA Engineer | `/bear-qa:validate`, `/bear-qa:automate` |
 | `ux` | UX Designer | `/ux:wireframe`, `/ux:journey` |
 
 ## Quality Gate Thresholds
@@ -181,10 +181,10 @@ BMAD v6 integrates with the team sprint command for overnight execution:
 
 ```bash
 # Run sprint overnight
-/common:team-sprint --ralph-mode "Sprint 1" --overnight
+/bear-common:team-sprint --ralph-mode "Sprint 1" --overnight
 
 # With parallel processing
-/common:team-sprint --ralph-mode "Sprint 1" --parallel 3 --overnight
+/bear-common:team-sprint --ralph-mode "Sprint 1" --parallel 3 --overnight
 ```
 
 ### Routing Engine Autonomous Commands

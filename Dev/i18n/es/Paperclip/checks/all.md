@@ -17,7 +17,7 @@ Realizar una auditoría de cumplimiento completa de un proyecto Paperclip orques
 
 ### Paso 2: Auditoría de Arquitectura (25 puntos)
 
-Invocar `/paperclip:check architecture`.
+Invocar `/bear-paperclip:check architecture`.
 
 Criterios evaluados:
 - Separación de dos capas (control plane vs adaptadores) — 6 pts
@@ -29,7 +29,7 @@ Criterios evaluados:
 
 ### Paso 3: Auditoría de Calidad de Código (20 puntos)
 
-Invocar `/paperclip:check code-quality`.
+Invocar `/bear-paperclip:check code-quality`.
 
 Criterios evaluados:
 - TypeScript strict + `noUncheckedIndexedAccess` — 5 pts
@@ -41,7 +41,7 @@ Criterios evaluados:
 
 ### Paso 4: Auditoría de Testing (20 puntos)
 
-Invocar `/paperclip:check testing`.
+Invocar `/bear-paperclip:check testing`.
 
 Criterios evaluados:
 - Cobertura ≥ 80% (líneas, funciones, statements) — 6 pts
@@ -52,7 +52,7 @@ Criterios evaluados:
 
 ### Paso 5: Auditoría de Seguridad (20 puntos)
 
-Invocar `/paperclip:check security`.
+Invocar `/bear-paperclip:check security`.
 
 Criterios evaluados:
 - Todos los endpoints con scope de tenant por `companyId` desde sesión — 4 pts

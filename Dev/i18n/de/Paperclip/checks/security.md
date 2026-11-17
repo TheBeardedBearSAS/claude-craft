@@ -76,4 +76,4 @@ Versendete Header verifizieren:
 
 ## Ausgabe
 
-Markdown-Report mit per-Section Pass/Fail, Schweregrad (Blocker / Major / Minor), CVE-Referenzen wo relevant und einem Score /20 für `/paperclip:check all`.
+Markdown-Report mit per-Section Pass/Fail, Schweregrad (Blocker / Major / Minor), CVE-Referenzen wo relevant und einem Score /20 für `/bear-paperclip:check all`.

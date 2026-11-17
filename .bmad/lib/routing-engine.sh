@@ -61,7 +61,7 @@ log_error() {
 check_sprint_status() {
     if [[ ! -f "$SPRINT_STATUS_FILE" ]]; then
         log_error "sprint-status.yaml not found at $SPRINT_STATUS_FILE"
-        log_info "Run '/project:migrate-backlog' to create it"
+        log_info "Run '/bear-project:migrate-backlog' to create it"
         exit 1
     fi
 }

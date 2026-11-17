@@ -12,7 +12,7 @@ QA Recette (actuellement intégré à Bear Craft) devient un outil autonome **en
 - **Extension Chrome MIT** (Chrome Web Store)
 - **Backend self-hostable MIT optionnel** (sync multi-devices, dashboards, CI webhooks)
 
-Bear Craft reste l'orchestrateur principal (command `/qa:recette` inchangé), mais délègue l'exécution au SDK.
+Bear Craft reste l'orchestrateur principal (command `/bear-qa:recette` inchangé), mais délègue l'exécution au SDK.
 
 ## Motivation
 
@@ -37,7 +37,7 @@ Bear Craft reste l'orchestrateur principal (command `/qa:recette` inchangé), ma
 
 ## Impact breaking
 
-- Command `/qa:recette` reste compatible (wrapper appelle SDK).
+- Command `/bear-qa:recette` reste compatible (wrapper appelle SDK).
 - Structure `~/.qa-recette/` remplace `~/.claude/qa-sessions/` — migration auto au premier run.
 - Chrome extension v1.0.36 actuelle → v2.0.0 (nouveau bundle, nouveau ID store possible).
 

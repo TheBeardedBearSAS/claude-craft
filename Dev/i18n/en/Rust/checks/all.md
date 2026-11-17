@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/rust:check architecture` or manually follow steps in `.claude/references/rust/checks/architecture.md`
+**Command**: Use slash command `/bear-rust:check architecture` or manually follow steps in `.claude/references/rust/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Workspace layout and crate boundaries (domain free of axum/sqlx) (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/rust:check code-quality` or manually follow steps in `.claude/references/rust/checks/code-quality.md`
+**Command**: Use slash command `/bear-rust:check code-quality` or manually follow steps in `.claude/references/rust/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - Clippy clean with `-D warnings` and workspace lints (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/rust:check testing` or manually follow steps in `.claude/references/rust/checks/testing.md`
+**Command**: Use slash command `/bear-rust:check testing` or manually follow steps in `.claude/references/rust/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (cargo-llvm-cov, target >= 80%) (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/rust:check security` or manually follow steps in `.claude/references/rust/checks/security.md`
+**Command**: Use slash command `/bear-rust:check security` or manually follow steps in `.claude/references/rust/checks/security.md`
 
 **Evaluated Criteria**:
 - OWASP Top 10:2025 protections (6 pts)

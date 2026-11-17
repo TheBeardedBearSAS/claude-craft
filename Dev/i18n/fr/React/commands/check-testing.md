@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /react:check testing"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-react:check testing"
 deprecated: true
-replaced-by: /react:check
+replaced-by: /bear-react:check
 ---
 
-> ⚠️ `/react:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/react:check testing`.
+> ⚠️ `/bear-react:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/bear-react:check testing`.
 
-Exécutez `/react:check testing $ARGUMENTS` : lisez `.claude/commands/react/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-react:check testing $ARGUMENTS` : lisez `.claude/commands/bear-react/check.md` et suivez-le avec ces arguments.

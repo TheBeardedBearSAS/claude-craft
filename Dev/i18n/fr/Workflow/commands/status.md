@@ -14,7 +14,7 @@ arguments:
     required: false
 ---
 
-# /workflow:status
+# /bear-workflow:status
 
 ## Mission
 
@@ -26,22 +26,22 @@ Cette commande **met à jour** `project-management/workflow-status.yaml` (`curre
 
 | Mode | Ce qu'il fait | Remplace |
 |------|---------------|----------|
-| `/workflow:status` | Vue par défaut : phase du workflow + métriques du sprint + prochaine action | `/workflow:status` |
-| `/workflow:status --verbose` | Idem, avec chaque artefact et les contrôles de santé | - |
-| `/workflow:status --board` | Tableau Kanban du sprint, régénère `board.md` | `/workflow:status --board` |
-| `/workflow:status --queue [--history]` | File d'attente batch (`.bmad/batch-queue.yaml`) et son historique | `/workflow:status --queue` |
-| `/workflow:status --standup [date]` | Synthèse du daily stand-up (hier / aujourd'hui / bloqueurs) | `/workflow:status --standup` |
-| `/workflow:status --gates` | Synthèse des quality gates, exécute/lit `/gate:check all` | - |
+| `/bear-workflow:status` | Vue par défaut : phase du workflow + métriques du sprint + prochaine action | `/bear-workflow:status` |
+| `/bear-workflow:status --verbose` | Idem, avec chaque artefact et les contrôles de santé | - |
+| `/bear-workflow:status --board` | Tableau Kanban du sprint, régénère `board.md` | `/bear-workflow:status --board` |
+| `/bear-workflow:status --queue [--history]` | File d'attente batch (`.bmad/batch-queue.yaml`) et son historique | `/bear-workflow:status --queue` |
+| `/bear-workflow:status --standup [date]` | Synthèse du daily stand-up (hier / aujourd'hui / bloqueurs) | `/bear-workflow:status --standup` |
+| `/bear-workflow:status --gates` | Synthèse des quality gates, exécute/lit `/bear-gate:check all` | - |
 | `--sprint N` | Cible le sprint N au lieu du sprint courant (se combine avec toute vue) | - |
 
 ```bash
-/workflow:status                   # Phase + métriques du sprint + prochaine action
-/workflow:status --verbose         # Vue détaillée avec tous les artefacts
-/workflow:status --board           # Tableau Kanban du sprint courant
-/workflow:status --board --sprint 2
-/workflow:status --queue --history
-/workflow:status --standup
-/workflow:status --gates
+/bear-workflow:status                   # Phase + métriques du sprint + prochaine action
+/bear-workflow:status --verbose         # Vue détaillée avec tous les artefacts
+/bear-workflow:status --board           # Tableau Kanban du sprint courant
+/bear-workflow:status --board --sprint 2
+/bear-workflow:status --queue --history
+/bear-workflow:status --standup
+/bear-workflow:status --gates
 ```
 
 ## Sources de vérité
@@ -96,7 +96,7 @@ Vue des phases, métriques du sprint, puis la prochaine action et sa commande.
 ║ Bloqueurs : TASK-008 (en attente de l'API auth, 2 jours)          ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║ PROCHAINE ACTION : Poursuivre le sprint                           ║
-║ COMMANDE : /workflow:implement                                    ║
+║ COMMANDE : /bear-workflow:implement                                    ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
@@ -112,7 +112,7 @@ Progression globale : ██████████████░░░░░�
 
 Burndown : 34h restantes, idéal 28h → 🟡 légèrement en retard (6h)
 Risques : 🔴 mobile bloqué depuis 2 jours → prioriser TASK-005
-Routage auto : US-008 a toutes ses tâches terminées → /project:backlog move story US-008 review
+Routage auto : US-008 a toutes ses tâches terminées → /bear-project:backlog move story US-008 review
 ```
 
 Le rapport est également sauvegardé dans `project-management/sprints/sprint-{N}-{slug}/status-YYYY-MM-DD.md`.
@@ -128,8 +128,8 @@ Ajoute, pour chaque phase, chaque artefact avec son chemin, sa version et ses co
 ║ ⚠️  Conception d'API incomplète (6 endpoints restants)            ║
 ║ ⚠️  Revue de sécurité en attente                                  ║
 ║ PROCHAINES ACTIONS                                                ║
-║ 1. Terminer la conception d'API → /workflow:design                ║
-║ 2. Puis démarrer l'implémentation → /workflow:implement           ║
+║ 1. Terminer la conception d'API → /bear-workflow:design                ║
+║ 2. Puis démarrer l'implémentation → /bear-workflow:implement           ║
 ```
 
 ### Aucun workflow initialisé
@@ -137,7 +137,7 @@ Ajoute, pour chaque phase, chaque artefact avec son chemin, sa version et ses co
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║  ⚠️  Aucun workflow initialisé pour ce projet                     ║
-║  Pour commencer, lancez :  /workflow:init                         ║
+║  Pour commencer, lancez :  /bear-workflow:init                         ║
 ║  • Analyser le contexte de votre projet                           ║
 ║  • Recommander le track (Quick/Standard/Enterprise)               ║
 ║  • Initialiser le suivi du workflow                               ║
@@ -146,7 +146,7 @@ Ajoute, pour chaque phase, chaque artefact avec son chemin, sa version et ses co
 
 ### Statut Quick Flow
 
-Aucune phase n'est requise. Afficher la tâche courante si elle est suivie (ex. `TASK-042: Fix login validation bug, In Progress`) et les commandes disponibles : `/qa:tdd` (continuer en TDD), `/project:backlog move task <TASK> done` (marquer comme terminée), `/workflow:init` (démarrer un nouveau workflow).
+Aucune phase n'est requise. Afficher la tâche courante si elle est suivie (ex. `TASK-042: Fix login validation bug, In Progress`) et les commandes disponibles : `/bear-qa:tdd` (continuer en TDD), `/bear-project:backlog move task <TASK> done` (marquer comme terminée), `/bear-workflow:init` (démarrer un nouveau workflow).
 
 ## `--board` : tableau Kanban
 
@@ -190,11 +190,11 @@ Progression : 13/32 (41%) | 45h/98h
 
 `board.md` est une **vue générée** : après l'affichage, le fichier `board.md` du sprint est régénéré à partir de `.bmad/sprint-status.yaml` (template `.claude/templates/project/board.md`). Il n'est jamais modifié à la main et n'est jamais la source d'un statut.
 
-Actions : `/project:backlog move task TASK-XXX in-progress` (démarrer), `/project:backlog move task TASK-XXX done` (terminer).
+Actions : `/bear-project:backlog move task TASK-XXX in-progress` (démarrer), `/bear-project:backlog move task TASK-XXX done` (terminer).
 
 ## `--queue` : file d'attente batch
 
-Afficher le statut de la file d'attente batch (`/workflow:implement --queue`).
+Afficher le statut de la file d'attente batch (`/bear-workflow:implement --queue`).
 
 1. Lire `.bmad/batch-queue.yaml`, analyser les entrées et charger le checkpoint.
 2. Regrouper les stories par statut : `pending` (en attente), `running` (en cours), `completed` (terminée), `failed` (en erreur), `skipped` (une dépendance a échoué).
@@ -223,15 +223,15 @@ En attente :
 
 `--history` ajoute le tableau des stories terminées (story, début, fin, durée), les stories en échec (erreur, phase TDD), les stories ignorées (raison, p. ex. « Dépend de US-013 en échec ») et des statistiques : temps total, moyenne par story, taux de réussite (5/6 = 83%), points réalisés.
 
-Une file vide indique comment la remplir : `/workflow:implement --queue` ou `/workflow:implement --epic EPIC-001`.
+Une file vide indique comment la remplir : `/bear-workflow:implement --queue` ou `/bear-workflow:implement --epic EPIC-001`.
 
 Gestion de la file :
 
 ```bash
 .bmad/lib/batch-executor.sh add US-001 1   # ajouter une story (priorité 1)
 # Relancer une story en échec : .bmad/batch-queue.yaml → US-013: status: pending
-/workflow:implement --queue                # exécuter la file
-/workflow:implement --queue --resume       # reprendre depuis le checkpoint
+/bear-workflow:implement --queue                # exécuter la file
+/bear-workflow:implement --queue --resume       # reprendre depuis le checkpoint
 # Vider la file :        .bmad/batch-queue.yaml → queue: []
 ```
 
@@ -285,7 +285,7 @@ Pour un digest quotidien, une GitHub Action planifiée (cron `0 7 * * 1-5`) peut
 
 ## `--gates` : synthèse des gates
 
-Synthétiser les quality gates en exécutant (ou en lisant le dernier résultat de) `/gate:check all`.
+Synthétiser les quality gates en exécutant (ou en lisant le dernier résultat de) `/bear-gate:check all`.
 
 | Gate | Seuil |
 |------|-------|
@@ -300,10 +300,10 @@ Synthétiser les quality gates en exécutant (ou en lisant le dernier résultat 
 GATES
 ✅ prd 86%   ✅ tech-spec 92%   ✅ invest 6/6
 ⚠️ sprint-ready 80%   ⏳ story-dod (US-005 en cours)   ✅ spec-alignment 88%
-Suivant : corriger les bloqueurs de sprint-ready → /gate:check sprint-ready
+Suivant : corriger les bloqueurs de sprint-ready → /bear-gate:check sprint-ready
 ```
 
-Pour une seule gate, utiliser directement `/gate:check <gate>`.
+Pour une seule gate, utiliser directement `/bear-gate:check <gate>`.
 
 ## Structure du fichier de statut
 
@@ -352,20 +352,20 @@ phases:
         stories: 5
 
 next_action: "Terminer la conception d'API"
-next_command: "/workflow:design"
+next_command: "/bear-workflow:design"
 ```
 
 Les statuts des stories et des tâches ne sont PAS stockés ici : ils vivent uniquement dans `.bmad/sprint-status.yaml`.
 
 ## Commandes associées
 
-- `/workflow:init` - Initialiser le workflow
-- `/workflow:plan` - Phase de planification (`--research`, `--only=prd`, `--only=backlog`)
-- `/workflow:design` - Phase de conception
-- `/workflow:start` - Préparation du sprint
-- `/workflow:implement` - Phase d'implémentation
-- `/project:backlog` - Ajouter, lister, modifier, déplacer des stories et des tâches
-- `/gate:check` - Quality gates
+- `/bear-workflow:init` - Initialiser le workflow
+- `/bear-workflow:plan` - Phase de planification (`--research`, `--only=prd`, `--only=backlog`)
+- `/bear-workflow:design` - Phase de conception
+- `/bear-workflow:start` - Préparation du sprint
+- `/bear-workflow:implement` - Phase d'implémentation
+- `/bear-project:backlog` - Ajouter, lister, modifier, déplacer des stories et des tâches
+- `/bear-gate:check` - Quality gates
 
 ## Étape suivante
 
@@ -375,14 +375,14 @@ Les statuts des stories et des tâches ne sont PAS stockés ici : ils vivent uni
 ╠══════════════════════════════════════════════════════════╣
 ║  Selon la phase courante :                               ║
 ║                                                          ║
-║  • init      → /workflow:plan                            ║
-║  • plan      → /workflow:design                          ║
-║  • design    → /workflow:start {N}                       ║
-║  • start     → /workflow:implement                       ║
-║  • implement → /workflow:review                          ║
-║  • review    → /workflow:retro                           ║
-║  • retro     → /workflow:start {N+1}                     ║
+║  • init      → /bear-workflow:plan                            ║
+║  • plan      → /bear-workflow:design                          ║
+║  • design    → /bear-workflow:start {N}                       ║
+║  • start     → /bear-workflow:implement                       ║
+║  • implement → /bear-workflow:review                          ║
+║  • review    → /bear-workflow:retro                           ║
+║  • retro     → /bear-workflow:start {N+1}                     ║
 ║                                                          ║
-║  À tout moment : /workflow:status                        ║
+║  À tout moment : /bear-workflow:status                        ║
 ╚══════════════════════════════════════════════════════════╝
 ```

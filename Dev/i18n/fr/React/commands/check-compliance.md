@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /react:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-react:check all"
 deprecated: true
-replaced-by: /react:check
+replaced-by: /bear-react:check
 ---
 
-> ⚠️ `/react:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/react:check all`.
+> ⚠️ `/bear-react:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-react:check all`.
 
-Exécutez `/react:check all $ARGUMENTS` : lisez `.claude/commands/react/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-react:check all $ARGUMENTS` : lisez `.claude/commands/bear-react/check.md` et suivez-le avec ces arguments.

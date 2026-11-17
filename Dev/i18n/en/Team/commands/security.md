@@ -44,7 +44,7 @@ The process below is written with Agent Teams primitives. With `--engine=subagen
 
 **Scope**: `--scope=full|code|deps|infra` applies to both engines (`full` = 3 reviewers in parallel, a single scope = a single reviewer).
 
-**Difference with native `/security-review`**: Claude Code's built-in `/security-review` only analyzes the diff (pending changes on the current branch). `/team:security` audits the whole repository for the chosen scope (code, dependencies, infrastructure). Use `/security-review` before a commit or a PR, `/team:security` for a full audit.
+**Difference with native `/security-review`**: Claude Code's built-in `/security-review` only analyzes the diff (pending changes on the current branch). `/bear-team:security` audits the whole repository for the chosen scope (code, dependencies, infrastructure). Use `/security-review` before a commit or a PR, `/bear-team:security` for a full audit.
 
 ## Prerequisites
 

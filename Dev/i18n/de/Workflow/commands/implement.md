@@ -1,6 +1,6 @@
 ---
 name: workflow-implement
-description: "Die Implementierungsphase durchführen - TDD/BDD-Entwicklung eines Sprints, eines Epics, einer Story oder der Batch-Queue (sequenziell oder parallel über /team:delivery --phase=implementation)"
+description: "Die Implementierungsphase durchführen - TDD/BDD-Entwicklung eines Sprints, eines Epics, einer Story oder der Batch-Queue (sequenziell oder parallel über /bear-team:delivery --phase=implementation)"
 argument-hint: "[<N>|--epic <EPIC>|--story <US-ID>|--queue] [--resume] [--parallel N] [--auto] [--dry-run]"
 arguments:
   - name: sprint
@@ -17,28 +17,28 @@ arguments:
     required: false
 ---
 
-# /workflow:implement
+# /bear-workflow:implement
 
 ## Mission
 
-Die Implementierungsphase durchführen: Entwicklung Sprint für Sprint (oder Epic / Story / Queue) mit TDD/BDD, gemäß dem technischen Design der vorherigen Phasen. Dies ist der einzige Einstiegspunkt für die Implementierung: Er ersetzt `/workflow:implement`, `/workflow:implement`, `/workflow:implement --epic` und `/workflow:implement --queue`.
+Die Implementierungsphase durchführen: Entwicklung Sprint für Sprint (oder Epic / Story / Queue) mit TDD/BDD, gemäß dem technischen Design der vorherigen Phasen. Dies ist der einzige Einstiegspunkt für die Implementierung: Er ersetzt `/bear-workflow:implement`, `/bear-workflow:implement`, `/bear-workflow:implement --epic` und `/bear-workflow:implement --queue`.
 
-**Standardmäßig sequenziell.** `--parallel N` delegiert die Ausführung an `/team:delivery --phase=implementation` (Agent Teams).
+**Standardmäßig sequenziell.** `--parallel N` delegiert die Ausführung an `/bear-team:delivery --phase=implementation` (Agent Teams).
 
 ## Verwendung
 
 ```bash
-/workflow:implement [<N>|--epic <EPIC>|--story <US-ID>|--queue] [--resume] [--parallel N] [--auto] [--dry-run]
+/bear-workflow:implement [<N>|--epic <EPIC>|--story <US-ID>|--queue] [--resume] [--parallel N] [--auto] [--dry-run]
 ```
 
 | Modus / Flag | Wirkung | Ersetzt |
 |--------------|---------|---------|
-| `<N>` / `next` / `current` | Implementiert Sprint N, den nächsten unvollständigen oder den aktiven Sprint (Standard: aktuell) | `/workflow:implement`, `/workflow:implement` |
-| `--epic <EPIC>` | Reiht alle Stories eines Epics ein und implementiert sie, Abhängigkeiten zuerst | `/workflow:implement --epic <EPIC>` |
+| `<N>` / `next` / `current` | Implementiert Sprint N, den nächsten unvollständigen oder den aktiven Sprint (Standard: aktuell) | `/bear-workflow:implement`, `/bear-workflow:implement` |
+| `--epic <EPIC>` | Reiht alle Stories eines Epics ein und implementiert sie, Abhängigkeiten zuerst | `/bear-workflow:implement --epic <EPIC>` |
 | `--story <US-ID>` | Implementiert eine einzelne Story (Task-Schleife + Validierung) | (eine Story) |
-| `--queue` | Arbeitet die Batch-Queue `.bmad/batch-queue.yaml` ab | `/workflow:implement --queue` |
-| `--resume` | Setzt ab dem letzten Checkpoint fort (gestoppter Sprint oder unterbrochene Queue) | `/workflow:implement --queue --resume` |
-| `--parallel N` | Führt bis zu N unabhängige Stories parallel aus, indem an `/team:delivery --phase=implementation` delegiert wird | `/workflow:implement --queue --parallel N` |
+| `--queue` | Arbeitet die Batch-Queue `.bmad/batch-queue.yaml` ab | `/bear-workflow:implement --queue` |
+| `--resume` | Setzt ab dem letzten Checkpoint fort (gestoppter Sprint oder unterbrochene Queue) | `/bear-workflow:implement --queue --resume` |
+| `--parallel N` | Führt bis zu N unabhängige Stories parallel aus, indem an `/bear-team:delivery --phase=implementation` delegiert wird | `/bear-workflow:implement --queue --parallel N` |
 | `--auto` | Startet sofort, ohne Bestätigungsabfrage | `--auto` |
 | `--dry-run` | Zeigt eine Vorschau des Ausführungsplans; nichts wird geändert | `--dry-run` |
 
@@ -46,15 +46,15 @@ Die Implementierungsphase durchführen: Entwicklung Sprint für Sprint (oder Epi
 
 ## Wann verwenden
 
-- Nach `/workflow:design` (Standard/Enterprise) und `/workflow:start <N>` (Sprint-Ordner, Tasks)
-- Nach `/workflow:init` im Quick-Flow-Track
+- Nach `/bear-workflow:design` (Standard/Enterprise) und `/bear-workflow:start <N>` (Sprint-Ordner, Tasks)
+- Nach `/bear-workflow:init` im Quick-Flow-Track
 - Wenn Sie bereit sind zu programmieren
 
 ## Voraussetzungen
 
 Standard/Enterprise:
 - Tech Spec unter `project-management/tech-spec.md`, Backlog unter `project-management/backlog/`
-- Sprint mit zerlegten Tasks in `project-management/sprints/sprint-{N}-{slug}/` (`sprint-goal.md`, `board.md`, `tasks/TASK-*.md`) - `/workflow:start <N>` (oder `/workflow:start <N> --tasks-only`) ausführen, falls sie fehlen
+- Sprint mit zerlegten Tasks in `project-management/sprints/sprint-{N}-{slug}/` (`sprint-goal.md`, `board.md`, `tasks/TASK-*.md`) - `/bear-workflow:start <N>` (oder `/bear-workflow:start <N> --tasks-only`) ausführen, falls sie fehlen
 - Stories in `.bmad/sprint-status.yaml` vorhanden
 
 Quick Flow: ein klares Verständnis des zu implementierenden Bugs bzw. Features.
@@ -73,7 +73,7 @@ Quick Flow: ein klares Verständnis des zu implementierenden Bugs bzw. Features.
    - `--epic <EPIC>`: Stories, deren `epic_id` übereinstimmt, nicht abgeschlossen, nicht blockiert (blockierte werden zur Prüfung markiert)
    - `--story <US-ID>`: genau diese Story
    - `--queue`: Stories mit Status `pending` in `.bmad/batch-queue.yaml`, nach Priorität sortiert
-3. Bei einem Sprint zuerst `/gate:check sprint` ausführen; schlägt das Gate fehl, die Probleme anzeigen und stoppen.
+3. Bei einem Sprint zuerst `/bear-gate:check sprint` ausführen; schlägt das Gate fehl, die Probleme anzeigen und stoppen.
 
 ```
 Sprint 1: Walking Skeleton
@@ -122,7 +122,7 @@ Ohne `--auto` vor der Ausführung um Bestätigung bitten.
 ### Schritt 3: Ausführen
 
 - **Sequenziell (Standard):** Die Stories nacheinander mit der unten beschriebenen Story-Schleife abarbeiten, mit einem Checkpoint nach jeder Story.
-- **`--parallel N`:** Die unabhängigen Stories (ohne offene Abhängigkeit) an `/team:delivery --phase=implementation` übergeben, das bis zu N Teammates parallel startet. `/team:delivery` schreibt seine Übergänge in dieselbe `.bmad/sprint-status.yaml`; Stories mit Abhängigkeiten warten, bis ihre Voraussetzungen `done` sind.
+- **`--parallel N`:** Die unabhängigen Stories (ohne offene Abhängigkeit) an `/bear-team:delivery --phase=implementation` übergeben, das bis zu N Teammates parallel startet. `/bear-team:delivery` schreibt seine Übergänge in dieselbe `.bmad/sprint-status.yaml`; Stories mit Abhängigkeiten warten, bis ihre Voraussetzungen `done` sind.
 
 ```
 Mode: Parallel (3 workers)
@@ -204,19 +204,19 @@ Refs: TASK-001, US-001
 
 #### Story-Validierung
 
-Sind alle Tasks einer Story `done`: jedes Akzeptanzkriterium prüfen, die E2E-Tests ausführen (falls vorhanden), das Quality Gate ausführen (`/gate:check story`, sofern konfiguriert) und die Story im YAML übergehen lassen (`in-progress` -> `review` -> `done`), mit `previous_status` und einem `history`-Eintrag. Den EPIC-Fortschritt aktualisieren (der EPIC-Status wird abgeleitet).
+Sind alle Tasks einer Story `done`: jedes Akzeptanzkriterium prüfen, die E2E-Tests ausführen (falls vorhanden), das Quality Gate ausführen (`/bear-gate:check story`, sofern konfiguriert) und die Story im YAML übergehen lassen (`in-progress` -> `review` -> `done`), mit `previous_status` und einem `history`-Eintrag. Den EPIC-Fortschritt aktualisieren (der EPIC-Status wird abgeleitet).
 
 ```
 US-001 validation: 4/4 tasks, acceptance criteria met, E2E passed
 US-001 -> done  |  EPIC-001: 1/3 stories (33%)
 ```
 
-Nach jedem Übergang greifen die Regeln `routing.auto_transitions` (siehe `/project:backlog move story --auto`).
+Nach jedem Übergang greifen die Regeln `routing.auto_transitions` (siehe `/bear-project:backlog move story --auto`).
 
 ### Schritt 4: Fehler und Blockaden behandeln
 
 - **Blockierter Task:** Im YAML mit Begründung als `blocked` markieren, dann wählen: [1] überspringen und mit dem nächsten nicht blockierten Task fortfahren, [2] versuchen, die Blockade aufzulösen, [3] stoppen.
-- **Fehlgeschlagene Story (Queue / Epic):** Mit Fehler, TDD-Phase und letztem Checkpoint als `failed` markieren; davon abhängige Stories werden übersprungen. `resume_on_failure` aus den Queue-Einstellungen anwenden (fortfahren oder stoppen). Die Ursache beheben, dann `/workflow:implement --resume` ausführen.
+- **Fehlgeschlagene Story (Queue / Epic):** Mit Fehler, TDD-Phase und letztem Checkpoint als `failed` markieren; davon abhängige Stories werden übersprungen. `resume_on_failure` aus den Queue-Einstellungen anwenden (fortfahren oder stoppen). Die Ursache beheben, dann `/bear-workflow:implement --resume` ausführen.
 
 ### Schritt 5: Checkpoints und Wiederaufnahme
 
@@ -254,7 +254,7 @@ Hours: 38h actual vs 42h estimated | Test coverage: 82% | Commits: 23
 sprint-review.md generated, sprint-retro.md template ready
 ```
 
-Nächste Schritte: `/workflow:review`, `/workflow:retro`, `/workflow:implement <N+1>` oder `/workflow:status`.
+Nächste Schritte: `/bear-workflow:review`, `/bear-workflow:retro`, `/bear-workflow:implement <N+1>` oder `/bear-workflow:status`.
 
 ## Verarbeitungsreihenfolge der Tasks
 
@@ -276,8 +276,8 @@ Nächste Schritte: `/workflow:review`, `/workflow:retro`, `/workflow:implement <
 | `skip` | Diesen Task überspringen (bleibt `to-do`) |
 | `block [Grund]` | Den Task mit Begründung als `blocked` markieren |
 | `stop` | Stoppen und den aktuellen Zustand speichern |
-| `status` | Den Fortschritt anzeigen (`/workflow:status`) |
-| `board` | Das Kanban-Board anzeigen (`/workflow:status --board`) |
+| `status` | Den Fortschritt anzeigen (`/bear-workflow:status`) |
+| `board` | Das Kanban-Board anzeigen (`/bear-workflow:status --board`) |
 
 ## Automatische Aktualisierungen
 
@@ -324,9 +324,9 @@ Ist Ralph konfiguriert, in `ralph.yml` `bmad_integration.batch_queue_file: ".bma
 ## Quick-Flow-Modus
 
 Für Bugfixes und kleine Features ist keine Sprint-Struktur nötig:
-- Bugfixes: `/qa:tdd` (TDD-Ansatz)
+- Bugfixes: `/bear-qa:tdd` (TDD-Ansatz)
 - Kleine Features: die technologiespezifischen `/{tech}:*`-Befehle
-- Nachverfolgung: `/project:backlog add task`, dann `/project:backlog move task done`
+- Nachverfolgung: `/bear-project:backlog add task`, dann `/bear-project:backlog move task done`
 
 ## Beteiligte Agenten
 
@@ -337,10 +337,10 @@ Für Bugfixes und kleine Features ist keine Sprint-Struktur nötig:
 
 ## Verwandte Befehle
 
-- `/workflow:design` - Vorherige Phase; `/workflow:start <N>` - Sprint und seine Tasks erstellen
-- `/workflow:status` - Fortschritt, Board (`--board`), Queue (`--queue`), Gates (`--gates`)
-- `/team:delivery --phase=implementation` - Paralleler Motor für `--parallel N`; `/team:delivery` - Parallele Erstellung + Implementierung
-- `/project:backlog move story <US> <status>` - Manueller Story-Übergang
-- `/qa:tdd` - Schnelle Bugfixes
-- `/workflow:review` - Sprint-Review-Zeremonie
-- `/workflow:retro` - Sprint-Retrospektive
+- `/bear-workflow:design` - Vorherige Phase; `/bear-workflow:start <N>` - Sprint und seine Tasks erstellen
+- `/bear-workflow:status` - Fortschritt, Board (`--board`), Queue (`--queue`), Gates (`--gates`)
+- `/bear-team:delivery --phase=implementation` - Paralleler Motor für `--parallel N`; `/bear-team:delivery` - Parallele Erstellung + Implementierung
+- `/bear-project:backlog move story <US> <status>` - Manueller Story-Übergang
+- `/bear-qa:tdd` - Schnelle Bugfixes
+- `/bear-workflow:review` - Sprint-Review-Zeremonie
+- `/bear-workflow:retro` - Sprint-Retrospektive

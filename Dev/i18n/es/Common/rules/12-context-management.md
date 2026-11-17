@@ -392,7 +392,7 @@ Sesion 2: Implementacion (codificar, testear)
 El comando `/loop` permite planificar tareas recurrentes:
 
 ```bash
-/loop 5m /gate:check commit    # Verificar cada 5 minutos
+/loop 5m /bear-gate:check commit    # Verificar cada 5 minutos
 /loop "Monitorear tests CI"           # Auto-cadencia por el modelo
 ```
 
@@ -781,7 +781,7 @@ Para los 5 agentes `opus` (security-auditor, database-architect, migration-speci
 
 ## Optimización de tokens — Configuración rápida
 
-> **Comando:** `/common:setup-rtk` para configurar automáticamente todas las optimizaciones.
+> **Comando:** `/bear-common:setup-rtk` para configurar automáticamente todas las optimizaciones.
 
 **RTK (Rust Token Killer):** Proxy CLI que reduce el consumo de tokens en un 60-90 % en comandos de desarrollo. Instalación: `rtk init -g`.
 

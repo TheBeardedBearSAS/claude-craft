@@ -32,7 +32,7 @@ const sequence = [
     },
   },
   {
-    text: '/common:audit',
+    text: '/bear-common:audit',
     output: '<span style="color:#60a5fa">\u2139</span> Running pre-flight checks...<br><span style="color:#4ade80">\u2713</span> Context usage within limits',
     action: () => {
       ctxBadge.value = 'ctx: 15%'

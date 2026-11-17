@@ -392,7 +392,7 @@ Session 2: Implementation (code, test)
 The `/loop` command allows scheduling recurring tasks:
 
 ```bash
-/loop 5m /gate:check commit    # Check every 5 minutes
+/loop 5m /bear-gate:check commit    # Check every 5 minutes
 /loop "Monitor CI tests"              # Auto-paced by the model
 ```
 
@@ -783,7 +783,7 @@ For the 5 `opus` agents (security-auditor, database-architect, migration-special
 
 ## Token Optimization — Quick Setup
 
-> **Command:** `/common:setup-rtk` to automatically configure all optimizations.
+> **Command:** `/bear-common:setup-rtk` to automatically configure all optimizations.
 
 **RTK (Rust Token Killer):** CLI proxy that reduces token consumption by 60-90% on dev commands. Install: `rtk init -g`.
 

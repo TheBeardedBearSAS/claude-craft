@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/angular:check architecture` verwenden oder die Schritte in `.claude/references/angular/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-angular:check architecture` verwenden oder die Schritte in `.claude/references/angular/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Domain-getriebene Modulstruktur (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/angular:check code-quality` verwenden oder die Schritte in `.claude/references/angular/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-angular:check code-quality` verwenden oder die Schritte in `.claude/references/angular/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - TypeScript-Strict-Modus und Typsicherheit (5 Pkt.)
@@ -58,7 +58,7 @@ Code-Qualitätsprüfung durchführen:
 
 Testprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/angular:check testing` verwenden oder die Schritte in `.claude/references/angular/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-angular:check testing` verwenden oder die Schritte in `.claude/references/angular/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (7 Pkt.)
@@ -74,7 +74,7 @@ Testprüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/angular:check security` verwenden oder die Schritte in `.claude/references/angular/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-angular:check security` verwenden oder die Schritte in `.claude/references/angular/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - XSS-Prävention und DomSanitizer (6 Pkt.)

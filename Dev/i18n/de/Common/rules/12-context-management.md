@@ -392,7 +392,7 @@ Session 2: Implementierung (kodieren, testen)
 Der `/loop`-Befehl ermoeglicht die Planung wiederkehrender Aufgaben:
 
 ```bash
-/loop 5m /gate:check commit    # Alle 5 Minuten pruefen
+/loop 5m /bear-gate:check commit    # Alle 5 Minuten pruefen
 /loop "CI-Tests ueberwachen"          # Automatische Taktung durch das Modell
 ```
 
@@ -781,7 +781,7 @@ Für die 5 `opus`-Agents (security-auditor, database-architect, migration-specia
 
 ## Token-Optimierung — Schnelleinrichtung
 
-> **Befehl:** `/common:setup-rtk` für die automatische Konfiguration aller Optimierungen.
+> **Befehl:** `/bear-common:setup-rtk` für die automatische Konfiguration aller Optimierungen.
 
 **RTK (Rust Token Killer):** CLI-Proxy, der den Token-Verbrauch bei Entwicklungsbefehlen um 60-90 % reduziert. Installation: `rtk init -g`.
 

@@ -14,7 +14,7 @@ Argumente:
 - Modellname (z.B. `User`, `Product`, `Order`)
 - (Optional) Felder im Format field:type (z.B. `name:str email:str:unique`)
 
-Beispiel: `/python:generate-model Product name:str price:decimal category_id:uuid:fk`
+Beispiel: `/bear-python:generate-model Product name:str price:decimal category_id:uuid:fk`
 
 ## Plan-Modus
 

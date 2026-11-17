@@ -110,13 +110,13 @@ Dans Claude Code, essayez ces commandes :
 
 ```
 # Vérifier l'architecture de votre projet
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Obtenir une revue de code
 @symfony-reviewer Passe en revue mon dossier src/
 
 # Générer une nouvelle entité avec CRUD
-/symfony:generate-crud Produit
+/bear-symfony:generate-crud Produit
 ```
 
 ---
@@ -160,7 +160,7 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 
 ```bash
 # Dans Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ---
@@ -185,10 +185,10 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 │   make install-{tech} TARGET=~/projet RULES_LANG=fr       │
 ├────────────────────────────────────────────────────────────┤
 │ COMMANDES COURANTES (204+ disponibles)                     │
-│   /gate:check commit          Validation avant commit      │
-│   /common:setup-rtk           Optimisation tokens (RTK)    │
-│   /team:audit                 Audit multi-tech du projet   │
-│   /workflow:init              Démarrer la méthodologie     │
+│   /bear-gate:check commit          Validation avant commit      │
+│   /bear-common:setup-rtk           Optimisation tokens (RTK)    │
+│   /bear-team:audit                 Audit multi-tech du projet   │
+│   /bear-workflow:init              Démarrer la méthodologie     │
 ├────────────────────────────────────────────────────────────┤
 │ AGENTS UTILES                                              │
 │   @tdd-coach                  Guidance TDD                 │

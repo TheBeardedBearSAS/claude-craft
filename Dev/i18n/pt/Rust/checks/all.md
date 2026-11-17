@@ -26,7 +26,7 @@ Preparar o ambiente de auditoria:
 
 Executar a verificação completa de arquitetura:
 
-**Comando**: Use o slash command `/rust:check architecture` ou siga manualmente as etapas de `.claude/references/rust/checks/architecture.md`
+**Comando**: Use o slash command `/bear-rust:check architecture` ou siga manualmente as etapas de `.claude/references/rust/checks/architecture.md`
 
 **Critérios Avaliados**:
 - Layout do workspace e fronteiras entre crates (domain livre de axum/sqlx) (6 pts)
@@ -42,7 +42,7 @@ Executar a verificação completa de arquitetura:
 
 Executar a verificação de qualidade de código:
 
-**Comando**: Use o slash command `/rust:check code-quality` ou siga manualmente as etapas de `.claude/references/rust/checks/code-quality.md`
+**Comando**: Use o slash command `/bear-rust:check code-quality` ou siga manualmente as etapas de `.claude/references/rust/checks/code-quality.md`
 
 **Critérios Avaliados**:
 - Clippy sem avisos com `-D warnings` e lints do workspace (5 pts)
@@ -58,7 +58,7 @@ Executar a verificação de qualidade de código:
 
 Executar a verificação de testes:
 
-**Comando**: Use o slash command `/rust:check testing` ou siga manualmente as etapas de `.claude/references/rust/checks/testing.md`
+**Comando**: Use o slash command `/bear-rust:check testing` ou siga manualmente as etapas de `.claude/references/rust/checks/testing.md`
 
 **Critérios Avaliados**:
 - Cobertura de código (cargo-llvm-cov, meta >= 80%) (7 pts)
@@ -74,7 +74,7 @@ Executar a verificação de testes:
 
 Executar a verificação de segurança:
 
-**Comando**: Use o slash command `/rust:check security` ou siga manualmente as etapas de `.claude/references/rust/checks/security.md`
+**Comando**: Use o slash command `/bear-rust:check security` ou siga manualmente as etapas de `.claude/references/rust/checks/security.md`
 
 **Critérios Avaliados**:
 - Proteções do OWASP Top 10:2025 (6 pts)

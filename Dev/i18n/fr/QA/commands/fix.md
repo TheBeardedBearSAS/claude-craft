@@ -5,7 +5,7 @@ argument-hint: --session=<session-id> [--dry-run|--skip-fix|--severity=<level>|-
 
 # QA Recette Fix - Correction Automatisee des Bugs
 
-Complement de `/qa:recette`. Lit un rapport/session de recette, affine chaque erreur pour la rendre exploitable, genere les documents de project management (stories BMAD, backlog, sprint), puis lance la correction TDD pour chaque bug. Implemente la **Regle d'Or** : Un bug corrige ne doit JAMAIS reapparaitre.
+Complement de `/bear-qa:recette`. Lit un rapport/session de recette, affine chaque erreur pour la rendre exploitable, genere les documents de project management (stories BMAD, backlog, sprint), puis lance la correction TDD pour chaque bug. Implemente la **Regle d'Or** : Un bug corrige ne doit JAMAIS reapparaitre.
 
 ## Arguments
 
@@ -227,19 +227,19 @@ resume_from:
 
 ```bash
 # Corriger tous les bugs d'une session recette
-/qa:fix --session=REC-20260130-143022
+/bear-qa:fix --session=REC-20260130-143022
 
 # Dry run : affiner et documenter sans corriger
-/qa:fix --session=REC-20260130-143022 --dry-run
+/bear-qa:fix --session=REC-20260130-143022 --dry-run
 
 # Corriger uniquement les bugs critiques et hauts
-/qa:fix --session=REC-20260130-143022 --severity=high
+/bear-qa:fix --session=REC-20260130-143022 --severity=high
 
 # Generer les documents BMAD sans lancer le TDD
-/qa:fix --session=REC-20260130-143022 --skip-fix
+/bear-qa:fix --session=REC-20260130-143022 --skip-fix
 
 # Corriger avec commit automatique
-/qa:fix --session=REC-20260130-143022 --auto-commit
+/bear-qa:fix --session=REC-20260130-143022 --auto-commit
 ```
 
 ## Structure de Sortie
@@ -268,10 +268,10 @@ resume_from:
 
 | Commande | Description |
 |----------|-------------|
-| `/qa:recette` | Executer les tests d'acceptance |
-| `/qa:status` | Afficher le statut de session |
-| `/qa:regression` | Voir les tests de regression |
-| `/qa:status --report` | Generer un rapport |
+| `/bear-qa:recette` | Executer les tests d'acceptance |
+| `/bear-qa:status` | Afficher le statut de session |
+| `/bear-qa:regression` | Voir les tests de regression |
+| `/bear-qa:status --report` | Generer un rapport |
 
 ## Messages d'Erreur
 
@@ -279,7 +279,7 @@ resume_from:
 |--------|----------|
 | "Session introuvable" | Verifiez l'ID de session dans `.recette/sessions/` |
 | "Aucune erreur dans la session" | La session n'a pas d'erreurs a corriger |
-| "Sprint-status.yaml introuvable" | Initialisez BMAD avec `/workflow:init` |
+| "Sprint-status.yaml introuvable" | Initialisez BMAD avec `/bear-workflow:init` |
 | "Test RED n'echoue pas" | Le bug n'est peut-etre plus present, verifier manuellement |
 
 ## Bonnes Pratiques
@@ -297,11 +297,11 @@ resume_from:
 ║                   PROCHAINE ÉTAPE                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-tester après les corrections                       ║
 ║                                                          ║
 ║  Voir aussi :                                            ║
-║  • /qa:regression — Vérifier les tests de régression     ║
+║  • /bear-qa:regression — Vérifier les tests de régression     ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

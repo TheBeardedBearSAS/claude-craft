@@ -14,7 +14,7 @@ Argumente:
 - Screen-Name (z.B. `Profile`, `Settings`, `ProductDetail`)
 - (Optional) Typ: list, detail, form, dashboard
 
-Beispiel: `/reactnative:generate-screen ProductDetail detail`
+Beispiel: `/bear-reactnative:generate-screen ProductDetail detail`
 
 ## Plan-Modus
 

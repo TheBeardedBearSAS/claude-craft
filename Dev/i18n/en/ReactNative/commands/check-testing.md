@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /reactnative:check testing"
+description: "Deprecated (removed in 10.0): use /bear-reactnative:check testing"
 deprecated: true
-replaced-by: /reactnative:check
+replaced-by: /bear-reactnative:check
 ---
 
-> ⚠️ `/reactnative:check-testing` is deprecated and will be removed in 10.0. Use `/reactnative:check testing`.
+> ⚠️ `/bear-reactnative:check-testing` is deprecated and will be removed in 10.0. Use `/bear-reactnative:check testing`.
 
-Run `/reactnative:check testing $ARGUMENTS`: read `.claude/commands/reactnative/check.md` and follow it with these arguments.
+Run `/bear-reactnative:check testing $ARGUMENTS`: read `.claude/commands/bear-reactnative/check.md` and follow it with these arguments.

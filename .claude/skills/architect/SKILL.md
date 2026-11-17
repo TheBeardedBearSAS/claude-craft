@@ -115,9 +115,9 @@ Ce n'est qu'**après** qu'on rentre dans le TDD (Red/Green/Refactor).
 
 ## Intégration Bear Craft
 
-- **`/workflow:design`** — utilise ce skill par défaut
+- **`/bear-workflow:design`** — utilise ce skill par défaut
 - **Agent `@tech-lead`** — peut produire l'output Architect
-- **ADR formel** : voir `/common:architecture-decision`
+- **ADR formel** : voir `/bear-common:architecture-decision`
 - **Rule 04 SOLID** + **Rule 17 CQRS** + **Rule 14 Multitenant** — consulter selon contexte
 
 ## Ressources

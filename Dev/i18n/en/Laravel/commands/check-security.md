@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /laravel:check security"
+description: "Deprecated (removed in 10.0): use /bear-laravel:check security"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-security` is deprecated and will be removed in 10.0. Use `/laravel:check security`.
+> ⚠️ `/bear-laravel:check-security` is deprecated and will be removed in 10.0. Use `/bear-laravel:check security`.
 
-Run `/laravel:check security $ARGUMENTS`: read `.claude/commands/laravel/check.md` and follow it with these arguments.
+Run `/bear-laravel:check security $ARGUMENTS`: read `.claude/commands/bear-laravel/check.md` and follow it with these arguments.

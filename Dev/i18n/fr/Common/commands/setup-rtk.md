@@ -85,7 +85,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL="claude-sonnet-5-5"
 export CLAUDE_CODE_FORK_SUBAGENT=1
 
 # Activer le TTL de cache de prompts de 1 heure (Claude Code 2.1.108+)
-# → -40% de coût sur les sessions répétitives (sprints BMAD, boucles /team:*)
+# → -40% de coût sur les sessions répétitives (sprints BMAD, boucles /bear-team:*)
 # → La même clé de cache de prompt est réutilisée jusqu'à 1h au lieu du défaut de 5min
 export ENABLE_PROMPT_CACHING_1H=1
 

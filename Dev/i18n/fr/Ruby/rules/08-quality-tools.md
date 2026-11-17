@@ -373,7 +373,7 @@ pre-commit:
 
 ## Alignement avec la notation
 
-L'audit `/ruby:check` associe les outils aux axes :
+L'audit `/bear-ruby:check` associe les outils aux axes :
 
 | Axe | Preuves fournies par les outils |
 |-----|---------------------------------|

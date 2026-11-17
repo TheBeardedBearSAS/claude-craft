@@ -8,7 +8,7 @@ Vollständiger Workflow zur Erstellung und Verwaltung eines SCRUM-Backlogs mit B
 
 Bear-Craft bietet einen umfassenden Satz von Befehlen zur Verwaltung Ihres Product Backlogs nach der SCRUM-Methodik:
 
-- **Ein einziger Befehl `/project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/workflow:plan --only=backlog`, `/workflow:start` und `/workflow:status --board`; die früheren Einzelbefehle (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) und der Sprint-Namespace wurden in 9.0 entfernt (siehe MIGRATION-v9)
+- **Ein einziger Befehl `/bear-project:backlog`** (`add`, `list`, `edit`, `move`, dazu `next story` und `move story --auto` für das Story-Routing) zusammen mit `/bear-workflow:plan --only=backlog`, `/bear-workflow:start` und `/bear-workflow:status --board`; die früheren Einzelbefehle (add-*, list-*, update-*, move-task, generate-backlog, decompose-tasks, board) und der Sprint-Namespace wurden in 9.0 entfernt (siehe MIGRATION-v9)
 - **5 Vorlagen** für eine konsistente Struktur
 - **Vertical Slicing** über alle Technologieschichten hinweg
 - **INVEST-Modell**-Validierung für User Stories
@@ -30,7 +30,7 @@ Basiert auf:
 Legen Sie Ihre Projektspezifikationen in `./docs/` ab und führen Sie dann aus:
 
 ```bash
-/workflow:plan --only=backlog symfony+flutter
+/bear-workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Generierte Struktur
@@ -161,36 +161,36 @@ Technische Arbeitselemente innerhalb einer User Story:
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/workflow:plan --only=backlog [stack]` | Vollständiges Backlog aus Specs generieren |
-| `/project:backlog add epic` | Neues EPIC erstellen |
-| `/project:backlog add story` | User Story zu einem EPIC hinzufügen |
-| `/project:backlog add task` | Technische Aufgabe für eine US erstellen |
+| `/bear-workflow:plan --only=backlog [stack]` | Vollständiges Backlog aus Specs generieren |
+| `/bear-project:backlog add epic` | Neues EPIC erstellen |
+| `/bear-project:backlog add story` | User Story zu einem EPIC hinzufügen |
+| `/bear-project:backlog add task` | Technische Aufgabe für eine US erstellen |
 
 ### Anzeigebefehle
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/project:backlog list epic` | Alle EPICs mit Status anzeigen |
-| `/project:backlog list story [filter]` | User Stories auflisten (nach EPIC, Sprint, Status) |
-| `/project:backlog list task [filter]` | Aufgaben auflisten (nach US, Sprint, Typ, Status) |
-| `/workflow:status --board [sprint]` | Kanban-Board anzeigen |
-| `/workflow:status [sprint]` | Detaillierter Sprint-Fortschrittsbericht |
+| `/bear-project:backlog list epic` | Alle EPICs mit Status anzeigen |
+| `/bear-project:backlog list story [filter]` | User Stories auflisten (nach EPIC, Sprint, Status) |
+| `/bear-project:backlog list task [filter]` | Aufgaben auflisten (nach US, Sprint, Typ, Status) |
+| `/bear-workflow:status --board [sprint]` | Kanban-Board anzeigen |
+| `/bear-workflow:status [sprint]` | Detaillierter Sprint-Fortschrittsbericht |
 
 ### Aktualisierungsbefehle
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/project:backlog move story [id] [status/sprint]` | US-Status ändern oder Sprint zuweisen |
-| `/project:backlog move task [id] [status]` | Aufgabenstatus ändern |
-| `/project:backlog edit epic [id]` | Bestehendes EPIC bearbeiten |
-| `/project:backlog edit story [id]` | Bestehende User Story bearbeiten |
+| `/bear-project:backlog move story [id] [status/sprint]` | US-Status ändern oder Sprint zuweisen |
+| `/bear-project:backlog move task [id] [status]` | Aufgabenstatus ändern |
+| `/bear-project:backlog edit epic [id]` | Bestehendes EPIC bearbeiten |
+| `/bear-project:backlog edit story [id]` | Bestehende User Story bearbeiten |
 
 ### Erweiterte Befehle
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/workflow:start [sprint]` | Sprint-US in Aufgaben zerlegen |
-| `/gate:check backlog` | Backlog-Qualität prüfen (SCRUM-Konformität) |
+| `/bear-workflow:start [sprint]` | Sprint-US in Aufgaben zerlegen |
+| `/bear-gate:check backlog` | Backlog-Qualität prüfen (SCRUM-Konformität) |
 
 ---
 
@@ -200,13 +200,13 @@ Technische Arbeitselemente innerhalb einer User Story:
 
 ```bash
 # Sicherstellen, dass Specs in ./docs/ vorhanden sind
-/workflow:plan --only=backlog symfony+flutter
+/bear-workflow:plan --only=backlog symfony+flutter
 ```
 
 ### Schritt 2: Qualität validieren
 
 ```bash
-/gate:check backlog
+/bear-gate:check backlog
 ```
 
 Dies generiert `scrum-validation-report.md` mit:
@@ -218,18 +218,18 @@ Dies generiert `scrum-validation-report.md` mit:
 ### Schritt 3: Sprint 1 überprüfen
 
 ```bash
-/workflow:status --board 1
+/bear-workflow:status --board 1
 ```
 
 Zeigt Kanban-Board mit Spalten:
 - To Do | In Progress | In Review | Done | Blocked
 
-> Das Backlog lässt sich auch in der Kanban-Weboberfläche (`npx @the-bearded-bear/bear-craft kanban`) verwalten: Stories erstellen, bearbeiten und löschen, in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Sie ergänzt die Befehle `/workflow:*` und `/project:*`, die gültig bleiben und dieselbe Datei schreiben (`.bmad/sprint-status.yaml`).
+> Das Backlog lässt sich auch in der Kanban-Weboberfläche (`npx @the-bearded-bear/bear-craft kanban`) verwalten: Stories erstellen, bearbeiten und löschen, in einen Sprint einplanen sowie Sprints erstellen, starten und abschließen. Sie ergänzt die Befehle `/bear-workflow:*` und `/bear-project:*`, die gültig bleiben und dieselbe Datei schreiben (`.bmad/sprint-status.yaml`).
 
 ### Schritt 4: In Aufgaben zerlegen
 
 ```bash
-/workflow:start 1
+/bear-workflow:start 1
 ```
 
 Erstellt detaillierte Aufgabenaufschlüsselung:
@@ -241,19 +241,19 @@ Erstellt detaillierte Aufgabenaufschlüsselung:
 
 ```bash
 # Erste Aufgabe in Bearbeitung setzen
-/project:backlog move task TASK-001 in-progress
+/bear-project:backlog move task TASK-001 in-progress
 
 # Später als erledigt markieren
-/project:backlog move task TASK-001 done
+/bear-project:backlog move task TASK-001 done
 
 # Bei Blockierung
-/project:backlog move task TASK-002 blocked "Waiting for API specs"
+/bear-project:backlog move task TASK-002 blocked "Waiting for API specs"
 ```
 
 ### Schritt 6: Fortschritt verfolgen
 
 ```bash
-/workflow:status 1
+/bear-workflow:status 1
 ```
 
 ### Schritt 7: Wiederkehrendes Monitoring einrichten (Optional)
@@ -262,10 +262,10 @@ Mit `/loop` (v2.1.71+) den Sprint-Fortschritt automatisch überwachen:
 
 ```bash
 # Sprint-Status alle 30 Minuten prüfen
-/loop 30m /workflow:status 1
+/loop 30m /bear-workflow:status 1
 
 # Pre-Commit-Checks alle 5 Minuten während der Entwicklung
-/loop 5m /gate:check commit
+/loop 5m /bear-gate:check commit
 ```
 
 Alias: `/proactive` (v2.1.105+).
@@ -330,7 +330,7 @@ User Stories, die nur Backend, nur Frontend oder nur Mobile abdecken, sind nicht
 - [ ] Stories in Fibonacci-Punkten geschätzt
 - [ ] Sprint 1 = Walking Skeleton
 - [ ] Definition of Done dokumentiert
-- [ ] Backlog validiert (`/gate:check backlog`)
+- [ ] Backlog validiert (`/bear-gate:check backlog`)
 
 ---
 

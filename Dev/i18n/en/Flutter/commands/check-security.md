@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /flutter:check security"
+description: "Deprecated (removed in 10.0): use /bear-flutter:check security"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-security` is deprecated and will be removed in 10.0. Use `/flutter:check security`.
+> ⚠️ `/bear-flutter:check-security` is deprecated and will be removed in 10.0. Use `/bear-flutter:check security`.
 
-Run `/flutter:check security $ARGUMENTS`: read `.claude/commands/flutter/check.md` and follow it with these arguments.
+Run `/bear-flutter:check security $ARGUMENTS`: read `.claude/commands/bear-flutter/check.md` and follow it with these arguments.

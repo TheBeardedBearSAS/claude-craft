@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /python:check testing"
+description: "Obsoleto (removido na 10.0): use /bear-python:check testing"
 deprecated: true
-replaced-by: /python:check
+replaced-by: /bear-python:check
 ---
 
-> ⚠️ `/python:check-testing` está obsoleto e será removido na 10.0. Use `/python:check testing`.
+> ⚠️ `/bear-python:check-testing` está obsoleto e será removido na 10.0. Use `/bear-python:check testing`.
 
-Execute `/python:check testing $ARGUMENTS`: leia `.claude/commands/python/check.md` e siga-o com estes argumentos.
+Execute `/bear-python:check testing $ARGUMENTS`: leia `.claude/commands/bear-python/check.md` e siga-o com estes argumentos.

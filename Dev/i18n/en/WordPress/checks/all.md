@@ -25,7 +25,7 @@ Prepare audit environment:
 
 ### Step 2: Architecture Audit (25 points)
 
-**Command**: Use slash command `/wordpress:check architecture` or manually follow steps in `.claude/references/wordpress/checks/architecture.md`
+**Command**: Use slash command `/bear-wordpress:check architecture` or manually follow steps in `.claude/references/wordpress/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Plugin header, bootstrap file, ABSPATH guard, Composer autoload (5 pts)
@@ -38,7 +38,7 @@ Prepare audit environment:
 
 ### Step 3: Code Quality Audit (25 points)
 
-**Command**: Use slash command `/wordpress:check code-quality` or manually follow steps in `.claude/references/wordpress/checks/code-quality.md`
+**Command**: Use slash command `/bear-wordpress:check code-quality` or manually follow steps in `.claude/references/wordpress/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - WPCS (PHPCS) passes (7 pts)
@@ -51,7 +51,7 @@ Prepare audit environment:
 
 ### Step 4: Testing Audit (25 points)
 
-**Command**: Use slash command `/wordpress:check testing` or manually follow steps in `.claude/references/wordpress/checks/testing.md`
+**Command**: Use slash command `/bear-wordpress:check testing` or manually follow steps in `.claude/references/wordpress/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (target >= 80%) across PHP and JS (7 pts)
@@ -65,7 +65,7 @@ Prepare audit environment:
 
 ### Step 5: Security Audit (25 points)
 
-**Command**: Use slash command `/wordpress:check security` or manually follow steps in `.claude/references/wordpress/checks/security.md`
+**Command**: Use slash command `/bear-wordpress:check security` or manually follow steps in `.claude/references/wordpress/checks/security.md`
 
 **Evaluated Criteria**:
 - Capability checks and nonces on every state change (6 pts)

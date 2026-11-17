@@ -254,8 +254,8 @@ spec:
 
 - `@devops-engineer` — CI/CD, IDP infrastructure
 - `.claude/skills/tooling/SKILL.md` — CLI patterns, scripting
-- `/common:getting-started` — onboarding guide generation
-- `/team:audit` — multi-dimension DevEx audit
+- `/bear-common:getting-started` — onboarding guide generation
+- `/bear-team:audit` — multi-dimension DevEx audit
 
 ## Resources
 

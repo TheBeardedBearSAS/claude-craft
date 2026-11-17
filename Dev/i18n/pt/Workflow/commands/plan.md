@@ -4,7 +4,7 @@ description: "Executar a fase de Planejamento - pesquisa (--research), PRD (--on
 argument-hint: "[--research] [--only=prd|backlog] [--continue]"
 arguments:
   - name: research
-    description: "Executar primeiro a etapa de pesquisa (antigo /workflow:plan --research): domínio, mercado, pesquisa técnica, restrições, riscos"
+    description: "Executar primeiro a etapa de pesquisa (antigo /bear-workflow:plan --research): domínio, mercado, pesquisa técnica, restrições, riscos"
     required: false
   - name: only
     description: "Executar uma única etapa: prd (PRD + personas) ou backlog (personas, DoD, epics, user stories, sprints)"
@@ -14,7 +14,7 @@ arguments:
     required: false
 ---
 
-# /workflow:plan
+# /bear-workflow:plan
 
 ## Missão
 
@@ -24,11 +24,11 @@ Executar a fase de Planejamento do workflow de desenvolvimento: pesquisa opciona
 
 | Invocação | O que faz | Substitui |
 |-----------|-----------|-----------|
-| `/workflow:plan` | Fase completa: PRD e depois backlog (adicione `--research` para começar pela pesquisa) | - |
-| `/workflow:plan --research` | Pesquisa, exploração, restrições e riscos, antes do PRD. Escreve `project-management/analysis/` | `/workflow:plan --research` |
-| `/workflow:plan --only=prd` | Apenas PRD + personas. Escreve `project-management/prd.md` | `/workflow:plan --only=prd` |
-| `/workflow:plan --only=backlog` | Apenas backlog: lê `project-management/prd.md` (+ `project-management/tech-spec.md` se existir), escreve personas, DoD, epics, user stories com `**Implements**`, pastas de sprint `sprint-{N}-{slug}`, e registra as stories em `.bmad/sprint-status.yaml` com status `backlog` | `/workflow:plan --only=backlog` |
-| `/workflow:plan --continue` | Retomar uma execução interrompida | - |
+| `/bear-workflow:plan` | Fase completa: PRD e depois backlog (adicione `--research` para começar pela pesquisa) | - |
+| `/bear-workflow:plan --research` | Pesquisa, exploração, restrições e riscos, antes do PRD. Escreve `project-management/analysis/` | `/bear-workflow:plan --research` |
+| `/bear-workflow:plan --only=prd` | Apenas PRD + personas. Escreve `project-management/prd.md` | `/bear-workflow:plan --only=prd` |
+| `/bear-workflow:plan --only=backlog` | Apenas backlog: lê `project-management/prd.md` (+ `project-management/tech-spec.md` se existir), escreve personas, DoD, epics, user stories com `**Implements**`, pastas de sprint `sprint-{N}-{slug}`, e registra as stories em `.bmad/sprint-status.yaml` com status `backlog` | `/bear-workflow:plan --only=backlog` |
+| `/bear-workflow:plan --continue` | Retomar uma execução interrompida | - |
 
 `--research` pode ser combinado com `--only=prd` (pesquisa e depois PRD).
 
@@ -36,15 +36,15 @@ Executar a fase de Planejamento do workflow de desenvolvimento: pesquisa opciona
 
 Os documentos são produzidos nesta ordem: **PRD, depois tech spec, depois backlog, depois sprint**.
 
-- **Track Quick**: `/workflow:plan` (sem opções) gera PRD + backlog de uma só vez.
-- **Standard / Enterprise (recomendado)**: `/workflow:plan --only=prd`, depois `/workflow:design`, depois `/workflow:plan --only=backlog`. O backlog lê então `project-management/prd.md` e `project-management/tech-spec.md`: as stories carregam a arquitetura real e `**Implements**` aponta para os `FR-xxx` do PRD.
-- **Enterprise**: começar com `/workflow:plan --research --only=prd`.
+- **Track Quick**: `/bear-workflow:plan` (sem opções) gera PRD + backlog de uma só vez.
+- **Standard / Enterprise (recomendado)**: `/bear-workflow:plan --only=prd`, depois `/bear-workflow:design`, depois `/bear-workflow:plan --only=backlog`. O backlog lê então `project-management/prd.md` e `project-management/tech-spec.md`: as stories carregam a arquitetura real e `**Implements**` aponta para os `FR-xxx` do PRD.
+- **Enterprise**: começar com `/bear-workflow:plan --research --only=prd`.
 
 Sem PRD, `--only=backlog` recorre às especificações de `./docs/` (ARCHITECTURE_TECHNIQUE*.md, CAHIER_DES_CHARGES*.md ou qualquer outro arquivo de especificação) e avisa que a rastreabilidade fica degradada.
 
 ## Quando usar
 
-- Tracks **Standard** e **Enterprise**, após `/workflow:init`
+- Tracks **Standard** e **Enterprise**, após `/bear-workflow:init`
 - Ao iniciar o planejamento de funcionalidades, ou quando o PRD ou o backlog precisa ser regenerado
 
 ## Plan Mode
@@ -59,7 +59,7 @@ Mostrar o track e a fase (Planejamento = fase 2 de 4) e depois verificar `projec
 
 ### Passo 2 (`--research`): Fase de pesquisa
 
-Antigo `/workflow:plan --research`. Pesquisa, exploração e restrições antes do PRD.
+Antigo `/bear-workflow:plan --research`. Pesquisa, exploração e restrições antes do PRD.
 
 **Perguntas guiadas**
 
@@ -120,7 +120,7 @@ Você atua como um Product Owner e Scrum Master experiente. O backlog deve respe
 **Entradas, por ordem de prioridade**
 
 1. `project-management/prd.md`: fonte principal. Seus IDs `FR-xxx` alimentam o campo `**Implements**` de cada user story.
-2. `project-management/tech-spec.md` se existir (ver `/workflow:design`): arquitetura, entidades, endpoints usados nas notas técnicas.
+2. `project-management/tech-spec.md` se existir (ver `/bear-workflow:design`): arquitetura, entidades, endpoints usados nas notas técnicas.
 3. Alternativa sem PRD: especificações em `./docs/`.
 
 **Vertical slicing (obrigatório)**: cada user story atravessa todas as camadas da stack do projeto (UI, API, persistência). Nenhuma story «somente backend» ou «somente frontend». Detectar a stack a partir da tech spec ou do código e adaptar a DoD e os critérios técnicos de acordo.
@@ -165,7 +165,7 @@ project-management/
 
 ### Passo 5: Validação
 
-Executar `/gate:check backlog` (ou verificar em linha):
+Executar `/bear-gate:check backlog` (ou verificar em linha):
 
 | Verificação | Critérios |
 |-------------|-----------|
@@ -182,7 +182,7 @@ Reportar os avisos (por exemplo «US-012: 21 pontos - deve ser dividida») e cor
 
 ### Passo 6: Fim da fase
 
-Resumir os artefatos (PRD, personas, epics, número de stories, total de pontos, escopo do Sprint 1, sprints estimados) e recomendar o próximo passo: após `--only=prd`, `/workflow:design` e depois `/workflow:plan --only=backlog`; após o backlog, `/workflow:design` (se ainda não houver tech spec) ou `/workflow:start 1`.
+Resumir os artefatos (PRD, personas, epics, número de stories, total de pontos, escopo do Sprint 1, sprints estimados) e recomendar o próximo passo: após `--only=prd`, `/bear-workflow:design` e depois `/bear-workflow:plan --only=backlog`; após o backlog, `/bear-workflow:design` (se ainda não houver tech spec) ou `/bear-workflow:start 1`.
 
 ## Agentes envolvidos
 
@@ -203,13 +203,13 @@ Resumir os artefatos (PRD, personas, epics, número de stories, total de pontos,
 
 ## Opção de retomada
 
-Em caso de interrupção, `/workflow:plan --continue` detecta o que existe (PRD concluído, backlog em 12/18 stories) e retoma no próximo item que falta.
+Em caso de interrupção, `/bear-workflow:plan --continue` detecta o que existe (PRD concluído, backlog em 12/18 stories) e retoma no próximo item que falta.
 
 ## Comandos relacionados
 
-- `/workflow:init` - Inicializar o workflow
-- `/workflow:design` - Tech spec (entre o PRD e o backlog)
-- `/workflow:start` - Iniciar um sprint a partir do backlog
-- `/workflow:status` - Verificar o progresso
-- `/project:backlog` - Adicionar, listar, editar e mover stories depois
-- `/gate:check` - Validar o backlog
+- `/bear-workflow:init` - Inicializar o workflow
+- `/bear-workflow:design` - Tech spec (entre o PRD e o backlog)
+- `/bear-workflow:start` - Iniciar um sprint a partir do backlog
+- `/bear-workflow:status` - Verificar o progresso
+- `/bear-project:backlog` - Adicionar, listar, editar e mover stories depois
+- `/bear-gate:check` - Validar o backlog

@@ -18,7 +18,7 @@ Produire un payload bien formé pour embaucher un agent Paperclip. Paperclip (v2
 ### 1. Collecter les entrées (interactif)
 
 Demander dans l'ordre :
-- `companyId` cible (doit exister — voir `/paperclip:setup-company` ou `paperclipai company list`)
+- `companyId` cible (doit exister — voir `/bear-paperclip:setup-company` ou `paperclipai company list`)
 - `adapterType` — l'un des types enregistrés (ex. `claude_local`, `codex_local`, `gemini_local`, `cursor_local`, `opencode_local`, `pi_local`). L'`agentConfigurationDoc` de l'adaptateur choisi vous indique quels sous-champs sont acceptés.
 - Nom d'affichage de l'agent (`$1`)
 - Rôle / titre (ex. "Ingénieur TypeScript senior")

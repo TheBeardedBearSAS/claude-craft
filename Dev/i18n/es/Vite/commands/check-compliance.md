@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /vite:check all"
+description: "Obsoleto (se elimina en 10.0): usa /bear-vite:check all"
 deprecated: true
-replaced-by: /vite:check
+replaced-by: /bear-vite:check
 ---
 
-> ⚠️ `/vite:check-compliance` está obsoleto y se eliminará en 10.0. Usa `/vite:check all`.
+> ⚠️ `/bear-vite:check-compliance` está obsoleto y se eliminará en 10.0. Usa `/bear-vite:check all`.
 
-Ejecuta `/vite:check all $ARGUMENTS`: lee `.claude/commands/vite/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-vite:check all $ARGUMENTS`: lee `.claude/commands/bear-vite/check.md` y síguelo con estos argumentos.

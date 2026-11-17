@@ -66,7 +66,7 @@ Le processus ci-dessous est décrit avec les primitives Agent Teams. Avec `--eng
 
 **Périmètre** : `--scope=full|code|deps|infra` s'applique aux deux moteurs (`full` = 3 reviewers en parallèle, un périmètre unique = un seul reviewer).
 
-**Différence avec `/security-review` natif** : la commande intégrée `/security-review` de Claude Code n'analyse que le diff (changements en attente de la branche courante). `/team:security` audite l'ensemble du dépôt selon le périmètre choisi (code, dépendances, infrastructure). Utiliser `/security-review` avant un commit ou une PR, `/team:security` pour un audit complet.
+**Différence avec `/security-review` natif** : la commande intégrée `/security-review` de Claude Code n'analyse que le diff (changements en attente de la branche courante). `/bear-team:security` audite l'ensemble du dépôt selon le périmètre choisi (code, dépendances, infrastructure). Utiliser `/security-review` avant un commit ou une PR, `/bear-team:security` pour un audit complet.
 
 ## Prérequis
 

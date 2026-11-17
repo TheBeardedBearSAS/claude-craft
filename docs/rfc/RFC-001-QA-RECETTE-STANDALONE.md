@@ -26,7 +26,7 @@ QA Recette est le **killer feature** de Bear Craft : automated acceptance testin
 QA Recette est intégré dans Bear Craft et nécessite :
 - Claude Code installé
 - Bear Craft framework complet
-- Commande `/qa:recette` dans Claude Code
+- Commande `/bear-qa:recette` dans Claude Code
 
 **Limitations** :
 - ❌ Locked-in à Claude Code (friction élevée)
@@ -221,7 +221,7 @@ npx qa-recette resume --session=REC-20260417-123456
 
 ```bash
 # Dans Bear Craft
-/qa:recette export --format=json --output=scenarios.json
+/bear-qa:recette export --format=json --output=scenarios.json
 ```
 
 **Étape 2** : Importer dans QA Recette Standalone
@@ -244,8 +244,8 @@ npx qa-recette run --scope=story --id=US-001
 ### Rétro-compatibilité
 
 Bear Craft continuera à supporter QA Recette intégré via :
-- `/qa:recette` (commande existante, mode legacy)
-- `/qa:recette --cloud` (délégation au service cloud standalone)
+- `/bear-qa:recette` (commande existante, mode legacy)
+- `/bear-qa:recette --cloud` (délégation au service cloud standalone)
 
 **Dépréciation** :
 - v8.5 : Legacy mode (warning)

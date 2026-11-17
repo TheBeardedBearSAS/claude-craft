@@ -3,7 +3,7 @@ description: "Project analytics reports: sprint burndown, metrics dashboard, sto
 argument-hint: "<burndown|metrics|deps> [--critical] [--sprint=Sprint-N] [--type=points|stories|tasks] [--format=...] [--velocity=N] [--output=path]"
 ---
 
-# /project:report
+# /bear-project:report
 
 ## Mission
 
@@ -13,10 +13,10 @@ Single entry point for read-only project analytics. Each subcommand turns the ba
 
 | Invocation | What it does | Replaces |
 |------------|--------------|----------|
-| `/project:report burndown` | Mermaid burndown chart + variance and projection | `/project:report burndown` |
-| `/project:report metrics` | Velocity, spec coverage, gates, health, regression dashboard | `/project:report metrics` |
-| `/project:report deps` | Story dependency graph, bottlenecks, parallel groups | `/project:report deps` |
-| `/project:report deps --critical` | Critical path, slack and parallel execution plan | `/project:report deps --critical` |
+| `/bear-project:report burndown` | Mermaid burndown chart + variance and projection | `/bear-project:report burndown` |
+| `/bear-project:report metrics` | Velocity, spec coverage, gates, health, regression dashboard | `/bear-project:report metrics` |
+| `/bear-project:report deps` | Story dependency graph, bottlenecks, parallel groups | `/bear-project:report deps` |
+| `/bear-project:report deps --critical` | Critical path, slack and parallel execution plan | `/bear-project:report deps --critical` |
 
 ## Arguments
 
@@ -77,13 +77,13 @@ Prerequisites: `.bmad/sprint-status.yaml`; `project-management/backlog/` with st
 | Category | Metrics (source) |
 |----------|------------------|
 | Velocity | Points completed per sprint, rolling average (last 3), commitment ratio (completed / committed, target > 80%), carryover (`sprint-status.yaml`, metrics history) |
-| Spec coverage | % FR-xxx covered by stories, % stories with code references, % ACs with tests, % complete FR→US→Code→Test chains (PRD, stories, `/project:trace`) |
-| Quality gates | PRD gate (>= 80%), story DoD, sprint ready pass rates, first-pass rate (gate history from `/gate:check`) |
+| Spec coverage | % FR-xxx covered by stories, % stories with code references, % ACs with tests, % complete FR→US→Code→Test chains (PRD, stories, `/bear-project:trace`) |
+| Quality gates | PRD gate (>= 80%), story DoD, sprint ready pass rates, first-pass rate (gate history from `/bear-gate:check`) |
 | Sprint health | Stories and tasks done / total, blocked stories, TDD compliance (`sprint-status.yaml`) |
 | Regression | Bugs found / fixed per sprint, regression rate, escape rate (QA recette sessions, regression registry) |
 
 Process:
-1. **Collect**: read `.bmad/sprint-status.yaml`, `.bmad/metrics/`, trace data (`/project:trace`), gate history and QA recette sessions (if present).
+1. **Collect**: read `.bmad/sprint-status.yaml`, `.bmad/metrics/`, trace data (`/bear-project:trace`), gate history and QA recette sessions (if present).
 2. **Calculate**: all five categories plus trends versus the previous sprint (up / down / same).
 3. **Dashboard** (one line per metric with status icons, thresholds as above):
 
@@ -142,7 +142,7 @@ Slack: US-003 5pts | US-004 2pts (monitor) | US-006, US-007 8pts
 ## Example
 
 ```
-User: /project:report deps --critical --sprint=Sprint-3 --velocity=21
+User: /bear-project:report deps --critical --sprint=Sprint-3 --velocity=21
 
 Claude: Critical path: US-001 -> US-002 -> US-005 (13 pts), fits in 1 sprint.
 Risk: a 2+ day delay on US-001 puts the whole sprint at risk.
@@ -150,7 +150,7 @@ Risk: a 2+ day delay on US-001 puts the whole sprint at risk.
 
 ## Related Commands
 
-- `/project:trace` — Traceability matrix and coverage
-- `/workflow:status` — Sprint status overview
-- `/project:backlog next story` — Next story (considers dependencies)
-- `/workflow:retro` — Sprint retrospective (uses metrics)
+- `/bear-project:trace` — Traceability matrix and coverage
+- `/bear-workflow:status` — Sprint status overview
+- `/bear-project:backlog next story` — Next story (considers dependencies)
+- `/bear-workflow:retro` — Sprint retrospective (uses metrics)

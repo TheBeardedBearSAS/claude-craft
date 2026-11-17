@@ -23,17 +23,17 @@ Packe la codebase entière en **un seul fichier** optimisé pour analyse LLM, av
 
 ```bash
 # Wrapper par défaut (Repomix npm)
-/common:pack-repo
+/bear-common:pack-repo
 
 # Format explicite
-/common:pack-repo --format=xml
-/common:pack-repo --format=markdown --output=./docs/repo-snapshot.md
+/bear-common:pack-repo --format=xml
+/bear-common:pack-repo --format=markdown --output=./docs/repo-snapshot.md
 
 # Compression (réduit ~30% de tokens)
-/common:pack-repo --compress
+/bear-common:pack-repo --compress
 
 # Forcer le fallback shell (pas de dépendance npm)
-/common:pack-repo --fallback
+/bear-common:pack-repo --fallback
 ```
 
 ## Étapes d'exécution
@@ -112,7 +112,7 @@ Afficher :
 ### Pack minimal pour audit sécurité
 
 ```bash
-/common:pack-repo \
+/bear-common:pack-repo \
   --format=xml \
   --include="src/**/*.{ts,js,php}" \
   --output=./audits/security-snapshot.xml
@@ -121,20 +121,20 @@ Afficher :
 ### Pack compressé pour analyse LLM
 
 ```bash
-/common:pack-repo --compress --format=markdown
+/bear-common:pack-repo --compress --format=markdown
 ```
 
 ### Pack fallback (environnement sans npm)
 
 ```bash
-/common:pack-repo --fallback --format=markdown
+/bear-common:pack-repo --fallback --format=markdown
 ```
 
 ## Intégration
 
-- **`/workflow:init`** — propose pack-repo pour contexte initial nouveau projet
-- **`/common:init --context`** — utilise pack-repo pour alimenter `.claude/INDEX.md`
-- **`/team:audit`** — packe avant audit multi-stack
+- **`/bear-workflow:init`** — propose pack-repo pour contexte initial nouveau projet
+- **`/bear-common:init --context`** — utilise pack-repo pour alimenter `.claude/INDEX.md`
+- **`/bear-team:audit`** — packe avant audit multi-stack
 - **Skill `atomic-tasks`** — pack léger par feature pour subagent frais
 
 ## Avertissements

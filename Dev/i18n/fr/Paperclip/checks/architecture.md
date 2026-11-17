@@ -70,4 +70,4 @@ Rapport Markdown avec :
 - Passe/échoue par case à cocher ci-dessus
 - Chemins de fichiers incriminés (numéros de ligne si disponibles)
 - Sévérité : Bloquant / Majeur / Mineur
-- Score /25 pour utilisation par `/paperclip:check all`
+- Score /25 pour utilisation par `/bear-paperclip:check all`

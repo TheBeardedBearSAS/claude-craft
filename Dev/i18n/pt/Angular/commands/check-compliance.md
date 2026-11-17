@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /angular:check all"
+description: "Obsoleto (removido na 10.0): use /bear-angular:check all"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-compliance` está obsoleto e será removido na 10.0. Use `/angular:check all`.
+> ⚠️ `/bear-angular:check-compliance` está obsoleto e será removido na 10.0. Use `/bear-angular:check all`.
 
-Execute `/angular:check all $ARGUMENTS`: leia `.claude/commands/angular/check.md` e siga-o com estes argumentos.
+Execute `/bear-angular:check all $ARGUMENTS`: leia `.claude/commands/bear-angular/check.md` e siga-o com estes argumentos.

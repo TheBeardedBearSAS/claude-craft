@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/python:check architecture` or manually follow steps in `.claude/references/python/checks/architecture.md`
+**Command**: Use slash command `/bear-python:check architecture` or manually follow steps in `.claude/references/python/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Structure and layer separation (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/python:check code-quality` or manually follow steps in `.claude/references/python/checks/code-quality.md`
+**Command**: Use slash command `/bear-python:check code-quality` or manually follow steps in `.claude/references/python/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - PEP8 and formatting (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/python:check testing` or manually follow steps in `.claude/references/python/checks/testing.md`
+**Command**: Use slash command `/bear-python:check testing` or manually follow steps in `.claude/references/python/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/python:check security` or manually follow steps in `.claude/references/python/checks/security.md`
+**Command**: Use slash command `/bear-python:check security` or manually follow steps in `.claude/references/python/checks/security.md`
 
 **Evaluated Criteria**:
 - Bandit scan (6 pts)

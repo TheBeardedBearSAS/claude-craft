@@ -311,7 +311,7 @@ Creer un fichier `CLAUDE.local.md` a la racine du projet (gitignore) pour les pr
 
 ## Optimisation des tokens — Quick Setup
 
-> **Commande:** `/common:setup-rtk` pour configurer automatiquement toutes les optimisations.
+> **Commande:** `/bear-common:setup-rtk` pour configurer automatiquement toutes les optimisations.
 
 **RTK (Rust Token Killer):** Proxy CLI qui reduit la consommation de tokens de 60-90% sur les commandes dev. Installation: `rtk init -g`.
 

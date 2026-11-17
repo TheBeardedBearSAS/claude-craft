@@ -35,7 +35,7 @@ Brief technical context and existing system overview.
 | FR-001 | 4.1 REST Endpoints | Pending |
 | FR-002 | 3.1 Data Model | Pending |
 
-> This table maps PRD functional requirements (FR-xxx) to the tech spec sections that describe their implementation. Run `/project:trace` to verify coverage.
+> This table maps PRD functional requirements (FR-xxx) to the tech spec sections that describe their implementation. Run `/bear-project:trace` to verify coverage.
 
 ---
 

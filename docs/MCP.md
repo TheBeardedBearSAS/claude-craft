@@ -223,7 +223,7 @@ and the rest of the ecosystem: [`docs/ECOSYSTEM.md`](ECOSYSTEM.md).
 ### code-review-graph
 
 Tree-sitter/AST code graph (in SQLite) that lets the model read only the blast radius of a change —
-reported ~63× median per-question token reduction (6.65× against a realistic grep baseline). Pairs with `/qa:*`, `@security-auditor` and the
+reported ~63× median per-question token reduction (6.65× against a realistic grep baseline). Pairs with `/bear-qa:*`, `@security-auditor` and the
 `@{tech}-reviewer` agents.
 
 ```json

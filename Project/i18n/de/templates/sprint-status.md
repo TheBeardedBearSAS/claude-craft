@@ -4,7 +4,7 @@
 
 - Story-Status: `backlog | ready-for-dev | in-progress | review | done | blocked`
 - Aufgabenstatus: `to-do | in-progress | done | blocked`
-- Story-Übergänge folgen der BMAD-Zustandsmaschine (siehe `/project:backlog move story`).
+- Story-Übergänge folgen der BMAD-Zustandsmaschine (siehe `/bear-project:backlog move story`).
 
 ```yaml
 # .bmad/sprint-status.yaml
@@ -57,7 +57,7 @@ routing:
 - `tasks.completed` ist die Anzahl der Aufgaben mit dem Status `done`; `tasks.total` ist die Länge von `tasks.list`.
 - Jeder Story-Übergang aktualisiert `status` und `previous_status` und hängt einen `history`-Eintrag an (`timestamp`, `from`, `to`, `by`, `reason`).
 - Der Epic-Status wird aus seinen Stories berechnet (alle `backlog` = nicht gestartet, alle anderen nicht-`done` = in Arbeit, alle `done` = erledigt); er wird nirgends geschrieben.
-- Fehlt die Datei, wird sie vor dem Schreiben aus dem Skelett von `/workflow:init` erstellt.
+- Fehlt die Datei, wird sie vor dem Schreiben aus dem Skelett von `/bear-workflow:init` erstellt.
 - Optionales `stories.<id>.sprint_id`: fehlt = bisheriges Verhalten (die Story gehört zum aktiven Sprint); `null` = Backlog; sonst die ID des zugehörigen Sprints.
 - Optionales `metadata.closed_date` (`JJJJ-MM-TT`): wird beim Abschluss eines Sprints gesetzt; ein Sprint mit `closed_date` ist nicht mehr der aktive Sprint.
 - Beim Abschluss eines Sprints werden seine `done`-Stories aus `stories` entfernt und unter `archived_sprints.<sprint_id>` mit `name`, `epic` (falls vorhanden), `closed_date`, `points_committed`, `points_delivered` und `stories` (`<id>: { status: "done", points }`) festgehalten. Nicht abgeschlossene Stories bleiben in `stories`, mit `sprint_id` auf `null` (Backlog) oder auf den Ziel-Sprint gesetzt. Die ältere Form mit nur `stories` bleibt gültig.

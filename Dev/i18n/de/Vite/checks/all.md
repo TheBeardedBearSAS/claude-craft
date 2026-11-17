@@ -29,7 +29,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vite:check architecture` verwenden oder die Schritte in `.claude/references/vite/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vite:check architecture` verwenden oder die Schritte in `.claude/references/vite/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Erkennung der Projektform und Einstiegspunkte (index.html im Root, build.lib-Entry, Multi-Page-Input, `new URL`-Muster für Worker/WASM) (6 Pkt.)
@@ -44,7 +44,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vite:check code-quality` verwenden oder die Schritte in `.claude/references/vite/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vite:check code-quality` verwenden oder die Schritte in `.claude/references/vite/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - ESLint-Analyse (no-explicit-any, no-restricted-imports, no-console) (5 Pkt.)
@@ -59,7 +59,7 @@ Code-Qualitätsprüfung durchführen:
 
 Test-Prüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vite:check testing` verwenden oder die Schritte in `.claude/references/vite/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vite:check testing` verwenden oder die Schritte in `.claude/references/vite/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung mit Vitest (>= 80 % Statements, Branches, Funktionen, Zeilen) (7 Pkt.)
@@ -75,7 +75,7 @@ Test-Prüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vite:check security` verwenden oder die Schritte in `.claude/references/vite/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vite:check security` verwenden oder die Schritte in `.claude/references/vite/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Secret-Leaks über env / `define()` (VITE_*-Präfix, hartkodierte Secrets) (7 Pkt.)
@@ -111,7 +111,7 @@ Abschließende Empfehlungen erstellen:
 - [ ] Umsetzungsreihenfolge vorschlagen
 - [ ] Quick Wins vorschlagen (hohes Auswirkungs-/Aufwandsverhältnis)
 
-> **Bibliotheksprojekte**: `/vite:check-library-build` ergänzt dieses Audit für Bibliotheksprojekte (build.lib-Ausgabe, exports-Map, Typdeklarationen, Tree-Shaking). Zusätzlich ausführen, wenn das Projekt ein Paket veröffentlicht.
+> **Bibliotheksprojekte**: `/bear-vite:check-library-build` ergänzt dieses Audit für Bibliotheksprojekte (build.lib-Ausgabe, exports-Map, Typdeklarationen, Tree-Shaking). Zusätzlich ausführen, wenn das Projekt ein Paket veröffentlicht.
 
 ## AUSGABEFORMAT
 
@@ -238,7 +238,7 @@ Umfangreiches Refactoring / Überarbeitung notwendig]
 
 ## WICHTIGE HINWEISE
 
-- Dieser Befehl orchestriert die 4 spezialisierten Audits (`/vite:check architecture`, `/vite:check code-quality`, `/vite:check testing`, `/vite:check security`)
+- Dieser Befehl orchestriert die 4 spezialisierten Audits (`/bear-vite:check architecture`, `/bear-vite:check code-quality`, `/bear-vite:check testing`, `/bear-vite:check security`)
 - Docker für alle Analysetools verwenden
 - Konkrete Beispiele mit datei:zeile für jedes Problem angeben
 - Maßnahmen nach der Auswirkung-/Aufwand-Matrix priorisieren

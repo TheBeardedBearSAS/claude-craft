@@ -155,13 +155,13 @@ export { {PascalName}Component } from './{name}.component';
 
 ```bash
 # Generate in shared components
-/angular:generate-component button
+/bear-angular:generate-component button
 
 # Generate in feature
-/angular:generate-component user-card users
+/bear-angular:generate-component user-card users
 
 # Generate in nested feature
-/angular:generate-component order-item orders/checkout
+/bear-angular:generate-component order-item orders/checkout
 ```
 
 ## Component Types

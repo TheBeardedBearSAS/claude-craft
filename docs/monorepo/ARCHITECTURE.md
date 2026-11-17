@@ -218,13 +218,13 @@ function parseBazelWorkspaces(rootPath: string): Workspace[] {
 
 ## Stratégies d'audit
 
-### Audit global (`/team:audit`)
+### Audit global (`/bear-team:audit`)
 
-Par défaut, `/team:audit` analyse **tous** les workspaces du monorepo séquentiellement.
+Par défaut, `/bear-team:audit` analyse **tous** les workspaces du monorepo séquentiellement.
 
 ```bash
 # Audit global (séquentiel)
-/team:audit
+/bear-team:audit
 
 # Output :
 # Analyzing monorepo (Nx, 12 workspaces)...
@@ -246,7 +246,7 @@ Flag `--monorepo` active la parallélisation intelligente.
 
 ```bash
 # Audit parallèle (worker pool)
-/team:audit --monorepo
+/bear-team:audit --monorepo
 
 # Output :
 # Analyzing monorepo (Nx, 12 workspaces)...
@@ -354,7 +354,7 @@ function findDependents(workspaceName: string): string[] {
 
 ```bash
 # Audit uniquement les workspaces affectés depuis main
-/team:audit --monorepo --affected --base=main --head=HEAD
+/bear-team:audit --monorepo --affected --base=main --head=HEAD
 
 # Output :
 # Analyzing monorepo (Turborepo, 12 workspaces)...
@@ -598,7 +598,7 @@ npx @the-bearded-bear/bear-craft install . --tech=react,symfony --lang=en
 # Installing Bear Craft in monorepo mode (Nx)...
 # Detected workspaces: 0 (empty workspace)
 # Creating .claude/ structure...
-# Done! Run `/team:audit --monorepo` to start.
+# Done! Run `/bear-team:audit --monorepo` to start.
 ```
 
 ### Commandes
@@ -607,34 +607,34 @@ npx @the-bearded-bear/bear-craft install . --tech=react,symfony --lang=en
 
 ```bash
 # Audit tous les workspaces (séquentiel)
-/team:audit
+/bear-team:audit
 
 # Audit tous les workspaces (parallèle)
-/team:audit --monorepo
+/bear-team:audit --monorepo
 ```
 
 #### Audit partial (affected)
 
 ```bash
 # Audit uniquement les workspaces affectés depuis main
-/team:audit --monorepo --affected --base=main
+/bear-team:audit --monorepo --affected --base=main
 
 # Audit avec cache bypass
-/team:audit --monorepo --affected --base=main --no-cache
+/bear-team:audit --monorepo --affected --base=main --no-cache
 ```
 
 #### Audit workspace spécifique
 
 ```bash
 # Audit un workspace précis
-/team:audit --workspace=@acme/api
+/bear-team:audit --workspace=@acme/api
 ```
 
 #### Rapport aggregé
 
 ```bash
 # Générer un rapport aggregé root + drill-down
-/team:audit --monorepo --output=reports/monorepo-audit.html
+/bear-team:audit --monorepo --output=reports/monorepo-audit.html
 ```
 
 **Rapport HTML :**
@@ -693,7 +693,7 @@ jobs:
         with:
           node-version: 20
       - run: npm install -g @the-bearded-bear/bear-craft
-      - run: /team:audit --monorepo --output=audit.html
+      - run: /bear-team:audit --monorepo --output=audit.html
       - uses: actions/upload-artifact@v4
         with:
           name: audit-report
@@ -721,7 +721,7 @@ jobs:
           node-version: 20
       - run: npm install -g @the-bearded-bear/bear-craft
       - run: |
-          /team:audit \
+          /bear-team:audit \
             --monorepo \
             --affected \
             --base=origin/${{ github.base_ref }} \
@@ -754,7 +754,7 @@ jobs:
       - run:
           name: Audit affected workspaces
           command: |
-            /team:audit \
+            /bear-team:audit \
               --monorepo \
               --affected \
               --base=origin/main \
@@ -782,7 +782,7 @@ audit:monorepo:
   script:
     - npm install -g @the-bearded-bear/bear-craft
     - |
-      /team:audit \
+      /bear-team:audit \
         --monorepo \
         --affected \
         --base=origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME \
@@ -808,7 +808,7 @@ audit:monorepo:
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                     CLI Entry Point                            │
-│                   /team:audit --monorepo                       │
+│                   /bear-team:audit --monorepo                       │
 └───────────────────┬────────────────────────────────────────────┘
                     │
                     ▼

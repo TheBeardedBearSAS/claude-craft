@@ -23,12 +23,12 @@ project-management/
 
 ## Workflow
 
-1. `/project:backlog add epic` - Créer un EPIC
-2. `/project:backlog add story` - Ajouter des User Stories
-3. `/project:backlog move story US-XXX sprint-N` - Planifier le sprint
-4. `/project:backlog add task` ou `/workflow:start` - Créer les tâches
-5. `/workflow:status --board` - Suivre l'avancement
-6. `/project:backlog move task` - Mettre à jour les statuts
+1. `/bear-project:backlog add epic` - Créer un EPIC
+2. `/bear-project:backlog add story` - Ajouter des User Stories
+3. `/bear-project:backlog move story US-XXX sprint-N` - Planifier le sprint
+4. `/bear-project:backlog add task` ou `/bear-workflow:start` - Créer les tâches
+5. `/bear-workflow:status --board` - Suivre l'avancement
+6. `/bear-project:backlog move task` - Mettre à jour les statuts
 
 ## Statuts
 

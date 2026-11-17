@@ -174,7 +174,7 @@ You can configure the project context interactively or manually:
 ```bash
 cd ~/my-api && claude
 # Then run:
-/common:init --context
+/bear-common:init --context
 ```
 
 **Option B: Manual**
@@ -229,13 +229,13 @@ Slash commands are quick actions:
 
 ```bash
 # Generate code
-/symfony:generate-crud User
+/bear-symfony:generate-crud User
 
 # Check quality
-/symfony:check all
+/bear-symfony:check all
 
 # Analyze architecture
-/common:architecture-decision
+/bear-common:architecture-decision
 ```
 
 ### Templates (`templates/`)
@@ -313,7 +313,7 @@ For maximum CLI output reduction (60-90% savings):
 
 ```bash
 # In Claude Code, run the setup command
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 **Expected savings:** 55-65% overall token reduction with full RTK + optimizations. See the [Setup Guide](08-setup-new-project.md) for details.
@@ -358,10 +358,10 @@ make config-validate CONFIG=file.yaml
 
 | Command | Purpose |
 |---------|---------|
-| `/common:analyze-feature` | Analyze requirements |
+| `/bear-common:analyze-feature` | Analyze requirements |
 | `/{tech}:generate-crud` | Generate CRUD code |
 | `/{tech}:check all` | Full quality audit |
-| `/common:security-audit` | Security review |
+| `/bear-common:security-audit` | Security review |
 
 ---
 

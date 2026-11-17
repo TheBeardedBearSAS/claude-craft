@@ -12,7 +12,7 @@ After installation (Step 1), open Claude Code in your project and run:
 
 ```bash
 # Inside Claude Code — run AFTER installation
-/common:getting-started
+/bear-common:getting-started
 ```
 
 This interactive wizard will:
@@ -28,7 +28,7 @@ After completing the wizard, you can either:
 - Jump to [What's Next](#whats-next) to explore workflows and agents
 - Open an issue or discussion on [GitHub Discussions](https://github.com/TheBeardedBearSAS/bear-craft/discussions) to ask questions (Discord community planned for Q3 2026)
 
-> See `.claude/commands/common/getting-started.md` for the full wizard reference.
+> See `.claude/commands/bear-common/getting-started.md` for the full wizard reference.
 
 ---
 
@@ -90,7 +90,7 @@ claude
 Inside Claude Code, type:
 
 ```
-/team:audit
+/bear-team:audit
 ```
 
 **What you should see:**
@@ -112,7 +112,7 @@ A typical output includes:
 Pick one finding from the audit (for example, a missing test or an architecture violation) and use TDD to fix it:
 
 ```
-/qa:tdd
+/bear-qa:tdd
 ```
 
 Describe the issue and the agent guides you through:
@@ -138,20 +138,20 @@ You can also ask the TDD coach agent directly:
 | I want to... | Command / Agent |
 |--------------|----------------|
 | Review my code | `@{tech}-reviewer Review my src/ folder` |
-| Start a feature with full workflow | `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (`/workflow:status` anytime) |
-| Run a whole sprint unattended | `/workflow:auto-sprint 1` (`--from-prd` to start from the PRD) |
+| Start a feature with full workflow | `/bear-workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (`/bear-workflow:status` anytime) |
+| Run a whole sprint unattended | `/bear-workflow:auto-sprint 1` (`--from-prd` to start from the PRD) |
 | Generate code following project patterns | `/{tech}:generate-*` |
-| Validate before committing | `/gate:check commit` |
-| Run acceptance tests in Chrome | `/qa:recette --scope=story --id=US-001` |
-| Run Claude in a continuous loop | `/common:ralph-run "implement feature X"` |
+| Validate before committing | `/bear-gate:check commit` |
+| Run acceptance tests in Chrome | `/bear-qa:recette --scope=story --id=US-001` |
+| Run Claude in a continuous loop | `/bear-common:ralph-run "implement feature X"` |
 
 ### By role
 
-**Backend developer:** Start with `/workflow:init`, use `@api-designer` for API design, `@database-architect` for schema work.
+**Backend developer:** Start with `/bear-workflow:init`, use `@api-designer` for API design, `@database-architect` for schema work.
 
 **Frontend developer:** Use `@uiux-orchestrator` for design system coordination, `/{tech}:generate-component` for scaffolding.
 
-**Team lead:** Run `/team:audit` regularly, use `/workflow:status` (`--board`, `--gates`) for progress tracking, `/gate:check all` for quality metrics.
+**Team lead:** Run `/bear-team:audit` regularly, use `/bear-workflow:status` (`--board`, `--gates`) for progress tracking, `/bear-gate:check all` for quality metrics.
 
 ### Learn more
 
@@ -177,10 +177,10 @@ INSTALLATION
   npx @the-bearded-bear/bear-craft doctor .
 
 COMMON COMMANDS
-  /team:audit                Full project audit
-  /workflow:init             Start development workflow
-  /gate:check commit         Validate before commit
-  /qa:tdd                    TDD flow
+  /bear-team:audit                Full project audit
+  /bear-workflow:init             Start development workflow
+  /bear-gate:check commit         Validate before commit
+  /bear-qa:tdd                    TDD flow
 
 USEFUL AGENTS
   @tdd-coach                 TDD guidance

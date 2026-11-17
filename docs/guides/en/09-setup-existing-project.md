@@ -398,7 +398,7 @@ You have two options to configure the project context:
 Use the built-in command to auto-detect your stack and answer targeted questions:
 
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 The command will analyze your existing codebase, detect technologies, and ask only for missing information.
@@ -506,7 +506,7 @@ Go ahead and implement this change following TDD:
 Before committing, run quality checks:
 
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Review all changes:
@@ -580,7 +580,7 @@ Create a brief guide for teammates:
 3. Launch in project: `cd project && claude`
 
 ### Quick Commands
-- `/gate:check commit` - Run before committing
+- `/bear-gate:check commit` - Run before committing
 - `@tdd-coach` - Get help with tests
 - `@{tech}-reviewer` - Code review
 
@@ -724,7 +724,7 @@ If you are upgrading an existing Bear-Craft installation to v8.7.1:
 
 ### New Features to Configure
 
-1. **Token Optimization (RTK):** Run `/common:setup-rtk` in Claude Code to configure 55-65% token savings
+1. **Token Optimization (RTK):** Run `/bear-common:setup-rtk` in Claude Code to configure 55-65% token savings
 2. **Hook Templates:** New templates available in `.claude/templates/hooks/` for output filtering, context preservation, and re-injection
 3. **Managed Settings:** Use `.claude/managed-settings.d/` for modular team configuration
 4. **Agent Frontmatter:** Add `effort`, `maxTurns`, `disallowedTools` to custom agents for cost control

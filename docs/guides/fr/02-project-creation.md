@@ -184,7 +184,7 @@ ls -la .claude/
 
 **Contenu installé :**
 - 21 règles spécifiques Symfony (Clean Architecture, DDD, CQRS, etc.)
-- 10+ commandes Symfony (`/symfony:generate-crud`, `/symfony:check all`, etc.)
+- 10+ commandes Symfony (`/bear-symfony:generate-crud`, `/bear-symfony:check all`, etc.)
 - Agent reviewer Symfony
 - Templates de code (Service, ValueObject, Aggregate, etc.)
 - Checklists qualité
@@ -428,7 +428,7 @@ C'est le fichier le plus important à personnaliser. Il informe Claude sur votre
 
 Exécutez cette commande dans Claude Code pour détecter votre stack et répondre à des questions ciblées :
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 **Option B : Configuration Manuelle**
@@ -531,7 +531,7 @@ Utilisez cette checklist lors de la configuration d'un nouveau projet :
 ### Vérification
 
 - [ ] Claude Code démarré dans le répertoire projet
-- [ ] Commandes disponibles (essayer `/symfony:check all`)
+- [ ] Commandes disponibles (essayer `/bear-symfony:check all`)
 - [ ] Agents répondent (essayer `@symfony-reviewer bonjour`)
 
 ### Configuration Équipe

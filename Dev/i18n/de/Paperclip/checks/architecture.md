@@ -70,4 +70,4 @@ Markdown-Report mit:
 - Pass/Fail pro Checkbox oben
 - Betroffene Dateipfade (Zeilennummern, falls verfügbar)
 - Schweregrad: Blocker / Major / Minor
-- Score /25 zur Nutzung durch `/paperclip:check all`
+- Score /25 zur Nutzung durch `/bear-paperclip:check all`

@@ -4,25 +4,25 @@ description: "Matriz de rastreabilidade bidirecional (requisito → story → c�
 argument-hint: "[all|requirement|story|code] [ID] [--gaps] [--by-priority] [--level=story|code|test|all] [--format=table|mermaid|json]"
 ---
 
-# /project:trace
+# /bear-project:trace
 
 ## Missão
 
-Relacionar cada requisito do PRD com as user stories, o código e os testes. A vista predefinida é a matriz bidirecional completa; `--gaps` transforma-a num relatório de cobertura que lista apenas o que não está coberto (o antigo `/project:trace --gaps`); `--by-priority` agrupa o resultado por prioridade MoSCoW.
+Relacionar cada requisito do PRD com as user stories, o código e os testes. A vista predefinida é a matriz bidirecional completa; `--gaps` transforma-a num relatório de cobertura que lista apenas o que não está coberto (o antigo `/bear-project:trace --gaps`); `--by-priority` agrupa o resultado por prioridade MoSCoW.
 
 ## Utilização
 
 | Invocação | O que faz | Substitui |
 |-----------|-----------|-----------|
-| `/project:trace` ou `/project:trace all` | Matriz completa: requisito → story → código → testes | `/project:trace` |
-| `/project:trace requirement FR-001` | Rastreia um requisito para baixo | `/project:trace --scope requirement --id FR-001` |
-| `/project:trace story US-001` | Rastreia uma story para cima (requisitos) e para baixo (código, testes) | `/project:trace --scope story` |
-| `/project:trace code` | Ficheiros de código com e sem referência a uma story | `/project:trace --scope code` |
-| `/project:trace --gaps` | Relatório de cobertura: requisitos não cobertos por stories, código ou testes, com ações recomendadas | `/project:trace --gaps` |
-| `/project:trace --gaps --level test` | Igual, limitado a um nível de cobertura (`story`, `code`, `test`, `all`; predefinido `all`) | `/project:trace --gaps --level test` |
-| `/project:trace --by-priority` | Agrupa requisitos e percentagens de cobertura por prioridade MoSCoW | novo (antes era uma secção do coverage-map) |
+| `/bear-project:trace` ou `/bear-project:trace all` | Matriz completa: requisito → story → código → testes | `/bear-project:trace` |
+| `/bear-project:trace requirement FR-001` | Rastreia um requisito para baixo | `/bear-project:trace --scope requirement --id FR-001` |
+| `/bear-project:trace story US-001` | Rastreia uma story para cima (requisitos) e para baixo (código, testes) | `/bear-project:trace --scope story` |
+| `/bear-project:trace code` | Ficheiros de código com e sem referência a uma story | `/bear-project:trace --scope code` |
+| `/bear-project:trace --gaps` | Relatório de cobertura: requisitos não cobertos por stories, código ou testes, com ações recomendadas | `/bear-project:trace --gaps` |
+| `/bear-project:trace --gaps --level test` | Igual, limitado a um nível de cobertura (`story`, `code`, `test`, `all`; predefinido `all`) | `/bear-project:trace --gaps --level test` |
+| `/bear-project:trace --by-priority` | Agrupa requisitos e percentagens de cobertura por prioridade MoSCoW | novo (antes era uma secção do coverage-map) |
 
-As opções combinam-se: `/project:trace --gaps --by-priority` produz o relatório de cobertura com a repartição por prioridade.
+As opções combinam-se: `/bear-project:trace --gaps --by-priority` produz o relatório de cobertura com a repartição por prioridade.
 
 ## Argumentos
 
@@ -166,9 +166,9 @@ Recommended Actions
 3. 📝 LOW: FR-020 (P2) não iniciada — planear para sprints futuros
 
 Next Commands
-- /project:trace requirement FR-005   → rastreio detalhado de um requisito
-- /project:backlog add story         → criar as user stories em falta
-- /workflow:plan --only=backlog          → regenerar o backlog com as lacunas
+- /bear-project:trace requirement FR-005   → rastreio detalhado de um requisito
+- /bear-project:backlog add story         → criar as user stories em falta
+- /bear-workflow:plan --only=backlog          → regenerar o backlog com as lacunas
 ```
 
 Com `--level test`, apresentar uma linha por story: `US-003 | ❌ | 0 files | 0 tests` e a ação (por ex. «Criar tests/RegistrationServiceTest.php»).
@@ -202,20 +202,20 @@ As ações recomendadas passam a ser ordenadas começando por P0.
 ## Exemplo de sessão
 
 ```
-User: /project:trace
+User: /bear-project:trace
 Claude: 10 requisitos encontrados (5 P0, 3 P1, 2 P2), 8 stories, 24 ficheiros de código, 18 ficheiros de testes.
         [matriz completa] Cobertura: 60% de ponta a ponta
 
-User: /project:trace requirement FR-001
+User: /bear-project:trace requirement FR-001
 Claude: [apenas o ramo FR-001]
 
-User: /project:trace --gaps --by-priority
+User: /bear-project:trace --gaps --by-priority
 Claude: [relatório de cobertura com tabela por prioridade, 2 requisitos P0 precisam de atenção]
 ```
 
 ## Comandos relacionados
 
-- `/workflow:plan --only=prd` - Gerar o PRD com identificadores de requisitos
-- `/workflow:plan --only=backlog` - Criar o backlog a partir do PRD
-- `/workflow:design` - Gerar a especificação técnica
-- `/project:migrate --stories` - Adicionar os campos em falta (como `Implements:`) às stories
+- `/bear-workflow:plan --only=prd` - Gerar o PRD com identificadores de requisitos
+- `/bear-workflow:plan --only=backlog` - Criar o backlog a partir do PRD
+- `/bear-workflow:design` - Gerar a especificação técnica
+- `/bear-project:migrate --stories` - Adicionar os campos em falta (como `Implements:`) às stories

@@ -580,7 +580,7 @@ Generate output
 ### BMAD Flow
 
 ```
-/workflow:init
+/bear-workflow:init
      │
      ▼
 Create .bmad/ structure
@@ -589,34 +589,34 @@ Create .bmad/ structure
 @pm creates PRD
      │
      ▼
-/gate:check prd
+/bear-gate:check prd
      │
      ▼
 @architect creates tech spec
      │
      ▼
-/gate:check spec
+/bear-gate:check spec
      │
      ▼
 @po creates backlog
      │
      ▼
-/gate:check backlog
+/bear-gate:check backlog
      │
      ▼
 @sm plans sprint
      │
      ▼
-/project:backlog next story
+/bear-project:backlog next story
      │
      ▼
 @dev implements (TDD)
      │
      ▼
-/gate:check story
+/bear-gate:check story
      │
      ▼
-/project:backlog move story done
+/bear-project:backlog move story done
 ```
 
 ---

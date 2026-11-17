@@ -10,7 +10,7 @@ $ARGUMENTS (opcional: ruta del proyecto a analizar)
 
 ## MISIÓN
 
-Realizar una auditoría de conformidad completa de la configuración de despliegue Vercel y del código de superficie de plataforma, orquestando las 4 verificaciones principales: Arquitectura, Calidad de Código, Pruebas y Seguridad. Producir un reporte consolidado con una puntuación general sobre 100 puntos. **Recordatorio de alcance**: esta auditoría cubre únicamente el uso de la plataforma Vercel agnóstico de framework (`vercel.json`, Serverless Functions en Node.js/Fluid Compute, primitivas de caché ISR, Cron Jobs, Storage). No evaluar el enrutamiento, renderizado o data-fetching específicos de Next.js (`revalidatePath`, `revalidateTag`, App Router, etc.) — eso pertenece a la verificación de conformidad propia del stack de framework correspondiente (`/react:*`, `/vuejs:*`, `/angular:*`).
+Realizar una auditoría de conformidad completa de la configuración de despliegue Vercel y del código de superficie de plataforma, orquestando las 4 verificaciones principales: Arquitectura, Calidad de Código, Pruebas y Seguridad. Producir un reporte consolidado con una puntuación general sobre 100 puntos. **Recordatorio de alcance**: esta auditoría cubre únicamente el uso de la plataforma Vercel agnóstico de framework (`vercel.json`, Serverless Functions en Node.js/Fluid Compute, primitivas de caché ISR, Cron Jobs, Storage). No evaluar el enrutamiento, renderizado o data-fetching específicos de Next.js (`revalidatePath`, `revalidateTag`, App Router, etc.) — eso pertenece a la verificación de conformidad propia del stack de framework correspondiente (`/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`).
 
 ### Paso 1: Preparación de la Auditoría
 
@@ -27,7 +27,7 @@ Preparar el entorno de auditoría:
 
 Ejecutar la verificación completa de arquitectura:
 
-**Comando**: Usar el comando slash `/vercel:check architecture` o seguir manualmente los pasos de `.claude/references/vercel/checks/architecture.md`
+**Comando**: Usar el comando slash `/bear-vercel:check architecture` o seguir manualmente los pasos de `.claude/references/vercel/checks/architecture.md`
 
 **Criterios Evaluados**:
 - Validez del esquema de vercel.json (`$schema`, `version`, claves de nivel superior válidas) (6 pts)
@@ -42,7 +42,7 @@ Ejecutar la verificación completa de arquitectura:
 
 Ejecutar la verificación de calidad de código:
 
-**Comando**: Usar el comando slash `/vercel:check code-quality` o seguir manualmente los pasos de `.claude/references/vercel/checks/code-quality.md`
+**Comando**: Usar el comando slash `/bear-vercel:check code-quality` o seguir manualmente los pasos de `.claude/references/vercel/checks/code-quality.md`
 
 **Criterios Evaluados**:
 - Análisis ESLint de las Functions y del middleware (6 pts)
@@ -57,7 +57,7 @@ Ejecutar la verificación de calidad de código:
 
 Ejecutar la verificación de pruebas:
 
-**Comando**: Usar el comando slash `/vercel:check testing` o seguir manualmente los pasos de `.claude/references/vercel/checks/testing.md`
+**Comando**: Usar el comando slash `/bear-vercel:check testing` o seguir manualmente los pasos de `.claude/references/vercel/checks/testing.md`
 
 **Criterios Evaluados**:
 - Cobertura de los handlers de Functions y del middleware (>= 80%) (7 pts)
@@ -73,7 +73,7 @@ Ejecutar la verificación de pruebas:
 
 Ejecutar la verificación de seguridad:
 
-**Comando**: Usar el comando slash `/vercel:check security` o seguir manualmente los pasos de `.claude/references/vercel/checks/security.md`
+**Comando**: Usar el comando slash `/bear-vercel:check security` o seguir manualmente los pasos de `.claude/references/vercel/checks/security.md`
 
 **Criterios Evaluados**:
 - Manejo de variables de entorno (sin valores fijos en el código, sin fugas al bundle del cliente, alcance de entorno correcto) (7 pts)
@@ -245,4 +245,4 @@ Refactorización importante / Revisión completa necesaria]
 - Adaptar las recomendaciones al contexto de negocio del proyecto
 - Un endpoint Cron sin protección y un secreto fijo en el código son SIEMPRE la máxima prioridad cuando se detectan
 - Un `runtime: 'edge'` en código nuevo o modificado siempre se señala, pero es deuda de migración (no un fallo bloqueante) en código heredado sin modificar
-- NO evaluar el enrutamiento/renderizado/data-fetching específicos de Next.js — fuera del alcance (ver `/react:*`, `/vuejs:*`, `/angular:*`)
+- NO evaluar el enrutamiento/renderizado/data-fetching específicos de Next.js — fuera del alcance (ver `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`)

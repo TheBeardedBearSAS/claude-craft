@@ -95,7 +95,7 @@ Chaque stack dispose de : reviewer agent dedie, commandes specifiques (check-com
 
 ### F2 : Cycle de vie sprint complet (analyse -> QA)
 
-Le seul framework couvrant : `/workflow:plan --research` -> `/workflow:plan` -> `/workflow:design` -> `/workflow:implement` -> `/qa:recette`. Avec 5 quality gates (PRD >=80%, Tech Spec >=90%, INVEST 6/6, Sprint Ready 100%, Story DoD 100%). Le `/team:delivery` orchestre ecriture + implementation en 2 phases avec detection de conflits de domaines fichiers. BMAD-METHOD fournit la methodologie mais pas le moteur d'execution.
+Le seul framework couvrant : `/bear-workflow:plan --research` -> `/bear-workflow:plan` -> `/bear-workflow:design` -> `/bear-workflow:implement` -> `/bear-qa:recette`. Avec 5 quality gates (PRD >=80%, Tech Spec >=90%, INVEST 6/6, Sprint Ready 100%, Story DoD 100%). Le `/bear-team:delivery` orchestre ecriture + implementation en 2 phases avec detection de conflits de domaines fichiers. BMAD-METHOD fournit la methodologie mais pas le moteur d'execution.
 
 ### F3 : QA Recette (differenciateur exclusif)
 
@@ -252,7 +252,7 @@ Le differenciateur le plus fort. Le packager comme module installable independam
 ### R3 : Creer une experience "Resultats en 10 minutes"
 
 **Arreter :** Mener avec "11 stacks, 70 agents, 125 commandes".
-**Commencer :** Un `/workflow:quick-start` qui demontre le cycle complet sur un projet sample en <10 min. Communiquer la valeur, pas la complexite.
+**Commencer :** Un `/bear-workflow:quick-start` qui demontre le cycle complet sur un projet sample en <10 min. Communiquer la valeur, pas la complexite.
 
 ### R4 : Publier les skills sur le Skills Hub
 

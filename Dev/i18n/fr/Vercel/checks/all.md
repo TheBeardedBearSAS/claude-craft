@@ -10,7 +10,7 @@ $ARGUMENTS (optionnel : chemin du projet à analyser)
 
 ## MISSION
 
-Réaliser un audit complet de conformité de la configuration de déploiement Vercel et du code de surface plateforme en orchestrant les 4 vérifications majeures : Architecture, Qualité du Code, Tests et Sécurité. Produire un rapport consolidé avec un score global sur 100 points. **Rappel de périmètre** : cet audit couvre uniquement l'usage de la plateforme Vercel indépendant de tout framework (`vercel.json`, Serverless Functions sur Node.js/Fluid Compute, primitives de cache ISR, Cron Jobs, Storage). Ne pas évaluer le routage, le rendu, ou la récupération de données spécifiques à Next.js (`revalidatePath`, `revalidateTag`, App Router, etc.) — cela relève de la vérification de conformité propre au stack du framework correspondant (`/react:*`, `/vuejs:*`, `/angular:*`).
+Réaliser un audit complet de conformité de la configuration de déploiement Vercel et du code de surface plateforme en orchestrant les 4 vérifications majeures : Architecture, Qualité du Code, Tests et Sécurité. Produire un rapport consolidé avec un score global sur 100 points. **Rappel de périmètre** : cet audit couvre uniquement l'usage de la plateforme Vercel indépendant de tout framework (`vercel.json`, Serverless Functions sur Node.js/Fluid Compute, primitives de cache ISR, Cron Jobs, Storage). Ne pas évaluer le routage, le rendu, ou la récupération de données spécifiques à Next.js (`revalidatePath`, `revalidateTag`, App Router, etc.) — cela relève de la vérification de conformité propre au stack du framework correspondant (`/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`).
 
 ### Étape 1 : Préparation de l'audit
 
@@ -27,7 +27,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification complète de l'architecture :
 
-**Commande** : Utiliser la commande slash `/vercel:check architecture` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/architecture.md`
+**Commande** : Utiliser la commande slash `/bear-vercel:check architecture` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/architecture.md`
 
 **Critères évalués** :
 - Validité du schéma vercel.json (`$schema`, `version`, clés de premier niveau valides) (6 pts)
@@ -42,7 +42,7 @@ Exécuter la vérification complète de l'architecture :
 
 Exécuter la vérification de la qualité du code :
 
-**Commande** : Utiliser la commande slash `/vercel:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/code-quality.md`
+**Commande** : Utiliser la commande slash `/bear-vercel:check code-quality` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/code-quality.md`
 
 **Critères évalués** :
 - Analyse ESLint des Functions et du middleware (6 pts)
@@ -57,7 +57,7 @@ Exécuter la vérification de la qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la commande slash `/vercel:check testing` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/testing.md`
+**Commande** : Utiliser la commande slash `/bear-vercel:check testing` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/testing.md`
 
 **Critères évalués** :
 - Couverture des handlers de Functions et du middleware (>= 80%) (7 pts)
@@ -73,7 +73,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la commande slash `/vercel:check security` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/security.md`
+**Commande** : Utiliser la commande slash `/bear-vercel:check security` ou suivre manuellement les étapes dans `.claude/references/vercel/checks/security.md`
 
 **Critères évalués** :
 - Gestion des variables d'environnement (pas de valeurs en dur, pas de fuite dans le bundle client, portée d'environnement correcte) (7 pts)
@@ -245,4 +245,4 @@ Refactoring majeur / Refonte nécessaire]
 - Adapter les recommandations au contexte métier du projet
 - Un endpoint Cron non protégé et un secret en dur sont TOUJOURS prioritaires lorsqu'ils sont détectés
 - Un `runtime: 'edge'` sur du code nouveau ou modifié est toujours signalé, mais constitue une dette de migration (pas un échec bloquant) sur du code hérité non modifié
-- Ne PAS évaluer le routage/rendu/récupération de données spécifiques à Next.js — hors périmètre (voir `/react:*`, `/vuejs:*`, `/angular:*`)
+- Ne PAS évaluer le routage/rendu/récupération de données spécifiques à Next.js — hors périmètre (voir `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`)

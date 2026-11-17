@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /flutter:check testing"
+description: "Obsoleto (removido na 10.0): use /bear-flutter:check testing"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-testing` está obsoleto e será removido na 10.0. Use `/flutter:check testing`.
+> ⚠️ `/bear-flutter:check-testing` está obsoleto e será removido na 10.0. Use `/bear-flutter:check testing`.
 
-Execute `/flutter:check testing $ARGUMENTS`: leia `.claude/commands/flutter/check.md` e siga-o com estes argumentos.
+Execute `/bear-flutter:check testing $ARGUMENTS`: leia `.claude/commands/bear-flutter/check.md` e siga-o com estes argumentos.

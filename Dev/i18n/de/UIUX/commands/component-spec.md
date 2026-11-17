@@ -14,7 +14,7 @@ Argumente:
 - Name der zu spezifizierenden Komponente
 - (Optional) Nutzungskontext
 
-Beispiel: `/uiux:component-spec Button` oder `/uiux:component-spec "Reisekarte" kontext:"Tourismus SaaS"`
+Beispiel: `/bear-uiux:component-spec Button` oder `/bear-uiux:component-spec "Reisekarte" kontext:"Tourismus SaaS"`
 
 ## Plan-Modus
 
@@ -41,7 +41,7 @@ Visuelles definieren:
 
 ### Schritt 3: A11y-Spezifikation (A11y-Experte)
 
-`/uiux:a11y-component {NAME}` ausführen und dessen Spezifikation (HTML-Semantik, ARIA-Attribute, Tastaturnavigation, Fokus, Kontrast, Screenreader-Ansagen) in den ♿-Abschnitt der Synthese übernehmen. Hier nicht neu definieren.
+`/bear-uiux:a11y-component {NAME}` ausführen und dessen Spezifikation (HTML-Semantik, ARIA-Attribute, Tastaturnavigation, Fokus, Kontrast, Screenreader-Ansagen) in den ♿-Abschnitt der Synthese übernehmen. Hier nicht neu definieren.
 
 ### Schritt 4: Synthese
 

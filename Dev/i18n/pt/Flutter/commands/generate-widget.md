@@ -14,7 +14,7 @@ Argumentos:
 - Nome do widget (ex: `CustomButton`, `UserCard`)
 - (Opcional) Tipo (stateless, stateful, hook)
 
-Exemplo: `/flutter:generate-widget UserCard stateless`
+Exemplo: `/bear-flutter:generate-widget UserCard stateless`
 
 ## Plan Mode
 

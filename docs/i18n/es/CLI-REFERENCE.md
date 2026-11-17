@@ -329,7 +329,7 @@ Inicia una interfaz web local para visualizar y gestionar el backlog y los sprin
 npx @the-bearded-bear/bear-craft kanban [ruta] [opciones]
 ```
 
-La `ruta` es por defecto el directorio actual. El destino debe contener un subdirectorio `project-management/` (generado por `/workflow:plan` o `/workflow:start`).
+La `ruta` es por defecto el directorio actual. El destino debe contener un subdirectorio `project-management/` (generado por `/bear-workflow:plan` o `/bear-workflow:start`).
 
 ### Opciones
 
@@ -364,7 +364,7 @@ Seis vistas, listadas en la barra de navegación.
 - **Buscar, filtrar y ordenar**: el cuadro de búsqueda (`Ctrl+K` o `/`) filtra las vistas Tablero y Backlog; los filtros de prioridad, responsable y épica y el orden se conservan en la URL, por ejemplo `#/kanban?q=auth&prio=must,should&who=alice&epic=E4&sort=priority&dir=desc`. `?story=US-E4-03` abre una historia desde cualquier vista y `#/docs/<ruta>` abre un documento.
 - **Idioma de la interfaz**: inglés, francés, español, alemán o portugués, elegido automáticamente según el navegador o en el panel de Ajustes. Los títulos de las historias y los documentos se muestran tal como están escritos.
 
-Los comandos `/workflow:*` y `/project:*` siguen siendo válidos y escriben los mismos archivos.
+Los comandos `/bear-workflow:*` y `/bear-project:*` siguen siendo válidos y escriben los mismos archivos.
 
 ### Dónde se escriben los datos
 
@@ -409,7 +409,7 @@ done          -> (terminal)
 
 ### Fuente sprint-status de BMAD v6
 
-Las historias proceden de `.bmad/sprint-status.yaml` (escrito por `/workflow:*` y `/project:backlog`) y de los archivos Markdown de `project-management/`. Cuando una historia figura en el YAML, el YAML prevalece para el estado, el título, los puntos, la prioridad, el responsable, la épica, las tareas y el sprint; el Markdown conserva el contenido. El tablero se actualiza en directo cuando cambia cualquiera de las fuentes. Las historias de un sprint cerrado (`archived_sprints`) son de solo lectura.
+Las historias proceden de `.bmad/sprint-status.yaml` (escrito por `/bear-workflow:*` y `/bear-project:backlog`) y de los archivos Markdown de `project-management/`. Cuando una historia figura en el YAML, el YAML prevalece para el estado, el título, los puntos, la prioridad, el responsable, la épica, las tareas y el sprint; el Markdown conserva el contenido. El tablero se actualiza en directo cuando cambia cualquiera de las fuentes. Las historias de un sprint cerrado (`archived_sprints`) son de solo lectura.
 
 Si el tablero está vacío o falta una historia, el aviso de diagnóstico lista los archivos ilegibles; `GET /api/diagnostics` devuelve la misma lista. Véase la [resolución de problemas](../../TROUBLESHOOTING.md#kanban-board-empty).
 
@@ -551,7 +551,7 @@ yq --version
 
 ```bash
 # En Claude Code, configura todas las optimizaciones en un comando
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### Comandos RTK

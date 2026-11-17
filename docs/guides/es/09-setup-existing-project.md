@@ -398,7 +398,7 @@ Tienes dos opciones para configurar el contexto del proyecto:
 Usa el comando integrado para detectar automáticamente tu stack y responder preguntas específicas:
 
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 El comando analizará tu codebase existente, detectará tecnologías y preguntará solo por la información faltante.
@@ -506,7 +506,7 @@ Adelante, implementa este cambio siguiendo TDD:
 Antes de commitear, ejecuta verificaciones de calidad:
 
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Revisa todos los cambios:
@@ -580,7 +580,7 @@ Crea una guía breve para compañeros:
 3. Lanzar en el proyecto: `cd project && claude`
 
 ### Comandos Rápidos
-- `/gate:check commit` - Ejecutar antes de commitear
+- `/bear-gate:check commit` - Ejecutar antes de commitear
 - `@tdd-coach` - Ayuda con tests
 - `@{tech}-reviewer` - Revisión de código
 

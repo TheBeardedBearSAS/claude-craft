@@ -5,7 +5,7 @@ argument-hint: --session=<session-id> [--dry-run|--skip-fix|--severity=<level>|-
 
 # QA Recette Fix - Automated Bug Fixing
 
-Complement to `/qa:recette`. Reads a recette session/report, refines each error to make it actionable, generates project management documents (BMAD bug stories, backlog, sprint), then launches TDD-based fixing for each bug. Implements the **Golden Rule**: A fixed bug should NEVER reappear.
+Complement to `/bear-qa:recette`. Reads a recette session/report, refines each error to make it actionable, generates project management documents (BMAD bug stories, backlog, sprint), then launches TDD-based fixing for each bug. Implements the **Golden Rule**: A fixed bug should NEVER reappear.
 
 ## Arguments
 
@@ -227,19 +227,19 @@ resume_from:
 
 ```bash
 # Fix all bugs from a recette session
-/qa:fix --session=REC-20260130-143022
+/bear-qa:fix --session=REC-20260130-143022
 
 # Dry run: refine and document without fixing
-/qa:fix --session=REC-20260130-143022 --dry-run
+/bear-qa:fix --session=REC-20260130-143022 --dry-run
 
 # Fix only critical and high severity bugs
-/qa:fix --session=REC-20260130-143022 --severity=high
+/bear-qa:fix --session=REC-20260130-143022 --severity=high
 
 # Generate BMAD documents without launching TDD
-/qa:fix --session=REC-20260130-143022 --skip-fix
+/bear-qa:fix --session=REC-20260130-143022 --skip-fix
 
 # Fix with automatic commits
-/qa:fix --session=REC-20260130-143022 --auto-commit
+/bear-qa:fix --session=REC-20260130-143022 --auto-commit
 ```
 
 ## Output Structure
@@ -268,10 +268,10 @@ resume_from:
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Execute acceptance tests |
-| `/qa:status` | Show session status |
-| `/qa:regression` | View regression tests |
-| `/qa:status --report` | Generate report |
+| `/bear-qa:recette` | Execute acceptance tests |
+| `/bear-qa:status` | Show session status |
+| `/bear-qa:regression` | View regression tests |
+| `/bear-qa:status --report` | Generate report |
 
 ## Error Messages
 
@@ -279,7 +279,7 @@ resume_from:
 |-------|----------|
 | "Session not found" | Verify session ID in `.recette/sessions/` |
 | "No errors in session" | Session has no errors to fix |
-| "sprint-status.yaml not found" | Initialize BMAD with `/workflow:init` |
+| "sprint-status.yaml not found" | Initialize BMAD with `/bear-workflow:init` |
 | "RED test does not fail" | Bug may no longer exist, check manually |
 
 ## Best Practices
@@ -297,11 +297,11 @@ resume_from:
 ║                      NEXT STEP                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-test after corrections                             ║
 ║                                                          ║
 ║  See also:                                               ║
-║  • /qa:regression — Check regression tests               ║
+║  • /bear-qa:regression — Check regression tests               ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

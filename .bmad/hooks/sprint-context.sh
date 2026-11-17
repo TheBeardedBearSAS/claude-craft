@@ -21,7 +21,7 @@ SPRINT_STATUS_FILE="${BMAD_DIR}/sprint-status.yaml"
 # Check if sprint-status.yaml exists
 if [[ ! -f "$SPRINT_STATUS_FILE" ]]; then
     echo "⚠️ BMAD: No sprint-status.yaml found"
-    echo "Run '/project:migrate-backlog' to initialize BMAD v6"
+    echo "Run '/bear-project:migrate-backlog' to initialize BMAD v6"
     exit 0
 fi
 

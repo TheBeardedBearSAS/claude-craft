@@ -69,7 +69,7 @@ docker compose exec app npx playwright test          # E2E
 ```
 
 ### Available Commands
-- `/wordpress:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
+- `/bear-wordpress:check <architecture|code-quality|security|testing|all>` - Audit by axis, or scored aggregate
 
 ### Development Workflow
 1. **Analyze** - Read code, understand domain (`rules/01-workflow-analysis.md`)

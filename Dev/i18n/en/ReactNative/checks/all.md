@@ -13,10 +13,10 @@ $ARGUMENTS
 You are a React Native project compliance expert. Your mission is to orchestrate a complete audit by combining the specialized audits: architecture, code quality, testing, and security.
 
 This command aggregates the results from:
-1. `/reactnative:check architecture` (25 points)
-2. `/reactnative:check code-quality` (25 points)
-3. `/reactnative:check testing` (25 points)
-4. `/reactnative:check security` (25 points)
+1. `/bear-reactnative:check architecture` (25 points)
+2. `/bear-reactnative:check code-quality` (25 points)
+3. `/bear-reactnative:check testing` (25 points)
+4. `/bear-reactnative:check security` (25 points)
 
 ### Step 1: Execute the 4 specialized audits
 
@@ -24,16 +24,16 @@ Execute sequentially (or show the commands to execute):
 
 ```bash
 # 1. Architecture Audit
-/reactnative:check architecture
+/bear-reactnative:check architecture
 
 # 2. Code Quality Audit
-/reactnative:check code-quality
+/bear-reactnative:check code-quality
 
 # 3. Testing Audit
-/reactnative:check testing
+/bear-reactnative:check testing
 
 # 4. Security Audit
-/reactnative:check security
+/bear-reactnative:check security
 ```
 
 ### Step 2: Aggregate results

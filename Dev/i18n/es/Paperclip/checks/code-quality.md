@@ -60,4 +60,4 @@ Ejecutar `eslint-plugin-sonarjs` (o equivalente). Señalar cualquier función co
 
 ## Output
 
-Reporte Markdown con pasa/falla por sección, archivos/símbolos ofensores, severidad, y un puntaje /20 para `/paperclip:check all`.
+Reporte Markdown con pasa/falla por sección, archivos/símbolos ofensores, severidad, y un puntaje /20 para `/bear-paperclip:check all`.

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /reactnative:check architecture"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-reactnative:check architecture"
 deprecated: true
-replaced-by: /reactnative:check
+replaced-by: /bear-reactnative:check
 ---
 
-> ⚠️ `/reactnative:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/reactnative:check architecture`.
+> ⚠️ `/bear-reactnative:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/bear-reactnative:check architecture`.
 
-Exécutez `/reactnative:check architecture $ARGUMENTS` : lisez `.claude/commands/reactnative/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-reactnative:check architecture $ARGUMENTS` : lisez `.claude/commands/bear-reactnative/check.md` et suivez-le avec ces arguments.

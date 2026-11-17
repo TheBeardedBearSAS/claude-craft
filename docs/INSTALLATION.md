@@ -256,9 +256,9 @@ cp Dev/i18n/$RULES_LANG/Symfony/rules/03-coding-standards.md ~/my-project/.claud
 
 # Copy agents, commands, etc.
 cp -r Dev/i18n/$RULES_LANG/Common/agents/* ~/my-project/.claude/agents/
-cp -r Dev/i18n/$RULES_LANG/Common/commands/* ~/my-project/.claude/commands/common/
+cp -r Dev/i18n/$RULES_LANG/Common/commands/* ~/my-project/.claude/commands/bear-common/
 cp -r Dev/i18n/$RULES_LANG/Symfony/agents/* ~/my-project/.claude/agents/
-cp -r Dev/i18n/$RULES_LANG/Symfony/commands/* ~/my-project/.claude/commands/symfony/
+cp -r Dev/i18n/$RULES_LANG/Symfony/commands/* ~/my-project/.claude/commands/bear-symfony/
 ```
 
 The install scripts also generate `CLAUDE.md`, `INDEX.md`, and `context.yaml` automatically.
@@ -339,8 +339,8 @@ find ~/my-project/.claude -name "*.md" | wc -l
 Open your project in Claude Code and try:
 
 ```
-/gate:check commit
-/symfony:check architecture
+/bear-gate:check commit
+/bear-symfony:check architecture
 ```
 
 ## Updating
@@ -367,7 +367,7 @@ Or remove specific components:
 
 ```bash
 rm -rf ~/my-project/.claude/agents/
-rm -rf ~/my-project/.claude/commands/symfony/
+rm -rf ~/my-project/.claude/commands/bear-symfony/
 ```
 
 ## Troubleshooting

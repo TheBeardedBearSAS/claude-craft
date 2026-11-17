@@ -566,16 +566,16 @@ generate_report() {
 
     for gate in "prd" "techspec" "backlog" "sprint_ready"; do
         local threshold="${GATE_THRESHOLDS[$gate]}"
-        echo "| $gate | ${threshold}% | ⏳ Run /gate:validate-${gate} |"
+        echo "| $gate | ${threshold}% | ⏳ Run /bear-gate:validate-${gate} |"
     done
 
     echo ""
     echo "Run individual validations:"
-    echo "  /gate:validate-prd [file]"
-    echo "  /gate:validate-techspec [file]"
-    echo "  /gate:validate-backlog"
-    echo "  /gate:validate-sprint"
-    echo "  /gate:validate-story <story-id>"
+    echo "  /bear-gate:validate-prd [file]"
+    echo "  /bear-gate:validate-techspec [file]"
+    echo "  /bear-gate:validate-backlog"
+    echo "  /bear-gate:validate-sprint"
+    echo "  /bear-gate:validate-story <story-id>"
     echo ""
 }
 

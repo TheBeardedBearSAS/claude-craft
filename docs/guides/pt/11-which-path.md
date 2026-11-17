@@ -19,19 +19,19 @@
         │              │              │                  │
         ▼              ▼              ▼                  ▼
    GREENFIELD      BROWNFIELD      BUGFIX         SPRINT AUTÔNOMO
-  /workflow:init  /project:reverse scan  /qa:tdd   /workflow:auto-sprint N
+  /bear-workflow:init  /bear-project:reverse scan  /bear-qa:tdd   /bear-workflow:auto-sprint N
         │              │        (+ Quick Flow)          │
         ▼              ▼              ▼                  ▼
      Seção 2        Seção 3       Seção 4            Seção 5
 
-  Perdido a qualquer momento?  →  /workflow:status   (Seção 6)
+  Perdido a qualquer momento?  →  /bear-workflow:status   (Seção 6)
 ```
 
 Não tem certeza? Faça-se estas perguntas:
 
 1. **Já existe código?** Não → Greenfield. Sim → pergunta 2.
 2. **Já existe um backlog (épicos e histórias)?** Não → Brownfield. Sim → pergunta 3.
-3. **É um único bug?** Sim → Bugfix. Não → continue o sprint com `/workflow:start N` ou entregue-o ao Sprint autônomo.
+3. **É um único bug?** Sim → Bugfix. Não → continue o sprint com `/bear-workflow:start N` ou entregue-o ao Sprint autônomo.
 
 ---
 
@@ -40,19 +40,19 @@ Não tem certeza? Faça-se estas perguntas:
 Você tem uma ideia e um repositório vazio. Siga o caminho principal, uma fase de cada vez:
 
 ```
-/workflow:init  →  /workflow:plan  →  /workflow:design  →  /workflow:start 1
-                →  /workflow:implement  →  /workflow:review  →  /workflow:retro
+/bear-workflow:init  →  /bear-workflow:plan  →  /bear-workflow:design  →  /bear-workflow:start 1
+                →  /bear-workflow:implement  →  /bear-workflow:review  →  /bear-workflow:retro
 ```
 
 | Etapa | Comando | O que você obtém |
 |-------|---------|------------------|
-| 1 | `/workflow:init` | Análise do projeto, track recomendado (Quick, Standard ou Enterprise) e `.bmad/sprint-status.yaml` |
-| 2 | `/workflow:plan` | PRD, personas e backlog gerado |
-| 3 | `/workflow:design` | Especificação técnica e arquitetura |
-| 4 | `/workflow:start 1` | Sprint 1 preparado: histórias selecionadas e prontas para desenvolvimento |
-| 5 | `/workflow:implement` | Histórias construídas com TDD (Red → Green → Refactor) |
-| 6 | `/workflow:review` | Preparação da revisão do sprint |
-| 7 | `/workflow:retro` | Retrospectiva e retorno a `/workflow:start 2` |
+| 1 | `/bear-workflow:init` | Análise do projeto, track recomendado (Quick, Standard ou Enterprise) e `.bmad/sprint-status.yaml` |
+| 2 | `/bear-workflow:plan` | PRD, personas e backlog gerado |
+| 3 | `/bear-workflow:design` | Especificação técnica e arquitetura |
+| 4 | `/bear-workflow:start 1` | Sprint 1 preparado: histórias selecionadas e prontas para desenvolvimento |
+| 5 | `/bear-workflow:implement` | Histórias construídas com TDD (Red → Green → Refactor) |
+| 6 | `/bear-workflow:review` | Preparação da revisão do sprint |
+| 7 | `/bear-workflow:retro` | Retrospectiva e retorno a `/bear-workflow:start 2` |
 
 Para uma versão narrada passo a passo, leia o [tutorial do workflow completo](10-complete-workflow.md).
 
@@ -63,17 +63,17 @@ Para uma versão narrada passo a passo, leia o [tutorial do workflow completo](1
 Você herdou (ou já escreveu) uma base de código, mas ninguém documentou o que ela faz. Primeiro faça a engenharia reversa do produto e depois junte-se ao caminho principal:
 
 ```
-/project:reverse scan  →  /project:reverse prd  →  /project:reverse stories
-               →  /project:reverse gaps  →  /workflow:start
+/bear-project:reverse scan  →  /bear-project:reverse prd  →  /bear-project:reverse stories
+               →  /bear-project:reverse gaps  →  /bear-workflow:start
 ```
 
 | Etapa | Comando | O que você obtém |
 |-------|---------|------------------|
-| 1 | `/project:reverse scan` | Inventário da base de código: stack, estrutura, módulos |
-| 2 | `/project:reverse prd` | Um PRD reconstruído a partir do que o código realmente faz |
-| 3 | `/project:reverse stories` | Histórias de usuário deduzidas das funcionalidades existentes |
-| 4 | `/project:reverse gaps` | Funcionalidades ausentes, testes ausentes, dívida técnica |
-| 5 | `/workflow:start` | Primeiro sprint planejado a partir das lacunas; continue com `/workflow:implement` |
+| 1 | `/bear-project:reverse scan` | Inventário da base de código: stack, estrutura, módulos |
+| 2 | `/bear-project:reverse prd` | Um PRD reconstruído a partir do que o código realmente faz |
+| 3 | `/bear-project:reverse stories` | Histórias de usuário deduzidas das funcionalidades existentes |
+| 4 | `/bear-project:reverse gaps` | Funcionalidades ausentes, testes ausentes, dívida técnica |
+| 5 | `/bear-workflow:start` | Primeiro sprint planejado a partir das lacunas; continue com `/bear-workflow:implement` |
 
 Veja também o [guia de integração em um projeto existente](09-setup-existing-project.md).
 
@@ -84,12 +84,12 @@ Veja também o [guia de integração em um projeto existente](09-setup-existing-
 Um bug não precisa de PRD. Use o track mais leve e deixe o teste conduzir a correção:
 
 ```
-/qa:tdd        ← escreva PRIMEIRO o teste que reproduz o bug (ele deve falhar)
-/workflow:init --quick    ← track Quick Flow: apenas implementação
+/bear-qa:tdd        ← escreva PRIMEIRO o teste que reproduz o bug (ele deve falhar)
+/bear-workflow:init --quick    ← track Quick Flow: apenas implementação
 ```
 
-1. Execute `/qa:tdd` e descreva o bug. O teste que o reproduz é escrito **antes** de qualquer correção e deve falhar.
-2. Execute `/workflow:init --quick` para forçar o track Quick Flow (sem fases de planejamento nem de design).
+1. Execute `/bear-qa:tdd` e descreva o bug. O teste que o reproduz é escrito **antes** de qualquer correção e deve falhar.
+2. Execute `/bear-workflow:init --quick` para forçar o track Quick Flow (sem fases de planejamento nem de design).
 3. Corrija o código até o teste passar e depois refatore. O teste permanece na suíte como proteção contra regressões: um bug corrigido nunca deve voltar.
 
 Veja o [guia de correção de bugs](04-bug-fixing.md) para mais detalhes.
@@ -101,7 +101,7 @@ Veja o [guia de correção de bugs](04-bug-fixing.md) para mais detalhes.
 Quando o trabalho já está planejado, deixe o Bear Craft conduzir o sprint inteiro:
 
 ```
-/workflow:auto-sprint N
+/bear-workflow:auto-sprint N
 ```
 
 **Pré-requisitos**
@@ -120,12 +120,12 @@ Prefere controle a velocidade? Fique no caminho principal manual da Seção 2.
 A qualquer momento, seja qual for o caminho:
 
 ```
-/workflow:status
+/bear-workflow:status
 ```
 
 O comando mostra a fase atual, o progresso do sprint e a próxima ação recomendada.
 
-> **Fonte única da verdade:** `.bmad/sprint-status.yaml` guarda o status de cada história (`backlog → ready-for-dev → in-progress → review → done`, ou `blocked`). Ele é criado por `/workflow:init`, e todo comando o lê e o atualiza. Se duas visões divergirem, este arquivo prevalece.
+> **Fonte única da verdade:** `.bmad/sprint-status.yaml` guarda o status de cada história (`backlog → ready-for-dev → in-progress → review → done`, ou `blocked`). Ele é criado por `/bear-workflow:init`, e todo comando o lê e o atualiza. Se duas visões divergirem, este arquivo prevalece.
 
 ---
 
@@ -133,8 +133,8 @@ O comando mostra a fase atual, o progresso do sprint e a próxima ação recomen
 
 | Situação | Comece com | Depois |
 |----------|------------|--------|
-| Produto novo | `/workflow:init` | `/workflow:plan` → `/workflow:design` → `/workflow:start 1` |
-| Código existente, sem backlog | `/project:reverse scan` | `/project:reverse prd` → `/project:reverse stories` → `/project:reverse gaps` → `/workflow:start` |
-| Bug | `/qa:tdd` | `/workflow:init --quick` |
-| Sprint planejado, sem intervenção | `/workflow:auto-sprint N` | Revisar a PR |
-| Perdido | `/workflow:status` | Seguir a ação recomendada |
+| Produto novo | `/bear-workflow:init` | `/bear-workflow:plan` → `/bear-workflow:design` → `/bear-workflow:start 1` |
+| Código existente, sem backlog | `/bear-project:reverse scan` | `/bear-project:reverse prd` → `/bear-project:reverse stories` → `/bear-project:reverse gaps` → `/bear-workflow:start` |
+| Bug | `/bear-qa:tdd` | `/bear-workflow:init --quick` |
+| Sprint planejado, sem intervenção | `/bear-workflow:auto-sprint N` | Revisar a PR |
+| Perdido | `/bear-workflow:status` | Seguir a ação recomendada |

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /paperclip:check security"
+description: "Deprecated (removed in 10.0): use /bear-paperclip:check security"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-security` is deprecated and will be removed in 10.0. Use `/paperclip:check security`.
+> ⚠️ `/bear-paperclip:check-security` is deprecated and will be removed in 10.0. Use `/bear-paperclip:check security`.
 
-Run `/paperclip:check security $ARGUMENTS`: read `.claude/commands/paperclip/check.md` and follow it with these arguments.
+Run `/bear-paperclip:check security $ARGUMENTS`: read `.claude/commands/bear-paperclip/check.md` and follow it with these arguments.

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /symfony:check architecture"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-symfony:check architecture"
 deprecated: true
-replaced-by: /symfony:check
+replaced-by: /bear-symfony:check
 ---
 
-> ⚠️ `/symfony:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/symfony:check architecture`.
+> ⚠️ `/bear-symfony:check-architecture` est obsolète et sera retirée en 10.0. Utilisez `/bear-symfony:check architecture`.
 
-Exécutez `/symfony:check architecture $ARGUMENTS` : lisez `.claude/commands/symfony/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-symfony:check architecture $ARGUMENTS` : lisez `.claude/commands/bear-symfony/check.md` et suivez-le avec ces arguments.

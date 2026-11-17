@@ -27,7 +27,7 @@ Preparar o ambiente de auditoria:
 
 Executar a verificação completa de arquitetura:
 
-**Comando**: Use o slash command `/tauri:check architecture` ou siga manualmente as etapas de `.claude/references/tauri/checks/architecture.md`
+**Comando**: Use o slash command `/bear-tauri:check architecture` ou siga manualmente as etapas de `.claude/references/tauri/checks/architecture.md`
 
 **Critérios Avaliados**:
 - Layout do projeto (`src/` / `src-tauri/`, ponto de entrada `run()` em `lib.rs`, ponto de entrada mobile) e `main.rs` enxuto (5 pts)
@@ -43,7 +43,7 @@ Executar a verificação completa de arquitetura:
 
 Executar a verificação de qualidade de código:
 
-**Comando**: Use o slash command `/tauri:check code-quality` ou siga manualmente as etapas de `.claude/references/tauri/checks/code-quality.md`
+**Comando**: Use o slash command `/bear-tauri:check code-quality` ou siga manualmente as etapas de `.claude/references/tauri/checks/code-quality.md`
 
 **Critérios Avaliados**:
 - Clippy sem avisos com `-D warnings` e `cargo fmt --check` (5 pts)
@@ -59,7 +59,7 @@ Executar a verificação de qualidade de código:
 
 Executar a verificação de testes:
 
-**Comando**: Use o slash command `/tauri:check testing` ou siga manualmente as etapas de `.claude/references/tauri/checks/testing.md`
+**Comando**: Use o slash command `/bear-tauri:check testing` ou siga manualmente as etapas de `.claude/references/tauri/checks/testing.md`
 
 **Critérios Avaliados**:
 - Cobertura de código (meta >= 80%) no núcleo Rust e no frontend (7 pts)
@@ -75,7 +75,7 @@ Executar a verificação de testes:
 
 Executar a verificação de segurança:
 
-**Comando**: Use o slash command `/tauri:check security` ou siga manualmente as etapas de `.claude/references/tauri/checks/security.md`
+**Comando**: Use o slash command `/bear-tauri:check security` ou siga manualmente as etapas de `.claude/references/tauri/checks/security.md`
 
 **Critérios Avaliados**:
 - Capabilities e permissões: uma capability por janela/papel, privilégio mínimo (6 pts)

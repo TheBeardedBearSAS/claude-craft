@@ -14,7 +14,7 @@ Au **premier run** de `bear-craft` (quelle que soit la commande), si `~/.claude/
 
 Pour améliorer Bear Craft, nous aimerions collecter :
 
-  ✓ Commandes exécutées (ex: /team:audit)
+  ✓ Commandes exécutées (ex: /bear-team:audit)
   ✓ Erreurs (stack traces anonymisées)
   ✓ OS + version Node.js
 

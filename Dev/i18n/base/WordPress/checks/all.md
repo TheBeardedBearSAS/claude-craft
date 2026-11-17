@@ -31,7 +31,7 @@ docker compose exec app grep -nE '@wordpress/(scripts|env|create-block|e2e-test-
 
 ### Step 2: Architecture Audit (25 points)
 
-Execute architecture check: `/wordpress:check architecture` or follow `.claude/references/wordpress/checks/architecture.md`
+Execute architecture check: `/bear-wordpress:check architecture` or follow `.claude/references/wordpress/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Plugin/theme layout and bootstrap (5 pts)
@@ -44,7 +44,7 @@ Execute architecture check: `/wordpress:check architecture` or follow `.claude/r
 
 ### Step 3: Code Quality Audit (25 points)
 
-Execute code quality check: `/wordpress:check code-quality` or follow `.claude/references/wordpress/checks/code-quality.md`
+Execute code quality check: `/bear-wordpress:check code-quality` or follow `.claude/references/wordpress/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - PHP standards (PHPCS WordPress) and static analysis (PHPStan with phpstan-wordpress) (7 pts)
@@ -57,7 +57,7 @@ Execute code quality check: `/wordpress:check code-quality` or follow `.claude/r
 
 ### Step 4: Testing Audit (25 points)
 
-Execute testing check: `/wordpress:check testing` or follow `.claude/references/wordpress/checks/testing.md`
+Execute testing check: `/bear-wordpress:check testing` or follow `.claude/references/wordpress/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage, 80% minimum (5 pts)
@@ -70,7 +70,7 @@ Execute testing check: `/wordpress:check testing` or follow `.claude/references/
 
 ### Step 5: Security Audit (25 points)
 
-Execute security check: `/wordpress:check security` or follow `.claude/references/wordpress/checks/security.md`
+Execute security check: `/bear-wordpress:check security` or follow `.claude/references/wordpress/checks/security.md`
 
 **Evaluated Criteria**:
 - Authorization and nonces (7 pts)

@@ -26,7 +26,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification d'architecture complète :
 
-**Commande** : Utiliser la slash command `/rust:check architecture` ou suivre manuellement les étapes de `.claude/references/rust/checks/architecture.md`
+**Commande** : Utiliser la slash command `/bear-rust:check architecture` ou suivre manuellement les étapes de `.claude/references/rust/checks/architecture.md`
 
 **Critères évalués** :
 - Organisation du workspace et frontières de crates (domain exempt d'axum/sqlx) (6 pts)
@@ -42,7 +42,7 @@ Exécuter la vérification d'architecture complète :
 
 Exécuter la vérification de qualité du code :
 
-**Commande** : Utiliser la slash command `/rust:check code-quality` ou suivre manuellement les étapes de `.claude/references/rust/checks/code-quality.md`
+**Commande** : Utiliser la slash command `/bear-rust:check code-quality` ou suivre manuellement les étapes de `.claude/references/rust/checks/code-quality.md`
 
 **Critères évalués** :
 - Clippy sans alerte avec `-D warnings` et lints de workspace (5 pts)
@@ -58,7 +58,7 @@ Exécuter la vérification de qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la slash command `/rust:check testing` ou suivre manuellement les étapes de `.claude/references/rust/checks/testing.md`
+**Commande** : Utiliser la slash command `/bear-rust:check testing` ou suivre manuellement les étapes de `.claude/references/rust/checks/testing.md`
 
 **Critères évalués** :
 - Couverture de code (cargo-llvm-cov, cible >= 80 %) (7 pts)
@@ -74,7 +74,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la slash command `/rust:check security` ou suivre manuellement les étapes de `.claude/references/rust/checks/security.md`
+**Commande** : Utiliser la slash command `/bear-rust:check security` ou suivre manuellement les étapes de `.claude/references/rust/checks/security.md`
 
 **Critères évalués** :
 - Protections OWASP Top 10:2025 (6 pts)

@@ -469,7 +469,7 @@ onMounted(() => {
                 </div>
                 <div style="color: #4ade80; margin-bottom: 0.75rem;">Installing StatusLine... Done</div>
                 <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(15,23,42,0.8); border-radius: 0.375rem; border: 1px solid rgba(255,255,255,0.1);">
-                  <span style="color: #c084fc;">User:</span> <span style="color: #e2e8f0;">/react:generate-component Button</span><br>
+                  <span style="color: #c084fc;">User:</span> <span style="color: #e2e8f0;">/bear-react:generate-component Button</span><br>
                   <span style="color: #60a5fa;">Claude:</span> <span style="color: #94a3b8;">I'll generate a Button component using your project's React standards...</span>
                 </div>
               </div>

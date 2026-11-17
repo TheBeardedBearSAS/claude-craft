@@ -93,10 +93,10 @@ O processo abaixo é descrito com as primitivas do Agent Teams. Com `--engine=su
 | Condicao | Usar Team Delivery | Alternativa |
 |----------|-------------------|-------------|
 | Ciclo completo (planejar + codar), 3+ stories | **Sim (~2.2x speedup)** | Muito lento sequencialmente |
-| < 3 stories | Nao | `@product-owner` + `/workflow:implement` |
-| Story unica | Nao | `/common:ralph-run` |
+| < 3 stories | Nao | `@product-owner` + `/bear-workflow:implement` |
+| Story unica | Nao | `/bear-common:ralph-run` |
 | 5+ stories independentes | **Sim (melhor ROI)** | Possivel mas lento sequencialmente |
-| Somente implementacao (stories existem) | Usar `--phase=implementation` | `/workflow:implement` |
+| Somente implementacao (stories existem) | Usar `--phase=implementation` | `/bear-workflow:implement` |
 | Somente redacao (sem codificacao) | Usar `--phase=writing` | `@product-owner` manualmente |
 | Orcamento muito limitado | Nao (+30-40% overhead de tokens) | Workflow sequencial |
 | Precisa de mapeamento de dominio de arquivo | **Sim (integrado)** | Coordenacao manual |

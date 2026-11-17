@@ -5,7 +5,7 @@ argument-hint: --session=<session-id> [--dry-run|--skip-fix|--severity=<level>|-
 
 # QA Recette Fix - Correcao Automatizada de Bugs
 
-Complemento do `/qa:recette`. Le um relatorio/sessao de recette, refina cada erro para torna-lo processavel, gera documentos de gestao de projeto (stories BMAD, backlog, sprint), e entao lanca a correcao TDD para cada bug. Implementa a **Regra de Ouro**: Um bug corrigido NUNCA deve reaparecer.
+Complemento do `/bear-qa:recette`. Le um relatorio/sessao de recette, refina cada erro para torna-lo processavel, gera documentos de gestao de projeto (stories BMAD, backlog, sprint), e entao lanca a correcao TDD para cada bug. Implementa a **Regra de Ouro**: Um bug corrigido NUNCA deve reaparecer.
 
 ## Argumentos
 
@@ -227,19 +227,19 @@ resume_from:
 
 ```bash
 # Corrigir todos os bugs de uma sessao recette
-/qa:fix --session=REC-20260130-143022
+/bear-qa:fix --session=REC-20260130-143022
 
 # Dry run: refinar e documentar sem corrigir
-/qa:fix --session=REC-20260130-143022 --dry-run
+/bear-qa:fix --session=REC-20260130-143022 --dry-run
 
 # Corrigir apenas bugs criticos e altos
-/qa:fix --session=REC-20260130-143022 --severity=high
+/bear-qa:fix --session=REC-20260130-143022 --severity=high
 
 # Gerar documentos BMAD sem lancar o TDD
-/qa:fix --session=REC-20260130-143022 --skip-fix
+/bear-qa:fix --session=REC-20260130-143022 --skip-fix
 
 # Corrigir com commit automatico
-/qa:fix --session=REC-20260130-143022 --auto-commit
+/bear-qa:fix --session=REC-20260130-143022 --auto-commit
 ```
 
 ## Estrutura de Saida
@@ -268,10 +268,10 @@ resume_from:
 
 | Comando | Descricao |
 |---------|-----------|
-| `/qa:recette` | Executar testes de aceitacao |
-| `/qa:status` | Mostrar status da sessao |
-| `/qa:regression` | Ver testes de regressao |
-| `/qa:status --report` | Gerar relatorio |
+| `/bear-qa:recette` | Executar testes de aceitacao |
+| `/bear-qa:status` | Mostrar status da sessao |
+| `/bear-qa:regression` | Ver testes de regressao |
+| `/bear-qa:status --report` | Gerar relatorio |
 
 ## Mensagens de Erro
 
@@ -279,7 +279,7 @@ resume_from:
 |------|---------|
 | "Sessao nao encontrada" | Verifique o ID de sessao em `.recette/sessions/` |
 | "Sem erros na sessao" | A sessao nao tem erros a corrigir |
-| "sprint-status.yaml nao encontrado" | Inicialize o BMAD com `/workflow:init` |
+| "sprint-status.yaml nao encontrado" | Inicialize o BMAD com `/bear-workflow:init` |
 | "Teste RED nao falha" | O bug pode nao existir mais, verificar manualmente |
 
 ## Melhores Praticas
@@ -297,11 +297,11 @@ resume_from:
 ║                    PRÓXIMO PASSO                         ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-testar após as correções                           ║
 ║                                                          ║
 ║  Veja também:                                            ║
-║  • /qa:regression — Verificar testes de regressão        ║
+║  • /bear-qa:regression — Verificar testes de regressão        ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

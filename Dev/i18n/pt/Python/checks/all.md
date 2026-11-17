@@ -26,7 +26,7 @@ Preparar ambiente de auditoria:
 
 Executar verificação completa de arquitetura:
 
-**Comando**: Usar comando slash `/python:check architecture` ou seguir manualmente os passos em `.claude/references/python/checks/architecture.md`
+**Comando**: Usar comando slash `/bear-python:check architecture` ou seguir manualmente os passos em `.claude/references/python/checks/architecture.md`
 
 **Critérios Avaliados**:
 - Estrutura e separação de camadas (6 pts)
@@ -42,7 +42,7 @@ Executar verificação completa de arquitetura:
 
 Executar verificação de qualidade do código:
 
-**Comando**: Usar comando slash `/python:check code-quality` ou seguir manualmente os passos em `.claude/references/python/checks/code-quality.md`
+**Comando**: Usar comando slash `/bear-python:check code-quality` ou seguir manualmente os passos em `.claude/references/python/checks/code-quality.md`
 
 **Critérios Avaliados**:
 - PEP8 e formatação (5 pts)
@@ -58,7 +58,7 @@ Executar verificação de qualidade do código:
 
 Executar verificação de testes:
 
-**Comando**: Usar comando slash `/python:check testing` ou seguir manualmente os passos em `.claude/references/python/checks/testing.md`
+**Comando**: Usar comando slash `/bear-python:check testing` ou seguir manualmente os passos em `.claude/references/python/checks/testing.md`
 
 **Critérios Avaliados**:
 - Cobertura de código (7 pts)
@@ -74,7 +74,7 @@ Executar verificação de testes:
 
 Executar verificação de segurança:
 
-**Comando**: Usar comando slash `/python:check security` ou seguir manualmente os passos em `.claude/references/python/checks/security.md`
+**Comando**: Usar comando slash `/bear-python:check security` ou seguir manualmente os passos em `.claude/references/python/checks/security.md`
 
 **Critérios Avaliados**:
 - Scan Bandit (6 pts)

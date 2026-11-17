@@ -21,8 +21,8 @@ El primer argumento es el eje; el resto (por ejemplo, la ruta de un proyecto) se
 
 ## MISIÓN
 
-1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/ruby:check security app/`) y detente.
+1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/bear-ruby:check security app/`) y detente.
 2. Lee el archivo de checklist de ese eje y síguelo paso a paso. En ese archivo, `$ARGUMENTS` designa los argumentos que siguen al eje.
 3. Genera el informe en el formato de salida que define la checklist.
 
-Ejemplos: `/ruby:check architecture`, `/ruby:check testing ./app`, `/ruby:check all`.
+Ejemplos: `/bear-ruby:check architecture`, `/bear-ruby:check testing ./app`, `/bear-ruby:check all`.

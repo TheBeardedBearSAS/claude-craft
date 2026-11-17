@@ -14,7 +14,7 @@ Arguments :
 - Nom de l'entité (ex: `Product`, `BlogPost`)
 - (Optionnel) Champs au format `nom:type` séparés par des virgules
 
-Exemple : `/symfony:generate-crud Product name:string,price:decimal,description:text`
+Exemple : `/bear-symfony:generate-crud Product name:string,price:decimal,description:text`
 
 ## Mode Plan
 

@@ -21,8 +21,8 @@ El primer argumento es el eje; el resto (por ejemplo, la ruta de un proyecto) se
 
 ## MISIÓN
 
-1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/csharp:check security src/`) y detente.
+1. Lee el primer argumento. Si no corresponde a ninguno de los 5 ejes anteriores, enuméralos con un ejemplo (`/bear-csharp:check security src/`) y detente.
 2. Lee el archivo de checklist de ese eje y síguelo paso a paso. En ese archivo, `$ARGUMENTS` designa los argumentos que siguen al eje.
 3. Genera el informe en el formato de salida que define la checklist.
 
-Ejemplos: `/csharp:check architecture`, `/csharp:check testing ./app`, `/csharp:check all`.
+Ejemplos: `/bear-csharp:check architecture`, `/bear-csharp:check testing ./app`, `/bear-csharp:check all`.

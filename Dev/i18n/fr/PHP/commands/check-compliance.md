@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /php:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-php:check all"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/php:check all`.
+> ⚠️ `/bear-php:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-php:check all`.
 
-Exécutez `/php:check all $ARGUMENTS` : lisez `.claude/commands/php/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-php:check all $ARGUMENTS` : lisez `.claude/commands/bear-php/check.md` et suivez-le avec ces arguments.

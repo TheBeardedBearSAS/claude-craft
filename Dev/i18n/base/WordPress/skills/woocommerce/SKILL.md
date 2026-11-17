@@ -29,7 +29,7 @@ Optional module of the WordPress stack (WooCommerce 11.2 line, WordPress 7.0+, P
 ## Where to Look
 
 - Detailed APIs, snippets, hooks, Store API, gateways, REST, testing: `REFERENCE.md` (this folder)
-- Auditable items for reviews and `/wordpress:check`: `checklist.md` (this folder)
+- Auditable items for reviews and `/bear-wordpress:check`: `checklist.md` (this folder)
 - Core WordPress rules: `.claude/references/wordpress/rules/`
 
 ## Workflow

@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /php:check code-quality"
+description: "Obsoleto (se elimina en 10.0): usa /bear-php:check code-quality"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/php:check code-quality`.
+> ⚠️ `/bear-php:check-code-quality` está obsoleto y se eliminará en 10.0. Usa `/bear-php:check code-quality`.
 
-Ejecuta `/php:check code-quality $ARGUMENTS`: lee `.claude/commands/php/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-php:check code-quality $ARGUMENTS`: lee `.claude/commands/bear-php/check.md` y síguelo con estos argumentos.

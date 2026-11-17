@@ -326,5 +326,5 @@ Wenn ein Timeout ausgelöst wird:
 ## Verwandt
 
 - `@ralph-conductor` - Agent für Ralph-Orchestrierung
-- `/qa:tdd` - TDD-basierte Fehlerbehebung
-- `/workflow:implement` - Sprint-Entwicklung mit TDD
+- `/bear-qa:tdd` - TDD-basierte Fehlerbehebung
+- `/bear-workflow:implement` - Sprint-Entwicklung mit TDD

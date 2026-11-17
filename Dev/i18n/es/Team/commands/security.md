@@ -48,7 +48,7 @@ El proceso siguiente se describe con las primitivas de Agent Teams. Con `--engin
 
 **Alcance**: `--scope=full|code|deps|infra` se aplica a ambos motores (`full` = 3 reviewers en paralelo, un alcance único = un solo reviewer).
 
-**Diferencia con `/security-review` nativo**: el comando integrado `/security-review` de Claude Code solo analiza el diff (cambios pendientes de la rama actual). `/team:security` audita todo el repositorio según el alcance elegido (código, dependencias, infraestructura). Usar `/security-review` antes de un commit o una PR, `/team:security` para una auditoría completa.
+**Diferencia con `/security-review` nativo**: el comando integrado `/security-review` de Claude Code solo analiza el diff (cambios pendientes de la rama actual). `/bear-team:security` audita todo el repositorio según el alcance elegido (código, dependencias, infraestructura). Usar `/security-review` antes de un commit o una PR, `/bear-team:security` para una auditoría completa.
 
 ## Prerequisitos
 

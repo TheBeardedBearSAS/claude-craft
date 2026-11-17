@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /paperclip:check testing"
+description: "Deprecated (removed in 10.0): use /bear-paperclip:check testing"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-testing` is deprecated and will be removed in 10.0. Use `/paperclip:check testing`.
+> ⚠️ `/bear-paperclip:check-testing` is deprecated and will be removed in 10.0. Use `/bear-paperclip:check testing`.
 
-Run `/paperclip:check testing $ARGUMENTS`: read `.claude/commands/paperclip/check.md` and follow it with these arguments.
+Run `/bear-paperclip:check testing $ARGUMENTS`: read `.claude/commands/bear-paperclip/check.md` and follow it with these arguments.

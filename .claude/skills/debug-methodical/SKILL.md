@@ -75,7 +75,7 @@ Skill inspiré de [obra/superpowers](https://github.com/obra/superpowers). **Obj
 - [ ] Performance non dégradée
 - [ ] Logs / monitoring vérifiés en staging si critique
 
-**Règle de régression :** le test écrit en Phase 1 reste dans la codebase **pour toujours**. Un bug fixé ne doit JAMAIS réapparaître (voir `/qa:regression`).
+**Règle de régression :** le test écrit en Phase 1 reste dans la codebase **pour toujours**. Un bug fixé ne doit JAMAIS réapparaître (voir `/bear-qa:regression`).
 
 ## Anti-patterns critiques
 
@@ -108,9 +108,9 @@ Skill inspiré de [obra/superpowers](https://github.com/obra/superpowers). **Obj
 
 ## Intégration Bear Craft
 
-- **`/qa:tdd`** — bug fix en mode TDD (test qui échoue d'abord)
-- **`/qa:fix`** — correction automatisée des bugs QA
-- **`/qa:regression`** — registre des tests de régression
+- **`/bear-qa:tdd`** — bug fix en mode TDD (test qui échoue d'abord)
+- **`/bear-qa:fix`** — correction automatisée des bugs QA
+- **`/bear-qa:regression`** — registre des tests de régression
 - **Skill `atomic-tasks`** — découper le debug en phases atomiques
 - **Rule 07 (testing)** — bug fix = test de régression obligatoire
 
@@ -118,7 +118,7 @@ Skill inspiré de [obra/superpowers](https://github.com/obra/superpowers). **Obj
 
 - [obra/superpowers](https://github.com/obra/superpowers)
 - Rule `.claude/rules/07-testing.md`
-- Command `/qa:tdd`, `/qa:regression`
+- Command `/bear-qa:tdd`, `/bear-qa:regression`
 
 ---
 

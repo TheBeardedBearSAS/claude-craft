@@ -2,7 +2,7 @@
 
 > **Status** : DRAFT scaffold P3-29.
 
-Enforce custom lint rules (ex : "no direct DB access in controllers") during `/team:audit` and pre-commit.
+Enforce custom lint rules (ex : "no direct DB access in controllers") during `/bear-team:audit` and pre-commit.
 
 ## Usage
 

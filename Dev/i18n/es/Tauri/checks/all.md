@@ -27,7 +27,7 @@ Preparar el entorno de auditoría:
 
 Ejecutar la verificación completa de arquitectura:
 
-**Comando**: Usar el comando slash `/tauri:check architecture` o seguir manualmente los pasos de `.claude/references/tauri/checks/architecture.md`
+**Comando**: Usar el comando slash `/bear-tauri:check architecture` o seguir manualmente los pasos de `.claude/references/tauri/checks/architecture.md`
 
 **Criterios evaluados**:
 - Disposición del proyecto (`src/` / `src-tauri/`, entrada `run()` en `lib.rs`, punto de entrada móvil) y `main.rs` delgado (5 pts)
@@ -43,7 +43,7 @@ Ejecutar la verificación completa de arquitectura:
 
 Ejecutar la verificación de calidad de código:
 
-**Comando**: Usar el comando slash `/tauri:check code-quality` o seguir manualmente los pasos de `.claude/references/tauri/checks/code-quality.md`
+**Comando**: Usar el comando slash `/bear-tauri:check code-quality` o seguir manualmente los pasos de `.claude/references/tauri/checks/code-quality.md`
 
 **Criterios evaluados**:
 - Clippy limpio con `-D warnings` y `cargo fmt --check` (5 pts)
@@ -59,7 +59,7 @@ Ejecutar la verificación de calidad de código:
 
 Ejecutar la verificación de tests:
 
-**Comando**: Usar el comando slash `/tauri:check testing` o seguir manualmente los pasos de `.claude/references/tauri/checks/testing.md`
+**Comando**: Usar el comando slash `/bear-tauri:check testing` o seguir manualmente los pasos de `.claude/references/tauri/checks/testing.md`
 
 **Criterios evaluados**:
 - Cobertura de código (objetivo >= 80%) en el núcleo Rust y en el frontend (7 pts)
@@ -75,7 +75,7 @@ Ejecutar la verificación de tests:
 
 Ejecutar la verificación de seguridad:
 
-**Comando**: Usar el comando slash `/tauri:check security` o seguir manualmente los pasos de `.claude/references/tauri/checks/security.md`
+**Comando**: Usar el comando slash `/bear-tauri:check security` o seguir manualmente los pasos de `.claude/references/tauri/checks/security.md`
 
 **Criterios evaluados**:
 - Capabilities y permisos: una capability por ventana/rol, mínimo privilegio (6 pts)

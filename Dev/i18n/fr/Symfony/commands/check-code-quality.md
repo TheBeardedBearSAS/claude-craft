@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /symfony:check code-quality"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-symfony:check code-quality"
 deprecated: true
-replaced-by: /symfony:check
+replaced-by: /bear-symfony:check
 ---
 
-> ⚠️ `/symfony:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/symfony:check code-quality`.
+> ⚠️ `/bear-symfony:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/bear-symfony:check code-quality`.
 
-Exécutez `/symfony:check code-quality $ARGUMENTS` : lisez `.claude/commands/symfony/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-symfony:check code-quality $ARGUMENTS` : lisez `.claude/commands/bear-symfony/check.md` et suivez-le avec ces arguments.

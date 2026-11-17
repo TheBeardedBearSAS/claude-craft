@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /vite:check testing"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-vite:check testing"
 deprecated: true
-replaced-by: /vite:check
+replaced-by: /bear-vite:check
 ---
 
-> ⚠️ `/vite:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/vite:check testing`.
+> ⚠️ `/bear-vite:check-testing` est obsolète et sera retirée en 10.0. Utilisez `/bear-vite:check testing`.
 
-Exécutez `/vite:check testing $ARGUMENTS` : lisez `.claude/commands/vite/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-vite:check testing $ARGUMENTS` : lisez `.claude/commands/bear-vite/check.md` et suivez-le avec ces arguments.

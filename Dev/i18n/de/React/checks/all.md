@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/react:check architecture` verwenden oder Schritte in `.claude/references/react/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-react:check architecture` verwenden oder Schritte in `.claude/references/react/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Feature-basierte Struktur (6 Pkt)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung ausführen:
 
 Codequalitätsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/react:check code-quality` verwenden oder Schritte in `.claude/references/react/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-react:check code-quality` verwenden oder Schritte in `.claude/references/react/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - TypeScript Strict Mode und Type-Safety (5 Pkt)
@@ -58,7 +58,7 @@ Codequalitätsprüfung ausführen:
 
 Testprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/react:check testing` verwenden oder Schritte in `.claude/references/react/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-react:check testing` verwenden oder Schritte in `.claude/references/react/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (7 Pkt)
@@ -74,7 +74,7 @@ Testprüfung ausführen:
 
 Sicherheitsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/react:check security` verwenden oder Schritte in `.claude/references/react/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-react:check security` verwenden oder Schritte in `.claude/references/react/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - XSS-Prävention (dangerouslySetInnerHTML) (6 Pkt)

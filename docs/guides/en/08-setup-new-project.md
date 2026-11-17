@@ -327,7 +327,7 @@ Use the built-in command to auto-detect your stack and answer targeted questions
 claude
 
 # Run the setup command
-/common:init --context
+/bear-common:init --context
 ```
 
 The command will:
@@ -452,7 +452,7 @@ For maximum token savings (60-90% on CLI outputs), install RTK:
 
 ```bash
 # In Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 This configures RTK proxy integration. See [RTK.md](@RTK.md) for details.
@@ -470,7 +470,7 @@ Ask Claude:
 List all available slash commands for this project
 ```
 
-Expected: Claude should list commands like `/common:analyze-feature`, `/{tech}:generate-crud`, etc.
+Expected: Claude should list commands like `/bear-common:analyze-feature`, `/{tech}:generate-crud`, etc.
 
 ### Test 2: Use an Agent
 
@@ -485,7 +485,7 @@ Expected: Claude should respond as the TDD Coach agent with testing guidance.
 
 Try a simple command:
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Expected: Claude should run a pre-commit quality check (may report no changes if project is empty).
@@ -588,10 +588,10 @@ claude
 @{tech}-reviewer   # Code review
 
 # Common commands
-/common:analyze-feature     # Analyze requirements
+/bear-common:analyze-feature     # Analyze requirements
 /{tech}:generate-crud       # Generate CRUD code
-/gate:check commit         # Quality check
-/common:security-audit      # Security review
+/bear-gate:check commit         # Quality check
+/bear-common:security-audit      # Security review
 ```
 
 ---

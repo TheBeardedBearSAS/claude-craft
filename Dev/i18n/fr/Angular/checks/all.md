@@ -26,7 +26,7 @@ Préparer l'environnement d'audit :
 
 Exécuter la vérification complète de l'architecture :
 
-**Commande** : Utiliser la commande slash `/angular:check architecture` ou suivre manuellement les étapes dans `.claude/references/angular/checks/architecture.md`
+**Commande** : Utiliser la commande slash `/bear-angular:check architecture` ou suivre manuellement les étapes dans `.claude/references/angular/checks/architecture.md`
 
 **Critères évalués** :
 - Structure des modules pilotée par le domaine (6 pts)
@@ -42,7 +42,7 @@ Exécuter la vérification complète de l'architecture :
 
 Exécuter la vérification de la qualité du code :
 
-**Commande** : Utiliser la commande slash `/angular:check code-quality` ou suivre manuellement les étapes dans `.claude/references/angular/checks/code-quality.md`
+**Commande** : Utiliser la commande slash `/bear-angular:check code-quality` ou suivre manuellement les étapes dans `.claude/references/angular/checks/code-quality.md`
 
 **Critères évalués** :
 - Mode strict TypeScript et sûreté des types (5 pts)
@@ -58,7 +58,7 @@ Exécuter la vérification de la qualité du code :
 
 Exécuter la vérification des tests :
 
-**Commande** : Utiliser la commande slash `/angular:check testing` ou suivre manuellement les étapes dans `.claude/references/angular/checks/testing.md`
+**Commande** : Utiliser la commande slash `/bear-angular:check testing` ou suivre manuellement les étapes dans `.claude/references/angular/checks/testing.md`
 
 **Critères évalués** :
 - Couverture du code (7 pts)
@@ -74,7 +74,7 @@ Exécuter la vérification des tests :
 
 Exécuter la vérification de sécurité :
 
-**Commande** : Utiliser la commande slash `/angular:check security` ou suivre manuellement les étapes dans `.claude/references/angular/checks/security.md`
+**Commande** : Utiliser la commande slash `/bear-angular:check security` ou suivre manuellement les étapes dans `.claude/references/angular/checks/security.md`
 
 **Critères évalués** :
 - Prévention XSS et DomSanitizer (6 pts)

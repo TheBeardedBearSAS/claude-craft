@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (removido na 10.0): use /laravel:check security"
+description: "Obsoleto (removido na 10.0): use /bear-laravel:check security"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-security` está obsoleto e será removido na 10.0. Use `/laravel:check security`.
+> ⚠️ `/bear-laravel:check-security` está obsoleto e será removido na 10.0. Use `/bear-laravel:check security`.
 
-Execute `/laravel:check security $ARGUMENTS`: leia `.claude/commands/laravel/check.md` e siga-o com estes argumentos.
+Execute `/bear-laravel:check security $ARGUMENTS`: leia `.claude/commands/bear-laravel/check.md` e siga-o com estes argumentos.

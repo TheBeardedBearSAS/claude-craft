@@ -14,7 +14,7 @@ Arguments:
 - Bug description or ticket link
 - (Optional) Affected file or module
 
-Example: `/qa:tdd "User cannot log out"` or `/qa:tdd #123`
+Example: `/bear-qa:tdd "User cannot log out"` or `/bear-qa:tdd #123`
 
 ## Plan Mode
 
@@ -393,11 +393,11 @@ Fixes #XXX
 ║                      NEXT STEP                           ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-test after corrections                             ║
 ║                                                          ║
 ║  See also:                                               ║
-║  • /gate:check commit — Validate before commit     ║
+║  • /bear-gate:check commit — Validate before commit     ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

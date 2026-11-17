@@ -11,10 +11,10 @@ Migration ponctuelle d'un backlog existant vers l'organisation BMAD v6, avec `.b
 
 | Invocation | Action | Remplace |
 |------------|--------|----------|
-| `/project:migrate --analyze` | Rapport uniquement : structure, scores INVEST, écarts BMAD v6. N'écrit rien | `analyze-backlog` |
-| `/project:migrate` | Par défaut : migre le backlog et crée `.bmad/sprint-status.yaml` | `migrate-backlog` |
-| `/project:migrate --stories [story-id]` | Complète les champs manquants des stories (tâches, CA, historique, INVEST) | `update-stories` |
-| `/project:migrate --resync` | Réconcilie le contenu et les IDs entre le markdown et le YAML | `sync-backlog` |
+| `/bear-project:migrate --analyze` | Rapport uniquement : structure, scores INVEST, écarts BMAD v6. N'écrit rien | `analyze-backlog` |
+| `/bear-project:migrate` | Par défaut : migre le backlog et crée `.bmad/sprint-status.yaml` | `migrate-backlog` |
+| `/bear-project:migrate --stories [story-id]` | Complète les champs manquants des stories (tâches, CA, historique, INVEST) | `update-stories` |
+| `/bear-project:migrate --resync` | Réconcilie le contenu et les IDs entre le markdown et le YAML | `sync-backlog` |
 | `--dry-run` | Prévisualisation uniquement, valable pour tous les modes | - |
 | `--force` | Écrase les fichiers BMAD existants (mode migration) | - |
 
@@ -56,7 +56,7 @@ Emplacement : project-management/backlog/ | Epics : {N} | Stories : {N} | Tâche
 | US-001 | Login | 5/6    | Estimable |
 
 Écarts de migration : tdd_phase 100% | tasks.list 60% | history 100%
-Suite : /project:migrate
+Suite : /bear-project:migrate
 ```
 
 ## Par défaut : migration
@@ -104,7 +104,7 @@ Dry run : liste les fichiers qui seraient créés (ex. `.bmad/sprint-status.yaml
 
 Retour arrière : `tar -xzf .bmad/backup/backlog-*.tar.gz -C project-management/ && rm .bmad/sprint-status.yaml`.
 
-Étapes suivantes : relire le YAML, lancer `/workflow:status`, renseigner les métadonnées du sprint (dates, objectifs), vérifier les quality gates avec `/gate:check all`.
+Étapes suivantes : relire le YAML, lancer `/bear-workflow:status`, renseigner les métadonnées du sprint (dates, objectifs), vérifier les quality gates avec `/bear-gate:check all`.
 
 ## --stories
 
@@ -127,7 +127,7 @@ Complète les champs BMAD v6 manquants des stories existantes (toutes, ou une se
 4. **INVEST** : ajouter `invest_score` (independent, negotiable, valuable, estimable, small, testable, total).
 5. **Mettre à jour** `sprint-status.yaml` en fusionnant les champs ; ajouter éventuellement un commentaire de métadonnées aux fichiers de stories (`<!-- BMAD v6 Metadata … -->` avec `tdd_phase`, `invest_score`, `last_sync`).
 
-Sortie : tableau des stories mises à jour (champs ajoutés, score INVEST), récapitulatif par champ (ajoutés / ignorés), avertissements (ex. « US-003 : story points manquants », « US-007 : aucun critère d'acceptation »), fichiers modifiés. Corriger ensuite les avertissements, puis lancer `/project:migrate --resync` et `/gate:check backlog`.
+Sortie : tableau des stories mises à jour (champs ajoutés, score INVEST), récapitulatif par champ (ajoutés / ignorés), avertissements (ex. « US-003 : story points manquants », « US-007 : aucun critère d'acceptation »), fichiers modifiés. Corriger ensuite les avertissements, puis lancer `/bear-project:migrate --resync` et `/bear-gate:check backlog`.
 
 ## --resync
 
@@ -141,18 +141,18 @@ Réconcilie le contenu et les IDs entre les fichiers markdown et le YAML. Le sta
 6. **Orphelins** : dans le YAML mais pas dans les fichiers → marquer `archived` ou avertir ; dans les fichiers mais pas dans le YAML → ajouter au YAML (statut `backlog`).
 7. **Horodatages** : `last_sync` dans le YAML et `<!-- last_sync: … -->` dans les fichiers de stories.
 
-Sortie : changements fichiers → YAML, changements YAML → fichiers, conflits résolus, orphelins (archivés / ajoutés), heure de dernière synchronisation. Relire ensuite `git diff` et lancer `/workflow:status`.
+Sortie : changements fichiers → YAML, changements YAML → fichiers, conflits résolus, orphelins (archivés / ajoutés), heure de dernière synchronisation. Relire ensuite `git diff` et lancer `/bear-workflow:status`.
 
-Automatisation : un hook pre-commit peut exécuter `/project:migrate --resync` (`.bmad/hooks/pre-commit.sh`).
+Automatisation : un hook pre-commit peut exécuter `/bear-project:migrate --resync` (`.bmad/hooks/pre-commit.sh`).
 
 ## Exemples
 
 ```
-/project:migrate --analyze
-/project:migrate --dry-run
-/project:migrate
-/project:migrate --force
-/project:migrate --stories US-001
-/project:migrate --stories --dry-run
-/project:migrate --resync --dry-run
+/bear-project:migrate --analyze
+/bear-project:migrate --dry-run
+/bear-project:migrate
+/bear-project:migrate --force
+/bear-project:migrate --stories US-001
+/bear-project:migrate --stories --dry-run
+/bear-project:migrate --resync --dry-run
 ```

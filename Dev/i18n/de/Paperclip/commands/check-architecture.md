@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /paperclip:check architecture verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-paperclip:check architecture verwenden"
 deprecated: true
-replaced-by: /paperclip:check
+replaced-by: /bear-paperclip:check
 ---
 
-> ⚠️ `/paperclip:check-architecture` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/paperclip:check architecture`.
+> ⚠️ `/bear-paperclip:check-architecture` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-paperclip:check architecture`.
 
-Führen Sie `/paperclip:check architecture $ARGUMENTS` aus: Lesen Sie `.claude/commands/paperclip/check.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-paperclip:check architecture $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-paperclip/check.md` und folgen Sie der Datei mit diesen Argumenten.

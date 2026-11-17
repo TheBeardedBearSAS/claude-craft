@@ -373,7 +373,7 @@ pre-commit:
 
 ## Abgleich mit der Bewertung
 
-Das Audit `/ruby:check` ordnet Werkzeuge den Achsen zu:
+Das Audit `/bear-ruby:check` ordnet Werkzeuge den Achsen zu:
 
 | Achse | Werkzeug-Nachweis |
 |-------|-------------------|

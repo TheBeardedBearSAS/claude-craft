@@ -58,9 +58,9 @@ dotnet format --verify-no-changes   # Verificar formatacao
 ```
 
 ### Comandos Bear Craft
-- `/csharp:check all` - Auditoria completa
-- `/csharp:check architecture` - Validacao de arquitetura
-- `/csharp:generate-feature` - Gerar feature CQRS
+- `/bear-csharp:check all` - Auditoria completa
+- `/bear-csharp:check architecture` - Validacao de arquitetura
+- `/bear-csharp:generate-feature` - Gerar feature CQRS
 
 ### Workflow de desenvolvimento
 1. **Analisar** - `rules/01-workflow-analysis.md`

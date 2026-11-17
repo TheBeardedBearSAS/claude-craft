@@ -176,4 +176,4 @@ Genera un reporte con:
 
 **⚠️ ATENCIÓN**: ¡Nunca commitear secrets! Verificar `.gitignore` y utilizar `git-secrets` o `truffleHog`.
 
-**Nota**: Este reporte se concentra únicamente en la seguridad. Para una auditoría completa, utiliza `/flutter:check all`.
+**Nota**: Este reporte se concentra únicamente en la seguridad. Para una auditoría completa, utiliza `/bear-flutter:check all`.

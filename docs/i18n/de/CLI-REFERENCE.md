@@ -329,7 +329,7 @@ Startet eine lokale Weboberfläche, um das BMAD-v6-Backlog und die Sprints als S
 npx @the-bearded-bear/bear-craft kanban [Pfad] [Optionen]
 ```
 
-Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unterverzeichnis `project-management/` enthalten (erzeugt durch `/workflow:plan` oder `/workflow:start`).
+Der `Pfad` ist standardmäßig das aktuelle Verzeichnis. Das Ziel muss ein Unterverzeichnis `project-management/` enthalten (erzeugt durch `/bear-workflow:plan` oder `/bear-workflow:start`).
 
 ### Optionen
 
@@ -364,7 +364,7 @@ Sechs Ansichten, aufgelistet in der Navigationsleiste.
 - **Suchen, filtern und sortieren**: Das Suchfeld (`Strg+K` oder `/`) filtert die Ansichten Board und Backlog; die Filter für Priorität, Zuständige/n und Epic sowie die Sortierung stehen in der URL, zum Beispiel `#/kanban?q=auth&prio=must,should&who=alice&epic=E4&sort=priority&dir=desc`. `?story=US-E4-03` öffnet eine Story aus jeder Ansicht, `#/docs/<Pfad>` öffnet ein Dokument.
 - **Sprache der Oberfläche**: Englisch, Französisch, Spanisch, Deutsch oder Portugiesisch, automatisch nach dem Browser gewählt oder im Einstellungsfenster. Story-Titel und Dokumente werden unverändert angezeigt.
 
-Die Befehle `/workflow:*` und `/project:*` bleiben gültig und schreiben dieselben Dateien.
+Die Befehle `/bear-workflow:*` und `/bear-project:*` bleiben gültig und schreiben dieselben Dateien.
 
 ### Wohin geschrieben wird
 
@@ -409,7 +409,7 @@ done          -> (terminal)
 
 ### BMAD-v6-Quelle sprint-status
 
-Die Stories stammen aus `.bmad/sprint-status.yaml` (geschrieben von `/workflow:*` und `/project:backlog`) und aus den Markdown-Dateien in `project-management/`. Wird eine Story in der YAML geführt, hat die YAML Vorrang für Status, Titel, Punkte, Priorität, Zuständige/n, Epic, Aufgaben und Sprint; das Markdown behält den Inhalt. Das Board aktualisiert sich live, sobald sich eine der Quellen ändert. Stories eines abgeschlossenen Sprints (`archived_sprints`) sind schreibgeschützt.
+Die Stories stammen aus `.bmad/sprint-status.yaml` (geschrieben von `/bear-workflow:*` und `/bear-project:backlog`) und aus den Markdown-Dateien in `project-management/`. Wird eine Story in der YAML geführt, hat die YAML Vorrang für Status, Titel, Punkte, Priorität, Zuständige/n, Epic, Aufgaben und Sprint; das Markdown behält den Inhalt. Das Board aktualisiert sich live, sobald sich eine der Quellen ändert. Stories eines abgeschlossenen Sprints (`archived_sprints`) sind schreibgeschützt.
 
 Ist das Board leer oder fehlt eine Story, listet das Diagnose-Banner die nicht lesbaren Dateien auf; dieselbe Liste liefert `GET /api/diagnostics`. Siehe [Fehlerbehebung](../../TROUBLESHOOTING.md#kanban-board-empty).
 
@@ -551,7 +551,7 @@ yq --version
 
 ```bash
 # In Claude Code alle Optimierungen mit einem Befehl konfigurieren
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### RTK-Befehle

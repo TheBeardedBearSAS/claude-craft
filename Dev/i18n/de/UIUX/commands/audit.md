@@ -14,7 +14,7 @@ Argumente:
 - (Optional) URL oder Pfad zur zu auditierenden Seite/Komponente
 - (Optional) WCAG-Stufe: AA oder AAA (Standard: AAA)
 
-Beispiel: `/uiux:audit src/pages/Dashboard.tsx AAA`
+Beispiel: `/bear-uiux:audit src/pages/Dashboard.tsx AAA`
 
 ## Plan-Modus
 
@@ -24,7 +24,7 @@ Beispiel: `/uiux:audit src/pages/Dashboard.tsx AAA`
 
 ### Schritt 1: Barrierefreiheit-Audit (A11y-Experte)
 
-`/uiux:a11y-audit {URL oder Pfad} {Stufe}` ausführen und dessen Bericht (Score, nicht erfüllte WCAG-Kriterien, Maßnahmen) in die Synthese übernehmen. Das automatisierte Audit und die WCAG-Checkliste hier nicht wiederholen: `/uiux:a11y-audit` ist die einzige Quelle.
+`/bear-uiux:a11y-audit {URL oder Pfad} {Stufe}` ausführen und dessen Bericht (Score, nicht erfüllte WCAG-Kriterien, Maßnahmen) in die Synthese übernehmen. Das automatisierte Audit und die WCAG-Checkliste hier nicht wiederholen: `/bear-uiux:a11y-audit` ist die einzige Quelle.
 
 ### Schritt 2: UX/Ergonomie-Audit (UX-Experte)
 

@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /vuejs:check security"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-vuejs:check security"
 deprecated: true
-replaced-by: /vuejs:check
+replaced-by: /bear-vuejs:check
 ---
 
-> ⚠️ `/vuejs:check-security` est obsolète et sera retirée en 10.0. Utilisez `/vuejs:check security`.
+> ⚠️ `/bear-vuejs:check-security` est obsolète et sera retirée en 10.0. Utilisez `/bear-vuejs:check security`.
 
-Exécutez `/vuejs:check security $ARGUMENTS` : lisez `.claude/commands/vuejs/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-vuejs:check security $ARGUMENTS` : lisez `.claude/commands/bear-vuejs/check.md` et suivez-le avec ces arguments.

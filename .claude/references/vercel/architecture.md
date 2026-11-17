@@ -1,6 +1,6 @@
 # Vercel Architecture Guidelines
 
-> Vercel is a **deployment platform**, not a framework. This document covers only the platform-level surface: `vercel.json`, Serverless Functions, ISR cache primitives, Cron Jobs, and the compute-model decision. Framework routing/rendering (Next.js, or any `/react:*`, `/vuejs:*`, `/angular:*` app) is out of scope — if a supported bear-craft framework stack is present in the project, defer to that stack's own `06-tooling.md` for its Vercel adapter, and do not duplicate config here.
+> Vercel is a **deployment platform**, not a framework. This document covers only the platform-level surface: `vercel.json`, Serverless Functions, ISR cache primitives, Cron Jobs, and the compute-model decision. Framework routing/rendering (Next.js, or any `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*` app) is out of scope — if a supported bear-craft framework stack is present in the project, defer to that stack's own `06-tooling.md` for its Vercel adapter, and do not duplicate config here.
 
 ## Architecture Pattern
 

@@ -93,13 +93,13 @@ No Claude Code, tente estes comandos:
 
 ```
 # Verificar a arquitetura do seu projeto
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Obter uma revisão de código
 @symfony-reviewer Revise minha pasta src/
 
 # Gerar uma nova entidade com CRUD
-/symfony:generate-crud Produto
+/bear-symfony:generate-crud Produto
 ```
 
 ---

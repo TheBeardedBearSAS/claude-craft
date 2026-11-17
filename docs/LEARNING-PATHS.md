@@ -39,7 +39,7 @@ make install-react TARGET=. RULES_LANG=en
 ### Step 2: Project Configuration (5 min)
 
 ```bash
-/common:init
+/bear-common:init
 ```
 
 Answer the interactive questions about your project:
@@ -54,7 +54,7 @@ This creates `.claude/project-context.yaml`.
 ### Step 3: Workflow Initialization (5 min)
 
 ```bash
-/workflow:init
+/bear-workflow:init
 ```
 
 Select your workflow track:
@@ -77,7 +77,7 @@ The board opens at `http://127.0.0.1:3737`. If your project uses the BMAD v6 wor
 ### Step 4: First Pre-Commit Check (5 min)
 
 ```bash
-/gate:check commit
+/bear-gate:check commit
 ```
 
 This validates:
@@ -91,7 +91,7 @@ This validates:
 ### Step 5: First Feature (15 min)
 
 ```bash
-/workflow:start "Add a login button to the homepage"
+/bear-workflow:start "Add a login button to the homepage"
 ```
 
 Claude will:
@@ -112,12 +112,12 @@ Claude will:
 ### Prerequisites
 
 - Completed Beginner path
-- At least 3 commits using `/gate:check commit`
+- At least 3 commits using `/bear-gate:check commit`
 
 ### Step 1: Full Audit (20 min)
 
 ```bash
-/team:audit --sequential
+/bear-team:audit --sequential
 ```
 
 This runs a comprehensive audit across 4 categories:
@@ -133,7 +133,7 @@ This runs a comprehensive audit across 4 categories:
 ### Step 2: Ralph Wiggum - Continuous Loop (30 min)
 
 ```bash
-/common:ralph-run "Implement user registration with email confirmation"
+/bear-common:ralph-run "Implement user registration with email confirmation"
 ```
 
 Ralph will:
@@ -167,7 +167,7 @@ dod:
 Before creating a PR:
 
 ```bash
-/gate:check merge
+/bear-gate:check merge
 ```
 
 This runs:
@@ -181,7 +181,7 @@ This runs:
 ### Step 4: TDD Bug Fix (20 min)
 
 ```bash
-/qa:tdd "Login button doesn't work when form is empty"
+/bear-qa:tdd "Login button doesn't work when form is empty"
 ```
 
 Claude will guide you through TDD:
@@ -203,7 +203,7 @@ Learn to manage Claude's context window:
 **Token optimization:**
 
 ```bash
-/common:setup-rtk
+/bear-common:setup-rtk
 export CLAUDE_CODE_SUBAGENT_MODEL=sonnet
 ```
 
@@ -225,7 +225,7 @@ export CLAUDE_CODE_SUBAGENT_MODEL=sonnet
 
 ```bash
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-/team:audit
+/bear-team:audit
 ```
 
 This runs audits in parallel across technology stacks:
@@ -248,7 +248,7 @@ Tools/AgentTeams/lib/cost-dashboard.sh --techs 2 --worker-model sonnet
 ### Step 2: Parallel Sprint (60 min)
 
 ```bash
-/team:delivery --phase=implementation Sprint-3
+/bear-team:delivery --phase=implementation Sprint-3
 ```
 
 This processes stories in parallel:
@@ -270,7 +270,7 @@ sprint-conductor (Opus)
 ### Step 3: Full Lifecycle Delivery (90 min)
 
 ```bash
-/team:delivery
+/bear-team:delivery
 ```
 
 This runs the complete sprint cycle:
@@ -289,7 +289,7 @@ This runs the complete sprint cycle:
 ### Step 4: Security Review (45 min)
 
 ```bash
-/team:security
+/bear-team:security
 ```
 
 This runs parallel security audits:
@@ -308,7 +308,7 @@ security-lead (Opus)
 Automated acceptance testing via Chrome:
 
 ```bash
-/qa:recette --scope=story --id=US-001
+/bear-qa:recette --scope=story --id=US-001
 ```
 
 **Prerequisites:**
@@ -337,7 +337,7 @@ Open separate Claude Code sessions for each worktree.
 Create a custom team template:
 
 ```bash
-.claude/commands/team/my-custom-team.md
+.claude/commands/bear-team/my-custom-team.md
 ```
 
 Follow the structure of existing templates (`team-audit`, `team-sprint`).
@@ -382,7 +382,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 
 | Pitfall | Solution |
 |---------|----------|
-| Skipping `/common:init` | Always configure project context first |
+| Skipping `/bear-common:init` | Always configure project context first |
 | Not using pre-commit check | Automate with git hook |
 | Overloading context | Use `/clear` between tasks |
 
@@ -392,7 +392,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 |---------|----------|
 | Running full audit too often | Use lightweight checks daily, full audit weekly |
 | Not configuring Ralph DoD | Create `ralph.yml` with appropriate validators |
-| Ignoring token costs | Use `/common:setup-rtk` and `SUBAGENT_MODEL=sonnet` |
+| Ignoring token costs | Use `/bear-common:setup-rtk` and `SUBAGENT_MODEL=sonnet` |
 
 ### Advanced
 
@@ -409,7 +409,7 @@ Follow the structure of existing templates (`team-audit`, `team-sprint`).
 After completing all paths:
 
 1. **Contribute:** Submit PRs to improve templates, skills, or documentation
-2. **Add Technology:** From a clone of the bear-craft repository, use `/common:add-technology` to add your stack
+2. **Add Technology:** From a clone of the bear-craft repository, use `/bear-common:add-technology` to add your stack
 3. **Train Team:** Onboard team members using this learning path
 4. **Customize:** Create custom skills, agents, and workflows
 5. **Optimize:** Fine-tune Ralph DoD, agent team sizes, and quality gates

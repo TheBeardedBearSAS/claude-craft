@@ -326,5 +326,5 @@ When a timeout fires:
 ## Related
 
 - `@ralph-conductor` - Agent for Ralph orchestration
-- `/qa:tdd` - TDD-based bug fixing
-- `/workflow:implement` - Sprint development with TDD
+- `/bear-qa:tdd` - TDD-based bug fixing
+- `/bear-workflow:implement` - Sprint development with TDD

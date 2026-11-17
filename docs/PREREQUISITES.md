@@ -348,7 +348,7 @@ nvm use 22
 
 ## RTK Installation Security
 
-When using `/common:setup-rtk` or `Tools/RTK/install-rtk.sh`, the RTK installer is verified with SHA256 checksum before execution.
+When using `/bear-common:setup-rtk` or `Tools/RTK/install-rtk.sh`, the RTK installer is verified with SHA256 checksum before execution.
 
 ### Checksum Verification
 

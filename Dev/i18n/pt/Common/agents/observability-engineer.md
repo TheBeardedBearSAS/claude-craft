@@ -165,7 +165,7 @@ def get_users():
 - `.claude/skills/observability/SKILL.md` — padrões de instrumentação
 - `@devops-engineer` — monitoramento de infraestrutura, configuração do Prometheus/Grafana
 - `@performance-auditor` — otimização guiada por traces/métricas
-- `/team:audit` — auditoria de observabilidade em paralelo
+- `/bear-team:audit` — auditoria de observabilidade em paralelo
 
 ## Recursos
 

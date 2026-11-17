@@ -18,7 +18,7 @@ Produce a well-formed payload for hiring a Paperclip agent. Paperclip (v2026.609
 ### 1. Collect inputs (interactive)
 
 Ask in order:
-- Target `companyId` (must exist — see `/paperclip:setup-company` or `paperclipai company list`)
+- Target `companyId` (must exist — see `/bear-paperclip:setup-company` or `paperclipai company list`)
 - `adapterType` — one of the registered types (e.g. `claude_local`, `codex_local`, `gemini_local`, `cursor_local`, `opencode_local`, `pi_local`). The `agentConfigurationDoc` of the chosen adapter tells you which sub-fields are accepted.
 - Agent display name (`$1`)
 - Role / title (e.g. "Senior TypeScript engineer")

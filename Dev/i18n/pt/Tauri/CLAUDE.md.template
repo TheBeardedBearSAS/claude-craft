@@ -68,7 +68,7 @@ docker compose exec app npx vitest run               # Testes do frontend (mockI
 > Os builds de GUI desktop exigem as bibliotecas de sistema da WebView; se o container não puder executá-las, faça o build na CI e mantenha os testes unitários compatíveis com o container.
 
 ### Comandos Disponíveis
-- `/tauri:check <architecture|code-quality|security|testing|all>` - Auditoria por eixo, ou agregado com pontuação
+- `/bear-tauri:check <architecture|code-quality|security|testing|all>` - Auditoria por eixo, ou agregado com pontuação
 
 ### Fluxo de Desenvolvimento
 1. **Analisar** - Ler o código, entender o domínio (`rules/01-workflow-analysis.md`)

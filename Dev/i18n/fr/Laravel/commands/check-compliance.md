@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /laravel:check all"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-laravel:check all"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/laravel:check all`.
+> ⚠️ `/bear-laravel:check-compliance` est obsolète et sera retirée en 10.0. Utilisez `/bear-laravel:check all`.
 
-Exécutez `/laravel:check all $ARGUMENTS` : lisez `.claude/commands/laravel/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-laravel:check all $ARGUMENTS` : lisez `.claude/commands/bear-laravel/check.md` et suivez-le avec ces arguments.

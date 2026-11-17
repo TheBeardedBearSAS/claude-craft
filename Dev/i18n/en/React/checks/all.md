@@ -26,7 +26,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/react:check architecture` or manually follow steps in `.claude/references/react/checks/architecture.md`
+**Command**: Use slash command `/bear-react:check architecture` or manually follow steps in `.claude/references/react/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Feature-based structure (6 pts)
@@ -42,7 +42,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/react:check code-quality` or manually follow steps in `.claude/references/react/checks/code-quality.md`
+**Command**: Use slash command `/bear-react:check code-quality` or manually follow steps in `.claude/references/react/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - TypeScript strict mode and type safety (5 pts)
@@ -58,7 +58,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/react:check testing` or manually follow steps in `.claude/references/react/checks/testing.md`
+**Command**: Use slash command `/bear-react:check testing` or manually follow steps in `.claude/references/react/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (7 pts)
@@ -74,7 +74,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/react:check security` or manually follow steps in `.claude/references/react/checks/security.md`
+**Command**: Use slash command `/bear-react:check security` or manually follow steps in `.claude/references/react/checks/security.md`
 
 **Evaluated Criteria**:
 - XSS prevention (dangerouslySetInnerHTML) (6 pts)

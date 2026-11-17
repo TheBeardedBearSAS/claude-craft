@@ -116,4 +116,4 @@ void authenticateUser() { ... }
 
 ---
 
-**Nota** : Este relatório foca apenas na qualidade do código. Para uma auditoria completa, use `/flutter:check all`.
+**Nota** : Este relatório foca apenas na qualidade do código. Para uma auditoria completa, use `/bear-flutter:check all`.

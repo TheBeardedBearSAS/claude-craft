@@ -16,7 +16,7 @@ Bear Craft is an open-source framework that runs locally on your machine. We col
 
 ### 2.1 Ralph Autonomous Agent Logs (If Used)
 
-- **What**: Command execution logs, error messages, task outcomes when using the Ralph feature (`/common:ralph-run`)
+- **What**: Command execution logs, error messages, task outcomes when using the Ralph feature (`/bear-common:ralph-run`)
 - **Why**: To improve the autonomous agent's reliability and debug failures
 - **How Long**: 90 days
 - **Legal Basis**: Legitimate interest (product improvement), or your explicit consent if opted-in
@@ -31,7 +31,7 @@ Bear Craft is an open-source framework that runs locally on your machine. We col
 
 ### 2.3 CLI Usage Analytics (Opt-in Only)
 
-- **What**: Commands executed (e.g., `/team:audit`), frequency, anonymized project identifiers (UUID v4 local)
+- **What**: Commands executed (e.g., `/bear-team:audit`), frequency, anonymized project identifiers (UUID v4 local)
 - **Why**: To understand feature adoption and prioritize development
 - **How Long**: 12 months
 - **Legal Basis**: Explicit consent (you must opt-in via `bear-craft telemetry on` — first-run 3-button prompt since v8.2)

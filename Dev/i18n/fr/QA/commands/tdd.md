@@ -14,7 +14,7 @@ Arguments :
 - Description du bug ou lien vers le ticket
 - (Optionnel) Fichier ou module concerné
 
-Exemple : `/qa:tdd "L'utilisateur ne peut pas se déconnecter"` ou `/qa:tdd #123`
+Exemple : `/bear-qa:tdd "L'utilisateur ne peut pas se déconnecter"` ou `/bear-qa:tdd #123`
 
 ## Mode Plan
 
@@ -393,11 +393,11 @@ Fixes #XXX
 ║                   PROCHAINE ÉTAPE                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-tester après les corrections                       ║
 ║                                                          ║
 ║  Voir aussi :                                            ║
-║  • /gate:check commit — Valider avant le commit    ║
+║  • /bear-gate:check commit — Valider avant le commit    ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

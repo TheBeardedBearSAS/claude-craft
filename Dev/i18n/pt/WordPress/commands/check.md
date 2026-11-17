@@ -21,8 +21,8 @@ O primeiro argumento é o eixo; o restante (por exemplo, um caminho de projeto) 
 
 ## MISSÃO
 
-1. Leia o primeiro argumento. Se ele não for um dos 5 eixos acima, liste-os com um exemplo (`/wordpress:check security wp-content/plugins/my-plugin`) e pare.
+1. Leia o primeiro argumento. Se ele não for um dos 5 eixos acima, liste-os com um exemplo (`/bear-wordpress:check security wp-content/plugins/my-plugin`) e pare.
 2. Leia o arquivo de checklist desse eixo e siga-o passo a passo. Nesse arquivo, `$ARGUMENTS` representa os argumentos que seguem o eixo.
 3. Produza o relatório no formato de saída definido pela checklist.
 
-Exemplos: `/wordpress:check architecture`, `/wordpress:check testing ./my-plugin`, `/wordpress:check all`.
+Exemplos: `/bear-wordpress:check architecture`, `/bear-wordpress:check testing ./my-plugin`, `/bear-wordpress:check all`.

@@ -70,4 +70,4 @@ Reporte Markdown con:
 - Pasa/falla por checkbox arriba
 - Paths de archivo ofensores (números de línea cuando esté disponible)
 - Severidad: Blocker / Major / Minor
-- Puntaje /25 para uso por `/paperclip:check all`
+- Puntaje /25 para uso por `/bear-paperclip:check all`

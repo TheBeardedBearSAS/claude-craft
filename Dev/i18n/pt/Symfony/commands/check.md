@@ -21,8 +21,8 @@ O primeiro argumento é o eixo; o restante (por exemplo, o caminho de um projeto
 
 ## MISSÃO
 
-1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/symfony:check security src/`) e pare.
+1. Leia o primeiro argumento. Se não corresponder a nenhum dos 5 eixos acima, liste-os com um exemplo (`/bear-symfony:check security src/`) e pare.
 2. Leia o arquivo de checklist desse eixo e siga-o passo a passo. Nesse arquivo, `$ARGUMENTS` designa os argumentos que vêm depois do eixo.
 3. Produza o relatório no formato de saída definido pela checklist.
 
-Exemplos: `/symfony:check architecture`, `/symfony:check testing ./app`, `/symfony:check all`.
+Exemplos: `/bear-symfony:check architecture`, `/bear-symfony:check testing ./app`, `/bear-symfony:check all`.

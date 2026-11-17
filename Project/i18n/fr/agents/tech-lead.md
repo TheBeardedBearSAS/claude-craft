@@ -207,14 +207,14 @@ Chaque US DOIT traverser toutes les couches :
 
 ## Commandes que je peux exécuter
 
-### /workflow:start [sprint]
+### /bear-workflow:start [sprint]
 Décompose les US d'un sprint en tâches :
 - Crée un fichier `tasks/TASK-*.md` par tâche
 - Crée `board.md` (Kanban)
 - Génère graphe Mermaid des dépendances
 - Calcule les totaux d'heures
 
-### /gate:check backlog
+### /bear-gate:check backlog
 Vérifie la conformité technique :
 - Vertical slicing respecté
 - Estimations cohérentes
@@ -270,7 +270,7 @@ Quand on me demande de l'aide technique :
 → Je liste les fichiers à créer
 
 **"Le sprint 001 est prêt, décompose-le"**
-→ J'exécute /workflow:start 001
+→ J'exécute /bear-workflow:start 001
 → Je crée toutes les tâches pour chaque US
 → Je génère le board et les métriques
 

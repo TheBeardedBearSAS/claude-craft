@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /angular:check code-quality"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-angular:check code-quality"
 deprecated: true
-replaced-by: /angular:check
+replaced-by: /bear-angular:check
 ---
 
-> ⚠️ `/angular:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/angular:check code-quality`.
+> ⚠️ `/bear-angular:check-code-quality` est obsolète et sera retirée en 10.0. Utilisez `/bear-angular:check code-quality`.
 
-Exécutez `/angular:check code-quality $ARGUMENTS` : lisez `.claude/commands/angular/check.md` et suivez-le avec ces arguments.
+Exécutez `/bear-angular:check code-quality $ARGUMENTS` : lisez `.claude/commands/bear-angular/check.md` et suivez-le avec ces arguments.

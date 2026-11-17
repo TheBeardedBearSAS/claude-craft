@@ -29,7 +29,7 @@ Preparar el entorno de auditoría:
 
 Ejecutar la verificación completa de arquitectura:
 
-**Comando**: Usar el comando slash `/vite:check architecture` o seguir manualmente los pasos de `.claude/references/vite/checks/architecture.md`
+**Comando**: Usar el comando slash `/bear-vite:check architecture` o seguir manualmente los pasos de `.claude/references/vite/checks/architecture.md`
 
 **Criterios Evaluados**:
 - Detección de la forma del proyecto y puntos de entrada (index.html en la raíz, entrada build.lib, input multipágina, patrón `new URL` de Worker/WASM) (6 pts)
@@ -44,7 +44,7 @@ Ejecutar la verificación completa de arquitectura:
 
 Ejecutar la verificación de calidad de código:
 
-**Comando**: Usar el comando slash `/vite:check code-quality` o seguir manualmente los pasos de `.claude/references/vite/checks/code-quality.md`
+**Comando**: Usar el comando slash `/bear-vite:check code-quality` o seguir manualmente los pasos de `.claude/references/vite/checks/code-quality.md`
 
 **Criterios Evaluados**:
 - Análisis de ESLint (no-explicit-any, no-restricted-imports, no-console) (5 pts)
@@ -59,7 +59,7 @@ Ejecutar la verificación de calidad de código:
 
 Ejecutar la verificación de pruebas:
 
-**Comando**: Usar el comando slash `/vite:check testing` o seguir manualmente los pasos de `.claude/references/vite/checks/testing.md`
+**Comando**: Usar el comando slash `/bear-vite:check testing` o seguir manualmente los pasos de `.claude/references/vite/checks/testing.md`
 
 **Criterios Evaluados**:
 - Cobertura de código con Vitest (>= 80 % sentencias, ramas, funciones, líneas) (7 pts)
@@ -75,7 +75,7 @@ Ejecutar la verificación de pruebas:
 
 Ejecutar la verificación de seguridad:
 
-**Comando**: Usar el comando slash `/vite:check security` o seguir manualmente los pasos de `.claude/references/vite/checks/security.md`
+**Comando**: Usar el comando slash `/bear-vite:check security` o seguir manualmente los pasos de `.claude/references/vite/checks/security.md`
 
 **Criterios Evaluados**:
 - Fuga de secretos mediante env / `define()` (prefijo VITE_*, secretos en el código) (7 pts)
@@ -111,7 +111,7 @@ Producir las recomendaciones finales:
 - [ ] Proponer el orden de implementación
 - [ ] Sugerir victorias rápidas (alta relación impacto/esfuerzo)
 
-> **Proyectos de biblioteca**: `/vite:check-library-build` complementa esta auditoría en proyectos de biblioteca (salida build.lib, mapa exports, declaraciones de tipos, tree-shaking). Ejecutarlo además cuando el proyecto publique un paquete.
+> **Proyectos de biblioteca**: `/bear-vite:check-library-build` complementa esta auditoría en proyectos de biblioteca (salida build.lib, mapa exports, declaraciones de tipos, tree-shaking). Ejecutarlo además cuando el proyecto publique un paquete.
 
 ## FORMATO DE SALIDA
 
@@ -238,7 +238,7 @@ Refactorización importante / Revisión completa necesaria]
 
 ## NOTAS IMPORTANTES
 
-- Este comando orquesta las 4 auditorías especializadas (`/vite:check architecture`, `/vite:check code-quality`, `/vite:check testing`, `/vite:check security`)
+- Este comando orquesta las 4 auditorías especializadas (`/bear-vite:check architecture`, `/bear-vite:check code-quality`, `/bear-vite:check testing`, `/bear-vite:check security`)
 - Usar Docker para todas las herramientas de análisis
 - Proporcionar ejemplos concretos con archivo:línea para cada problema
 - Priorizar las acciones según la matriz Impacto/Esfuerzo

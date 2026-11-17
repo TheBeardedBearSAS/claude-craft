@@ -101,7 +101,7 @@ docker compose exec app ./vendor/bin/phpunit
 
 ```bash
 claude
-/workflow:init
+/bear-workflow:init
 ```
 
 ---
@@ -150,7 +150,7 @@ sprints:
 
 ```bash
 # 1. Get next story
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 
 # 2. Start TDD
 @dev Implement US-003 with TDD
@@ -160,26 +160,26 @@ sprints:
 # 🔵 Refactor
 
 # 3. Validate
-/gate:check story US-003
+/bear-gate:check story US-003
 
 # 4. Complete
-/project:backlog move story US-003 done
+/bear-project:backlog move story US-003 done
 ```
 
 ### Quality Checks
 
 ```bash
 # Architecture
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Code quality
-/symfony:check code-quality
+/bear-symfony:check code-quality
 
 # Security
-/symfony:check security
+/bear-symfony:check security
 
 # Full audit
-/team:audit --sequential
+/bear-team:audit --sequential
 ```
 
 ---

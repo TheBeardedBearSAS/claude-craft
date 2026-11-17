@@ -214,7 +214,7 @@ Tracking SQLite local (metriques de savings)
 |---------|--------|
 | **Court terme** | Tester RTK manuellement avec bear-craft pour valider les savings reels |
 | **Moyen terme** | Si RTK atteint v1.0 avec stabilite prouvee, envisager une mention dans la doc ou un guide d'integration |
-| **Long terme** | Potentielle integration optionnelle dans le workflow bear-craft (ajout de hooks RTK via `/common:init --context`) |
+| **Long terme** | Potentielle integration optionnelle dans le workflow bear-craft (ajout de hooks RTK via `/bear-common:init --context`) |
 
 ### Risques a monitorer
 
@@ -239,7 +239,7 @@ make install-rtk RULES_LANG=fr
 npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 
 # Via Claude Code command
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### Manual Install

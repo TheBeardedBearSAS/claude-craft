@@ -30,7 +30,7 @@ Bear Craft Phase 4 (P4-40) introduit le **live coding / pair programming interac
 | **Formation** | Formateur code avec Claude, étudiants suivent en temps réel |
 | **Démo produit** | Démo Bear Craft en live (conférences, webinars) |
 | **Debugging collaboratif** | Dev partage session, collègue suit et suggère |
-| **Audit en direct** | Auditeur observe exécution `/team:audit` en temps réel |
+| **Audit en direct** | Auditeur observe exécution `/bear-team:audit` en temps réel |
 | **Pair programming** | Deux devs, un pilote (Claude + humain), un co-pilot (spectateur) |
 
 ### Experience utilisateur
@@ -55,7 +55,7 @@ claude-code --live
 │  [Timeline] ──●──────●────────●──────────●─────────────> Now   │
 │             14:02  14:05    14:08      14:12                   │
 │                                                                 │
-│  [14:12:34] User: /team:audit --sequential                     │
+│  [14:12:34] User: /bear-team:audit --sequential                     │
 │  [14:12:35] Agent: Analyzing project structure...              │
 │  [14:12:37] Tool: Read (src/controllers/OrderController.php)   │
 │  [14:12:38] Tool Result: 245 lines, 3 classes                  │
@@ -164,7 +164,7 @@ Tous les events suivent le format JSON :
   "timestamp": 1713182405000,
   "sessionId": "01J7XKQZ8M9N2P3Q4R5S6T",
   "payload": {
-    "command": "/team:audit --sequential"
+    "command": "/bear-team:audit --sequential"
   }
 }
 ```
@@ -608,7 +608,7 @@ Automatique après 30 jours (S3 lifecycle policy).
 │  ☐ Agent                  │                                     │
 │                           │  [Split View] [Unified View]        │
 │  [14:12:34] User:         │                                     │
-│  /team:audit              │                                     │
+│  /bear-team:audit              │                                     │
 │                           │                                     │
 │  [14:12:35] Agent:        │                                     │
 │  Analyzing project...     │                                     │

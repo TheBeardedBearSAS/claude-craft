@@ -119,7 +119,7 @@ npx @the-bearded-bear/bear-craft install ~/my-project --tech=symfony
 ls -la ~/my-project/.claude/commands/
 
 # Check file format
-head -20 ~/my-project/.claude/commands/common/pre-commit-check.md
+head -20 ~/my-project/.claude/commands/bear-common/pre-commit-check.md
 ```
 
 **Solutions:**
@@ -391,9 +391,9 @@ services:
 **Solution:**
 ```bash
 # Initialize workflow (commande correcte — il n'existe pas de /bmad:init)
-/workflow:init
+/bear-workflow:init
 
-# Si les commandes /gate:* et /project:* sont absentes, installer la couche Project d'abord :
+# Si les commandes /bear-gate:* et /bear-project:* sont absentes, installer la couche Project d'abord :
 make install-project TARGET=.
 
 # Ou créer le fichier manuellement
@@ -408,7 +408,7 @@ sprints:
 EOF
 ```
 
-> **Note :** `/bmad:init` n'est pas une commande valide. Utiliser `/workflow:init` (installé par défaut) pour initialiser le workflow BMAD.
+> **Note :** `/bmad:init` n'est pas une commande valide. Utiliser `/bear-workflow:init` (installé par défaut) pour initialiser le workflow BMAD.
 
 ---
 
@@ -418,7 +418,7 @@ EOF
 
 **Diagnosis:**
 ```
-/gate:check all
+/bear-gate:check all
 ```
 
 **Common causes:**
@@ -440,7 +440,7 @@ EOF
 
 ### Story transitions not working
 
-**Problem:** `/project:backlog move story` fails to update story status.
+**Problem:** `/bear-project:backlog move story` fails to update story status.
 
 **Solution:**
 ```bash
@@ -522,7 +522,7 @@ npm run lint
 
 ### Sprint doesn't start
 
-**Problem:** `/team:delivery --phase=implementation --engine=teams --ralph-mode` fails immediately.
+**Problem:** `/bear-team:delivery --phase=implementation --engine=teams --ralph-mode` fails immediately.
 
 **Diagnosis:**
 ```bash
@@ -535,19 +535,19 @@ yq '.stories | to_entries[] | select(.value.status == "ready-for-dev")' .bmad/sp
 
 **Solutions:**
 
-1. **Initialize BMAD first** (`/bmad:init` n'existe pas — utiliser `/workflow:init`)
+1. **Initialize BMAD first** (`/bmad:init` n'existe pas — utiliser `/bear-workflow:init`)
    ```bash
-   /workflow:init
+   /bear-workflow:init
    # Si la couche project est installée (make install-project TARGET=.) :
-   /project:backlog next story
+   /bear-project:backlog next story
    ```
 
 2. **Transition stories to ready-for-dev**
    ```bash
-   /project:backlog move story US-001 ready-for-dev
+   /bear-project:backlog move story US-001 ready-for-dev
    ```
 
-> **Note:** `/common:ralph-sprint` was removed in v6.0. Use `/team:delivery --phase=implementation --engine=teams --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/bear-common:ralph-sprint` was removed in v6.0. Use `/bear-team:delivery --phase=implementation --engine=teams --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
 
 ---
 
@@ -856,7 +856,7 @@ Save as `diagnose.sh` and run with `bash diagnose.sh`.
 
 3. **Installer RTK pour réduire la consommation de tokens (60-90%)**
    ```
-   /common:setup-rtk
+   /bear-common:setup-rtk
    ```
 
 4. **Utiliser des modèles allégés pour les sous-agents**
@@ -896,7 +896,7 @@ curl -s http://127.0.0.1:3737/api/diagnostics
 ls .bmad/sprint-status.yaml
 # Si absent, initialiser avec :
 make install-project TARGET=.
-/workflow:init
+/bear-workflow:init
 ```
 
 **Cause 2 : format de sprint-status.yaml incorrect**

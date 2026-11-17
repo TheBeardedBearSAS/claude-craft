@@ -317,7 +317,7 @@ Utilisez la commande intégrée pour détecter automatiquement votre stack et r�
 claude
 
 # Exécuter la commande de configuration
-/common:init --context
+/bear-common:init --context
 ```
 
 La commande va :
@@ -438,7 +438,7 @@ Demandez à Claude :
 Liste toutes les commandes slash disponibles pour ce projet
 ```
 
-Attendu : Claude devrait lister des commandes comme `/common:analyze-feature`, `/{tech}:generate-crud`, etc.
+Attendu : Claude devrait lister des commandes comme `/bear-common:analyze-feature`, `/{tech}:generate-crud`, etc.
 
 ### Test 2 : Utiliser un Agent
 
@@ -453,7 +453,7 @@ Attendu : Claude devrait répondre en tant qu'agent TDD Coach avec des conseils 
 
 Essayez une commande simple :
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Attendu : Claude devrait exécuter une vérification de qualité pré-commit (peut indiquer qu'il n'y a pas de changements si le projet est vide).
@@ -532,7 +532,7 @@ Félicitations ! Votre environnement Bear-Craft est prêt. Voici la suite :
 
 2. **Configurez l'optimisation des tokens (recommandé) :**
    ```bash
-   /common:setup-rtk
+   /bear-common:setup-rtk
    ```
    Cela réduit la consommation de tokens de 55-65% en configurant RTK et les hooks d'optimisation.
 
@@ -562,10 +562,10 @@ claude
 @{tech}-reviewer   # Revue de code
 
 # Commandes courantes
-/common:analyze-feature     # Analyser les besoins
+/bear-common:analyze-feature     # Analyser les besoins
 /{tech}:generate-crud       # Générer du code CRUD
-/gate:check commit         # Vérification qualité
-/common:security-audit      # Audit de sécurité
+/bear-gate:check commit         # Vérification qualité
+/bear-common:security-audit      # Audit de sécurité
 ```
 
 ---

@@ -14,7 +14,7 @@ Argumentos:
 - Descrição do bug ou link do ticket
 - (Opcional) Arquivo ou módulo afetado
 
-Exemplo: `/qa:tdd "Usuário não consegue fazer logout"` ou `/qa:tdd #123`
+Exemplo: `/bear-qa:tdd "Usuário não consegue fazer logout"` ou `/bear-qa:tdd #123`
 
 ## Modo Plano
 
@@ -393,11 +393,11 @@ Fixes #XXX
 ║                    PRÓXIMO PASSO                         ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Re-testar após as correções                           ║
 ║                                                          ║
 ║  Veja também:                                            ║
-║  • /gate:check commit — Validar antes do commit    ║
+║  • /bear-gate:check commit — Validar antes do commit    ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 ```

@@ -27,7 +27,7 @@ Prepare audit environment:
 
 Execute complete architecture check:
 
-**Command**: Use slash command `/tauri:check architecture` or manually follow steps in `.claude/references/tauri/checks/architecture.md`
+**Command**: Use slash command `/bear-tauri:check architecture` or manually follow steps in `.claude/references/tauri/checks/architecture.md`
 
 **Evaluated Criteria**:
 - Project layout (`src/` / `src-tauri/`, `lib.rs` `run()` entry, mobile entry point) and thin `main.rs` (5 pts)
@@ -43,7 +43,7 @@ Execute complete architecture check:
 
 Execute code quality check:
 
-**Command**: Use slash command `/tauri:check code-quality` or manually follow steps in `.claude/references/tauri/checks/code-quality.md`
+**Command**: Use slash command `/bear-tauri:check code-quality` or manually follow steps in `.claude/references/tauri/checks/code-quality.md`
 
 **Evaluated Criteria**:
 - Clippy clean with `-D warnings` and `cargo fmt --check` (5 pts)
@@ -59,7 +59,7 @@ Execute code quality check:
 
 Execute testing check:
 
-**Command**: Use slash command `/tauri:check testing` or manually follow steps in `.claude/references/tauri/checks/testing.md`
+**Command**: Use slash command `/bear-tauri:check testing` or manually follow steps in `.claude/references/tauri/checks/testing.md`
 
 **Evaluated Criteria**:
 - Code coverage (target >= 80%) across Rust core and frontend (7 pts)
@@ -75,7 +75,7 @@ Execute testing check:
 
 Execute security check:
 
-**Command**: Use slash command `/tauri:check security` or manually follow steps in `.claude/references/tauri/checks/security.md`
+**Command**: Use slash command `/bear-tauri:check security` or manually follow steps in `.claude/references/tauri/checks/security.md`
 
 **Evaluated Criteria**:
 - Capabilities and permissions: one capability per window/role, least privilege (6 pts)

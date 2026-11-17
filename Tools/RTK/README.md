@@ -38,7 +38,7 @@ npx @the-bearded-bear/bear-craft install . --tech=symfony --lang=en
 ### Via Claude Code Command
 
 ```bash
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 ### Manual

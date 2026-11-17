@@ -14,7 +14,7 @@ Argumentos:
 - (Opcional) Caminho para módulo específico
 - (Opcional) Limite mínimo de cobertura (ex: `80`)
 
-Exemplo: `/python:type-coverage app/` ou `/python:type-coverage app/api/ 90`
+Exemplo: `/bear-python:type-coverage app/` ou `/bear-python:type-coverage app/api/ 90`
 
 ## Modo Plano
 

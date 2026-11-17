@@ -35,6 +35,6 @@ Le plugin échoue explicitement si aucun des deux n'est trouvé (pas de fallback
 
 ```bash
 bear-craft plugin install export-pdf
-/team:audit --scope=phase-2
+/bear-team:audit --scope=phase-2
 # → reports/pdf/audit-phase-2-2026-04-15.pdf généré automatiquement
 ```

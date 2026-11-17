@@ -3,7 +3,7 @@ description: "Pipeline de rétro-ingénierie brownfield : scanner le code, puis 
 argument-hint: "[scan|prd|stories|gaps|all] [--scope=<scope>] [--module=<name>] [--output=<path>]"
 ---
 
-# /project:reverse
+# /bear-project:reverse
 
 ## Mission
 
@@ -13,11 +13,11 @@ Rétro-concevoir des spécifications à partir d'un code existant (projets brown
 
 | Commande | Rôle | Remplace |
 |----------|------|----------|
-| `/project:reverse scan` | Inventaire des modules, endpoints, modèles, services, tests, infrastructure | `/project:reverse scan` |
-| `/project:reverse prd` | PRD BROUILLON inféré du code | `/project:reverse prd` |
-| `/project:reverse stories` | User stories BROUILLON inférées du code et des tests | `/project:reverse stories` |
-| `/project:reverse gaps` | Analyse d'écarts spec vs code, classée par sévérité | `/project:reverse gaps` |
-| `/project:reverse all` | `scan` -> `prd` -> `stories` -> `gaps`, dans cet ordre | les quatre |
+| `/bear-project:reverse scan` | Inventaire des modules, endpoints, modèles, services, tests, infrastructure | `/bear-project:reverse scan` |
+| `/bear-project:reverse prd` | PRD BROUILLON inféré du code | `/bear-project:reverse prd` |
+| `/bear-project:reverse stories` | User stories BROUILLON inférées du code et des tests | `/bear-project:reverse stories` |
+| `/bear-project:reverse gaps` | Analyse d'écarts spec vs code, classée par sévérité | `/bear-project:reverse gaps` |
+| `/bear-project:reverse all` | `scan` -> `prd` -> `stories` -> `gaps`, dans cet ordre | les quatre |
 
 ## Arguments
 
@@ -64,7 +64,7 @@ project-management/
     +-- gap-analysis.md             # gaps
 ```
 
-**Prérequis :** code source accessible ; `README.md`, `docker-compose.yml`, `./docs/` optionnels. `prd`, `stories` et `gaps` nécessitent `project-management/scan-report.md` -- s'il manque, lancer `scan` d'abord (automatique avec `all`). `gaps` nécessite aussi un PRD (`project-management/prd.md`, issu de `/workflow:plan --only=prd` ou de `prd`) ; `stories` et `gaps` l'utilisent pour la traçabilité FR-xxx lorsqu'il existe.
+**Prérequis :** code source accessible ; `README.md`, `docker-compose.yml`, `./docs/` optionnels. `prd`, `stories` et `gaps` nécessitent `project-management/scan-report.md` -- s'il manque, lancer `scan` d'abord (automatique avec `all`). `gaps` nécessite aussi un PRD (`project-management/prd.md`, issu de `/bear-workflow:plan --only=prd` ou de `prd`) ; `stories` et `gaps` l'utilisent pour la traçabilité FR-xxx lorsqu'il existe.
 
 **Convention de sortie :** chaque étape affiche une bannière de progression encadrée, se termine par un court résumé et propose les prochaines étapes (valider de façon interactive, lancer la sous-commande suivante). Avec `all`, marquer une pause de validation humaine après `prd` et `stories` avant de continuer vers `gaps`.
 
@@ -111,7 +111,7 @@ Métriques du Complexity Summary : LOC total, nombre de fichiers, bounded contex
 
 ## prd
 
-Pendant brownfield de `/workflow:plan --only=prd` : un PRD BROUILLON inféré du code.
+Pendant brownfield de `/bear-workflow:plan --only=prd` : un PRD BROUILLON inféré du code.
 
 **1. Charger** le rapport de scan (ainsi que `./docs/` et `README.md`) ; analyser stack, modules, endpoints, entités, services.
 
@@ -243,7 +243,7 @@ Exécuter `scan` -> `prd` -> `stories` -> `gaps` dans l'ordre, en réutilisant c
 
 ## Commandes associées
 
-- `/workflow:plan --only=prd` - Générer un PRD de façon interactive (greenfield)
-- `/workflow:plan --only=backlog` - Créer un backlog SCRUM à partir du PRD
-- `/workflow:design` - Générer une spécification technique
-- `/project:backlog` - Gérer epics, stories et tâches
+- `/bear-workflow:plan --only=prd` - Générer un PRD de façon interactive (greenfield)
+- `/bear-workflow:plan --only=backlog` - Créer un backlog SCRUM à partir du PRD
+- `/bear-workflow:design` - Générer une spécification technique
+- `/bear-project:backlog` - Gérer epics, stories et tâches

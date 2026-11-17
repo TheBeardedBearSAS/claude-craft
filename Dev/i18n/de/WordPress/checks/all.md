@@ -25,7 +25,7 @@ Audit-Umgebung vorbereiten:
 
 ### Schritt 2: Architektur-Audit (25 Punkte)
 
-**Befehl**: Den Slash-Befehl `/wordpress:check architecture` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/architecture.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-wordpress:check architecture` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/architecture.md` folgen
 
 **Bewertete Kriterien**:
 - Plugin-Header, Bootstrap-Datei, ABSPATH-Guard, Composer-Autoload (5 Pkt.)
@@ -38,7 +38,7 @@ Audit-Umgebung vorbereiten:
 
 ### Schritt 3: Codequalitäts-Audit (25 Punkte)
 
-**Befehl**: Den Slash-Befehl `/wordpress:check code-quality` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/code-quality.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-wordpress:check code-quality` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/code-quality.md` folgen
 
 **Bewertete Kriterien**:
 - WPCS (PHPCS) bestanden (7 Pkt.)
@@ -51,7 +51,7 @@ Audit-Umgebung vorbereiten:
 
 ### Schritt 4: Test-Audit (25 Punkte)
 
-**Befehl**: Den Slash-Befehl `/wordpress:check testing` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/testing.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-wordpress:check testing` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/testing.md` folgen
 
 **Bewertete Kriterien**:
 - Code-Abdeckung (Ziel >= 80 %) über PHP und JS (7 Pkt.)
@@ -65,7 +65,7 @@ Audit-Umgebung vorbereiten:
 
 ### Schritt 5: Sicherheits-Audit (25 Punkte)
 
-**Befehl**: Den Slash-Befehl `/wordpress:check security` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/security.md` folgen
+**Befehl**: Den Slash-Befehl `/bear-wordpress:check security` verwenden oder manuell den Schritten in `.claude/references/wordpress/checks/security.md` folgen
 
 **Bewertete Kriterien**:
 - Capability-Prüfungen und Nonces bei jeder Zustandsänderung (6 Pkt.)

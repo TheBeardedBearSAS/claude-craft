@@ -21,8 +21,8 @@ Das erste Argument ist die Achse; der Rest (zum Beispiel ein Projektpfad) wird w
 
 ## MISSION
 
-1. Das erste Argument lesen. Ist es keine der 5 oben genannten Achsen, diese mit einem Beispiel auflisten (`/rust:check security crates/api`) und anhalten.
+1. Das erste Argument lesen. Ist es keine der 5 oben genannten Achsen, diese mit einem Beispiel auflisten (`/bear-rust:check security crates/api`) und anhalten.
 2. Die Checklisten-Datei dieser Achse lesen und Schritt für Schritt befolgen. In dieser Datei steht `$ARGUMENTS` für die Argumente, die auf die Achse folgen.
 3. Den Bericht im Ausgabeformat erstellen, das die Checkliste definiert.
 
-Beispiele: `/rust:check architecture`, `/rust:check testing ./crates/api`, `/rust:check all`.
+Beispiele: `/bear-rust:check architecture`, `/bear-rust:check testing ./crates/api`, `/bear-rust:check all`.

@@ -17,7 +17,7 @@ Realizar uma auditoria completa de conformidade de um projeto Paperclip orquestr
 
 ### Passo 2: Auditoria de Arquitetura (25 pontos)
 
-Invocar `/paperclip:check architecture`.
+Invocar `/bear-paperclip:check architecture`.
 
 Critérios avaliados:
 - Separação de duas camadas (plano de controle vs adaptadores) — 6 pts
@@ -29,7 +29,7 @@ Critérios avaliados:
 
 ### Passo 3: Auditoria de Qualidade de Código (20 pontos)
 
-Invocar `/paperclip:check code-quality`.
+Invocar `/bear-paperclip:check code-quality`.
 
 Critérios avaliados:
 - TypeScript strict + `noUncheckedIndexedAccess` — 5 pts
@@ -41,7 +41,7 @@ Critérios avaliados:
 
 ### Passo 4: Auditoria de Testes (20 pontos)
 
-Invocar `/paperclip:check testing`.
+Invocar `/bear-paperclip:check testing`.
 
 Critérios avaliados:
 - Cobertura ≥ 80% (linhas, funções, declarações) — 6 pts
@@ -52,7 +52,7 @@ Critérios avaliados:
 
 ### Passo 5: Auditoria de Segurança (20 pontos)
 
-Invocar `/paperclip:check security`.
+Invocar `/bear-paperclip:check security`.
 
 Critérios avaliados:
 - Todos os endpoints com escopo de tenant por `companyId` da sessão — 4 pts

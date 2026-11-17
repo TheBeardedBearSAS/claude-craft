@@ -161,7 +161,7 @@ async afterCommand(ctx: PluginContext): Promise<void> {
 
 ### 3. onAudit
 
-**Déclenché pendant:** Exécution de `/team:audit`.
+**Déclenché pendant:** Exécution de `/bear-team:audit`.
 
 **Use cases:**
 - Collecte de métriques personnalisées

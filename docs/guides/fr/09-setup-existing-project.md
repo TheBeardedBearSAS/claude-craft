@@ -398,7 +398,7 @@ Vous avez deux options pour configurer le contexte du projet :
 Utilisez la commande intégrée pour détecter automatiquement votre stack et répondre à des questions ciblées :
 
 ```bash
-/common:init --context
+/bear-common:init --context
 ```
 
 La commande analysera votre codebase existante, détectera les technologies et posera uniquement les questions pour les informations manquantes.
@@ -506,7 +506,7 @@ Vas-y et implémente ce changement en suivant TDD :
 Avant de commiter, lancez les vérifications de qualité :
 
 ```
-/gate:check commit
+/bear-gate:check commit
 ```
 
 Examinez tous les changements :
@@ -580,7 +580,7 @@ Créez un guide bref pour les collègues :
 3. Lancer dans le projet : `cd project && claude`
 
 ### Commandes Rapides
-- `/gate:check commit` - Lancer avant de commiter
+- `/bear-gate:check commit` - Lancer avant de commiter
 - `@tdd-coach` - Aide sur les tests
 - `@{tech}-reviewer` - Revue de code
 
@@ -724,7 +724,7 @@ Après l'installation, configurez l'optimisation des tokens pour réduire vos co
 
 ```bash
 # Dans Claude Code
-/common:setup-rtk
+/bear-common:setup-rtk
 ```
 
 Cela configure RTK, les hooks de filtrage et le modèle des sous-agents automatiquement.

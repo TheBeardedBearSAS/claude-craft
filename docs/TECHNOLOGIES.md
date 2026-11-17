@@ -103,13 +103,13 @@ src/
 
 ```bash
 # Generate CRUD with proper architecture
-/symfony:generate-crud Product
+/bear-symfony:generate-crud Product
 
 # Check architecture compliance
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # Plan database migration
-/symfony:migration-plan "Add user preferences"
+/bear-symfony:migration-plan "Add user preferences"
 ```
 
 ### Templates
@@ -164,13 +164,13 @@ lib/
 
 ```bash
 # Generate feature module
-/flutter:generate-feature authentication
+/bear-flutter:generate-feature authentication
 
 # Generate widget with tests
-/flutter:generate-widget UserAvatar
+/bear-flutter:generate-widget UserAvatar
 
 # Analyze performance
-/flutter:analyze-performance
+/bear-flutter:analyze-performance
 ```
 
 ### State Management
@@ -245,13 +245,13 @@ src/
 
 ```bash
 # Generate FastAPI endpoint
-/python:generate-endpoint users
+/bear-python:generate-endpoint users
 
 # Check async code
-/python:async-check
+/bear-python:async-check
 
 # Type coverage analysis
-/python:type-coverage
+/bear-python:type-coverage
 ```
 
 ### Type Hints
@@ -315,13 +315,13 @@ src/
 
 ```bash
 # Generate component with tests
-/react:generate-component Button
+/bear-react:generate-component Button
 
 # Generate custom hook
-/react:generate-hook useAuth
+/bear-react:generate-hook useAuth
 
 # Check accessibility
-/react:accessibility-check
+/bear-react:accessibility-check
 ```
 
 ### Component Pattern
@@ -421,13 +421,13 @@ src/
 
 ```bash
 # Generate screen
-/reactnative:generate-screen Profile
+/bear-reactnative:generate-screen Profile
 
 # Native module integration
-/reactnative:native-module Camera
+/bear-reactnative:native-module Camera
 
 # Prepare for store
-/reactnative:store-prepare
+/bear-reactnative:store-prepare
 ```
 
 ### Navigation
@@ -610,7 +610,7 @@ Adapters **never** hold governance state. They execute, heartbeat, report cost, 
 
 ### Commands
 
-See [`/paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit commands + `generate-adapter`, `generate-agent-config`, `setup-company`.
+See [`/bear-paperclip:*`](COMMANDS.md#paperclip-commands-paperclip) — 5 audit commands + `generate-adapter`, `generate-agent-config`, `setup-company`.
 
 ### Use this stack when
 

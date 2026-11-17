@@ -26,7 +26,7 @@ Preparar o ambiente de auditoria:
 
 Executar a verificação completa de arquitetura:
 
-**Comando**: Use o slash command `/ruby:check architecture` ou siga manualmente as etapas de `.claude/references/ruby/checks/architecture.md`
+**Comando**: Use o slash command `/bear-ruby:check architecture` ou siga manualmente as etapas de `.claude/references/ruby/checks/architecture.md`
 
 **Critérios Avaliados**:
 - Convenções Rails e layout de `app/` (6 pts)
@@ -42,7 +42,7 @@ Executar a verificação completa de arquitetura:
 
 Executar a verificação de qualidade de código:
 
-**Comando**: Use o slash command `/ruby:check code-quality` ou siga manualmente as etapas de `.claude/references/ruby/checks/code-quality.md`
+**Comando**: Use o slash command `/bear-ruby:check code-quality` ou siga manualmente as etapas de `.claude/references/ruby/checks/code-quality.md`
 
 **Critérios Avaliados**:
 - Conformidade com o RuboCop (rubocop-rails-omakase ou configuração do projeto) (5 pts)
@@ -58,7 +58,7 @@ Executar a verificação de qualidade de código:
 
 Executar a verificação de testes:
 
-**Comando**: Use o slash command `/ruby:check testing` ou siga manualmente as etapas de `.claude/references/ruby/checks/testing.md`
+**Comando**: Use o slash command `/bear-ruby:check testing` ou siga manualmente as etapas de `.claude/references/ruby/checks/testing.md`
 
 **Critérios Avaliados**:
 - Cobertura de código (SimpleCov, meta >= 80%) (7 pts)
@@ -74,7 +74,7 @@ Executar a verificação de testes:
 
 Executar a verificação de segurança:
 
-**Comando**: Use o slash command `/ruby:check security` ou siga manualmente as etapas de `.claude/references/ruby/checks/security.md`
+**Comando**: Use o slash command `/bear-ruby:check security` ou siga manualmente as etapas de `.claude/references/ruby/checks/security.md`
 
 **Critérios Avaliados**:
 - Proteções OWASP Top 10:2025 (6 pts)

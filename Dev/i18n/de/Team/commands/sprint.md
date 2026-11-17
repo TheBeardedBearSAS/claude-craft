@@ -1,9 +1,9 @@
 ---
-description: "Veraltet (Entfernung in 10.0): /team:delivery --phase=implementation verwenden"
+description: "Veraltet (Entfernung in 10.0): /bear-team:delivery --phase=implementation verwenden"
 deprecated: true
-replaced-by: /team:delivery
+replaced-by: /bear-team:delivery
 ---
 
-> ⚠️ `/team:sprint` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/team:delivery --phase=implementation`.
+> ⚠️ `/bear-team:sprint` ist veraltet und wird in 10.0 entfernt. Verwenden Sie `/bear-team:delivery --phase=implementation`.
 
-Führen Sie `/team:delivery --phase=implementation $ARGUMENTS` aus: Lesen Sie `.claude/commands/team/delivery.md` und folgen Sie der Datei mit diesen Argumenten.
+Führen Sie `/bear-team:delivery --phase=implementation $ARGUMENTS` aus: Lesen Sie `.claude/commands/bear-team/delivery.md` und folgen Sie der Datei mit diesen Argumenten.

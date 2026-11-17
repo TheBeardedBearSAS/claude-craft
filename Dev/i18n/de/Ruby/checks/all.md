@@ -26,7 +26,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/ruby:check architecture` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/architecture.md` folgen
+**Befehl**: Slash-Befehl `/bear-ruby:check architecture` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/architecture.md` folgen
 
 **Bewertete Kriterien**:
 - Rails-Konventionen und `app/`-Layout (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung ausführen:
 
 Codequalitätsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/ruby:check code-quality` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/code-quality.md` folgen
+**Befehl**: Slash-Befehl `/bear-ruby:check code-quality` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/code-quality.md` folgen
 
 **Bewertete Kriterien**:
 - RuboCop-Konformität (rubocop-rails-omakase oder Projektkonfiguration) (5 Pkt.)
@@ -58,7 +58,7 @@ Codequalitätsprüfung ausführen:
 
 Testprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/ruby:check testing` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/testing.md` folgen
+**Befehl**: Slash-Befehl `/bear-ruby:check testing` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/testing.md` folgen
 
 **Bewertete Kriterien**:
 - Codeabdeckung (SimpleCov, Ziel >= 80 %) (7 Pkt.)
@@ -74,7 +74,7 @@ Testprüfung ausführen:
 
 Sicherheitsprüfung ausführen:
 
-**Befehl**: Slash-Befehl `/ruby:check security` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/security.md` folgen
+**Befehl**: Slash-Befehl `/bear-ruby:check security` verwenden oder manuell den Schritten in `.claude/references/ruby/checks/security.md` folgen
 
 **Bewertete Kriterien**:
 - Schutzmaßnahmen gemäß OWASP Top 10:2025 (6 Pkt.)

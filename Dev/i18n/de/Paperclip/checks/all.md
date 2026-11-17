@@ -17,7 +17,7 @@ Ein vollständiges Compliance-Audit eines Paperclip-Projekts durchführen, indem
 
 ### Schritt 2: Architektur-Audit (25 Punkte)
 
-`/paperclip:check architecture` aufrufen.
+`/bear-paperclip:check architecture` aufrufen.
 
 Bewertete Kriterien:
 - Two-Layer-Trennung (Control-Plane vs. Adapter) — 6 Pkt.
@@ -29,7 +29,7 @@ Bewertete Kriterien:
 
 ### Schritt 3: Code-Qualitäts-Audit (20 Punkte)
 
-`/paperclip:check code-quality` aufrufen.
+`/bear-paperclip:check code-quality` aufrufen.
 
 Bewertete Kriterien:
 - TypeScript strict + `noUncheckedIndexedAccess` — 5 Pkt.
@@ -41,7 +41,7 @@ Bewertete Kriterien:
 
 ### Schritt 4: Testing-Audit (20 Punkte)
 
-`/paperclip:check testing` aufrufen.
+`/bear-paperclip:check testing` aufrufen.
 
 Bewertete Kriterien:
 - Coverage ≥ 80% (Zeilen, Funktionen, Statements) — 6 Pkt.
@@ -52,7 +52,7 @@ Bewertete Kriterien:
 
 ### Schritt 5: Sicherheits-Audit (20 Punkte)
 
-`/paperclip:check security` aufrufen.
+`/bear-paperclip:check security` aufrufen.
 
 Bewertete Kriterien:
 - Alle Endpoints mandanten-scoped nach `companyId` aus Session — 4 Pkt.

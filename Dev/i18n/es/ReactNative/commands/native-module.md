@@ -14,7 +14,7 @@ Argumentos:
 - Nombre del módulo (p. ej., `DeviceInfo`, `Biometrics`, `FileManager`)
 - (Opcional) Funcionalidades: sync, async, events
 
-Ejemplo: `/reactnative:native-module Biometrics async,events`
+Ejemplo: `/bear-reactnative:native-module Biometrics async,events`
 
 ## Modo Plan
 

@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /laravel:check architecture"
+description: "Deprecated (removed in 10.0): use /bear-laravel:check architecture"
 deprecated: true
-replaced-by: /laravel:check
+replaced-by: /bear-laravel:check
 ---
 
-> ⚠️ `/laravel:check-architecture` is deprecated and will be removed in 10.0. Use `/laravel:check architecture`.
+> ⚠️ `/bear-laravel:check-architecture` is deprecated and will be removed in 10.0. Use `/bear-laravel:check architecture`.
 
-Run `/laravel:check architecture $ARGUMENTS`: read `.claude/commands/laravel/check.md` and follow it with these arguments.
+Run `/bear-laravel:check architecture $ARGUMENTS`: read `.claude/commands/bear-laravel/check.md` and follow it with these arguments.

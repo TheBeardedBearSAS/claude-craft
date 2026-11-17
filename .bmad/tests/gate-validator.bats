@@ -5,7 +5,7 @@
 # Reproduces the Wrandly bug: `set -euo pipefail` + `((score++))`. In bash,
 # `((score++))` evaluates the OLD value, so when score == 0 the expression
 # returns exit code 1, and under `set -e` the script ABORTS after the first
-# check. Symptom: every /gate:* command dies after validating one item.
+# check. Symptom: every /bear-gate:* command dies after validating one item.
 #
 # Before the fix these behavioral tests are RED (script exits non-zero, no
 # PASS line). After converting `((score++))` -> `score=$((score + 1))` they
@@ -128,7 +128,7 @@ EOF
     [[ "$output" == *"FAIL"* ]]
 }
 
-@test "validate_prd defaults to project-management/prd.md (where /project:generate-prd writes)" {
+@test "validate_prd defaults to project-management/prd.md (where /bear-project:generate-prd writes)" {
     mkdir -p "$BATS_TEST_TMPDIR/proj/project-management"
     write_complete_prd "$BATS_TEST_TMPDIR/proj/project-management/prd.md"
     cd "$BATS_TEST_TMPDIR/proj"

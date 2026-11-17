@@ -136,4 +136,4 @@ TOTAL            : XX% (objetivo : 60%)
 
 ---
 
-**Nota** : Este relatório foca apenas nos testes. Para uma auditoria completa, use `/flutter:check all`.
+**Nota** : Este relatório foca apenas nos testes. Para uma auditoria completa, use `/bear-flutter:check all`.

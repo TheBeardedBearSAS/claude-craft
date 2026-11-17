@@ -11,17 +11,17 @@ Punto de entrada único para todos los quality gates de BMAD. Los gates document
 
 | Invocación | Qué hace | Reemplaza |
 |------------|----------|-----------|
-| `/gate:check prd [file]` | Quality gate del PRD (umbral 80%) | `/gate:check prd` |
-| `/gate:check spec [file]` | Quality gate del Tech Spec (umbral 90%) | `/gate:check spec` |
-| `/gate:check backlog [story-id] [--no-gate]` | Gate INVEST, 6/6 por story | `/gate:check backlog` |
-| `/gate:check sprint [N] [--verbose]` | Gate Sprint Ready (todos los criterios obligatorios) | `/gate:check sprint` |
-| `/gate:check story <story-id>` | Gate Definition of Done (100%) | `/gate:check story` |
-| `/gate:check alignment [story-id]` | Gate de alineación spec-código (umbral 85%) | `/gate:check alignment` |
-| `/gate:check commit [--fix] [--staged]` | Verificación pre-commit de los archivos modificados | `/gate:check commit` |
-| `/gate:check merge [source] [target]` | Verificación pre-merge de una rama | `/gate:check merge` |
-| `/gate:check release <version> [patch\|minor\|major]` | Checklist de release | `/gate:check release` |
-| `/gate:check all [--detailed]` | Informe de todos los gates documentales | `/gate:check all` |
-| `/gate:check --phase=<phase> [story-or-sprint]` | Checkpoint de una fase del ciclo de vida: `pre-sprint`, `pre-impl`, `post-impl`, `pre-merge` | `/gate:check --phase` |
+| `/bear-gate:check prd [file]` | Quality gate del PRD (umbral 80%) | `/bear-gate:check prd` |
+| `/bear-gate:check spec [file]` | Quality gate del Tech Spec (umbral 90%) | `/bear-gate:check spec` |
+| `/bear-gate:check backlog [story-id] [--no-gate]` | Gate INVEST, 6/6 por story | `/bear-gate:check backlog` |
+| `/bear-gate:check sprint [N] [--verbose]` | Gate Sprint Ready (todos los criterios obligatorios) | `/bear-gate:check sprint` |
+| `/bear-gate:check story <story-id>` | Gate Definition of Done (100%) | `/bear-gate:check story` |
+| `/bear-gate:check alignment [story-id]` | Gate de alineación spec-código (umbral 85%) | `/bear-gate:check alignment` |
+| `/bear-gate:check commit [--fix] [--staged]` | Verificación pre-commit de los archivos modificados | `/bear-gate:check commit` |
+| `/bear-gate:check merge [source] [target]` | Verificación pre-merge de una rama | `/bear-gate:check merge` |
+| `/bear-gate:check release <version> [patch\|minor\|major]` | Checklist de release | `/bear-gate:check release` |
+| `/bear-gate:check all [--detailed]` | Informe de todos los gates documentales | `/bear-gate:check all` |
+| `/bear-gate:check --phase=<phase> [story-or-sprint]` | Checkpoint de una fase del ciclo de vida: `pre-sprint`, `pre-impl`, `post-impl`, `pre-merge` | `/bear-gate:check --phase` |
 
 ## Argumentos
 
@@ -37,7 +37,7 @@ $ARGUMENTS (formato: `<gate> [target] [flags]` o `--phase=<phase> [target]`)
 - **Rutas por defecto**: PRD `project-management/prd.md`, tech spec `project-management/tech-spec.md`, stories `project-management/backlog/`, sprints `project-management/sprints/sprint-{N}-{slug}/`, constitution `project-management/constitution.md` (opcional). Los umbrales de los gates se configuran en `.bmad/gates/*.yaml` (`prd-gate`, `techspec-gate`, `backlog-gate`, `sprint-ready-gate`, `story-gate`).
 - **Fuente de verdad del estado**: `.bmad/sprint-status.yaml` contiene el estado de las stories y de las tareas (`backlog -> ready-for-dev -> in-progress -> review -> done`, cualquiera -> `blocked`). Los gates leen el estado de ahí y nunca de los archivos markdown, que solo contienen el contenido. Esquema: `.claude/templates/project/sprint-status.md`.
 - **Puntuación**: criterios ponderados; un criterio superado suma su peso a la puntuación (puntuación final = suma de los pesos superados). Todos los criterios «obligatorios» deben superarse para que el gate sea aprobado. Símbolos: ✅ aprobado, ⚠️ parcial, ❌ ausente o fallido, ⏳ omitido o no verificado.
-- **Informe**: listar siempre cada criterio con lo encontrado o lo que falta, la puntuación frente al umbral, el veredicto (`GATE PASSED` / `GATE FAILED (need X%, got Y%)`), y después «Required Actions» numeradas con un ejemplo concreto para cada fallo y el comando para volver a ejecutar (`/gate:check <gate>`).
+- **Informe**: listar siempre cada criterio con lo encontrado o lo que falta, la puntuación frente al umbral, el veredicto (`GATE PASSED` / `GATE FAILED (need X%, got Y%)`), y después «Required Actions» numeradas con un ejemplo concreto para cada fallo y el comando para volver a ejecutar (`/bear-gate:check <gate>`).
 - **Docker**: los gates de código ejecutan las herramientas del proyecto a través de Docker (`docker compose exec <service> ...` o `docker run --rm ...`), nunca en el entorno local.
 
 ## prd
@@ -64,10 +64,10 @@ File: project-management/prd.md   Threshold: 80%
 ❌ Goals/Objectives (15%)    Missing: no measurable goals found
 ⚠️ Risks (10%)               Partial: risks listed but no mitigations
 Score: 90/100 (90%)
-✅ PRD GATE PASSED — Next: /workflow:design
+✅ PRD GATE PASSED — Next: /bear-workflow:design
 ```
 
-En caso de fallo, sugerir un ejemplo por cada carencia (p. ej. objetivo «Reduce checkout time by 30%», KPI «Conversion rate > 5%», riesgo «API rate limits; Mitigation: caching»). El gate también se verifica antes de `/workflow:design` y en la transición del workflow BMAD.
+En caso de fallo, sugerir un ejemplo por cada carencia (p. ej. objetivo «Reduce checkout time by 30%», KPI «Conversion rate > 5%», riesgo «API rate limits; Mitigation: caching»). El gate también se verifica antes de `/bear-workflow:design` y en la transición del workflow BMAD.
 
 ## spec
 
@@ -97,7 +97,7 @@ Score: 68/100 (68%)
 ❌ TECH SPEC GATE FAILED (need 90%, got 68%)
 ```
 
-Las acciones requeridas proporcionan una plantilla por carencia: un esqueleto de diagrama mermaid, la estrategia de seguridad (método de autenticación, modelo de autorización, cifrado), schemas de request/response con formatos de error y versionado, etapas de CI/CD con promoción y rollback. Para decisiones significativas, sugerir un ADR: `/common:architecture-decision "JWT vs Session-based authentication"`. Si se aprueba: siguiente paso `/workflow:plan --only=backlog` y después `/gate:check backlog`.
+Las acciones requeridas proporcionan una plantilla por carencia: un esqueleto de diagrama mermaid, la estrategia de seguridad (método de autenticación, modelo de autorización, cifrado), schemas de request/response con formatos de error y versionado, etapas de CI/CD con promoción y rollback. Para decisiones significativas, sugerir un ADR: `/bear-common:architecture-decision "JWT vs Session-based authentication"`. Si se aprueba: siguiente paso `/bear-workflow:plan --only=backlog` y después `/bear-gate:check backlog`.
 
 ## backlog
 
@@ -122,7 +122,7 @@ Summary: validated 8 | passing 6 | warnings 1 | failing 1
 ❌ BACKLOG GATE FAILED
 ```
 
-Corrección de problemas comunes: story demasiado grande (S) → `/project:backlog edit story US-003` para reducir el alcance y `/project:backlog add story` para el resto; puntos ausentes (E) → `/project:backlog edit story US-002 --points 3`; criterios de aceptación ausentes (V, T) → `/project:backlog edit story US-002 "Given... When... Then..."`. Si se aprueba: siguiente `/gate:check sprint`.
+Corrección de problemas comunes: story demasiado grande (S) → `/bear-project:backlog edit story US-003` para reducir el alcance y `/bear-project:backlog add story` para el resto; puntos ausentes (E) → `/bear-project:backlog edit story US-002 --points 3`; criterios de aceptación ausentes (V, T) → `/bear-project:backlog edit story US-002 "Given... When... Then..."`. Si se aprueba: siguiente `/bear-gate:check sprint`.
 
 ## sprint
 
@@ -140,13 +140,13 @@ Valida la preparación del sprint (argumentos: `[N] [--verbose]`). `N` es el nú
 **Proceso**
 1. Cargar el estado del sprint, en este orden:
    1. `.bmad/sprint-status.yaml` si existe y su `metadata.sprint_id` corresponde al sprint `N`: extraer los metadatos y contar las stories por estado.
-   2. En caso contrario, fallback markdown desde `project-management/sprints/sprint-{N}-*/` (escrito por `/workflow:start`): metadatos, objetivo y capacidad desde `sprint-goal.md` (inicio, fin, capacidad, objetivo); stories desde la tabla de US seleccionadas de `sprint-goal.md` y los archivos `project-management/backlog/user-stories/US-*.md` (puntos, estado), considerándose `ready-for-dev` una story planificada que aún no ha empezado; dependencias bloqueantes desde `sprint-dependencies.md`.
-   3. Ninguno encontrado: fallar con «No sprint {N}: run `/workflow:start {N}`».
+   2. En caso contrario, fallback markdown desde `project-management/sprints/sprint-{N}-*/` (escrito por `/bear-workflow:start`): metadatos, objetivo y capacidad desde `sprint-goal.md` (inicio, fin, capacidad, objetivo); stories desde la tabla de US seleccionadas de `sprint-goal.md` y los archivos `project-management/backlog/user-stories/US-*.md` (puntos, estado), considerándose `ready-for-dev` una story planificada que aún no ha empezado; dependencias bloqueantes desde `sprint-dependencies.md`.
+   3. Ninguno encontrado: fallar con «No sprint {N}: run `/bear-workflow:start {N}`».
 2. Validar los campos de metadatos `sprint_id`, `name`, `start_date`, `end_date`, `goal`.
 3. Validar las stories (ready, estimadas, ninguna bloqueada) y la capacidad opcional.
 4. Generar el informe, empezando por la fuente utilizada: `Source: .bmad/sprint-status.yaml` o `Source: markdown (project-management/sprints/sprint-{N}-*/)`.
 
-En modo fallback el gate se evalúa igualmente, pero el informe añade una advertencia no bloqueante: los comandos `/workflow:*` necesitan `.bmad/sprint-status.yaml`; ejecutar `/workflow:start {N}`, o `/project:migrate` para crear `.bmad/sprint-status.yaml` a partir de un backlog existente.
+En modo fallback el gate se evalúa igualmente, pero el informe añade una advertencia no bloqueante: los comandos `/bear-workflow:*` necesitan `.bmad/sprint-status.yaml`; ejecutar `/bear-workflow:start {N}`, o `/bear-project:migrate` para crear `.bmad/sprint-status.yaml` a partir de un backlog existente.
 
 ```
 Sprint Ready Gate Validation
@@ -154,7 +154,7 @@ Sprint: sprint-3 - User Management   Period: 2026-01-29 → 2026-02-12 (14 days)
 ✅ Sprint Metadata (20%)  ✅ Sprint Goal (15%)  ✅ Stories Ready (25%): 5 stories, 21 points
 ✅ Stories Estimated (20%)  ✅ Capacity Check (10%): 21/25 = 84%  ✅ Dependencies Resolved (10%)
 Score: 100/100 — ✅ SPRINT READY GATE PASSED
-Commands: /workflow:start (start the sprint), /project:backlog next story (pick the first story)
+Commands: /bear-workflow:start (start the sprint), /bear-project:backlog next story (pick the first story)
 ```
 
 En caso de fallo, las acciones requeridas muestran el bloque `metadata` que hay que añadir a `.bmad/sprint-status.yaml`:
@@ -169,7 +169,7 @@ metadata:
   capacity_points: 25  # Optional: team capacity
 ```
 
-después las estimaciones que faltan (`/project:backlog edit story US-010 --points 5`) y las stories ready bloqueadas (quitarlas del sprint, desbloquear la dependencia o reordenar).
+después las estimaciones que faltan (`/bear-project:backlog edit story US-010 --points 5`) y las stories ready bloqueadas (quitarlas del sprint, desbloquear la dependencia o reordenar).
 
 ## story
 
@@ -193,10 +193,10 @@ Story DoD Gate: US-005 — Email verification   Status: in-progress
 ❌ Tests Passing (20%)    TDD Phase: red
 ⚠️ Acceptance Criteria    1/3 validated
 ❌ Code Reviewed (15%)    No PR created yet
-Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /workflow:implement US-005
+Score: 25/100 — ❌ STORY DoD GATE FAILED. Resume work: /bear-workflow:implement US-005
 ```
 
-Si se aprueba: la story puede pasar a `done` con `/project:backlog move story US-005 done`. El gate también lo verifica el hook Stop (`quality-gate.sh`) y se comprueba antes de `/project:backlog move story <id> done`.
+Si se aprueba: la story puede pasar a `done` con `/bear-project:backlog move story US-005 done`. El gate también lo verifica el hook Stop (`quality-gate.sh`) y se comprueba antes de `/bear-project:backlog move story <id> done`.
 
 | Fase TDD | Significado | Siguiente paso |
 |----------|-------------|----------------|
@@ -234,7 +234,7 @@ SPEC-CODE ALIGNMENT GATE ❌   Story: US-012 | Score: 65%
 Actions: 1. Add // Story: US-012 to ProfileService.ts  2. Write test for AC-2  → Fix issues before merging
 ```
 
-Relacionados: `/project:trace` (matriz de trazabilidad), `/project:trace --gaps` (cobertura de requisitos).
+Relacionados: `/bear-project:trace` (matriz de trazabilidad), `/bear-project:trace --gaps` (cobertura de requisitos).
 
 ## commit
 
@@ -251,11 +251,11 @@ Verifica el código antes de un commit (flags: `--fix` corrige los problemas cor
 |-------------------------------|-----------------------------|
 | Errores de sintaxis, errores de PHPStan/mypy/tsc, secretos detectados, archivos `.env`, claves privadas/certificados | Problemas de formato, advertencias de ESLint, cobertura de tests reducida, TODO/FIXME añadidos |
 
-Para automatizarlo, llamarlo desde un hook pre-commit: `claude-code "/gate:check commit --staged"`.
+Para automatizarlo, llamarlo desde un hook pre-commit: `claude-code "/bear-gate:check commit --staged"`.
 
 ## merge
 
-Verifica una rama antes de fusionarla (argumentos: `[source] [target]`; source por defecto: la rama actual, target por defecto: `main` o `master`). Ejemplo: `/gate:check merge feature/auth main`.
+Verifica una rama antes de fusionarla (argumentos: `[source] [target]`; source por defecto: la rama actual, target por defecto: `main` o `master`). Ejemplo: `/bear-gate:check merge feature/auth main`.
 
 1. **Analizar el diff**: commits a fusionar (`git log target..source --oneline`), archivos modificados (`--stat`), líneas añadidas/eliminadas (`--shortstat`).
 2. **Verificaciones de calidad** (en Docker): la suite de tests completa con cobertura (phpunit, `flutter test --coverage`, `pytest --cov`, `npm run test -- --coverage`); análisis estático completo (`phpstan analyse -l max`, `dart analyze --fatal-infos`, `mypy --strict .`, `tsc --noEmit`); auditoría de dependencias (`composer audit`, `pip-audit`, `npm audit`, `dart pub outdated`).
@@ -271,7 +271,7 @@ Verifica una rama antes de fusionarla (argumentos: `[source] [target]`; source p
 
 ## release
 
-Guía al equipo a través de una release (argumentos: `<version> [patch|minor|major]`, p. ej. `1.2.0 minor` o `2.0.0-beta.1`). Ejemplo: `/gate:check release 1.2.0 minor`.
+Guía al equipo a través de una release (argumentos: `<version> [patch|minor|major]`, p. ej. `1.2.0 minor` o `2.0.0-beta.1`). Ejemplo: `/bear-gate:check release 1.2.0 minor`.
 
 1. **Validación pre-release**: rama correcta (`main`/`master` o `release/*`), sin cambios sin commitear, todos los tests pasan; `CHANGELOG.md` al día (cambios desde el último tag con `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"`); archivos de versión actualizados (`composer.json`, `pyproject.toml`/`__version__.py`, `package.json`, `pubspec.yaml`, `Info.plist`, `build.gradle`).
 2. **Tests exhaustivos**: unitarios, de integración, E2E, de rendimiento, de seguridad.
@@ -311,7 +311,7 @@ BMAD Quality Gates Report   Project: bear-craft   Sprint: sprint-3 - User Manage
 | Story DoD | 100% | varies | 📊 |
 Story DoD Status: US-010 in-progress 45% ⏳ | US-012 review 85% ⚠️ | US-013 done 100% ✅
 Overall Health: 🟢 Good — 4/5 gates passing, 8/10 stories on track
-Recommendations: 1. ⚠️ US-002 missing story points → /project:backlog edit story US-002 --points 3
+Recommendations: 1. ⚠️ US-002 missing story points → /bear-project:backlog edit story US-002 --points 3
 ```
 
 El informe `--detailed` añade, por gate, el archivo, el umbral, la puntuación, el estado y todos los criterios, las stories con problemas (backlog), el desglose DoD de cada story y los action items por prioridad (1 bloqueante, 2 conviene corregir, 3 deseable). El informe puede generarse bajo demanda, incluirse en la retrospectiva del sprint, usarse para monitorizar la salud del proyecto o exportarse para los stakeholders. Los gates de código (`commit`, `merge`, `release`) y `alignment` no forman parte de él: ejecutarlos por separado.
@@ -326,9 +326,9 @@ Ejecuta checkpoints automatizados en las fases críticas del ciclo de vida para 
 
 | Fase | Cuándo | Target |
 |------|--------|--------|
-| `pre-sprint` | Antes de iniciar un sprint (tras `/workflow:start`) | sprint |
-| `pre-impl` | Antes de programar una story (tras `/project:backlog next story --claim`) | story |
-| `post-impl` | Tras completar una story (antes de `/project:backlog move story US-xxx review`) | story |
+| `pre-sprint` | Antes de iniciar un sprint (tras `/bear-workflow:start`) | sprint |
+| `pre-impl` | Antes de programar una story (tras `/bear-project:backlog next story --claim`) | story |
+| `post-impl` | Tras completar una story (antes de `/bear-project:backlog move story US-xxx review`) | story |
 | `pre-merge` | Antes de fusionar en main (llamada por `merge`) | story o sprint |
 
 **pre-sprint**: cargar las stories asignadas al sprint.
@@ -371,7 +371,7 @@ Ejecuta checkpoints automatizados en las fases críticas del ciclo de vida para 
 | Code review realizada | Sí |
 | Suite de tests en verde (suite completa) | Sí |
 | Constitution respect | Sí |
-| Traceability complete: FR → US → Code → Test, con `/project:trace` | Sí |
+| Traceability complete: FR → US → Code → Test, con `/bear-project:trace` | Sí |
 | Documentación actualizada | No |
 
 ```
@@ -382,11 +382,11 @@ Actions required: 1. Add FR-003 coverage to tech spec section 3.2  2. Define per
 → Fix issues before proceeding
 ```
 
-Ejemplo: `/gate:check --phase=pre-sprint Sprint-3` → «Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet». Integración: `/workflow:start` activa `pre-sprint`, `/project:backlog next story` sugiere `pre-impl`, `/project:backlog move story` activa `post-impl` y `merge` activa `pre-merge`.
+Ejemplo: `/bear-gate:check --phase=pre-sprint Sprint-3` → «Score: 83% (5/6 passed) — WARNING: US-015 has no tasks yet». Integración: `/bear-workflow:start` activa `pre-sprint`, `/bear-project:backlog next story` sugiere `pre-impl`, `/bear-project:backlog move story` activa `post-impl` y `merge` activa `pre-merge`.
 
 ## Comandos relacionados
 
-- `/project:trace` — matriz de trazabilidad y cobertura de requisitos (`--gaps`)
-- `/workflow:design`, `/workflow:plan --only=backlog` — producen los artefactos que validan los gates
-- `/workflow:start` — iniciar el sprint (incluye el checkpoint pre-sprint)
-- `/project:backlog move story` — pasar una story al siguiente estado
+- `/bear-project:trace` — matriz de trazabilidad y cobertura de requisitos (`--gaps`)
+- `/bear-workflow:design`, `/bear-workflow:plan --only=backlog` — producen los artefactos que validan los gates
+- `/bear-workflow:start` — iniciar el sprint (incluye el checkpoint pre-sprint)
+- `/bear-project:backlog move story` — pasar una story al siguiente estado

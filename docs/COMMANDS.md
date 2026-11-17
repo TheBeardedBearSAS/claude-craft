@@ -9,9 +9,9 @@ Claude Code commands are slash commands that automate workflows and provide stru
 Type a slash command in Claude Code:
 
 ```
-/gate:check commit
-/symfony:generate-crud User
-/react:generate-component Button
+/bear-gate:check commit
+/bear-symfony:generate-crud User
+/bear-react:generate-component Button
 ```
 
 Commands can take arguments:
@@ -25,17 +25,17 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 | Level | Description | Example Commands |
 |-------|-------------|-----------------|
-| **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/workflow:implement`, `/qa:tdd`, `/qa:recette`, `generate-*` commands |
-| **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/workflow:plan`, `/workflow:design`, `/common:architecture-decision` |
-| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/workflow:plan --research` |
+| **MANDATORY** | Plan mode activates automatically before execution. Claude analyzes impacted code and proposes a plan for your validation. | `/bear-workflow:implement`, `/bear-qa:tdd`, `/bear-qa:recette`, `generate-*` commands |
+| **RECOMMENDED** | Plan mode is recommended for complex scenarios. Activates when scope spans multiple modules. | `/bear-workflow:plan`, `/bear-workflow:design`, `/bear-common:architecture-decision` |
+| **CONDITIONAL** | Plan mode activates automatically when scope is broad (multiple modules, cross-cutting analysis). | `check-*` commands, `/bear-workflow:plan --research` |
 
-> **Tip:** Commands without a Plan Mode section (e.g., `/workflow:status`, `/workflow:status --standup`) are lightweight and never require plan mode.
+> **Tip:** Commands without a Plan Mode section (e.g., `/bear-workflow:status`, `/bear-workflow:status --standup`) are lightweight and never require plan mode.
 
 ---
 
 ## Command Namespaces
 
-> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/team:sprint` → `/team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/common:add-technology` and `/common:audit-*` are maintainer-only (they work on the Bear Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
+> The generated reference lists **197 command files** across all namespaces: **131 active commands** plus **66 deprecated redirect stubs** (the `/<tech>:check-*` commands → `/<tech>:check <axis>` and `/bear-team:sprint` → `/bear-team:delivery --phase=implementation`, deprecated in 9.0 and removed in 10.0). The counts below are active commands only. `/bear-common:add-technology` and `/bear-common:audit-*` are maintainer-only (they work on the Bear Craft repository itself). Full auto-generated reference: [COMMANDS-FULL-REFERENCE](COMMANDS-FULL-REFERENCE.md).
 
 | Namespace | Technology | Count |
 |-----------|------------|-------|
@@ -69,7 +69,7 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 | `/pgbouncer:` | PgBouncer/Connection Pooling | 5 |
 | `/frankenphp:` | FrankenPHP/PHP Server | 5 |
 | `/paperclip:` | Paperclip AI-workforce orchestration | 4 |
-| `/gate:` | Quality Gates (BMAD v6) | 1 (`/gate:check`, 11 modes) |
+| `/gate:` | Quality Gates (BMAD v6) | 1 (`/bear-gate:check`, 11 modes) |
 | `/project:` | Project Management (BMAD v6) | 5 |
 
 ---
@@ -78,35 +78,35 @@ Every command includes a **Plan Mode** section that indicates when Claude should
 
 Transversal commands for all projects.
 
-> Pre-commit, pre-merge and release checks are `/gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)).
+> Pre-commit, pre-merge and release checks are `/bear-gate:check commit|merge|release` (see [Quality Gate Commands](#quality-gate-commands-gate)).
 
 ### Generation Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:generate-changelog` | Generate changelog from commits |
-| `/common:architecture-decision` | Document an ADR |
+| `/bear-common:generate-changelog` | Generate changelog from commits |
+| `/bear-common:architecture-decision` | Document an ADR |
 
-> Sprint-lifecycle commands live in [`/workflow:`](#workflow-commands-workflow); the daily stand-up is `/workflow:status --standup`.
+> Sprint-lifecycle commands live in [`/workflow:`](#workflow-commands-workflow); the daily stand-up is `/bear-workflow:status --standup`.
 
 ### Configuration Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:init --context` | Analyze the codebase and configure the project context |
-| `/common:setup-rtk` | Install and configure RTK (token optimization) |
+| `/bear-common:init --context` | Analyze the codebase and configure the project context |
+| `/bear-common:setup-rtk` | Install and configure RTK (token optimization) |
 
 ### Continuous Loop Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:ralph-run` | Run Claude in continuous loop until DoD passes |
+| `/bear-common:ralph-run` | Run Claude in continuous loop until DoD passes |
 
 Ralph Wiggum executes Claude iteratively until the task is complete:
 
 ```bash
-/common:ralph-run "Implement user authentication"
-/common:ralph-run --full "Fix the login bug"  # With all DoD checks
+/bear-common:ralph-run "Implement user authentication"
+/bear-common:ralph-run --full "Fix the login bug"  # With all DoD checks
 ```
 
 **Definition of Done validators:**
@@ -116,50 +116,50 @@ Ralph Wiggum executes Claude iteratively until the task is complete:
 - `hook`: Integrate with quality-gate.sh
 - `human`: Manual approval gate
 
-> **Note:** `/common:full-audit` and `/common:ralph-sprint` were removed in v6.0. Use `/team:audit --sequential` and `/team:delivery --phase=implementation --engine=teams --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
+> **Note:** `/bear-common:full-audit` and `/bear-common:ralph-sprint` were removed in v6.0. Use `/bear-team:audit --sequential` and `/bear-team:delivery --phase=implementation --engine=teams --ralph-mode` instead. See [Migration Guide](MIGRATION-v6.md).
 
 ### DevOps Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:setup-ci` | Configure CI/CD pipeline |
+| `/bear-common:setup-ci` | Configure CI/CD pipeline |
 | `/docker:optimize` | Optimize Docker configuration |
 
 ### Codebase Packing (v7.33+)
 
 | Command | Description |
 |---------|-------------|
-| `/common:pack-repo` | Pack the codebase into a single AI-friendly file (XML/Markdown/Plain/JSON). Wrapper around [Repomix](https://github.com/yamadashy/repomix) with native shell fallback. Token counting included. Options : `--format`, `--output`, `--compress`, `--include`, `--exclude`, `--mcp`, `--fallback`. |
+| `/bear-common:pack-repo` | Pack the codebase into a single AI-friendly file (XML/Markdown/Plain/JSON). Wrapper around [Repomix](https://github.com/yamadashy/repomix) with native shell fallback. Token counting included. Options : `--format`, `--output`, `--compress`, `--include`, `--exclude`, `--mcp`, `--fallback`. |
 
 ### Development Commands
 
 | Command | Description |
 |---------|-------------|
-| `/qa:tdd` | Fix bug using TDD methodology (see [QA Recette Commands](#qa-recette-commands-qa)) |
+| `/bear-qa:tdd` | Fix bug using TDD methodology (see [QA Recette Commands](#qa-recette-commands-qa)) |
 
 ### UI/UX Commands
 
 | Command | Description |
 |---------|-------------|
-| `/uiux:audit` | Complete UI/UX/Accessibility audit |
-| `/uiux:component-spec` | Full component specification (UI + UX + A11y) |
-| `/uiux:design-tokens` | Define design system tokens |
-| `/uiux:user-flow` | Design user journey and flow |
-| `/uiux:a11y-audit` | WCAG 2.2 AAA accessibility audit |
-| `/uiux:a11y-component` | Accessibility specs for a component |
-| `/uiux:generate-design-md` | Generate root `DESIGN.md` from template (auto-detect Tailwind / W3C tokens). Options : `--from-tailwind`, `--from-tokens`, `--interactive`. Convention : `design-md-convention` skill. (v7.34+) |
+| `/bear-uiux:audit` | Complete UI/UX/Accessibility audit |
+| `/bear-uiux:component-spec` | Full component specification (UI + UX + A11y) |
+| `/bear-uiux:design-tokens` | Define design system tokens |
+| `/bear-uiux:user-flow` | Design user journey and flow |
+| `/bear-uiux:a11y-audit` | WCAG 2.2 AAA accessibility audit |
+| `/bear-uiux:a11y-component` | Accessibility specs for a component |
+| `/bear-uiux:generate-design-md` | Generate root `DESIGN.md` from template (auto-detect Tailwind / W3C tokens). Options : `--from-tailwind`, `--from-tokens`, `--interactive`. Convention : `design-md-convention` skill. (v7.34+) |
 
 ### Technology Commands
 
 | Command | Description |
 |---------|-------------|
-| `/common:add-technology` | Add a new technology to bear-craft (maintainer-only: available in a clone of the bear-craft repository, not installed in projects since 8.24.0) |
+| `/bear-common:add-technology` | Add a new technology to bear-craft (maintainer-only: available in a clone of the bear-craft repository, not installed in projects since 8.24.0) |
 
 Add a complete technology stack to bear-craft with best practices:
 
 ```bash
-/common:add-technology "nextjs"
-/common:add-technology "golang" backend
+/bear-common:add-technology "nextjs"
+/bear-common:add-technology "golang" backend
 ```
 
 **Features:**
@@ -181,9 +181,9 @@ Add a complete technology stack to bear-craft with best practices:
 
 | Command | Description |
 |---------|-------------|
-| `/team:audit` | Parallel multi-tech audit (Agent Teams) |
-| `/team:security` | Parallel security review (Agent Teams) |
-| `/team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams); `--phase=implementation` implements existing stories (replaces `/team:sprint` in 9.0) |
+| `/bear-team:audit` | Parallel multi-tech audit (Agent Teams) |
+| `/bear-team:security` | Parallel security review (Agent Teams) |
+| `/bear-team:delivery` | Full sprint lifecycle — writing + implementation (Agent Teams); `--phase=implementation` implements existing stories (replaces `/bear-team:sprint` in 9.0) |
 | skill `sub-agents-patterns` | Sub-agent orchestration patterns for Agent Teams (a skill since 8.26.0, no longer a command) |
 
 ---
@@ -192,21 +192,21 @@ Add a complete technology stack to bear-craft with best practices:
 
 BMAD-inspired workflow system adapted to project complexity. Since Phase 3 of the PM simplification, the whole sprint lifecycle is covered by **9 commands**; `.bmad/sprint-status.yaml` is the single source of truth for status.
 
-**Main path:** `/workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (with `/workflow:status` at any time). `/workflow:auto-sprint <N>` chains start → … → merge in one run.
+**Main path:** `/bear-workflow:init` → `plan` → `design` → `start` → `implement` → `review` → `retro` (with `/bear-workflow:status` at any time). `/bear-workflow:auto-sprint <N>` chains start → … → merge in one run.
 
 | Command | Description |
 |---------|-------------|
-| `/workflow:init` | Analyze project context and recommend the track |
-| `/workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document |
-| `/workflow:design` | Technical specification; `--constitution` generates the project constitution |
-| `/workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) |
-| `/workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/team:delivery --phase=implementation`), `--auto` |
-| `/workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` |
-| `/workflow:review` | Sprint review summary |
-| `/workflow:retro` | Sprint retrospective |
-| `/workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) |
+| `/bear-workflow:init` | Analyze project context and recommend the track |
+| `/bear-workflow:plan` | PRD + backlog (default); `--research` adds the research phase; `--only=prd` / `--only=backlog` runs a single document |
+| `/bear-workflow:design` | Technical specification; `--constitution` generates the project constitution |
+| `/bear-workflow:start <N>` | Prepare a sprint: sprint folder, `sprint-status.yaml` entries, task breakdown (`--tasks-only` decomposes an existing sprint) |
+| `/bear-workflow:implement [<N>]` | Sprint development in TDD/BDD, sequential by default; `--story <US-ID>`, `--epic <EPIC>`, `--queue` / `--resume` (batch queue), `--parallel N` (delegates to `/bear-team:delivery --phase=implementation`), `--auto` |
+| `/bear-workflow:status` | Where am I + next action; `--board` (Kanban), `--queue` (batch queue), `--standup`, `--gates` |
+| `/bear-workflow:review` | Sprint review summary |
+| `/bear-workflow:retro` | Sprint retrospective |
+| `/bear-workflow:auto-sprint <N>` | End-to-end orchestrator (PO/SM): start → decompose → validate → implement → PR → CI watch → review → retro → merge, each step in an isolated sub-agent (`--from-prd` starts from a PRD) |
 
-Story transitions are handled by `/project:backlog` (`next story`, `move story <US> <status>`, `move story --auto`).
+Story transitions are handled by `/bear-project:backlog` (`next story`, `move story <US> <status>`, `move story --auto`).
 
 ---
 
@@ -218,22 +218,22 @@ PHP backend development with Symfony.
 
 | Command | Description |
 |---------|-------------|
-| `/symfony:generate-crud <Entity>` | Generate CRUD operations |
-| `/symfony:generate-command <Name>` | Generate CLI command |
-| `/symfony:api-endpoint <Resource>` | Generate API endpoint |
+| `/bear-symfony:generate-crud <Entity>` | Generate CRUD operations |
+| `/bear-symfony:generate-command <Name>` | Generate CLI command |
+| `/bear-symfony:api-endpoint <Resource>` | Generate API endpoint |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/symfony:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-symfony:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Database Commands
 
 | Command | Description |
 |---------|-------------|
-| `/symfony:migration-plan <Change>` | Plan database migration |
-| `/symfony:optimize-doctrine` | Optimize Doctrine queries |
+| `/bear-symfony:migration-plan <Change>` | Plan database migration |
+| `/bear-symfony:optimize-doctrine` | Optimize Doctrine queries |
 
 ---
 
@@ -245,27 +245,27 @@ Mobile development with Flutter/Dart.
 
 | Command | Description |
 |---------|-------------|
-| `/flutter:generate-feature <Name>` | Generate feature module |
-| `/flutter:generate-widget <Name>` | Generate widget |
+| `/bear-flutter:generate-feature <Name>` | Generate feature module |
+| `/bear-flutter:generate-widget <Name>` | Generate widget |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/flutter:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
-| `/flutter:analyze-performance` | Performance analysis |
+| `/bear-flutter:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-flutter:analyze-performance` | Performance analysis |
 
 ### Testing Commands
 
 | Command | Description |
 |---------|-------------|
-| `/flutter:golden-update` | Update golden files |
+| `/bear-flutter:golden-update` | Update golden files |
 
 ### Localization Commands
 
 | Command | Description |
 |---------|-------------|
-| `/flutter:localization-check` | Validate i18n setup |
+| `/bear-flutter:localization-check` | Validate i18n setup |
 
 ---
 
@@ -277,32 +277,32 @@ Python backend and API development.
 
 | Command | Description |
 |---------|-------------|
-| `/python:generate-endpoint <Name>` | Generate API endpoint |
-| `/python:generate-model <Name>` | Generate data model |
+| `/bear-python:generate-endpoint <Name>` | Generate API endpoint |
+| `/bear-python:generate-model <Name>` | Generate data model |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/python:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-python:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Type Commands
 
 | Command | Description |
 |---------|-------------|
-| `/python:type-coverage` | Analyze type hint coverage |
+| `/bear-python:type-coverage` | Analyze type hint coverage |
 
 ### Async Commands
 
 | Command | Description |
 |---------|-------------|
-| `/python:async-check` | Validate async/await usage |
+| `/bear-python:async-check` | Validate async/await usage |
 
 ### Dependency Commands
 
 | Command | Description |
 |---------|-------------|
-| `/python:dependency-audit` | Audit dependencies for vulnerabilities |
+| `/bear-python:dependency-audit` | Audit dependencies for vulnerabilities |
 
 ---
 
@@ -314,27 +314,27 @@ Frontend development with React/TypeScript.
 
 | Command | Description |
 |---------|-------------|
-| `/react:generate-component <Name>` | Generate React component |
-| `/react:generate-hook <Name>` | Generate custom hook |
-| `/react:storybook-story <Component>` | Generate Storybook story |
+| `/bear-react:generate-component <Name>` | Generate React component |
+| `/bear-react:generate-hook <Name>` | Generate custom hook |
+| `/bear-react:storybook-story <Component>` | Generate Storybook story |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/react:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-react:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### Performance Commands
 
 | Command | Description |
 |---------|-------------|
-| `/react:bundle-analyze` | Analyze bundle size |
+| `/bear-react:bundle-analyze` | Analyze bundle size |
 
 ### Accessibility Commands
 
 | Command | Description |
 |---------|-------------|
-| `/react:accessibility-check` | A11y validation |
+| `/bear-react:accessibility-check` | A11y validation |
 
 ---
 
@@ -346,22 +346,22 @@ Mobile development with React Native.
 
 | Command | Description |
 |---------|-------------|
-| `/reactnative:generate-screen <Name>` | Generate screen component |
-| `/reactnative:native-module <Name>` | Generate native module |
+| `/bear-reactnative:generate-screen <Name>` | Generate screen component |
+| `/bear-reactnative:native-module <Name>` | Generate native module |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/reactnative:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-reactnative:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ### App Commands
 
 | Command | Description |
 |---------|-------------|
-| `/reactnative:app-size` | Analyze app bundle size |
-| `/reactnative:deep-link <Route>` | Configure deep linking |
-| `/reactnative:store-prepare` | Prepare for app store |
+| `/bear-reactnative:app-size` | Analyze app bundle size |
+| `/bear-reactnative:deep-link <Route>` | Configure deep linking |
+| `/bear-reactnative:store-prepare` | Prepare for app store |
 
 ---
 
@@ -373,13 +373,13 @@ Frontend development with Angular standalone components and signals.
 
 | Command | Description |
 |---------|-------------|
-| `/angular:generate-component <Name>` | Generate standalone component with tests |
+| `/bear-angular:generate-component <Name>` | Generate standalone component with tests |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/angular:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-angular:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -391,13 +391,13 @@ Backend development with C#/.NET, Clean Architecture, and CQRS.
 
 | Command | Description |
 |---------|-------------|
-| `/csharp:generate-feature <Name>` | Generate complete CQRS feature (entity, commands, queries, endpoints) |
+| `/bear-csharp:generate-feature <Name>` | Generate complete CQRS feature (entity, commands, queries, endpoints) |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/csharp:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-csharp:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -409,13 +409,13 @@ PHP backend development with Laravel, Clean Architecture, and Pest PHP.
 
 | Command | Description |
 |---------|-------------|
-| `/laravel:generate-controller <Name>` | Generate API controller with Form Request, Resource, and Policy |
+| `/bear-laravel:generate-controller <Name>` | Generate API controller with Form Request, Resource, and Policy |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/laravel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-laravel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -427,50 +427,50 @@ Frontend development with Vue.js 3, Composition API, and TypeScript.
 
 | Command | Description |
 |---------|-------------|
-| `/vuejs:generate-component <Name>` | Generate component with test, types, and Storybook story |
+| `/bear-vuejs:generate-component <Name>` | Generate component with test, types, and Storybook story |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/vuejs:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-vuejs:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
 ## Vite Commands (`/vite:`)
 
-Framework-agnostic Vite projects only — vanilla JS/TS apps, library authoring, multi-page apps, Workers/WASM entries. For React/Vue/Angular/Svelte's own Vite tooling, use `/react:*`, `/vuejs:*`, `/angular:*` commands instead.
+Framework-agnostic Vite projects only — vanilla JS/TS apps, library authoring, multi-page apps, Workers/WASM entries. For React/Vue/Angular/Svelte's own Vite tooling, use `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*` commands instead.
 
 ### Code Generation
 
 | Command | Description |
 |---------|-------------|
-| `/vite:scaffold-project` | Scaffold a new Vite project (`vanilla-ts`/`lit-ts` template) or a library skeleton |
+| `/bear-vite:scaffold-project` | Scaffold a new Vite project (`vanilla-ts`/`lit-ts` template) or a library skeleton |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/vite:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
-| `/vite:check-library-build` | Validate `build.lib` output and `vite-plugin-dts` `.d.ts` generation |
+| `/bear-vite:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-vite:check-library-build` | Validate `build.lib` output and `vite-plugin-dts` `.d.ts` generation |
 
 ---
 
 ## Vercel Commands (`/vercel:`)
 
-Framework-agnostic Vercel platform features only — `vercel.json`, Serverless Functions (Node.js/Fluid Compute runtime), ISR, Cron Jobs, Storage. Not a Next.js stack (no `/nextjs:*` namespace exists) — for framework-specific routing/rendering, use `/react:*`, `/vuejs:*`, `/angular:*` instead.
+Framework-agnostic Vercel platform features only — `vercel.json`, Serverless Functions (Node.js/Fluid Compute runtime), ISR, Cron Jobs, Storage. Not a Next.js stack (no `/nextjs:*` namespace exists) — for framework-specific routing/rendering, use `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*` instead.
 
 ### Code Generation
 
 | Command | Description |
 |---------|-------------|
-| `/vercel:deploy-config` | Detect project shape and generate/validate a `vercel.json` |
+| `/bear-vercel:deploy-config` | Detect project shape and generate/validate a `vercel.json` |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/vercel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-vercel:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -482,7 +482,7 @@ Ruby 4.0 + Rails 8.1: Rails Way first, service/form/query objects when code grow
 
 | Command | Description |
 |---------|-------------|
-| `/ruby:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+| `/bear-ruby:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
 
 ---
 
@@ -494,7 +494,7 @@ Rust 1.99 (edition 2024) + Axum 0.8: layered Cargo workspace, Tokio, Tower middl
 
 | Command | Description |
 |---------|-------------|
-| `/rust:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+| `/bear-rust:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
 
 ---
 
@@ -506,7 +506,7 @@ Tauri v2 (2.12, community): desktop and mobile apps with a Rust core and a frame
 
 | Command | Description |
 |---------|-------------|
-| `/tauri:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+| `/bear-tauri:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
 
 ---
 
@@ -518,7 +518,7 @@ WordPress 7.1 (community): plugins and block themes — plugin header and bootst
 
 | Command | Description |
 |---------|-------------|
-| `/wordpress:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
+| `/bear-wordpress:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 |
 
 ---
 
@@ -528,7 +528,7 @@ Standalone PHP development with PSR-12 and PHPStan.
 
 | Command | Description |
 |---------|-------------|
-| `/php:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-php:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -701,15 +701,15 @@ Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeS
 
 | Command | Description |
 |---------|-------------|
-| `/paperclip:generate-adapter <name> <kind>` | Scaffold a custom adapter (`local` \| `process` \| `http`) implementing the full `AdapterContract` |
-| `/paperclip:generate-agent-config <name>` | Produce an `agent.yaml` with budget, skills, approvals, adapter binding |
-| `/paperclip:setup-company <name>` | Bootstrap a new Paperclip company end-to-end (install, company, goal, budget, adapter, first agent) |
+| `/bear-paperclip:generate-adapter <name> <kind>` | Scaffold a custom adapter (`local` \| `process` \| `http`) implementing the full `AdapterContract` |
+| `/bear-paperclip:generate-agent-config <name>` | Produce an `agent.yaml` with budget, skills, approvals, adapter binding |
+| `/bear-paperclip:setup-company <name>` | Bootstrap a new Paperclip company end-to-end (install, company, goal, budget, adapter, first agent) |
 
 ### Analysis Commands
 
 | Command | Description |
 |---------|-------------|
-| `/paperclip:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-paperclip:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
 
 ---
 
@@ -717,68 +717,68 @@ Paperclip is an open-source AI-workforce orchestration platform (Node.js + TypeS
 
 Available with Project installation. Since Phase 2 of the PM simplification, the many per-entity commands were merged into five commands with subcommands (`backlog`, `reverse`, `trace`, `report`, `migrate`); the old names are listed in [MIGRATION-v9.md](MIGRATION-v9.md).
 
-### Backlog (`/project:backlog <action> <entity>`)
+### Backlog (`/bear-project:backlog <action> <entity>`)
 
 | Command | Description |
 |---------|-------------|
-| `/project:backlog add epic <Name>` | Create a new EPIC |
-| `/project:backlog add story <Epic> <Name>` | Create a User Story |
-| `/project:backlog add task <US> <Desc> <Est>` | Create a task |
-| `/project:backlog list epic` | List all EPICs |
-| `/project:backlog list story` | List User Stories |
-| `/project:backlog list task` | List tasks |
-| `/project:backlog edit epic <Epic>` | Update an EPIC |
-| `/project:backlog edit story <US>` | Update a User Story |
-| `/project:backlog move task <Task> <Status>` | Change task status |
-| `/project:backlog move story <US> <Status>` | Transition a story (also `next story`, `move story --auto`) |
+| `/bear-project:backlog add epic <Name>` | Create a new EPIC |
+| `/bear-project:backlog add story <Epic> <Name>` | Create a User Story |
+| `/bear-project:backlog add task <US> <Desc> <Est>` | Create a task |
+| `/bear-project:backlog list epic` | List all EPICs |
+| `/bear-project:backlog list story` | List User Stories |
+| `/bear-project:backlog list task` | List tasks |
+| `/bear-project:backlog edit epic <Epic>` | Update an EPIC |
+| `/bear-project:backlog edit story <US>` | Update a User Story |
+| `/bear-project:backlog move task <Task> <Status>` | Change task status |
+| `/bear-project:backlog move story <US> <Status>` | Transition a story (also `next story`, `move story --auto`) |
 
-> Backlog generation, sprint breakdown and the Kanban board are workflow commands: `/workflow:plan --only=backlog`, `/workflow:start <N>`, `/workflow:status --board`. PRD, tech spec, batch queue and constitution: `/workflow:plan --only=prd`, `/workflow:design`, `/workflow:implement --queue`, `/workflow:design --constitution` (see [Workflow Commands](#workflow-commands-workflow)).
+> Backlog generation, sprint breakdown and the Kanban board are workflow commands: `/bear-workflow:plan --only=backlog`, `/bear-workflow:start <N>`, `/bear-workflow:status --board`. PRD, tech spec, batch queue and constitution: `/bear-workflow:plan --only=prd`, `/bear-workflow:design`, `/bear-workflow:implement --queue`, `/bear-workflow:design --constitution` (see [Workflow Commands](#workflow-commands-workflow)).
 
 ### BMAD v6 Commands
 
 | Command | Description |
 |---------|-------------|
-| `/project:migrate --analyze` | Analyze current backlog structure |
-| `/project:migrate` | Convert backlog to BMAD v6 format |
-| `/project:migrate --stories` | Add missing BMAD fields to stories |
-| `/project:migrate --resync` | Synchronize backlog files and YAML |
-| `/project:migrate --dry-run` | Preview the migration without writing |
+| `/bear-project:migrate --analyze` | Analyze current backlog structure |
+| `/bear-project:migrate` | Convert backlog to BMAD v6 format |
+| `/bear-project:migrate --stories` | Add missing BMAD fields to stories |
+| `/bear-project:migrate --resync` | Synchronize backlog files and YAML |
+| `/bear-project:migrate --dry-run` | Preview the migration without writing |
 
 ### SDD v2.0 Commands
 
 | Command | Description |
 |---------|-------------|
-| `/project:trace [--scope] [--id]` | Display bidirectional traceability matrix |
-| `/project:trace --gaps` | Analyze requirement coverage gaps |
-| `/project:trace --by-priority` | Coverage map grouped by priority |
-| `/project:reverse scan [--scope]` | Analyze codebase and generate structured inventory |
-| `/project:reverse prd` | Generate PRD from existing codebase (brownfield) |
-| `/project:reverse stories` | Generate user stories from existing features |
-| `/project:reverse gaps` | Compare specifications with actual code |
-| `/project:reverse all` | Run scan, prd, stories and gaps in sequence |
-| `/gate:check --phase=<phase>` | Run spec verification checkpoints (pre-sprint, pre-impl, post-impl, pre-merge) |
+| `/bear-project:trace [--scope] [--id]` | Display bidirectional traceability matrix |
+| `/bear-project:trace --gaps` | Analyze requirement coverage gaps |
+| `/bear-project:trace --by-priority` | Coverage map grouped by priority |
+| `/bear-project:reverse scan [--scope]` | Analyze codebase and generate structured inventory |
+| `/bear-project:reverse prd` | Generate PRD from existing codebase (brownfield) |
+| `/bear-project:reverse stories` | Generate user stories from existing features |
+| `/bear-project:reverse gaps` | Compare specifications with actual code |
+| `/bear-project:reverse all` | Run scan, prd, stories and gaps in sequence |
+| `/bear-gate:check --phase=<phase>` | Run spec verification checkpoints (pre-sprint, pre-impl, post-impl, pre-merge) |
 
-### Reports (`/project:report`)
+### Reports (`/bear-project:report`)
 
 | Command | Description |
 |---------|-------------|
-| `/project:report burndown [--sprint]` | Generate sprint burndown chart (Mermaid) |
-| `/project:report metrics [--sprint]` | Generate project metrics dashboard |
-| `/project:report deps [--sprint]` | Generate story dependency graph (Mermaid) |
-| `/project:report deps --critical [--sprint]` | Identify critical path for sprint optimization |
+| `/bear-project:report burndown [--sprint]` | Generate sprint burndown chart (Mermaid) |
+| `/bear-project:report metrics [--sprint]` | Generate project metrics dashboard |
+| `/bear-project:report deps [--sprint]` | Generate story dependency graph (Mermaid) |
+| `/bear-project:report deps --critical [--sprint]` | Identify critical path for sprint optimization |
 
-### Sprint Development (`/workflow:implement`, part of the workflow path)
+### Sprint Development (`/bear-workflow:implement`, part of the workflow path)
 
 Orchestrates complete sprint development in TDD/BDD mode:
 
 ```bash
-/workflow:implement 1        # Sprint 1
-/workflow:implement next     # Next incomplete sprint
-/workflow:implement current  # Currently active sprint
-/workflow:implement --story US-003      # One story
-/workflow:implement --epic EPIC-002     # All stories of an epic
-/workflow:implement --queue [--resume]  # Batch queue (.bmad/batch-queue.yaml)
-/workflow:implement --parallel 3        # Parallel engine (/team:delivery --phase=implementation)
+/bear-workflow:implement 1        # Sprint 1
+/bear-workflow:implement next     # Next incomplete sprint
+/bear-workflow:implement current  # Currently active sprint
+/bear-workflow:implement --story US-003      # One story
+/bear-workflow:implement --epic EPIC-002     # All stories of an epic
+/bear-workflow:implement --queue [--resume]  # Batch queue (.bmad/batch-queue.yaml)
+/bear-workflow:implement --parallel 3        # Parallel engine (/bear-team:delivery --phase=implementation)
 ```
 
 **Features:**
@@ -813,15 +813,15 @@ Orchestrates complete sprint development in TDD/BDD mode:
 
 ## Sprint Status Commands
 
-Story routing lives in `/project:backlog`; status is read with `/workflow:status`.
+Story routing lives in `/bear-project:backlog`; status is read with `/bear-workflow:status`.
 
 | Command | Description |
 |---------|-------------|
-| `/project:backlog next story` | Get next ready-for-dev story |
-| `/project:backlog move story <ID> <status>` | Transition story status |
-| `/project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) |
-| `/workflow:status` | Phase, sprint metrics and next action |
-| `/workflow:implement` | Sprint development |
+| `/bear-project:backlog next story` | Get next ready-for-dev story |
+| `/bear-project:backlog move story <ID> <status>` | Transition story status |
+| `/bear-project:backlog move story --auto` | Execute automatic routing rules (`routing.auto_transitions`, also applied after every transition) |
+| `/bear-workflow:status` | Phase, sprint metrics and next action |
+| `/bear-workflow:implement` | Sprint development |
 
 ### State Machine
 
@@ -846,17 +846,17 @@ Available with BMAD v6 installation.
 
 | Command | Description |
 |---------|-------------|
-| `/gate:check prd` | Validate PRD (≥80% threshold) |
-| `/gate:check spec` | Validate Tech Spec (≥90% threshold) |
-| `/gate:check backlog` | Validate INVEST compliance |
-| `/gate:check story <ID>` | Validate story Definition of Done |
-| `/gate:check sprint` | Validate sprint readiness |
-| `/gate:check alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
-| `/gate:check commit [--fix] [--staged]` | Pre-commit verification |
-| `/gate:check merge [source] [target]` | Pre-merge verification |
-| `/gate:check release <version>` | Release checklist |
-| `/gate:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
-| `/gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint |
+| `/bear-gate:check prd` | Validate PRD (≥80% threshold) |
+| `/bear-gate:check spec` | Validate Tech Spec (≥90% threshold) |
+| `/bear-gate:check backlog` | Validate INVEST compliance |
+| `/bear-gate:check story <ID>` | Validate story Definition of Done |
+| `/bear-gate:check sprint` | Validate sprint readiness |
+| `/bear-gate:check alignment [story-id]` | Validate spec-code alignment (≥85% threshold) |
+| `/bear-gate:check commit [--fix] [--staged]` | Pre-commit verification |
+| `/bear-gate:check merge [source] [target]` | Pre-merge verification |
+| `/bear-gate:check release <version>` | Release checklist |
+| `/bear-gate:check <architecture|code-quality|security|testing|all>` | Audit by axis; `all` runs the 4 axes and scores them out of 100 (replaces the `check-*` commands in 9.0) |
+| `/bear-gate:check --phase=<pre-sprint\|pre-impl\|post-impl\|pre-merge>` | Lifecycle checkpoint |
 
 ### Quality Gate Thresholds
 
@@ -873,7 +873,7 @@ Available with BMAD v6 installation.
 
 ## Removed commands (9.0)
 
-The 52 deprecated PM commands and the whole sprint namespace were removed in 9.0, together with `/common:research-context7` and `/uiux:orchestrator` (deprecated in 8.27.0). See [MIGRATION-v9.md](MIGRATION-v9.md) for the complete old → new table.
+The 52 deprecated PM commands and the whole sprint namespace were removed in 9.0, together with `/bear-common:research-context7` and `/bear-uiux:orchestrator` (deprecated in 8.27.0). See [MIGRATION-v9.md](MIGRATION-v9.md) for the complete old → new table.
 
 ## Deprecated commands (removed in 10.0)
 
@@ -886,7 +886,7 @@ These redirect stubs print a warning and run their replacement until 10.0.
 | `/<tech>:check-security` | `/<tech>:check security` |
 | `/<tech>:check-testing` | `/<tech>:check testing` |
 | `/<tech>:check-compliance` | `/<tech>:check all` |
-| `/team:sprint` | `/team:delivery --phase=implementation` |
+| `/bear-team:sprint` | `/bear-team:delivery --phase=implementation` |
 
 `<tech>` is any of the 17 stacks: `angular`, `csharp`, `flutter`, `laravel`, `paperclip`, `php`, `python`, `react`, `reactnative`, `ruby`, `rust`, `symfony`, `tauri`, `vercel`, `vite`, `vuejs`, `wordpress`. The per-axis checklists are installed in `.claude/references/<tech>/checks/`.
 
@@ -898,12 +898,12 @@ Automated acceptance testing with Claude in Chrome.
 
 | Command | Description |
 |---------|-------------|
-| `/qa:recette` | Execute automated acceptance tests via browser |
-| `/qa:fix` | Fix bugs from recette session (TDD workflow) |
-| `/qa:status` | Show recette session status and progress |
-| `/qa:regression` | View and manage regression test registry |
-| `/qa:status --report` | Generate recette report (MD/HTML/JSON) |
-| `/qa:tdd` | Fix a bug in TDD/BDD mode |
+| `/bear-qa:recette` | Execute automated acceptance tests via browser |
+| `/bear-qa:fix` | Fix bugs from recette session (TDD workflow) |
+| `/bear-qa:status` | Show recette session status and progress |
+| `/bear-qa:regression` | View and manage regression test registry |
+| `/bear-qa:status --report` | Generate recette report (MD/HTML/JSON) |
+| `/bear-qa:tdd` | Fix a bug in TDD/BDD mode |
 
 ### Golden Rule
 
@@ -915,28 +915,28 @@ All detected errors automatically generate regression tests.
 
 ```bash
 # Test a specific story
-/qa:recette --scope=story --id=US-001
+/bear-qa:recette --scope=story --id=US-001
 
 # Test all stories in a sprint
-/qa:recette --scope=sprint --id=Sprint-3
+/bear-qa:recette --scope=sprint --id=Sprint-3
 
 # Dry run to see test plan
-/qa:recette --scope=story --id=US-001 --dry-run
+/bear-qa:recette --scope=story --id=US-001 --dry-run
 
 # Resume interrupted session
-/qa:recette --resume=REC-20260130-143022
+/bear-qa:recette --resume=REC-20260130-143022
 
 # Record execution as GIF
-/qa:recette --scope=story --id=US-001 --record-gif
+/bear-qa:recette --scope=story --id=US-001 --record-gif
 
 # Fix all bugs from a recette session
-/qa:fix --session=REC-20260130-143022
+/bear-qa:fix --session=REC-20260130-143022
 
 # Dry run: refine and document without fixing
-/qa:fix --session=REC-20260130-143022 --dry-run
+/bear-qa:fix --session=REC-20260130-143022 --dry-run
 
 # Fix critical bugs only
-/qa:fix --session=REC-20260130-143022 --severity=critical
+/bear-qa:fix --session=REC-20260130-143022 --severity=critical
 ```
 
 ### Prerequisites
@@ -983,7 +983,7 @@ See command documentation: `Dev/i18n/{lang}/Common/commands/recette.md`
 See fix command documentation: `Dev/i18n/{lang}/Common/commands/recette-fix.md`
 See status command documentation: `Dev/i18n/{lang}/Common/commands/recette-status.md`
 See regression command documentation: `Dev/i18n/{lang}/Common/commands/recette-regression.md`
-See report documentation: `/qa:status --report` (`Dev/i18n/{lang}/QA/commands/status.md`)
+See report documentation: `/bear-qa:status --report` (`Dev/i18n/{lang}/QA/commands/status.md`)
 
 ---
 
@@ -1118,7 +1118,7 @@ Expected output format...
 ```
 
 Place in:
-- `.claude/commands/common/` for `/common:` namespace
+- `.claude/commands/bear-common/` for `/common:` namespace
 - `.claude/commands/myproject/` for `/myproject:` namespace
 
 ---

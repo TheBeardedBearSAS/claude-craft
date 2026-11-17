@@ -10,7 +10,7 @@ $ARGUMENTS (optional: Pfad zum zu analysierenden Projekt)
 
 ## AUFTRAG
 
-Ein vollständiges Compliance-Audit der Vercel-Deployment-Konfiguration und des Platform-Oberflächen-Codes durchführen, indem die 4 großen Prüfungen orchestriert werden: Architektur, Code-Qualität, Tests und Sicherheit. Einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten erstellen. **Hinweis zum Geltungsbereich**: dieses Audit deckt ausschließlich die framework-agnostische Vercel-Platform-Nutzung ab (`vercel.json`, Serverless Functions auf Node.js/Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Storage). Next.js-spezifisches Routing, Rendering oder Data-Fetching (`revalidatePath`, `revalidateTag`, App Router usw.) NICHT bewerten — das gehört zur eigenen Compliance-Prüfung des jeweiligen Framework-Stacks (`/react:*`, `/vuejs:*`, `/angular:*`).
+Ein vollständiges Compliance-Audit der Vercel-Deployment-Konfiguration und des Platform-Oberflächen-Codes durchführen, indem die 4 großen Prüfungen orchestriert werden: Architektur, Code-Qualität, Tests und Sicherheit. Einen konsolidierten Bericht mit einer Gesamtpunktzahl von 100 Punkten erstellen. **Hinweis zum Geltungsbereich**: dieses Audit deckt ausschließlich die framework-agnostische Vercel-Platform-Nutzung ab (`vercel.json`, Serverless Functions auf Node.js/Fluid Compute, ISR-Cache-Primitiven, Cron Jobs, Storage). Next.js-spezifisches Routing, Rendering oder Data-Fetching (`revalidatePath`, `revalidateTag`, App Router usw.) NICHT bewerten — das gehört zur eigenen Compliance-Prüfung des jeweiligen Framework-Stacks (`/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`).
 
 ### Schritt 1: Audit-Vorbereitung
 
@@ -27,7 +27,7 @@ Audit-Umgebung vorbereiten:
 
 Vollständige Architekturprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vercel:check architecture` verwenden oder die Schritte in `.claude/references/vercel/checks/architecture.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vercel:check architecture` verwenden oder die Schritte in `.claude/references/vercel/checks/architecture.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Gültigkeit des vercel.json-Schemas (`$schema`, `version`, gültige Schlüssel der obersten Ebene) (6 Pkt.)
@@ -42,7 +42,7 @@ Vollständige Architekturprüfung durchführen:
 
 Code-Qualitätsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vercel:check code-quality` verwenden oder die Schritte in `.claude/references/vercel/checks/code-quality.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vercel:check code-quality` verwenden oder die Schritte in `.claude/references/vercel/checks/code-quality.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - ESLint-Analyse der Functions und der Middleware (6 Pkt.)
@@ -57,7 +57,7 @@ Code-Qualitätsprüfung durchführen:
 
 Test-Prüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vercel:check testing` verwenden oder die Schritte in `.claude/references/vercel/checks/testing.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vercel:check testing` verwenden oder die Schritte in `.claude/references/vercel/checks/testing.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Abdeckung der Function-Handler und der Middleware (>= 80 %) (7 Pkt.)
@@ -73,7 +73,7 @@ Test-Prüfung durchführen:
 
 Sicherheitsprüfung durchführen:
 
-**Befehl**: Slash-Befehl `/vercel:check security` verwenden oder die Schritte in `.claude/references/vercel/checks/security.md` manuell befolgen
+**Befehl**: Slash-Befehl `/bear-vercel:check security` verwenden oder die Schritte in `.claude/references/vercel/checks/security.md` manuell befolgen
 
 **Bewertete Kriterien**:
 - Umgang mit Umgebungsvariablen (keine Hardcodierung, kein Leak ins Client-Bundle, korrekter Umgebungs-Scope) (7 Pkt.)
@@ -245,4 +245,4 @@ Umfangreiches Refactoring / Vollständige Überarbeitung notwendig]
 - Empfehlungen an den fachlichen Kontext des Projekts anpassen
 - Ein ungeschützter Cron-Endpunkt und ein hartcodiertes Secret haben IMMER höchste Priorität, sobald sie gefunden werden
 - Ein `runtime: 'edge'` in neuem oder geändertem Code wird immer markiert, ist bei unverändertem Legacy-Code aber Migrationsschuld (kein harter Fehler)
-- Next.js-spezifisches Routing/Rendering/Data-Fetching NICHT bewerten — außerhalb des Geltungsbereichs (siehe `/react:*`, `/vuejs:*`, `/angular:*`)
+- Next.js-spezifisches Routing/Rendering/Data-Fetching NICHT bewerten — außerhalb des Geltungsbereichs (siehe `/bear-react:*`, `/bear-vuejs:*`, `/bear-angular:*`)

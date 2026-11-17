@@ -232,7 +232,7 @@ When helping with development:
 
 When working on a project, you can ask me to:
 
-- `/workflow:init` - Analyze project and recommend approach
+- `/bear-workflow:init` - Analyze project and recommend approach
 - `/check-architecture` - Review code against Clean Architecture
 - `/security-audit` - Check for security vulnerabilities
 - `/generate-tests` - Create test cases for code

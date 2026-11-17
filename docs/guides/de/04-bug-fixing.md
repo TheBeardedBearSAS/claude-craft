@@ -98,7 +98,7 @@ Die Grundursache des Fehlers finden.
 ### Analysebefehl verwenden
 
 ```bash
-/common:analyze-bug "Benutzer können sich nach dem Passwort-Reset nicht mit richtigen Anmeldedaten anmelden"
+/bear-common:analyze-bug "Benutzer können sich nach dem Passwort-Reset nicht mit richtigen Anmeldedaten anmelden"
 ```
 
 Dieser Befehl wird:
@@ -319,15 +319,15 @@ make test
 
 ```bash
 # Codequalität (je nach Technologie)
-/symfony:check code-quality
-/flutter:check code-quality
-/python:check code-quality
+/bear-symfony:check code-quality
+/bear-flutter:check code-quality
+/bear-python:check code-quality
 
 # Sicherheit (wenn die Korrektur sicherheitsrelevanten Code berührt)
-/common:security-audit
+/bear-common:security-audit
 
 # Vollständige Konformität
-/symfony:check all
+/bear-symfony:check all
 ```
 
 ### Manuelles Testen
@@ -468,7 +468,7 @@ git checkout -b hotfix/issue-123-login-failure
 
 # 4. Verifizieren
 make test
-/symfony:check all
+/bear-symfony:check all
 
 # 5. Mit klarer Nachricht committen
 git commit -m "fix(auth): Kritischen Login-Fehler nach Passwort-Reset beheben
@@ -622,7 +622,7 @@ public function calculateTotal(): Money
 make test
 
 # Qualitätsprüfung
-/symfony:check all
+/bear-symfony:check all
 # Score: 94/100 ✓
 ```
 
@@ -651,7 +651,7 @@ Regressionstests hinzugefügt:
 3. **Statische Analyse**: Werkzeuge finden häufige Fehler
 4. **Integrationstests**: Interaktionsfehler erkennen
 5. **Produktion überwachen**: Probleme frühzeitig erkennen
-6. **`/loop` verwenden**: Wiederkehrende Qualitätsprüfungen einrichten (z. B. `/loop 5m /gate:check commit`)
+6. **`/loop` verwenden**: Wiederkehrende Qualitätsprüfungen einrichten (z. B. `/loop 5m /bear-gate:check commit`)
 7. **Erkenntnisse speichern**: `/memory` verwenden, um Fehlermuster über Sitzungen hinweg zu persistieren
 
 ---

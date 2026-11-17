@@ -1,9 +1,9 @@
 ---
-description: "Obsolète (retirée en 10.0) : utilisez /team:delivery --phase=implementation"
+description: "Obsolète (retirée en 10.0) : utilisez /bear-team:delivery --phase=implementation"
 deprecated: true
-replaced-by: /team:delivery
+replaced-by: /bear-team:delivery
 ---
 
-> ⚠️ `/team:sprint` est obsolète et sera retirée en 10.0. Utilisez `/team:delivery --phase=implementation`.
+> ⚠️ `/bear-team:sprint` est obsolète et sera retirée en 10.0. Utilisez `/bear-team:delivery --phase=implementation`.
 
-Exécutez `/team:delivery --phase=implementation $ARGUMENTS` : lisez `.claude/commands/team/delivery.md` et suivez-le avec ces arguments.
+Exécutez `/bear-team:delivery --phase=implementation $ARGUMENTS` : lisez `.claude/commands/bear-team/delivery.md` et suivez-le avec ces arguments.

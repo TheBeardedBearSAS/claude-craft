@@ -125,7 +125,7 @@ For major changes, use pre-release versions following SemVer:
 - **beta** - Features completes, testing interne
 - **rc** - Release Candidate, pret pour production
 
-This rule is non-negotiable and is enforced via the release checklist (`/common:release-checklist`). See `docs/RUNBOOK.md` for the complete release process.
+This rule is non-negotiable and is enforced via the release checklist (`/bear-common:release-checklist`). See `docs/RUNBOOK.md` for the complete release process.
 
 ---
 

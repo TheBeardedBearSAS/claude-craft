@@ -107,25 +107,25 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 
 ```bash
 # Alle Regressionstests auflisten
-/qa:regression --list
+/bear-qa:regression --list
 
 # Stabilitaetswert anzeigen
-/qa:regression --stats
+/bear-qa:regression --stats
 
 # Regressionspruefung ausfuehren (Verstoesse erkennen)
-/qa:regression --check
+/bear-qa:regression --check
 
 # Nach Quell-Story filtern
-/qa:regression --list --source=US-001
+/bear-qa:regression --list --source=US-001
 
 # Nach Status filtern
-/qa:regression --list --status=active
+/bear-qa:regression --list --status=active
 
 # Historischen Trend anzeigen
-/qa:regression --stats --trend
+/bear-qa:regression --stats --trend
 
 # Ausgabe als JSON
-/qa:regression --list --format=json
+/bear-qa:regression --list --format=json
 ```
 
 ## Ausgabestruktur
@@ -146,18 +146,18 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 
 | Befehl | Beschreibung |
 |--------|--------------|
-| `/qa:recette` | Akzeptanztests ausfuehren |
-| `/qa:fix` | Bugs aus einer Sitzung beheben |
-| `/qa:status` | Sitzungsstatus anzeigen |
-| `/qa:status --report` | Bericht generieren |
+| `/bear-qa:recette` | Akzeptanztests ausfuehren |
+| `/bear-qa:fix` | Bugs aus einer Sitzung beheben |
+| `/bear-qa:status` | Sitzungsstatus anzeigen |
+| `/bear-qa:status --report` | Bericht generieren |
 
 ## Fehlermeldungen
 
 | Fehler | Loesung |
 |--------|---------|
-| "Register nicht gefunden" | Fuehren Sie `/qa:recette` zuerst aus |
+| "Register nicht gefunden" | Fuehren Sie `/bear-qa:recette` zuerst aus |
 | "Keine Regressionstests" | Keine Fehler in vorherigen Laeufen erkannt |
-| "Verstoss gegen Goldene Regel" | Bug wieder aufgetreten — `/qa:fix` ausfuehren |
+| "Verstoss gegen Goldene Regel" | Bug wieder aufgetreten — `/bear-qa:fix` ausfuehren |
 | "Historiedatei fehlt" | Mindestens 2 Recette-Sitzungen fuer Trends ausfuehren |
 
 ## Best Practices
@@ -175,7 +175,7 @@ Goldene-Regel-Pruefung: 1 VERSTOSS ERKANNT
 ║                   NÄCHSTER SCHRITT                        ║
 ╠══════════════════════════════════════════════════════════╣
 ║                                                          ║
-║  → /qa:recette                                           ║
+║  → /bear-qa:recette                                           ║
 ║    Neue Recette-Sitzung starten                          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝

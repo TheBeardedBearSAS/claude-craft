@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /flutter:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-flutter:check code-quality"
 deprecated: true
-replaced-by: /flutter:check
+replaced-by: /bear-flutter:check
 ---
 
-> ⚠️ `/flutter:check-code-quality` is deprecated and will be removed in 10.0. Use `/flutter:check code-quality`.
+> ⚠️ `/bear-flutter:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-flutter:check code-quality`.
 
-Run `/flutter:check code-quality $ARGUMENTS`: read `.claude/commands/flutter/check.md` and follow it with these arguments.
+Run `/bear-flutter:check code-quality $ARGUMENTS`: read `.claude/commands/bear-flutter/check.md` and follow it with these arguments.

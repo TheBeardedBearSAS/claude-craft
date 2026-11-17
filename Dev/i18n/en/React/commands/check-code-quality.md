@@ -1,9 +1,9 @@
 ---
-description: "Deprecated (removed in 10.0): use /react:check code-quality"
+description: "Deprecated (removed in 10.0): use /bear-react:check code-quality"
 deprecated: true
-replaced-by: /react:check
+replaced-by: /bear-react:check
 ---
 
-> ⚠️ `/react:check-code-quality` is deprecated and will be removed in 10.0. Use `/react:check code-quality`.
+> ⚠️ `/bear-react:check-code-quality` is deprecated and will be removed in 10.0. Use `/bear-react:check code-quality`.
 
-Run `/react:check code-quality $ARGUMENTS`: read `.claude/commands/react/check.md` and follow it with these arguments.
+Run `/bear-react:check code-quality $ARGUMENTS`: read `.claude/commands/bear-react/check.md` and follow it with these arguments.

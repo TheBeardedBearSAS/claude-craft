@@ -91,32 +91,32 @@ cd symfony-api
 claude
 
 # 2. Initialize workflow
-/workflow:init --quick
+/bear-workflow:init --quick
 
 # 3. Generate endpoint
-/symfony:generate-crud Product
+/bear-symfony:generate-crud Product
 
 # 4. Check quality
-/symfony:check architecture
+/bear-symfony:check architecture
 
 # 5. Commit
-/gate:check commit
+/bear-gate:check commit
 ```
 
 ### Implement Feature with TDD (15 minutes)
 
 ```bash
 # 1. Get next story
-/project:backlog next story --claim
+/bear-project:backlog next story --claim
 
 # 2. Start TDD
 @dev Implement US-001 with TDD
 
 # 3. Validate
-/gate:check story US-001
+/bear-gate:check story US-001
 
 # 4. Complete
-/project:backlog move story US-001 done
+/bear-project:backlog move story US-001 done
 ```
 
 ---

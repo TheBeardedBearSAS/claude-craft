@@ -1,9 +1,9 @@
 ---
-description: "Obsoleto (se elimina en 10.0): usa /php:check testing"
+description: "Obsoleto (se elimina en 10.0): usa /bear-php:check testing"
 deprecated: true
-replaced-by: /php:check
+replaced-by: /bear-php:check
 ---
 
-> ⚠️ `/php:check-testing` está obsoleto y se eliminará en 10.0. Usa `/php:check testing`.
+> ⚠️ `/bear-php:check-testing` está obsoleto y se eliminará en 10.0. Usa `/bear-php:check testing`.
 
-Ejecuta `/php:check testing $ARGUMENTS`: lee `.claude/commands/php/check.md` y síguelo con estos argumentos.
+Ejecuta `/bear-php:check testing $ARGUMENTS`: lee `.claude/commands/bear-php/check.md` y síguelo con estos argumentos.

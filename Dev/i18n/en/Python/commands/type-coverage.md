@@ -14,7 +14,7 @@ Arguments:
 - (Optional) Path to specific module
 - (Optional) Minimum coverage threshold (e.g., `80`)
 
-Example: `/python:type-coverage app/` or `/python:type-coverage app/api/ 90`
+Example: `/bear-python:type-coverage app/` or `/bear-python:type-coverage app/api/ 90`
 
 ## Plan Mode
 
