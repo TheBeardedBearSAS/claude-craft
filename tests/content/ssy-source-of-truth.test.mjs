@@ -69,10 +69,10 @@ describe('"Which path?" decision page', () => {
 
   it.each(LANGS)('exists and routes greenfield, brownfield, bugfix and autonomous sprint (lang=%s)', (lang) => {
     const guide = read('docs/guides', lang, GUIDE);
-    for (const cmd of ['/workflow:init', '/workflow:auto-sprint', '/project:reverse', '/qa:tdd']) expect(guide).toContain(cmd);
+    for (const cmd of ['/bear-workflow:init', '/bear-workflow:auto-sprint', '/bear-project:reverse', '/bear-qa:tdd']) expect(guide).toContain(cmd);
   });
 
-  it.each(LANGS)('is linked from /common:getting-started and /workflow:init (lang=%s)', (lang) => {
+  it.each(LANGS)('is linked from /bear-common:getting-started and /bear-workflow:init (lang=%s)', (lang) => {
     expect(read('Dev/i18n', lang, 'Common/commands/getting-started.md')).toContain(GUIDE);
     expect(read('Dev/i18n', lang, 'Workflow/commands/init.md')).toContain(GUIDE);
   });

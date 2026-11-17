@@ -1,3 +1,11 @@
+/** Surface the installers' command-folder migration notices (kept folders with user files). */
+function showMigrationNotices(result) {
+  const lines = `${result.stdout || ''}\n${result.stderr || ''}`
+    .split('\n')
+    .filter((l) => /migrated \.claude\/commands\/|\[WARN\] \.claude\/commands\//.test(l));
+  for (const l of lines) console.log(l);
+}
+
 /**
  * CLI `update` command — re-run install scripts to refresh an existing installation.
  * @module cli/lib/update
@@ -113,6 +121,7 @@ function runUpdate(targetPath, options, cliRoot) {
       timeout: 60_000,
       stdio: 'pipe',
     });
+    showMigrationNotices(result);
     if (result.status === 0) {
       console.log(`  ${c.green}[OK]${c.reset} Common rules updated`);
       updated++;
@@ -139,12 +148,37 @@ function runUpdate(targetPath, options, cliRoot) {
       timeout: 60_000,
       stdio: 'pipe',
     });
+    showMigrationNotices(result);
     if (result.status === 0) {
       console.log(`  ${c.green}[OK]${c.reset} ${entry.displayName} updated`);
       updated++;
     } else {
       console.log(
         `  ${c.red}[FAIL]${c.reset} ${entry.displayName}: ${result.stderr || result.error?.message || 'unknown'}`
+      );
+      anyFailed = true;
+    }
+  }
+
+  // The Project installer is not re-run (it would rewrite the scaffold), but its commands moved to
+  // bear-project/ and bear-gate/ in 10.0: refresh them and drop the pre-10.0 folders (commands only).
+  const projectScript = path.join(cliRoot, 'Project', 'install-project-commands.sh');
+  const hasProjectCommands = ['project', 'bear-project'].some((d) =>
+    fs.existsSync(path.join(claudeDir, 'commands', d))
+  );
+  if (hasProjectCommands && fs.existsSync(projectScript)) {
+    const result = spawnSync('bash', [projectScript, `--lang=${lang}`, '--commands-only', '--force', safeTarget], {
+      encoding: 'utf8',
+      timeout: 60_000,
+      stdio: 'pipe',
+    });
+    showMigrationNotices(result);
+    if (result.status === 0) {
+      console.log(`  ${c.green}[OK]${c.reset} Project commands updated`);
+      updated++;
+    } else {
+      console.log(
+        `  ${c.red}[FAIL]${c.reset} Project commands: ${result.stderr || result.error?.message || 'unknown'}`
       );
       anyFailed = true;
     }

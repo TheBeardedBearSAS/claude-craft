@@ -51,7 +51,7 @@ HELP_DESCRIPTION="    TCL-optimized installation for WordPress plugins and block
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 my-plugin/

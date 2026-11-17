@@ -53,8 +53,8 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~70K to ~3.5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
-- \`/${TECH_NAMESPACE}:generate-feature\` - Generate CQRS feature"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)
+- \`/bear-${TECH_NAMESPACE}:generate-feature\` - Generate CQRS feature"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 src/

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * collect-freshness-signals.mjs — pré-collecte déterministe pour
- * `/common:audit-freshness`.
+ * `/bear-common:audit-freshness`.
  *
  * Rôle : mesurer, SANS appeler de modèle, l'écart entre la version déclarée de
  * chaque stack / outil infra (`config/versions.yaml`) et la dernière version

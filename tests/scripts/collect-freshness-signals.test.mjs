@@ -4,7 +4,7 @@ import path from 'node:path';
 import * as yaml from 'js-yaml';
 
 /**
- * Garde-fou du collecteur de `/common:audit-freshness`.
+ * Garde-fou du collecteur de `/bear-common:audit-freshness`.
  *
  * Le collecteur décide, sans modèle, quels stacks méritent un sous-agent : ceux
  * dont la version stable publiée a dépassé la version déclarée dans

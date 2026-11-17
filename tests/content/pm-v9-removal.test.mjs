@@ -11,58 +11,58 @@ const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
 
 // <ns>/<command> -> new invocation (also the MIGRATION-v9 table)
 export const REMOVED_IN_V9 = {
-  'project/add-epic': '/project:backlog add epic',
-  'project/add-story': '/project:backlog add story',
-  'project/add-task': '/project:backlog add task',
-  'project/list-epics': '/project:backlog list epic',
-  'project/list-stories': '/project:backlog list story',
-  'project/list-tasks': '/project:backlog list task',
-  'project/update-epic': '/project:backlog edit epic',
-  'project/update-story': '/project:backlog edit story',
-  'project/move-task': '/project:backlog move task',
-  'project/scan': '/project:reverse scan',
-  'project/reverse-prd': '/project:reverse prd',
-  'project/reverse-stories': '/project:reverse stories',
-  'project/gap-analysis': '/project:reverse gaps',
-  'project/coverage-map': '/project:trace --gaps',
-  'project/burndown': '/project:report burndown',
-  'project/metrics': '/project:report metrics',
-  'project/dependencies': '/project:report deps',
-  'project/critical-path': '/project:report deps --critical',
-  'project/analyze-backlog': '/project:migrate --analyze',
-  'project/migrate-backlog': '/project:migrate',
-  'project/update-stories': '/project:migrate --stories',
-  'project/sync-backlog': '/project:migrate --resync',
-  'project/checkpoint': '/gate:check --phase=<phase>',
-  'project/run-sprint': '/workflow:implement',
-  'project/run-epic': '/workflow:implement --epic',
-  'project/run-queue': '/workflow:implement --queue',
-  'project/board': '/workflow:status --board',
-  'project/batch-status': '/workflow:status --queue',
-  'project/generate-prd': '/workflow:plan --only=prd',
-  'project/generate-backlog': '/workflow:plan --only=backlog',
-  'project/generate-tech-spec': '/workflow:design',
-  'project/generate-constitution': '/workflow:design --constitution',
-  'project/decompose-tasks': '/workflow:start',
-  'gate/validate-prd': '/gate:check prd',
-  'gate/validate-techspec': '/gate:check spec',
-  'gate/validate-backlog': '/gate:check backlog',
-  'gate/validate-sprint': '/gate:check sprint',
-  'gate/validate-story': '/gate:check story',
-  'gate/validate-alignment': '/gate:check alignment',
-  'gate/report': '/gate:check all',
-  'sprint/dev': '/workflow:implement',
-  'sprint/status': '/workflow:status',
-  'sprint/next-story': '/project:backlog next story',
-  'sprint/transition': '/project:backlog move story',
-  'sprint/auto-route': '/project:backlog move story --auto',
-  'workflow/analyze': '/workflow:plan --research',
-  'qa/report': '/qa:status --report',
-  'common/pre-commit-check': '/gate:check commit',
-  'common/pre-merge-check': '/gate:check merge',
-  'common/release-checklist': '/gate:check release',
-  'common/daily-standup': '/workflow:status --standup',
-  'common/setup-project-context': '/common:init --context',
+  'project/add-epic': '/bear-project:backlog add epic',
+  'project/add-story': '/bear-project:backlog add story',
+  'project/add-task': '/bear-project:backlog add task',
+  'project/list-epics': '/bear-project:backlog list epic',
+  'project/list-stories': '/bear-project:backlog list story',
+  'project/list-tasks': '/bear-project:backlog list task',
+  'project/update-epic': '/bear-project:backlog edit epic',
+  'project/update-story': '/bear-project:backlog edit story',
+  'project/move-task': '/bear-project:backlog move task',
+  'project/scan': '/bear-project:reverse scan',
+  'project/reverse-prd': '/bear-project:reverse prd',
+  'project/reverse-stories': '/bear-project:reverse stories',
+  'project/gap-analysis': '/bear-project:reverse gaps',
+  'project/coverage-map': '/bear-project:trace --gaps',
+  'project/burndown': '/bear-project:report burndown',
+  'project/metrics': '/bear-project:report metrics',
+  'project/dependencies': '/bear-project:report deps',
+  'project/critical-path': '/bear-project:report deps --critical',
+  'project/analyze-backlog': '/bear-project:migrate --analyze',
+  'project/migrate-backlog': '/bear-project:migrate',
+  'project/update-stories': '/bear-project:migrate --stories',
+  'project/sync-backlog': '/bear-project:migrate --resync',
+  'project/checkpoint': '/bear-gate:check --phase=<phase>',
+  'project/run-sprint': '/bear-workflow:implement',
+  'project/run-epic': '/bear-workflow:implement --epic',
+  'project/run-queue': '/bear-workflow:implement --queue',
+  'project/board': '/bear-workflow:status --board',
+  'project/batch-status': '/bear-workflow:status --queue',
+  'project/generate-prd': '/bear-workflow:plan --only=prd',
+  'project/generate-backlog': '/bear-workflow:plan --only=backlog',
+  'project/generate-tech-spec': '/bear-workflow:design',
+  'project/generate-constitution': '/bear-workflow:design --constitution',
+  'project/decompose-tasks': '/bear-workflow:start',
+  'gate/validate-prd': '/bear-gate:check prd',
+  'gate/validate-techspec': '/bear-gate:check spec',
+  'gate/validate-backlog': '/bear-gate:check backlog',
+  'gate/validate-sprint': '/bear-gate:check sprint',
+  'gate/validate-story': '/bear-gate:check story',
+  'gate/validate-alignment': '/bear-gate:check alignment',
+  'gate/report': '/bear-gate:check all',
+  'sprint/dev': '/bear-workflow:implement',
+  'sprint/status': '/bear-workflow:status',
+  'sprint/next-story': '/bear-project:backlog next story',
+  'sprint/transition': '/bear-project:backlog move story',
+  'sprint/auto-route': '/bear-project:backlog move story --auto',
+  'workflow/analyze': '/bear-workflow:plan --research',
+  'qa/report': '/bear-qa:status --report',
+  'common/pre-commit-check': '/bear-gate:check commit',
+  'common/pre-merge-check': '/bear-gate:check merge',
+  'common/release-checklist': '/bear-gate:check release',
+  'common/daily-standup': '/bear-workflow:status --standup',
+  'common/setup-project-context': '/bear-common:init --context',
 };
 
 const SOURCE_DIR = {
@@ -110,7 +110,7 @@ describe('9.0: deprecated stubs are gone', () => {
       // <Ns>/commands/<name>.md (i18n sources) or .claude/commands/<ns>/<name>.md
       const parts = path.relative(PROJECT_ROOT, f).split(path.sep);
       const ns = parts.at(-2) === 'commands' ? parts.at(-3) : parts.at(-2);
-      return !(`${ns.toLowerCase()}/${parts.at(-1)}` in scheduled);
+      return !(`${ns.toLowerCase().replace(/^bear-/, '')}/${parts.at(-1)}` in scheduled);
     });
     expect(unscheduled.map((f) => path.relative(PROJECT_ROOT, f))).toEqual([]);
   });
@@ -126,8 +126,10 @@ describe('docs/MIGRATION-v9.md', () => {
     const doc = read('docs/MIGRATION-v9.md');
     for (const [k, inv] of Object.entries(REMOVED_IN_V9)) {
       const [ns, name] = k.split('/');
+      // MIGRATION-v9.md is history: it documents the pre-10.0 (unprefixed) command names.
+      const legacyInv = inv.replace(/\/bear-/g, '/');
       expect(doc, `/${ns}:${name}`).toContain(`\`/${ns}:${name}\``);
-      expect(doc, inv).toContain(`\`${inv}\``);
+      expect(doc, legacyInv).toContain(`\`${legacyInv}\``);
     }
   });
 });

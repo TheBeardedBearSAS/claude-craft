@@ -129,12 +129,12 @@ For detailed rules and examples: `@.claude/references/<topic>.md`
 
 ## Available Commands
 
-- `/csharp:check all` - Full compliance audit
-- `/csharp:check architecture` - Architecture validation
-- `/csharp:check code-quality` - Code quality analysis
-- `/csharp:check testing` - Test coverage analysis
-- `/csharp:check security` - Security audit (OWASP)
-- `/csharp:generate-feature` - Generate CQRS feature
+- `/bear-csharp:check all` - Full compliance audit
+- `/bear-csharp:check architecture` - Architecture validation
+- `/bear-csharp:check code-quality` - Code quality analysis
+- `/bear-csharp:check testing` - Test coverage analysis
+- `/bear-csharp:check security` - Security audit (OWASP)
+- `/bear-csharp:generate-feature` - Generate CQRS feature
 
 ## Docker Requirement
 

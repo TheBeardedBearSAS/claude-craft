@@ -148,10 +148,10 @@ function resolveReplacement(stubFile, ref) {
       fs.readdirSync(langDir).map((d) => path.join(langDir, d, 'agents', `${agent[1]}.md`))
     );
   }
-  const m = /^\/([a-z][a-z0-9]*):([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
+  const m = /^\/bear-([a-z][a-z0-9]*):([a-z0-9][a-z0-9-]*)$/.exec(ref ?? '');
   if (!m) return null;
   const [, ns, name] = m;
-  if (inClaude) return [path.join(PROJECT_ROOT, '.claude/commands', ns, `${name}.md`)];
+  if (inClaude) return [path.join(PROJECT_ROOT, '.claude/commands', `bear-${ns}`, `${name}.md`)];
   const out = [];
   for (const { root, langDir } of langDirs(rel[2])) {
     if (ns === root.toLowerCase()) out.push(path.join(langDir, 'commands', `${name}.md`));
@@ -173,7 +173,7 @@ function stubViolations(file, raw) {
   if (!candidates)
     return [
       ...out,
-      `${where}: replaced-by must be "/ns:cmd", "@agent" or "mcp:server", got ${JSON.stringify(data['replaced-by'])}`,
+      `${where}: replaced-by must be "/bear-ns:cmd", "@agent" or "mcp:server", got ${JSON.stringify(data['replaced-by'])}`,
     ];
   const target = candidates.find((f) => fs.existsSync(f));
   if (!target) out.push(`${where}: replaced-by ${data['replaced-by']} does not resolve`);
@@ -187,15 +187,15 @@ describe('deprecation stubs', () => {
 
   it('accepts a small stub redirecting to a live command', () => {
     const raw =
-      '---\ndescription: "Deprecated: use /project:backlog add story"\ndeprecated: true\nreplaced-by: /project:backlog\n---\n\nRun /project:backlog add story $ARGUMENTS.\n';
+      '---\ndescription: "Deprecated: use /bear-project:backlog add story"\ndeprecated: true\nreplaced-by: /bear-project:backlog\n---\n\nRun /bear-project:backlog add story $ARGUMENTS.\n';
     expect(stubViolations(sample, raw)).toEqual([]);
   });
 
   it('rejects an unresolvable replaced-by, a missing one and an oversized body', () => {
     const fm = (by) => `---\ndescription: d\ndeprecated: true\n${by}---\n`;
-    expect(stubViolations(sample, fm('replaced-by: /project:nope\n'))).toHaveLength(1);
+    expect(stubViolations(sample, fm('replaced-by: /bear-project:nope\n'))).toHaveLength(1);
     expect(stubViolations(sample, fm(''))).toHaveLength(1);
-    expect(stubViolations(sample, fm('replaced-by: /project:backlog\n') + 'x'.repeat(600))).toHaveLength(1);
+    expect(stubViolations(sample, fm('replaced-by: /bear-project:backlog\n') + 'x'.repeat(600))).toHaveLength(1);
   });
 
   it('accepts a stub redirecting to an agent or to a distributed MCP server', () => {
@@ -204,7 +204,7 @@ describe('deprecation stubs', () => {
     expect(stubViolations(fr, fm('"@uiux-orchestrator"'))).toEqual([]);
     expect(stubViolations(fr, fm('mcp:context7'))).toEqual([]);
     expect(
-      stubViolations(path.join(PROJECT_ROOT, '.claude/commands/uiux/sample-stub.md'), fm('"@uiux-orchestrator"'))
+      stubViolations(path.join(PROJECT_ROOT, '.claude/commands/bear-uiux/sample-stub.md'), fm('"@uiux-orchestrator"'))
     ).toEqual([]);
     expect(stubViolations(fr, fm('"@nope"'))).toHaveLength(1);
     expect(stubViolations(fr, fm('mcp:nope'))).toHaveLength(1);

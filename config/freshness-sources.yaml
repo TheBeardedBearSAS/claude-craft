@@ -1,4 +1,4 @@
-# Sources de fraîcheur — `/common:audit-freshness`
+# Sources de fraîcheur — `/bear-common:audit-freshness`
 # --------------------------------------------------
 # Pour chaque clé `stacks:` / `infra:` de config/versions.yaml : où lire la dernière
 # version STABLE publiée (lue par scripts/collect-freshness-signals.mjs) et quels
@@ -18,18 +18,18 @@ stacks:
   csharp:
     kind: endoflife
     pkg: dotnet
-    paths: [Dev/i18n/en/CSharp, .claude/references/csharp, .claude/agents/csharp-reviewer.md, .claude/commands/csharp]
+    paths: [Dev/i18n/en/CSharp, .claude/references/csharp, .claude/agents/csharp-reviewer.md, .claude/commands/bear-csharp]
   symfony:
     kind: packagist
     pkg: symfony/framework-bundle
-    paths: [Dev/i18n/en/Symfony, .claude/references/symfony, .claude/agents/symfony-reviewer.md, .claude/commands/symfony]
+    paths: [Dev/i18n/en/Symfony, .claude/references/symfony, .claude/agents/symfony-reviewer.md, .claude/commands/bear-symfony]
   flutter:
     kind: flutter
-    paths: [Dev/i18n/en/Flutter, .claude/references/flutter, .claude/agents/flutter-reviewer.md, .claude/commands/flutter]
+    paths: [Dev/i18n/en/Flutter, .claude/references/flutter, .claude/agents/flutter-reviewer.md, .claude/commands/bear-flutter]
   react:
     kind: npm
     pkg: react
-    paths: [Dev/i18n/en/React, .claude/references/react, .claude/agents/react-reviewer.md, .claude/commands/react]
+    paths: [Dev/i18n/en/React, .claude/references/react, .claude/agents/react-reviewer.md, .claude/commands/bear-react]
   reactnative:
     kind: npm
     pkg: react-native
@@ -38,28 +38,28 @@ stacks:
         Dev/i18n/en/ReactNative,
         .claude/references/reactnative,
         .claude/agents/reactnative-reviewer.md,
-        .claude/commands/reactnative,
+        .claude/commands/bear-reactnative,
       ]
   angular:
     kind: npm
     pkg: '@angular/core'
-    paths: [Dev/i18n/en/Angular, .claude/references/angular, .claude/agents/angular-reviewer.md, .claude/commands/angular]
+    paths: [Dev/i18n/en/Angular, .claude/references/angular, .claude/agents/angular-reviewer.md, .claude/commands/bear-angular]
   laravel:
     kind: packagist
     pkg: laravel/framework
-    paths: [Dev/i18n/en/Laravel, .claude/references/laravel, .claude/agents/laravel-reviewer.md, .claude/commands/laravel]
+    paths: [Dev/i18n/en/Laravel, .claude/references/laravel, .claude/agents/laravel-reviewer.md, .claude/commands/bear-laravel]
   vuejs:
     kind: npm
     pkg: vue
-    paths: [Dev/i18n/en/VueJS, .claude/references/vuejs, .claude/agents/vuejs-reviewer.md, .claude/commands/vuejs]
+    paths: [Dev/i18n/en/VueJS, .claude/references/vuejs, .claude/agents/vuejs-reviewer.md, .claude/commands/bear-vuejs]
   vite:
     kind: npm
     pkg: vite
-    paths: [Dev/i18n/en/Vite, .claude/references/vite, .claude/agents/vite-reviewer.md, .claude/commands/vite]
+    paths: [Dev/i18n/en/Vite, .claude/references/vite, .claude/agents/vite-reviewer.md, .claude/commands/bear-vite]
   vercel:
     kind: npm
     pkg: vercel
-    paths: [Dev/i18n/en/Vercel, .claude/references/vercel, .claude/agents/vercel-reviewer.md, .claude/commands/vercel]
+    paths: [Dev/i18n/en/Vercel, .claude/references/vercel, .claude/agents/vercel-reviewer.md, .claude/commands/bear-vercel]
   tauri:
     kind: crates
     pkg: tauri
@@ -70,11 +70,11 @@ stacks:
   php:
     kind: endoflife
     pkg: php
-    paths: [Dev/i18n/en/PHP, .claude/references/php, .claude/agents/php-reviewer.md, .claude/commands/php]
+    paths: [Dev/i18n/en/PHP, .claude/references/php, .claude/agents/php-reviewer.md, .claude/commands/bear-php]
   python:
     kind: endoflife
     pkg: python
-    paths: [Dev/i18n/en/Python, .claude/references/python, .claude/agents/python-reviewer.md, .claude/commands/python]
+    paths: [Dev/i18n/en/Python, .claude/references/python, .claude/agents/python-reviewer.md, .claude/commands/bear-python]
   ruby:
     # Version déclarée « 8.1 / Ruby 4.0 » : le premier token est Rails.
     kind: rubygems

@@ -82,7 +82,7 @@ describe('generate-plugins : plugins produits', () => {
     }
   });
 
-  it('les commandes gardent leur nom de namespace (react → /react:check)', () => {
+  it('les commandes gardent leur nom de namespace (react → /bear-react:check)', () => {
     expect(fs.existsSync(path.join(GEN_A, 'bear-react/commands/check.md'))).toBe(true);
     expect(fs.existsSync(path.join(GEN_A, 'bear-workflow/commands/init.md'))).toBe(true);
     expect(fs.existsSync(path.join(GEN_A, 'bear-react/agents/react-reviewer.md'))).toBe(true);
@@ -153,7 +153,7 @@ describe('generate-plugins : références slash préfixées', () => {
     }
   });
 
-  it('réécrit les références citées (/workflow:plan → /bear-workflow:plan) sans toucher aux URL', () => {
+  it('réécrit les références citées (/bear-workflow:plan → /bear-workflow:plan) sans toucher aux URL', () => {
     const all = EXPECTED.flatMap((n) => walk(path.join(GEN_A, `bear-${n}`)).map((f) => path.join(GEN_A, `bear-${n}`, f)));
     const texts = all.filter((f) => f.endsWith('.md')).map((f) => fs.readFileSync(f, 'utf8'));
     expect(texts.some((t) => t.includes('/bear-workflow:plan'))).toBe(true);

@@ -13,10 +13,12 @@ lang="en"
 # Shared UI library
 source "${SCRIPT_DIR}/../Dev/scripts/lib/shell-ui.sh"
 source "${SCRIPT_DIR}/../Dev/scripts/lib/stack-profiles.sh"
+source "${SCRIPT_DIR}/../Dev/scripts/lib/legacy-commands.sh"
 
 # Parse arguments
 PROJECT_DIR="."
 skip_common=false
+commands_only=false
 force=false
 tech_arg=""
 while [[ $# -gt 0 ]]; do
@@ -25,6 +27,7 @@ while [[ $# -gt 0 ]]; do
         --skip-common) skip_common=true; shift ;;
         --tech=*) tech_arg="${1#--tech=}"; shift ;;
         --force) force=true; shift ;;
+        --commands-only) commands_only=true; shift ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS] [PROJECT_DIR]"
             echo ""
@@ -33,6 +36,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --skip-common  Skip common rules installation (for multi-tech modules)"
             echo "  --tech=a,b     Project stack, rendered into CLAUDE.md (e.g. python,react,docker)"
             echo "  --force        Overwrite existing CLAUDE.md and project-management scaffold"
+            echo "  --commands-only  Refresh bear-project/bear-gate commands only (used by update); no scaffold"
             echo "  --help         Show this help"
             echo ""
             echo "Example:"
@@ -70,24 +74,26 @@ ui_info "Source: $SRC_DIR"
 echo ""
 
 # Créer la structure .claude
-mkdir -p "$CLAUDE_DIR/commands/project"
-mkdir -p "$CLAUDE_DIR/commands/gate"
+mkdir -p "$CLAUDE_DIR/commands/bear-project"
+mkdir -p "$CLAUDE_DIR/commands/bear-gate"
 mkdir -p "$CLAUDE_DIR/agents"
 mkdir -p "$CLAUDE_DIR/templates/project"
 
-# Créer la structure project-management
-mkdir -p "$PROJECT_DIR/project-management/backlog/epics"
-mkdir -p "$PROJECT_DIR/project-management/backlog/user-stories"
-mkdir -p "$PROJECT_DIR/project-management/backlog/tasks"
-mkdir -p "$PROJECT_DIR/project-management/sprints"
-mkdir -p "$PROJECT_DIR/project-management/metrics"
+if [[ "$commands_only" != "true" ]]; then
+    # Créer la structure project-management
+    mkdir -p "$PROJECT_DIR/project-management/backlog/epics"
+    mkdir -p "$PROJECT_DIR/project-management/backlog/user-stories"
+    mkdir -p "$PROJECT_DIR/project-management/backlog/tasks"
+    mkdir -p "$PROJECT_DIR/project-management/sprints"
+    mkdir -p "$PROJECT_DIR/project-management/metrics"
+fi
 
 ui_info "Création de la structure..."
 
-# Migration : déplacer les anciens fichiers de commands/ vers commands/project/
+# Migration : déplacer les anciens fichiers de commands/ vers commands/bear-project/
 if ls "$CLAUDE_DIR/commands/"*.md 1>/dev/null 2>&1; then
-    ui_info "Migration des anciennes commandes vers commands/project/..."
-    mv "$CLAUDE_DIR/commands/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
+    ui_info "Migration des anciennes commandes vers commands/bear-project/..."
+    mv "$CLAUDE_DIR/commands/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
     ui_success "Migration effectuée"
 fi
 
@@ -97,7 +103,7 @@ if [[ ! -d "$CMD_SRC" ]]; then
     CMD_SRC="$SCRIPT_DIR/claude-commands"
 fi
 if [[ -d "$CMD_SRC" ]]; then
-    cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/project/" 2>/dev/null || true
+    cp "$CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-project/" 2>/dev/null || true
     COMMANDS_COUNT=$(ls -1 "$CMD_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$COMMANDS_COUNT project commands copied"
 fi
@@ -106,13 +112,19 @@ fi
 # Copy gate commands from i18n source
 GATE_CMD_SRC="$SRC_DIR/Gate/commands"
 if [[ -d "$GATE_CMD_SRC" ]]; then
-    cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/gate/" 2>/dev/null || true
+    cp "$GATE_CMD_SRC/"*.md "$CLAUDE_DIR/commands/bear-gate/" 2>/dev/null || true
     GATE_COUNT=$(ls -1 "$GATE_CMD_SRC/"*.md 2>/dev/null | wc -l)
     ui_success "$GATE_COUNT gate commands copied"
 fi
 
 # Delete commands retired from the distribution (config/removed-commands.yaml)
 bash "$SCRIPT_DIR/../Dev/scripts/prune-removed-commands.sh" "$PROJECT_DIR"
+migrate_legacy_commands "$PROJECT_DIR" project gate
+
+if [[ "$commands_only" = "true" ]]; then
+    ui_success "Commands refreshed (--commands-only)"
+    exit 0
+fi
 
 # Copy agents from i18n source
 AGT_SRC="$SRC_DIR/agents"
@@ -149,7 +161,7 @@ render_claude_md() {
         case "$line" in
             '{{STACK_BLOCK}}')
                 if [[ ${#techs[@]} -gt 0 ]]; then render_stack_block "${techs[@]}"
-                else echo "# → /project:generate-tech-spec"; fi ;;
+                else echo "# → /bear-project:generate-tech-spec"; fi ;;
             '{{QUALITY_BLOCK}}')
                 if [[ ${#techs[@]} -gt 0 ]]; then render_quality_block "${techs[@]}"; fi ;;
             *)
@@ -185,28 +197,28 @@ echo ""
 echo "📋 Commandes disponibles :"
 echo ""
 echo "   Génération (/project:) :"
-echo "   /project:generate-backlog      - Générer le backlog complet"
-echo "   /project:decompose-tasks [N]   - Décomposer sprint N en tâches"
-echo "   /project:generate-prd          - Générer le PRD"
-echo "   /project:generate-tech-spec    - Générer la spécification technique"
+echo "   /bear-project:generate-backlog      - Générer le backlog complet"
+echo "   /bear-project:decompose-tasks [N]   - Décomposer sprint N en tâches"
+echo "   /bear-project:generate-prd          - Générer le PRD"
+echo "   /bear-project:generate-tech-spec    - Générer la spécification technique"
 echo ""
 echo "   Backlog et analyse (/project:) :"
-echo "   /project:backlog add|list|edit|move epic|story|task - Gérer le backlog"
-echo "   /project:reverse [scan|prd|stories|gaps|all]       - Rétro-ingénierie (brownfield)"
-echo "   /project:trace [--gaps] [--by-priority]            - Traçabilité exigences → code → tests"
-echo "   /project:report burndown|metrics|deps              - Burndown, métriques, dépendances"
-echo "   /project:migrate [--analyze|--resync|--stories]    - Migration vers BMAD v6"
+echo "   /bear-project:backlog add|list|edit|move epic|story|task - Gérer le backlog"
+echo "   /bear-project:reverse [scan|prd|stories|gaps|all]       - Rétro-ingénierie (brownfield)"
+echo "   /bear-project:trace [--gaps] [--by-priority]            - Traçabilité exigences → code → tests"
+echo "   /bear-project:report burndown|metrics|deps              - Burndown, métriques, dépendances"
+echo "   /bear-project:migrate [--analyze|--resync|--stories]    - Migration vers BMAD v6"
 echo ""
 echo "   Visualisation (/project:) :"
-echo "   /project:board                 - Kanban du sprint"
-echo "   /project:run-sprint            - Exécuter un sprint"
-echo "   /project:run-epic              - Exécuter un EPIC"
-echo "   /project:batch-status          - Statut par lot"
+echo "   /bear-project:board                 - Kanban du sprint"
+echo "   /bear-project:run-sprint            - Exécuter un sprint"
+echo "   /bear-project:run-epic              - Exécuter un EPIC"
+echo "   /bear-project:batch-status          - Statut par lot"
 echo ""
 echo "   Quality Gates (/gate:) :"
-echo "   /gate:check prd|spec|backlog|sprint|story|alignment - Portes documentaires"
-echo "   /gate:check commit|merge|release                    - Portes de code"
-echo "   /gate:check all | --phase=<phase>                   - Rapport complet / checkpoint"
+echo "   /bear-gate:check prd|spec|backlog|sprint|story|alignment - Portes documentaires"
+echo "   /bear-gate:check commit|merge|release                    - Portes de code"
+echo "   /bear-gate:check all | --phase=<phase>                   - Rapport complet / checkpoint"
 echo ""
 echo "🤖 Agents disponibles :"
 echo "   @po   - Product Owner (backlog, US, priorisation)"
@@ -216,8 +228,8 @@ echo "📁 Structure créée :"
 echo "   $PROJECT_DIR/"
 echo "   ├── CLAUDE.md"
 echo "   ├── .claude/"
-echo "   │   ├── commands/project/"
-echo "   │   ├── commands/gate/"
+echo "   │   ├── commands/bear-project/"
+echo "   │   ├── commands/bear-gate/"
 echo "   │   ├── agents/              (2 agents)"
 echo "   │   └── templates/project/   (5 templates)"
 echo "   └── project-management/"
@@ -231,7 +243,7 @@ echo ""
 echo "🚀 Pour commencer :"
 echo "   cd $PROJECT_DIR"
 echo "   claude"
-echo "   > /project:backlog add epic \"Mon premier EPIC\""
+echo "   > /bear-project:backlog add epic \"Mon premier EPIC\""
 echo ""
 echo "📊 Workflow strict des statuts :"
 echo "   backlog → ready-for-dev → in-progress → review → done"
@@ -242,28 +254,28 @@ echo ""
 echo "📋 Available commands:"
 echo ""
 echo "   Generation (/project:):"
-echo "   /project:generate-backlog      - Generate the full backlog"
-echo "   /project:decompose-tasks [N]   - Break sprint N into tasks"
-echo "   /project:generate-prd          - Generate the PRD"
-echo "   /project:generate-tech-spec    - Generate the technical spec"
+echo "   /bear-project:generate-backlog      - Generate the full backlog"
+echo "   /bear-project:decompose-tasks [N]   - Break sprint N into tasks"
+echo "   /bear-project:generate-prd          - Generate the PRD"
+echo "   /bear-project:generate-tech-spec    - Generate the technical spec"
 echo ""
 echo "   Backlog and analysis (/project:):"
-echo "   /project:backlog add|list|edit|move epic|story|task - Manage the backlog"
-echo "   /project:reverse [scan|prd|stories|gaps|all]       - Reverse engineering (brownfield)"
-echo "   /project:trace [--gaps] [--by-priority]            - Requirements → code → tests traceability"
-echo "   /project:report burndown|metrics|deps              - Burndown, metrics, dependencies"
-echo "   /project:migrate [--analyze|--resync|--stories]    - Migrate to BMAD v6"
+echo "   /bear-project:backlog add|list|edit|move epic|story|task - Manage the backlog"
+echo "   /bear-project:reverse [scan|prd|stories|gaps|all]       - Reverse engineering (brownfield)"
+echo "   /bear-project:trace [--gaps] [--by-priority]            - Requirements → code → tests traceability"
+echo "   /bear-project:report burndown|metrics|deps              - Burndown, metrics, dependencies"
+echo "   /bear-project:migrate [--analyze|--resync|--stories]    - Migrate to BMAD v6"
 echo ""
 echo "   Visualization (/project:):"
-echo "   /project:board                 - Sprint Kanban"
-echo "   /project:run-sprint            - Run a sprint"
-echo "   /project:run-epic              - Run an EPIC"
-echo "   /project:batch-status          - Batch status"
+echo "   /bear-project:board                 - Sprint Kanban"
+echo "   /bear-project:run-sprint            - Run a sprint"
+echo "   /bear-project:run-epic              - Run an EPIC"
+echo "   /bear-project:batch-status          - Batch status"
 echo ""
 echo "   Quality Gates (/gate:):"
-echo "   /gate:check prd|spec|backlog|sprint|story|alignment - Document gates"
-echo "   /gate:check commit|merge|release                    - Code gates"
-echo "   /gate:check all | --phase=<phase>                   - Full report / checkpoint"
+echo "   /bear-gate:check prd|spec|backlog|sprint|story|alignment - Document gates"
+echo "   /bear-gate:check commit|merge|release                    - Code gates"
+echo "   /bear-gate:check all | --phase=<phase>                   - Full report / checkpoint"
 echo ""
 echo "🤖 Available agents:"
 echo "   @po   - Product Owner (backlog, User Stories, prioritization)"
@@ -273,8 +285,8 @@ echo "📁 Structure created:"
 echo "   $PROJECT_DIR/"
 echo "   ├── CLAUDE.md"
 echo "   ├── .claude/"
-echo "   │   ├── commands/project/"
-echo "   │   ├── commands/gate/"
+echo "   │   ├── commands/bear-project/"
+echo "   │   ├── commands/bear-gate/"
 echo "   │   ├── agents/              (2 agents)"
 echo "   │   └── templates/project/   (5 templates)"
 echo "   └── project-management/"
@@ -288,7 +300,7 @@ echo ""
 echo "🚀 Getting started:"
 echo "   cd $PROJECT_DIR"
 echo "   claude"
-echo "   > /project:backlog add epic \"My first EPIC\""
+echo "   > /bear-project:backlog add epic \"My first EPIC\""
 echo ""
 echo "📊 Strict status workflow:"
 echo "   backlog → ready-for-dev → in-progress → review → done"

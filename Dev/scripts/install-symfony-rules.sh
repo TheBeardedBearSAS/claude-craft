@@ -76,7 +76,7 @@ HELP_DESCRIPTION="    TCL-optimized installation covering:
     Token reduction: ~95% (from ~120K to ~5K)"
 
 # --- Install data ---
-AVAILABLE_COMMANDS="- \`/${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
+AVAILABLE_COMMANDS="- \`/bear-${TECH_NAMESPACE}:check <architecture|code-quality|security|testing|all>\` - Audit by axis (all = scored aggregate)"
 
 ARCHITECTURE_SUMMARY="\`\`\`
 src/

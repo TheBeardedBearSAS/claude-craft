@@ -77,7 +77,7 @@ ${c.bold}Options:${c.reset}
 ${c.bold}Available Namespaces:${c.reset}
 ${NAMESPACES.map((ns) => `  ${c.cyan}/${ns.prefix}:*${c.reset}`.padEnd(30 + c.cyan.length + c.reset.length) + ns.desc).join('\n')}
 
-  ${c.dim}Example: /common:pre-commit-check, /workflow:init, /team:delivery${c.reset}
+  ${c.dim}Example: /bear-common:pre-commit-check, /bear-workflow:init, /bear-team:delivery${c.reset}
 
 ${c.bold}Examples:${c.reset}
   ${c.dim}# Interactive installation${c.reset}

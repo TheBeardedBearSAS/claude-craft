@@ -34,6 +34,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const AGENTS_DIR = path.join(ROOT, '.claude', 'agents');
 const COMMANDS_DIR = path.join(ROOT, '.claude', 'commands');
+
+/** Namespaces published as `bear-<ns>` (commands read `/bear-react:check`); infra namespaces keep their name. */
+const BEAR_NAMESPACES = new Set([
+  'common',
+  'workflow',
+  'team',
+  'qa',
+  'uiux',
+  'gate',
+  'project',
+  ...Object.keys(TECH_REGISTRY).filter((k) => TECH_REGISTRY[k].tier !== null),
+]);
+const publishedNamespace = (ns) => (BEAR_NAMESPACES.has(ns) ? `bear-${ns}` : ns);
 const AGENTS_OUT = path.join(ROOT, 'docs', 'AGENTS-FULL-REFERENCE.md');
 const COMMANDS_OUT = path.join(ROOT, 'docs', 'COMMANDS-FULL-REFERENCE.md');
 
@@ -160,7 +173,7 @@ function scanI18nCommands(rootDir) {
     if (entry.name === 'commands') {
       // Flat layout `<RootDir>/commands/*.md` (e.g. `Project/i18n/en/commands/`):
       // namespace is the top segment of the root (`Project` -> `project`).
-      const namespace = path.basename(path.dirname(path.dirname(rootDir))).toLowerCase();
+      const namespace = publishedNamespace(path.basename(path.dirname(path.dirname(rootDir))).toLowerCase());
       for (const f of listMdFiles(path.join(rootDir, 'commands'), false)) {
         out.push({ filePath: f, namespace });
       }
@@ -168,7 +181,7 @@ function scanI18nCommands(rootDir) {
     }
     const cmdDir = path.join(rootDir, entry.name, 'commands');
     if (!fs.existsSync(cmdDir)) continue;
-    const namespace = entry.name.toLowerCase();
+    const namespace = publishedNamespace(entry.name.toLowerCase());
     for (const f of listMdFiles(cmdDir, false)) {
       out.push({ filePath: f, namespace });
     }

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * collect-claude-signals.mjs — pré-collecte déterministe pour
- * `/common:audit-claude-alignment`.
+ * `/bear-common:audit-claude-alignment`.
  *
  * Rôle : décider, SANS appeler de modèle, quelles lentilles d'audit méritent un
  * sous-agent cette semaine. Chaque lentille dont la source externe n'a pas bougé

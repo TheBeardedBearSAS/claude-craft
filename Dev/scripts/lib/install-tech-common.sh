@@ -33,6 +33,8 @@ lang="en"
 # --- Shared UI (colors + logging) ---
 # shellcheck source=shell-ui.sh
 source "$(dirname "${BASH_SOURCE[0]}")/shell-ui.sh"
+# shellcheck source=legacy-commands.sh
+source "$(dirname "${BASH_SOURCE[0]}")/legacy-commands.sh"
 
 # ============================================================================
 # LOAD I18N MESSAGES
@@ -345,27 +347,28 @@ copy_checklists() {
 copy_commands() {
     local target_dir="$1"
     local dry_run="$2"
-    local dest="${target_dir}/.claude/commands/${TECH_NAMESPACE}"
+    local dest="${target_dir}/.claude/commands/bear-${TECH_NAMESPACE}"
 
     if i18n_dir_exists "$TECH_NAME/commands"; then
         if [[ "$dry_run" = "true" ]]; then
-            log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
+            log_dry_run "Copy: commands/bear-${TECH_NAMESPACE}/*.md"
         else
             copy_i18n_files "$TECH_NAME/commands" "$dest" "*.md"
             local count
             count=$(find "$dest" -name "*.md" -type f 2>/dev/null | wc -l)
-            log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
+            log_success "${count} commands copied (/bear-${TECH_NAMESPACE}:*)"
         fi
     elif [[ -d "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}" ]]; then
         if [[ "$dry_run" = "true" ]]; then
-            log_dry_run "Copy: commands/${TECH_NAMESPACE}/*.md"
+            log_dry_run "Copy: commands/bear-${TECH_NAMESPACE}/*.md"
         else
             cp "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}/"*.md "$dest/" 2>/dev/null || true
             local count
             count=$(ls -1 "${SCRIPT_DIR}/claude-commands/${TECH_NAMESPACE}/"*.md 2>/dev/null | wc -l)
-            log_success "${count} commands copied (/${TECH_NAMESPACE}:*)"
+            log_success "${count} commands copied (/bear-${TECH_NAMESPACE}:*)"
         fi
     fi
+    [[ "$dry_run" = "true" ]] || migrate_legacy_commands "$target_dir" "$TECH_NAMESPACE"
 }
 
 # Per-axis checklists read by /<tech>:check <axis> (9.0)
@@ -380,7 +383,7 @@ copy_checks() {
         else
             mkdir -p "$dest"
             copy_i18n_files "$TECH_NAME/checks" "$dest" "*.md"
-            log_success "Check checklists copied (/${TECH_NAMESPACE}:check)"
+            log_success "Check checklists copied (/bear-${TECH_NAMESPACE}:check)"
         fi
     fi
 }

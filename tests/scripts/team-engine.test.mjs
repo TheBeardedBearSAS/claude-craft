@@ -5,15 +5,15 @@ import path from 'path';
 const PROJECT_ROOT = path.resolve(import.meta.dirname, '../..');
 const COMMANDS = ['audit', 'security', 'delivery'];
 const LOCATIONS = [
-  '.claude/commands/team',
+  '.claude/commands/bear-team',
   ...['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/Team/commands`),
 ];
 
 // Agent Teams is an experimental env-gated feature: without
-// CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS the /team:* commands used to be unusable.
+// CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS the /bear-team:* commands used to be unusable.
 // The default engine is now plain sub-agent delegation (Agent tool), Agent Teams
 // being opt-in via --engine=teams.
-describe('/team:* execution engine', () => {
+describe('/bear-team:* execution engine', () => {
   for (const dir of LOCATIONS) {
     for (const cmd of COMMANDS) {
       const file = `${dir}/${cmd}.md`;
@@ -59,10 +59,10 @@ describe('/team:* execution engine', () => {
   }
 });
 
-// Callers of the /team:* engines must not reintroduce a hard dependency on the env var.
+// Callers of the /bear-team:* engines must not reintroduce a hard dependency on the env var.
 describe('Agent Teams callers', () => {
   const LANGS = ['en', 'fr', 'es', 'de', 'pt'];
-  const AUTO_SPRINT = ['.claude/commands/workflow', ...LANGS.map((l) => `Dev/i18n/${l}/Workflow/commands`)].map(
+  const AUTO_SPRINT = ['.claude/commands/bear-workflow', ...LANGS.map((l) => `Dev/i18n/${l}/Workflow/commands`)].map(
     (d) => `${d}/auto-sprint.md`
   );
   const CONDUCTOR = ['.claude/agents', ...LANGS.map((l) => `Dev/i18n/${l}/Common/agents`)].map(

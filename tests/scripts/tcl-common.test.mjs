@@ -93,8 +93,8 @@ get_bear_craft_version
       '.claude/references/react',
       '.claude/skills',
       '.claude/commands',
-      '.claude/commands/common',
-      '.claude/commands/react',
+      '.claude/commands/bear-common',
+      '.claude/commands/bear-react',
       '.claude/agents',
       '.claude/templates',
       '.claude/checklists',
@@ -113,7 +113,7 @@ get_bear_craft_version
     fs.mkdirSync(path.join(tmpDir, '.claude'), { recursive: true });
 
     runTclFunction(
-      `generate_minimal_claude_md "${tmpDir}" "TestProject" "React" "React 19 + TypeScript" "react" "- /react:check-architecture" "false" "false"`,
+      `generate_minimal_claude_md "${tmpDir}" "TestProject" "React" "React 19 + TypeScript" "react" "- /bear-react:check-architecture" "false" "false"`,
     );
 
     const claudeMd = path.join(tmpDir, '.claude', 'CLAUDE.md');

@@ -48,6 +48,7 @@ VERSION=$(get_bear_craft_version)
 # shellcheck source=lib/shell-ui.sh
 source "${SCRIPT_DIR}/lib/shell-ui.sh"
 source "${SCRIPT_DIR}/lib/stack-profiles.sh"
+source "${SCRIPT_DIR}/lib/legacy-commands.sh"
 
 # Default options
 action="install"
@@ -466,7 +467,7 @@ install_commands() {
     log_info "${MSG_INSTALLING_COMMANDS}"
 
     # Namespace mapping: SourceDir:target_dir_name
-    local namespaces="Common:common Workflow:workflow Team:team QA:qa UIUX:uiux"
+    local namespaces="Common:bear-common Workflow:bear-workflow Team:bear-team QA:bear-qa UIUX:bear-uiux"
     local found_any=false
 
     # Temporarily set IFS to include space for word splitting
@@ -493,19 +494,20 @@ install_commands() {
     IFS="$OLD_IFS"
 
     # The deprecated common:pre-commit-check|pre-merge-check|release-checklist
-    # stubs redirect to /gate:check, which otherwise ships only with the Project
+    # stubs redirect to /bear-gate:check, which otherwise ships only with the Project
     # package: install it here too so a Dev-only install keeps them working.
     local gate_check="$SCRIPT_DIR/../../Project/i18n/$lang/Gate/commands/check.md"
     if [[ -f "$gate_check" ]]; then
-        copy_file "$gate_check" "$target_dir/.claude/commands/gate/check.md"
+        copy_file "$gate_check" "$target_dir/.claude/commands/bear-gate/check.md"
     fi
 
     # Delete commands retired from the distribution (config/removed-commands.yaml)
     $dry_run || bash "$SCRIPT_DIR/prune-removed-commands.sh" "$target_dir"
+    $dry_run || migrate_legacy_commands "$target_dir" common workflow team qa uiux gate
 
     if ! $found_any; then
         if [[ -d "$SCRIPT_DIR/claude-commands/common" ]]; then
-            copy_directory "$SCRIPT_DIR/claude-commands/common" "$target_dir/.claude/commands/common" "*.md" "add-technology.md"
+            copy_directory "$SCRIPT_DIR/claude-commands/common" "$target_dir/.claude/commands/bear-common" "*.md" "add-technology.md"
         else
             log_warning "${MSG_COMMANDS_NOT_FOUND}"
         fi
@@ -513,8 +515,8 @@ install_commands() {
 }
 
 # Install AgentTeams helper scripts (cost-estimator, ralph-teams-adapter,
-# compatibility-check, ...) used by the /team:* commands. They are shipped
-# alongside the Team command namespace so /team:delivery etc. find them at
+# compatibility-check, ...) used by the /bear-team:* commands. They are shipped
+# alongside the Team command namespace so /bear-team:delivery etc. find them at
 # <project>/Tools/AgentTeams/lib/ instead of warning "scripts MISSING".
 install_agentteams() {
     local craft_root

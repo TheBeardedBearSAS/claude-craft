@@ -18,12 +18,12 @@ const P = (l, f) => `Project/i18n/${l}/commands/${f}.md`;
 const S = (l, f) => `Project/i18n/${l}/Sprint/commands/${f}.md`;
 
 const MERGED = [
-  [W, 'implement', ['--epic', '--resume', '--parallel', '--queue', '--story', '/team:delivery', '.bmad/sprint-status.yaml']],
+  [W, 'implement', ['--epic', '--resume', '--parallel', '--queue', '--story', '/bear-team:delivery', '.bmad/sprint-status.yaml']],
   [W, 'status', ['--board', '--queue', '--standup', '--gates', 'workflow-status.yaml', '.bmad/sprint-status.yaml']],
   [W, 'plan', ['--research', '--only=prd', '--only=backlog', 'project-management/prd.md', 'Implements']],
   [W, 'design', ['--constitution', 'project-management/tech-spec.md']],
   [W, 'start', ['--tasks-only', 'tasks/TASK-', '.bmad/sprint-status.yaml']],
-  [W, 'auto-sprint', ['--from-prd', '/workflow:plan', '/team:delivery']],
+  [W, 'auto-sprint', ['--from-prd', '/bear-workflow:plan', '/bear-team:delivery']],
   [P, 'backlog', ['next story', 'move story', '--auto', 'routing.auto_transitions']],
   [Q, 'status', ['--report']],
   [B, 'init', ['--context']],

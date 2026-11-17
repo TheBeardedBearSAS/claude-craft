@@ -42,7 +42,7 @@ export async function runKanban({ targetPath, options }) {
   if (!resolved) {
     console.error(
       `${c.red}Error: no 'project-management/' directory found under ${path.resolve(targetPath)}.${c.reset}\n` +
-        `Run ${c.bold}/workflow:plan${c.reset} in Claude Code first, or cd into a BMAD project.`
+        `Run ${c.bold}/bear-workflow:plan${c.reset} in Claude Code first, or cd into a BMAD project.`
     );
     process.exit(1);
   }

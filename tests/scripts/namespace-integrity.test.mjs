@@ -22,18 +22,18 @@ function findMdFiles(dir) {
 describe('v7.0.0 namespace integrity', () => {
   it('no residual /common: references to moved commands', () => {
     const movedPatterns = [
-      /\/common:workflow-/,
-      /\/common:sprint-retro/,
-      /\/common:sprint-review/,
-      /\/common:sprint-start/,
-      /\/common:team-/,
-      /\/common:recette/,
-      /\/common:fix-bug-tdd/,
-      /\/common:uiux-/,
-      /\/common:a11y-/,
-      /\/common:ui-design-tokens/,
-      /\/common:ux-user-flow/,
-      /\/common:docker-optimize/,
+      /\/bear-common:workflow-/,
+      /\/bear-common:sprint-retro/,
+      /\/bear-common:sprint-review/,
+      /\/bear-common:sprint-start/,
+      /\/bear-common:team-/,
+      /\/bear-common:recette/,
+      /\/bear-common:fix-bug-tdd/,
+      /\/bear-common:uiux-/,
+      /\/bear-common:a11y-/,
+      /\/bear-common:ui-design-tokens/,
+      /\/bear-common:ux-user-flow/,
+      /\/bear-common:docker-optimize/,
     ];
 
     const dirs = ['Dev', 'Project', 'Infra', 'docs', '.claude'];
@@ -55,7 +55,7 @@ describe('v7.0.0 namespace integrity', () => {
   });
 
   it('no residual /project: references to moved commands', () => {
-    const movedPatterns = [/\/project:sprint-/, /\/project:gate-/, /\/project:project-/];
+    const movedPatterns = [/\/bear-project:sprint-/, /\/bear-project:gate-/, /\/bear-project:project-/];
 
     const dirs = ['Dev', 'Project', 'Infra', 'docs', '.claude'];
     const violations = [];
@@ -122,8 +122,8 @@ describe('v7.0.0 namespace integrity', () => {
 
   it('correct command counts per namespace', () => {
     const expected = {
-      // 8.24.0: add-technology, audit-* are maintainer-only (repo .claude/commands/common/)
-      // 9.0: pre-commit/pre-merge/release → /gate:check, daily-standup → /workflow:status, setup-project-context → /common:init
+      // 8.24.0: add-technology, audit-* are maintainer-only (repo .claude/commands/bear-common/)
+      // 9.0: pre-commit/pre-merge/release → /bear-gate:check, daily-standup → /bear-workflow:status, setup-project-context → /bear-common:init
       'Dev/i18n/en/Common/commands': 6, // 9.0: research-context7 removed
       'Dev/i18n/base/Common/commands': 4,
       'Dev/i18n/en/Workflow/commands': 9,
@@ -155,7 +155,7 @@ describe('v7.0.0 namespace integrity', () => {
 
   it.each(Object.entries(TECH))('%s exposes /<tech>:check in .claude and the 5 languages', (ns, dir) => {
     const files = ['en', 'fr', 'es', 'de', 'pt'].map((l) => `Dev/i18n/${l}/${dir}/commands/check.md`);
-    if (!NO_MAINTAINER_LAYER.has(ns)) files.push(`.claude/commands/${ns}/check.md`);
+    if (!NO_MAINTAINER_LAYER.has(ns)) files.push(`.claude/commands/bear-${ns}/check.md`);
     expect(files.filter((f) => !fs.existsSync(path.join(PROJECT_ROOT, f)))).toEqual([]);
   });
 
@@ -171,14 +171,14 @@ describe('v7.0.0 namespace integrity', () => {
     }
   );
 
-  it('no reference to the 9.0 tech check-* stubs or /team:sprint outside the stubs and migration notes', () => {
+  it('no reference to the 9.0 tech check-* stubs or /bear-team:sprint outside the stubs and migration notes', () => {
     const banned = new RegExp(
-      `/(?:${Object.keys(TECH).join('|')}):check-(?:architecture|code-quality|security|testing|compliance)(?![\\w-])|/team:sprint(?![\\w-])`
+      `/bear-(?:${Object.keys(TECH).join('|')}):check-(?:architecture|code-quality|security|testing|compliance)(?![\\w-])|/bear-team:sprint(?![\\w-])`
     );
     // Generated index of every command file (stubs included) and historical documents.
     const SKIP = /MIGRATION-v\d|CHANGELOG|COMMANDS-FULL-REFERENCE|\/internal\/|\/training\/|\/marketing\/|\/docs\/audit\//;
     // A migration note may name the old command next to its replacement.
-    const NAMES_REPLACEMENT = /:check (?:architecture|code-quality|security|testing|all)\b|:check <|\/team:delivery/;
+    const NAMES_REPLACEMENT = /:check (?:architecture|code-quality|security|testing|all)\b|:check <|\/bear-team:delivery/;
     const files = ['Dev', 'Project', 'Infra', 'Tools', 'docs', '.claude']
       .flatMap((d) => findMdFiles(path.join(PROJECT_ROOT, d)))
       .filter((f) => !SKIP.test(f));

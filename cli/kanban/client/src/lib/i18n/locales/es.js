@@ -55,8 +55,8 @@ export default {
   'nav.boardCount': '{n} historias en el tablero',
 
   // ---- board : colonnes, cartes, menu Déplacer, WIP, raccourcis ----
-  'board.empty.backlog': 'No hay historias — ejecute /workflow:plan',
-  'board.empty.ready-for-dev': 'No hay historias listas — ejecute /workflow:start',
+  'board.empty.backlog': 'No hay historias — ejecute /bear-workflow:plan',
+  'board.empty.ready-for-dev': 'No hay historias listas — ejecute /bear-workflow:start',
   'board.empty.in-progress': 'Nada en curso',
   'board.empty.review': 'Nada en revisión',
   'board.empty.done': 'Todavía nada terminado',

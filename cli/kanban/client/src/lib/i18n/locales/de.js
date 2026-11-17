@@ -55,8 +55,8 @@ export default {
   'nav.boardCount': '{n} Stories auf dem Board',
 
   // ---- board : colonnes, cartes, menu Déplacer, WIP, raccourcis ----
-  'board.empty.backlog': 'Keine Stories — /workflow:plan ausführen',
-  'board.empty.ready-for-dev': 'Keine Stories bereit — /workflow:start ausführen',
+  'board.empty.backlog': 'Keine Stories — /bear-workflow:plan ausführen',
+  'board.empty.ready-for-dev': 'Keine Stories bereit — /bear-workflow:start ausführen',
   'board.empty.in-progress': 'Nichts in Arbeit',
   'board.empty.review': 'Nichts zu prüfen',
   'board.empty.done': 'Noch nichts erledigt',

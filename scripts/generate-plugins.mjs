@@ -153,7 +153,7 @@ function collectOwned(installs, pluginNames, ctx) {
 
   for (const [source, install] of Object.entries(installs)) {
     for (const [rel, abs] of install.files) {
-      const cm = /^commands\/([^/]+)\/([^/]+)$/.exec(rel);
+      const cm = /^commands\/bear-([^/]+)\/([^/]+)$/.exec(rel);
       if (cm) {
         const [, ns, file] = cm;
         if (!owned.has(ns) || !file.endsWith('.md')) continue;
@@ -198,19 +198,7 @@ function universeFor(name, installs) {
     .filter((v, i, a) => a.indexOf(v) === i);
 }
 
-/**
- * `/<ns>:<cmd>` → `/bear-<ns>:<cmd>` pour tout namespace dont un plugin est généré. Uniquement après un début de
- * ligne, un espace ou l'un des caractères ` ' " ( [ | > (jamais dans une URL ou un chemin).
- */
-function prefixSlash(text, stats) {
-  const re = new RegExp(String.raw`(^|[\s\`'"(\[|>])/(${[...stats.namespaces].join('|')}):(?=[A-Za-z*])`, 'gm');
-  return text.replace(re, (_m, before, ns) => {
-    stats.slashRewritten += 1;
-    return `${before}/${pluginName(ns)}:`;
-  });
-}
-
-function buildPlugin(name, owned, installs, ctx, unresolved, stats) {
+function buildPlugin(name, owned, installs, ctx, unresolved) {
   const files = new Map(); // chemin plugin → { data: Buffer, mode: 'x'|'' }
   const universe = universeFor(name, installs);
   const queue = [];
@@ -252,7 +240,7 @@ function buildPlugin(name, owned, installs, ctx, unresolved, stats) {
 
       if (dir === 'commands') {
         const [ns, file] = trimmed.split('/');
-        if (ns === name && file && ownCommands.has(file)) return `\${CLAUDE_PLUGIN_ROOT}/commands/${file}${tail}`;
+        if (ns === pluginName(name) && file && ownCommands.has(file)) return `\${CLAUDE_PLUGIN_ROOT}/commands/${file}${tail}`;
         return (report('command-outside-plugin'), match);
       }
       // project-context.md est généré dans le projet de l'utilisateur (nom du projet, stack) : ce n'est pas une référence du plugin.
@@ -268,7 +256,7 @@ function buildPlugin(name, owned, installs, ctx, unresolved, stats) {
     const p = queue.shift();
     const entry = files.get(p);
     if (!isText(entry.data) || !/\.(md|json|ya?ml|txt|template)$/.test(p)) continue;
-    entry.data = Buffer.from(prefixSlash(rewrite(entry.data.toString('utf8'), p), stats), 'utf8');
+    entry.data = Buffer.from(rewrite(entry.data.toString('utf8'), p), 'utf8');
   }
   return files;
 }
@@ -392,7 +380,7 @@ function generate(work, ctx) {
   const namespaces = new Set();
   for (const install of Object.values(installs)) {
     for (const rel of install.files.keys()) {
-      const m = /^commands\/([^/]+)\/[^/]+\.md$/.exec(rel);
+      const m = /^commands\/bear-([^/]+)\/[^/]+\.md$/.exec(rel);
       if (m) namespaces.add(m[1]);
     }
   }
@@ -407,10 +395,9 @@ function generate(work, ctx) {
 
   const owned = collectOwned(installs, names, ctx);
   const unresolved = [];
-  const stats = { slashRewritten: 0, namespaces: new Set(names) };
   const result = new Map(); // nom → Map(chemin → entry)
   for (const name of names) {
-    const files = buildPlugin(name, owned.get(name), installs, ctx, unresolved, stats);
+    const files = buildPlugin(name, owned.get(name), installs, ctx, unresolved);
     if (name === 'common') addHooks(files);
     files.set('.claude-plugin/plugin.json', {
       data: Buffer.from(`${JSON.stringify(manifestFor(name, ctx), null, 2)}\n`),
@@ -418,10 +405,10 @@ function generate(work, ctx) {
     });
     files.set('.claude-plugin/icon.png', { data: fs.readFileSync(ICON_SRC), mode: '' });
     files.set('LICENSE', { data: fs.readFileSync(path.join(ROOT, 'LICENSE')), mode: '' });
-    files.set('README.md', { data: Buffer.from(prefixSlash(readmeFor(name, owned.get(name), files, ctx), stats)), mode: '' });
+    files.set('README.md', { data: Buffer.from(readmeFor(name, owned.get(name), files, ctx)), mode: '' });
     result.set(name, files);
   }
-  return { result, unresolved, owned, stats };
+  return { result, unresolved, owned };
 }
 
 function writeTree(result, out) {
@@ -486,7 +473,7 @@ function countAgentRefs(result) {
   return n;
 }
 
-function summarize(result, unresolved, owned, stats) {
+function summarize(result, unresolved, owned) {
   const lines = ['', 'Plugins :'];
   for (const name of sortedKeys(result)) {
     const files = result.get(name);
@@ -496,8 +483,7 @@ function summarize(result, unresolved, owned, stats) {
       `  ${name.padEnd(12)} commandes=${owned.get(name).commands.size} agents=${count(/^agents\/[^/]+\.md$/)} skills=${new Set([...files.keys()].filter((f) => f.startsWith('skills/')).map((f) => f.split('/')[1])).size} références=${refs}`
     );
   }
-  lines.push('', `Références slash réécrites (/<ns>: → /bear-<ns>:) : ${stats.slashRewritten}`);
-  lines.push(`Références @agent laissées telles quelles : ${countAgentRefs(result)}`);
+  lines.push('', `Références @agent laissées telles quelles : ${countAgentRefs(result)}`);
   const unique = new Map();
   for (const u of unresolved) unique.set(`${u.ref}|${u.cause}`, u);
   lines.push('', `Références non résolues : ${unresolved.length} occurrences, ${unique.size} uniques`);
@@ -519,7 +505,7 @@ function main() {
   const work = fs.mkdtempSync(path.join(tmpBase, 'plugin-gen-'));
   try {
     const ctx = loadContext();
-    const { result, unresolved, owned, stats } = generate(work, ctx);
+    const { result, unresolved, owned } = generate(work, ctx);
     const market = marketplaceWith(result, ctx);
     if (check) {
       const diffs = fs.existsSync(out)
@@ -538,7 +524,7 @@ function main() {
     writeTree(result, out);
     if (out === path.join(ROOT, 'plugins')) fs.writeFileSync(MARKETPLACE, market);
     if (reportFile) fs.writeFileSync(path.resolve(ROOT, reportFile), `${JSON.stringify({ unresolved }, null, 2)}\n`);
-    console.log(summarize(result, unresolved, owned, stats));
+    console.log(summarize(result, unresolved, owned));
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }

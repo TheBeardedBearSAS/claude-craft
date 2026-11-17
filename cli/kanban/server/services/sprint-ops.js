@@ -170,7 +170,7 @@ export function sprintSlug(name) {
 
 const oneLine = (text) => text.replace(/\s+/g, ' ').trim();
 
-/** `sprint-goal.md` in the layout of /workflow:start (`## Informations` table, `## Sprint Goal` quote). */
+/** `sprint-goal.md` in the layout of /bear-workflow:start (`## Informations` table, `## Sprint Goal` quote). */
 export function renderSprintGoal({ number, name, start_date, end_date, goal, capacity_points }) {
   const rows = [`| Numéro | ${number} |`, `| Début | ${start_date} |`, `| Fin | ${end_date} |`];
   if (capacity_points !== undefined) rows.push(`| Capacité | ${capacity_points} points |`);

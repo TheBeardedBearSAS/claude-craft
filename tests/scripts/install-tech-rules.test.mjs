@@ -109,7 +109,7 @@ describe('tech install scripts', { timeout: 30000 }, () => {
     expect(fs.existsSync(path.join(tmpDir, '.claude', 'skills'))).toBe(true);
     expect(fs.existsSync(path.join(tmpDir, '.claude', 'agents'))).toBe(true);
     expect(
-      fs.existsSync(path.join(tmpDir, '.claude', 'commands', 'symfony')),
+      fs.existsSync(path.join(tmpDir, '.claude', 'commands', 'bear-symfony')),
     ).toBe(true);
 
     // Generated config files

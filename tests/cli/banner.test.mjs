@@ -67,6 +67,6 @@ describe('printSuccess', () => {
     expect(output).toContain('Installation Complete');
     expect(output).toContain('/home/user/project');
     expect(output).toContain('Next Steps');
-    expect(output).toContain('/workflow:init');
+    expect(output).toContain('/bear-workflow:init');
   });
 });

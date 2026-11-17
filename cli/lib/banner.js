@@ -57,12 +57,12 @@ ${c.bold}Next Steps:${c.reset}
   1. ${c.cyan}cd ${targetPath}${c.reset}
 
   2. Start Claude Code and try the workflow:
-     ${c.cyan}/workflow:init${c.reset}
+     ${c.cyan}/bear-workflow:init${c.reset}
 
   3. Or use technology-specific commands:
-     ${c.cyan}/symfony:check architecture${c.reset}
-     ${c.cyan}/flutter:check all${c.reset}
-     ${c.cyan}/react:generate-component${c.reset}
+     ${c.cyan}/bear-symfony:check architecture${c.reset}
+     ${c.cyan}/bear-flutter:check all${c.reset}
+     ${c.cyan}/bear-react:generate-component${c.reset}
 
 ${c.bold}Documentation:${c.reset}
   ${c.dim}https://github.com/TheBeardedBearSAS/bear-craft${c.reset}

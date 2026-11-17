@@ -78,7 +78,7 @@ describe('config/removed-commands.yaml', () => {
     expect(removed()).toEqual(expect.arrayContaining(['common/research-context7.md', 'uiux/orchestrator.md']));
   });
 
-  // Lot 7 (9.0): /<tech>:check-<axis> -> /<tech>:check <axis>, /team:sprint -> /team:delivery.
+  // Lot 7 (9.0): /<tech>:check-<axis> -> /<tech>:check <axis>, /bear-team:sprint -> /bear-team:delivery.
   it('schedules the tech check-* stubs and team:sprint for removal in 10.0', () => {
     const stacks = ['angular', 'csharp', 'flutter', 'laravel', 'paperclip', 'php', 'python', 'react', 'reactnative'];
     stacks.push('symfony', 'vercel', 'vite', 'vuejs');

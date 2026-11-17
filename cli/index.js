@@ -230,7 +230,7 @@ class BearCraftCLI {
       case 'init':
         printBanner(VERSION);
         console.log(`${c.cyan}Workflow initialization is available after installation.${c.reset}`);
-        console.log(`Run ${c.bold}/workflow:init${c.reset} in Claude Code.\n`);
+        console.log(`Run ${c.bold}/bear-workflow:init${c.reset} in Claude Code.\n`);
         break;
 
       case 'flatten':
