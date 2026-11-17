@@ -32,6 +32,14 @@ Plus **11 stack-specific reviewers** (@symfony-reviewer, @react-reviewer, @pytho
 
 A comprehensive framework for AI-assisted development with [Claude Code](https://claude.ai/code). Install standardized rules, agents, and commands for your projects across multiple technology stacks — **33 specialized agents (+39 infra agents on-demand), 143 commands across 18 namespaces, 55 skills**, all token-optimized via `context: fork` and sub-agent model routing.
 
+## What's New in v9.4.0
+
+**Dernière version 9.x — sécurité Claude Code et hooks fail-closed (2026-11-17, v9.4.0) :**
+
+- **Claude Code** : minimum de sécurité relevé à 2.1.325 (contournements de permissions Bash/sandbox corrigés en 2.1.323 et 2.1.325), version recommandée 2.1.326 ; `claude-craft doctor` échoue sous le minimum, et le plugin déclare `engines["claude-code"]: ">=2.1.325"`.
+- **Hooks** : les trois gardes de sécurité bloquent l'appel d'outil si leur script manque, plante ou dépasse son timeout (`onFailure: "block"`) ; la réinstallation met à niveau les projets existants.
+- **Annonce** : Claude Craft devient **bear-craft** en 10.0.0 (paquet `@the-bearded-bear/bear-craft`, commande `bear-craft`, alias `claude-craft` conservé en 10.x). Détails : [CHANGELOG](CHANGELOG.md#940---2026-11-17).
+
 ## What's New in v9.3.0
 
 **Kanban en écriture et qualité mesurée (2026-11-16, v9.3.0) :**
