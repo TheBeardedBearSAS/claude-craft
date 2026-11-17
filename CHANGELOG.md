@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.4.0] - 2026-11-17
+
+> **Last 9.x release.** Claude Craft becomes **bear-craft** in 10.0.0: new npm package `@the-bearded-bear/bear-craft`, `bear-craft` command (the `claude-craft` command stays as an alias throughout 10.x). Claude Code reserves the `claude-` prefix for Anthropic's own plugins, so `claude plugin validate` rejects the current plugin name. A migration guide ships with 10.0.0.
+
 ### Security
 
 - **Claude Code minimum 2.1.321 → 2.1.325.** 2.1.323 and 2.1.325 fix Bash and sandbox permission bypasses (no GHSA published): deny/ask rules missed through `sudo`/`env`, `sandbox.excludedCommands` too permissive, Write/Edit on a path covered by a `Read` deny rule, a Bash allow rule running a different program than the one it names, compound commands run without a prompt, sandbox not protecting a worktree's settings, hooks and shared git folder. `claude-craft doctor` now fails below 2.1.325.
